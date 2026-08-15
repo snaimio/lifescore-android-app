@@ -34,6 +34,11 @@ android {
             ?: "DEMO_KEY"
         buildConfigField("String", "GEMINI_API_KEY", "\"$geminiKey\"")
         buildConfigField("String", "GEMINI_MODEL", "\"gemini-1.5-flash\"")
+
+        // 16 KB Page Size Alignment & ABI filters
+        ndk {
+            abiFilters += listOf("arm64-v8a", "x86_64")
+        }
     }
 
     buildTypes {
@@ -65,6 +70,9 @@ android {
     packaging {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
+        }
+        jniLibs {
+            useLegacyPackaging = false
         }
     }
 }

@@ -43,3 +43,15 @@
 
 # 9. Domain Models
 -keep class com.lifescore.app.domain.model.** { *; }
+
+# 10. Native JNI & 16 KB Page Size Compatibility
+-keep class * {
+    native <methods>;
+}
+-keepclasseswithmembernames class * {
+    native <methods>;
+}
+
+# 11. Ktor / Gemini AI R8 Rules
+-dontwarn java.lang.management.**
+-dontwarn io.ktor.**
