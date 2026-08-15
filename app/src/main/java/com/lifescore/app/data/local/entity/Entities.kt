@@ -36,11 +36,14 @@ data class DailyScoreEntity(
 data class UserEntity(
     @PrimaryKey val id: Long = 1,
     val name: String = "Achiever",
+    val email: String? = null,
     val currentXp: Int = 0,
     val currentLevel: Int = 1,
     val currentStreakDays: Int = 0,
     val isPremium: Boolean = false,
-    val title: String = "Novice Seeker"
+    val title: String = "Novice Seeker",
+    val lastActive: Long = System.currentTimeMillis(),
+    val isLocal: Boolean = false
 )
 
 @Entity(tableName = "challenges")

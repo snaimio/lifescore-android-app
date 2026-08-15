@@ -72,13 +72,13 @@ class AuthRepositoryImpl(
             try {
                 firebaseRepository.saveUser(profile, email = "", uid = user.uid)
             } catch (_: Exception) {}
-            localAuthRepository?.updateUser(profile)
+            localAuthRepository?.updateUserProfile(profile)
             lifeScoreRepository?.updateUserProfile(profile)
             localAuthenticatedUser = profile
             Result.success(profile)
         } catch (_: Exception) {
             // Offline-first fallback
-            val fallbackProfile = localAuthRepository?.createUser("guest@lifescore.local", "Guest Hero")
+            val fallbackProfile = localAuthRepository?.createProfile("guest@lifescore.local", "Guest Hero")
                 ?: UserProfile(
                     id = 1L,
                     name = "Guest Hero",
@@ -113,13 +113,13 @@ class AuthRepositoryImpl(
             try {
                 firebaseRepository.saveUser(profile, email = user.email ?: "", uid = user.uid)
             } catch (_: Exception) {}
-            localAuthRepository?.updateUser(profile)
+            localAuthRepository?.updateUserProfile(profile)
             lifeScoreRepository?.updateUserProfile(profile)
             localAuthenticatedUser = profile
             Result.success(profile)
         } catch (_: Exception) {
             // Offline-first fallback
-            val fallbackProfile = localAuthRepository?.createUser("google_user@lifescore.local", "Hero")
+            val fallbackProfile = localAuthRepository?.createProfile("google_user@lifescore.local", "Hero")
                 ?: UserProfile(
                     id = 1L,
                     name = "Hero",
@@ -156,13 +156,13 @@ class AuthRepositoryImpl(
             try {
                 firebaseRepository.saveUser(profile, email = email, uid = user.uid)
             } catch (_: Exception) {}
-            localAuthRepository?.updateUser(profile)
+            localAuthRepository?.updateUserProfile(profile)
             lifeScoreRepository?.updateUserProfile(profile)
             localAuthenticatedUser = profile
             Result.success(profile)
         } catch (_: Exception) {
             // Offline-first fallback on mock API key or connection error
-            val fallbackProfile = localAuthRepository?.createUser(email, displayName)
+            val fallbackProfile = localAuthRepository?.createProfile(email, displayName)
                 ?: UserProfile(
                     id = 1L,
                     name = displayName.ifBlank { email.substringBefore("@") },
@@ -189,14 +189,14 @@ class AuthRepositoryImpl(
                 currentLevel = 1,
                 currentStreakDays = 0
             )
-            localAuthRepository?.updateUser(profile)
+            localAuthRepository?.updateUserProfile(profile)
             lifeScoreRepository?.updateUserProfile(profile)
             localAuthenticatedUser = profile
             Result.success(profile)
         } catch (_: Exception) {
             // Offline-first fallback
             val existing = localAuthRepository?.getUserProfile()?.firstOrNull()
-            val fallbackProfile = existing ?: localAuthRepository?.createUser(email, email.substringBefore("@"))
+            val fallbackProfile = existing ?: localAuthRepository?.createProfile(email, email.substringBefore("@"))
                 ?: UserProfile(
                     id = 1L,
                     name = email.substringBefore("@"),

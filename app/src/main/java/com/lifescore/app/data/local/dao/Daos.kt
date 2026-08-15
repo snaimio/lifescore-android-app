@@ -46,6 +46,15 @@ interface UserDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertOrUpdateUser(user: UserEntity)
 
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertUser(user: UserEntity)
+
+    @Query("SELECT * FROM user_profile WHERE email = :email LIMIT 1")
+    suspend fun getUserByEmail(email: String): UserEntity?
+
+    @Query("SELECT * FROM user_profile ORDER BY lastActive DESC LIMIT 1")
+    suspend fun getLastActiveUser(): UserEntity?
+
     @Query("UPDATE user_profile SET currentXp = currentXp + :xpDelta WHERE id = 1")
     suspend fun addXp(xpDelta: Int)
 

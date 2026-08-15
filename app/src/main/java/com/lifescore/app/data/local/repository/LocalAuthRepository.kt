@@ -25,29 +25,36 @@ class LocalAuthRepository(
         }
     }
 
-    suspend fun createUser(email: String, displayName: String): UserProfile {
+    suspend fun createUser(email: String, password: String = "", displayName: String): UserEntity {
         val user = UserEntity(
             id = 1L,
             name = displayName.ifBlank { email.substringBefore("@").replaceFirstChar { it.uppercase() } },
+            email = email,
             currentXp = 0,
             currentLevel = 1,
             currentStreakDays = 0,
             isPremium = false,
-            title = "Novice Seeker"
+            title = "Novice Seeker",
+            lastActive = System.currentTimeMillis(),
+            isLocal = true
         )
-        database.userDao().insertOrUpdateUser(user)
-        return UserProfile(
-            id = user.id,
-            name = user.name,
-            currentXp = user.currentXp,
-            currentLevel = user.currentLevel,
-            currentStreakDays = user.currentStreakDays,
-            isPremium = user.isPremium,
-            title = user.title
-        )
+        database.userDao().insertUser(user)
+        return user
     }
 
-    suspend fun updateUser(userProfile: UserProfile) {
+    suspend fun getUser(email: String): UserEntity? {
+        return database.userDao().getUserByEmail(email)
+    }
+
+    suspend fun getCurrentUser(): UserEntity? {
+        return database.userDao().getLastActiveUser()
+    }
+
+    suspend fun updateUser(user: UserEntity) {
+        database.userDao().insertOrUpdateUser(user)
+    }
+
+    suspend fun updateUserProfile(userProfile: UserProfile) {
         val entity = UserEntity(
             id = userProfile.id,
             name = userProfile.name,
@@ -55,8 +62,25 @@ class LocalAuthRepository(
             currentLevel = userProfile.currentLevel,
             currentStreakDays = userProfile.currentStreakDays,
             isPremium = userProfile.isPremium,
-            title = userProfile.title
+            title = userProfile.title,
+            lastActive = System.currentTimeMillis(),
+            isLocal = true
         )
         database.userDao().insertOrUpdateUser(entity)
     }
+
+    suspend fun createProfile(email: String, displayName: String): UserProfile {
+        val user = createUser(email, "", displayName)
+        return user.toUserProfile()
+    }
 }
+
+fun UserEntity.toUserProfile(): UserProfile = UserProfile(
+    id = id,
+    name = name,
+    currentXp = currentXp,
+    currentLevel = currentLevel,
+    currentStreakDays = currentStreakDays,
+    isPremium = isPremium,
+    title = title
+)

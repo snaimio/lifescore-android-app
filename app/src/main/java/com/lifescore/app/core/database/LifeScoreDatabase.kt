@@ -15,7 +15,7 @@ import com.lifescore.app.data.local.entity.*
         UserEntity::class,
         ChallengeEntity::class
     ],
-    version = 1,
+    version = 2,
     exportSchema = false
 )
 @TypeConverters(Converters::class)

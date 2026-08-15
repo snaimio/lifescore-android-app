@@ -85,8 +85,25 @@ fun LoginScreen(
                     fontSize = 13.sp,
                     color = MaterialTheme.colorScheme.outline,
                     textAlign = TextAlign.Center,
-                    modifier = Modifier.padding(top = 4.dp, bottom = 24.dp)
+                    modifier = Modifier.padding(top = 4.dp, bottom = 8.dp)
                 )
+
+                if (uiState.isOffline) {
+                    Surface(
+                        shape = RoundedCornerShape(8.dp),
+                        color = MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.6f),
+                        modifier = Modifier.padding(bottom = 16.dp)
+                    ) {
+                        Text(
+                            text = "⚡ Offline-First Mode",
+                            color = MaterialTheme.colorScheme.onSecondaryContainer,
+                            style = MaterialTheme.typography.labelSmall,
+                            modifier = Modifier.padding(horizontal = 10.dp, vertical = 4.dp)
+                        )
+                    }
+                } else {
+                    Spacer(Modifier.height(16.dp))
+                }
 
                 // Sign In / Sign Up Mode Switcher
                 Card(

@@ -17,7 +17,8 @@ data class LoginUiState(
     val isPasswordVisible: Boolean = false,
     val isLoading: Boolean = false,
     val errorMessage: String? = null,
-    val authenticatedUser: UserProfile? = null
+    val authenticatedUser: UserProfile? = null,
+    val isOffline: Boolean = true
 )
 
 class LoginViewModel(
