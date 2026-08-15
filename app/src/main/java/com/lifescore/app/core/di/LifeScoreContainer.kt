@@ -1,0 +1,49 @@
+package com.lifescore.app.core.di
+
+import android.content.Context
+import com.lifescore.app.core.database.LifeScoreDatabase
+import com.lifescore.app.data.remote.repository.FirebaseRepository
+import com.lifescore.app.data.repository.*
+import com.lifescore.app.domain.usecase.*
+
+/**
+ * Clean Architecture Dependency Injection Container for LifeScore.
+ * Provides singleton dependencies, repositories, and use case providers.
+ */
+class LifeScoreContainer(private val context: Context) {
+
+    val database: LifeScoreDatabase by lazy {
+        LifeScoreDatabase.getInstance(context)
+    }
+
+    val firebaseRepository: FirebaseRepository by lazy {
+        com.lifescore.app.data.remote.repository.FirebaseRepositoryImpl()
+    }
+
+    val lifeScoreRepository: LifeScoreRepository by lazy {
+        LifeScoreRepositoryImpl(database)
+    }
+
+    val geminiCoachRepository: GeminiCoachRepository by lazy {
+        GeminiCoachRepositoryImpl()
+    }
+
+    val billingRepository: BillingRepository by lazy {
+        BillingRepositoryImpl(
+            context = context,
+            lifeScoreRepository = lifeScoreRepository,
+            firebaseRepository = firebaseRepository
+        )
+    }
+
+    // Domain Use Cases
+    val calculateLifeScoreUseCase by lazy { CalculateLifeScoreUseCase() }
+    val getDailyTasksUseCase by lazy { GetDailyTasksUseCase(lifeScoreRepository) }
+    val completeTaskUseCase by lazy { CompleteTaskUseCase(lifeScoreRepository) }
+    val addTaskUseCase by lazy { AddTaskUseCase(lifeScoreRepository) }
+    val deleteTaskUseCase by lazy { DeleteTaskUseCase(lifeScoreRepository) }
+    val getUserProfileUseCase by lazy { GetUserProfileUseCase(lifeScoreRepository) }
+    val updateUserProfileUseCase by lazy { UpdateUserProfileUseCase(lifeScoreRepository) }
+    val getAIRecommendationUseCase by lazy { GetAIRecommendationUseCase(geminiCoachRepository) }
+    val generateWeeklyAuditUseCase by lazy { GenerateWeeklyAuditUseCase(geminiCoachRepository) }
+}

@@ -1,0 +1,39 @@
+<resources>
+    <string name="app_name">LifeScore</string>
+    <string name="widget_name">LifeScore Quick Widget</string>
+
+    <!-- Navigation -->
+    <string name="nav_home">Home</string>
+    <string name="nav_dimensions">Dimensions</string>
+    <string name="nav_quests">Quests</string>
+    <string name="nav_challenges">Challenges</string>
+    <string name="nav_ai_coach">AI Coach</string>
+    <string name="nav_ranks">Ranks</string>
+    <string name="nav_reels">Reels</string>
+    <string name="nav_store">Store</string>
+    <string name="nav_settings">Settings</string>
+
+    <!-- General -->
+    <string name="streak_label">%1$d Day Streak</string>
+    <string name="coins_label">%1$d Coins</string>
+    <string name="level_label">Level %1$d</string>
+    <string name="points_reward">+%1$d XP</string>
+
+    <!-- Dimensions -->
+    <string name="dim_health">Health &amp; Vitality</string>
+    <string name="dim_wealth">Wealth &amp; Sovereignty</string>
+    <string name="dim_relationships">Relationships &amp; Love</string>
+    <string name="dim_career">Career &amp; Mastery</string>
+    <string name="dim_learning">Learning &amp; Wisdom</string>
+    <string name="dim_fitness">Fitness &amp; Body</string>
+    <string name="dim_mental_health">Mental Health &amp; Focus</string>
+    <string name="dim_social_life">Social Life &amp; Network</string>
+
+    <!-- Assessment -->
+    <string name="assessment_title">Psychometric LifeScore Assessment</string>
+    <string name="likert_strongly_disagree">Strongly Disagree</string>
+    <string name="likert_disagree">Disagree</string>
+    <string name="likert_neutral">Neutral</string>
+    <string name="likert_agree">Agree</string>
+    <string name="likert_strongly_agree">Strongly Agree</string>
+</resources>
