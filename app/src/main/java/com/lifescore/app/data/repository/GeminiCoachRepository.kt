@@ -54,15 +54,19 @@ interface GeminiCoachRepository {
 }
 
 class GeminiCoachRepositoryImpl(
-    private val apiKey: String? = null
+    private val apiKey: String? = com.lifescore.app.BuildConfig.GEMINI_API_KEY
 ) : GeminiCoachRepository {
 
     private val generativeModel by lazy {
-        if (!apiKey.isNullOrBlank()) {
-            GenerativeModel(
-                modelName = "gemini-1.5-flash",
-                apiKey = apiKey
-            )
+        if (!apiKey.isNullOrBlank() && apiKey != "DEMO_KEY") {
+            try {
+                GenerativeModel(
+                    modelName = com.lifescore.app.BuildConfig.GEMINI_MODEL,
+                    apiKey = apiKey
+                )
+            } catch (_: Exception) {
+                null
+            }
         } else null
     }
 

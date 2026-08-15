@@ -4,6 +4,7 @@ plugins {
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.ksp)
     alias(libs.plugins.google.services)
+    alias(libs.plugins.firebase.crashlytics)
 }
 
 android {
@@ -26,10 +27,21 @@ android {
         ksp {
             arg("room.schemaLocation", "$projectDir/schemas")
         }
+
+        // API Key Configurations
+        val geminiKey = project.findProperty("GEMINI_API_KEY") as? String 
+            ?: System.getenv("GEMINI_API_KEY") 
+            ?: "DEMO_KEY"
+        buildConfigField("String", "GEMINI_API_KEY", "\"$geminiKey\"")
+        buildConfigField("String", "GEMINI_MODEL", "\"gemini-1.5-flash\"")
     }
 
     buildTypes {
+        debug {
+            buildConfigField("Boolean", "DEBUG_MODE", "true")
+        }
         release {
+            buildConfigField("Boolean", "DEBUG_MODE", "false")
             isMinifyEnabled = true
             isShrinkResources = true
             proguardFiles(
@@ -109,6 +121,7 @@ dependencies {
     implementation(libs.firebase.auth)
     implementation(libs.firebase.storage)
     implementation(libs.firebase.analytics)
+    implementation(libs.firebase.crashlytics)
     implementation(libs.play.services.auth)
 
     // Unit Testing

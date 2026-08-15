@@ -1,8 +1,12 @@
 package com.lifescore.app
 
 import android.app.Application
+import android.os.Bundle
 import android.util.Log
+import androidx.work.Configuration
 import com.google.firebase.FirebaseApp
+import com.google.firebase.analytics.FirebaseAnalytics
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.FirebaseFirestoreSettings
 import com.lifescore.app.core.database.LifeScoreDatabase
@@ -19,7 +23,7 @@ import com.lifescore.app.data.repository.LifeScoreRepositoryImpl
 import com.lifescore.app.services.ReminderWorker
 import com.lifescore.app.services.SyncWorker
 
-class LifeScoreApp : Application() {
+class LifeScoreApp : Application(), Configuration.Provider {
 
     lateinit var database: LifeScoreDatabase
         private set
@@ -42,12 +46,26 @@ class LifeScoreApp : Application() {
     lateinit var authRepository: AuthRepository
         private set
 
+    private var firebaseAnalytics: FirebaseAnalytics? = null
+
+    override val workManagerConfiguration: Configuration
+        get() = Configuration.Builder()
+            .setMinimumLoggingLevel(if (BuildConfig.DEBUG_MODE) Log.DEBUG else Log.ERROR)
+            .build()
+
     override fun onCreate() {
         super.onCreate()
 
-        // 1. Initialize Firebase & Firestore Offline Persistence
+        // 1. Initialize Firebase & Crashlytics / Analytics
         try {
             FirebaseApp.initializeApp(this)
+            firebaseAnalytics = FirebaseAnalytics.getInstance(this)
+            FirebaseCrashlytics.getInstance().apply {
+                setCrashlyticsCollectionEnabled(true)
+                setCustomKey("debug_mode", BuildConfig.DEBUG_MODE)
+                setCustomKey("app_version", BuildConfig.VERSION_NAME)
+            }
+
             val firestore = FirebaseFirestore.getInstance()
             val settings = FirebaseFirestoreSettings.Builder()
                 .setPersistenceEnabled(true)
@@ -62,7 +80,7 @@ class LifeScoreApp : Application() {
         container = com.lifescore.app.core.di.LifeScoreContainer(this)
         database = LifeScoreDatabase.getInstance(this)
         lifeScoreRepository = LifeScoreRepositoryImpl(database)
-        coachRepository = GeminiCoachRepositoryImpl()
+        coachRepository = GeminiCoachRepositoryImpl(apiKey = BuildConfig.GEMINI_API_KEY)
         billingRepository = BillingRepositoryImpl(this, lifeScoreRepository).apply {
             startBillingConnection()
         }
@@ -73,5 +91,11 @@ class LifeScoreApp : Application() {
         // 3. Schedule Background WorkManager Workers
         ReminderWorker.scheduleDailyReminder(this)
         SyncWorker.schedulePeriodicSync(this)
+    }
+
+    fun logAnalyticsEvent(eventName: String, params: Bundle? = null) {
+        try {
+            firebaseAnalytics?.logEvent(eventName, params)
+        } catch (_: Exception) {}
     }
 }
