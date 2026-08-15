@@ -86,7 +86,11 @@ class LifeScoreApp : Application(), Configuration.Provider {
         }
 
         firebaseRepository = FirebaseRepositoryImpl()
-        authRepository = AuthRepositoryImpl(firebaseRepository = firebaseRepository)
+        authRepository = AuthRepositoryImpl(
+            firebaseRepository = firebaseRepository,
+            localAuthRepository = container.localAuthRepository,
+            lifeScoreRepository = lifeScoreRepository
+        )
 
         // 3. Schedule Background WorkManager Workers
         ReminderWorker.scheduleDailyReminder(this)

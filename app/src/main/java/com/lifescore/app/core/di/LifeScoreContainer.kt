@@ -28,6 +28,18 @@ class LifeScoreContainer(private val context: Context) {
         GeminiCoachRepositoryImpl()
     }
 
+    val localAuthRepository: com.lifescore.app.data.local.repository.LocalAuthRepository by lazy {
+        com.lifescore.app.data.local.repository.LocalAuthRepository(database)
+    }
+
+    val authRepository: com.lifescore.app.data.remote.repository.AuthRepository by lazy {
+        com.lifescore.app.data.remote.repository.AuthRepositoryImpl(
+            firebaseRepository = firebaseRepository,
+            localAuthRepository = localAuthRepository,
+            lifeScoreRepository = lifeScoreRepository
+        )
+    }
+
     val billingRepository: BillingRepository by lazy {
         BillingRepositoryImpl(
             context = context,
