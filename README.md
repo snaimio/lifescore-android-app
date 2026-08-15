@@ -117,7 +117,7 @@ graph TD
 ### Clone & Build
 ```bash
 # 1. Clone the repository
-git clone https://github.com/[username]/lifescore-android-app.git
+git clone https://github.com/snaimio/lifescore-android-app.git
 
 # 2. Enter project directory
 cd lifescore-android-app
