@@ -1,0 +1,39 @@
+<resources>
+    <string name="app_name">LifeScore</string>
+    <string name="widget_name">أداة LifeScore السريعة</string>
+
+    <!-- Navigation -->
+    <string name="nav_home">الرئيسية</string>
+    <string name="nav_dimensions">الأبعاد</string>
+    <string name="nav_quests">المهام</string>
+    <string name="nav_challenges">التحديات</string>
+    <string name="nav_ai_coach">المدرب الذكي</string>
+    <string name="nav_ranks">المتصدرين</string>
+    <string name="nav_reels">اليوميات</string>
+    <string name="nav_store">المتجر</string>
+    <string name="nav_settings">الإعدادات</string>
+
+    <!-- General -->
+    <string name="streak_label">سلسلة %1$d يوم</string>
+    <string name="coins_label">%1$d عملة</string>
+    <string name="level_label">المستوى %1$d</string>
+    <string name="points_reward">+%1$d نقطة</string>
+
+    <!-- Dimensions -->
+    <string name="dim_health">الصحة والحيوية</string>
+    <string name="dim_wealth">الثروة والمالية</string>
+    <string name="dim_relationships">العلاقات والعاطفة</string>
+    <string name="dim_career">المهنة والإتقان</string>
+    <string name="dim_learning">التعلم والحكمة</string>
+    <string name="dim_fitness">اللياقة البدنية</string>
+    <string name="dim_mental_health">الراحة النفسية والتركيز</string>
+    <string name="dim_social_life">الحياة الاجتماعية</string>
+
+    <!-- Assessment -->
+    <string name="assessment_title">تقييم LifeScore النفسي الشامل</string>
+    <string name="likert_strongly_disagree">أعارض بشدة</string>
+    <string name="likert_disagree">أعارض</string>
+    <string name="likert_neutral">محايد</string>
+    <string name="likert_agree">أوافق</string>
+    <string name="likert_strongly_agree">أوافق بشدة</string>
+</resources>

@@ -1,0 +1,39 @@
+<resources>
+    <string name="app_name">LifeScore</string>
+    <string name="widget_name">LifeScore 快捷小部件</string>
+
+    <!-- Navigation -->
+    <string name="nav_home">首页</string>
+    <string name="nav_dimensions">人生维度</string>
+    <string name="nav_quests">任务习惯</string>
+    <string name="nav_challenges">大师挑战</string>
+    <string name="nav_ai_coach">AI 教练</string>
+    <string name="nav_ranks">排行榜</string>
+    <string name="nav_reels">微日记</string>
+    <string name="nav_store">奖励商城</string>
+    <string name="nav_settings">设置</string>
+
+    <!-- General -->
+    <string name="streak_label">连续打卡 %1$d 天</string>
+    <string name="coins_label">%1$d 金币</string>
+    <string name="level_label">等级 %1$d</string>
+    <string name="points_reward">+%1$d 经验</string>
+
+    <!-- Dimensions -->
+    <string name="dim_health">健康与活力</string>
+    <string name="dim_wealth">财富与自由</string>
+    <string name="dim_relationships">人际与情感</string>
+    <string name="dim_career">事业与精进</string>
+    <string name="dim_learning">学习与智慧</string>
+    <string name="dim_fitness">体能与塑形</string>
+    <string name="dim_mental_health">心理与专注</string>
+    <string name="dim_social_life">社交与人脉</string>
+
+    <!-- Assessment -->
+    <string name="assessment_title">LifeScore 心理与人生维度深度评测</string>
+    <string name="likert_strongly_disagree">强烈反对</string>
+    <string name="likert_disagree">不同意</string>
+    <string name="likert_neutral">中立</string>
+    <string name="likert_agree">同意</string>
+    <string name="likert_strongly_agree">非常赞同</string>
+</resources>
