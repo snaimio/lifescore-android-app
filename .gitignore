@@ -1,51 +1,35 @@
-# Built application files
-*.apk
-*.aab
-*.ap_
-*.dex
-
-# Gradle files
-.gradle/
-build/
-app/build/
-gradle-app.setting
-!gradle-wrapper.jar
-
-# Android Studio & IntelliJ IDEA files
-.idea/
+# Android
 *.iml
-*.iws
-*.ipr
-.shelf/
-out/
-
-# Local configuration file (sdk path, etc)
-local.properties
-
-# Log Files
-*.log
-
-# Sensitive Files & API Keys
+.gradle
+/local.properties
+/.idea
+.DS_Store
+/build
+/captures
+.externalNativeBuild
+.cxx
+app/google-services.json
 google-services.json
-GoogleService-Info.plist
+*.keystore
+*.jks
+secrets.properties
+**/*.aab
+**/*.apk
+**/*.dex
+gradle/wrapper/gradle-wrapper.jar
+!gradle/wrapper/gradle-wrapper.jar
+
+# Firebase
+app/google-services.json
+google-services.json
+firebase-debug.log
+
+# Keystore files
 *.jks
 *.keystore
-signing.properties
+keystore.properties
 
-# OS-generated files
-.DS_Store
-.DS_Store?
-._*
-.Spotlight-V100
-.Trashes
-ehthumbs.db
-Thumbs.db
-
-# Kotlin compiler & KSP
-.kotlin/
-ksp/
-
-# Capture and recording cache
-captures/
-.externalNativeBuild
-.cxx/
+# Environment variables
+.env
+.env.local
+secrets.properties

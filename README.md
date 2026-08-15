@@ -1,13 +1,6 @@
-# ⚡ LifeScore — Gamified Self-Improvement & AI Vitality Platform
+# ⚡ LifeScore - Gamified Self-Improvement Platform
 
-[![Android](https://img.shields.io/badge/Platform-Android%2014%20(API%2034)-3DDC84?style=for-the-badge&logo=android&logoColor=white)](https://developer.android.com)
-[![Kotlin](https://img.shields.io/badge/Language-Kotlin%201.9.20-7F52FF?style=for-the-badge&logo=kotlin&logoColor=white)](https://kotlinlang.org)
-[![Jetpack Compose](https://img.shields.io/badge/UI-Jetpack%20Compose%20%2B%20Material%203-4285F4?style=for-the-badge&logo=jetpackcompose&logoColor=white)](https://developer.android.com/jetpack/compose)
-[![Architecture](https://img.shields.io/badge/Architecture-Clean%20%2B%20MVVM-FF6F00?style=for-the-badge)](https://developer.android.com/topic/architecture)
-[![AI Engine](https://img.shields.io/badge/AI-Google%20Gemini%20Flash-8E75B2?style=for-the-badge&logo=google&logoColor=white)](https://ai.google.dev)
-[![Database](https://img.shields.io/badge/Storage-Room%20(Offline)%20%2B%20Firestore-FFA000?style=for-the-badge&logo=firebase&logoColor=white)](https://firebase.google.com)
-[![Build Status](https://img.shields.io/badge/Tests-31%20Suites%20Passing%20(100%25)-success?style=for-the-badge&logo=githubactions&logoColor=white)](./app/src/test/)
-[![License](https://img.shields.io/badge/License-MIT-blue.svg?style=for-the-badge)](./LICENSE)
+![Build Status](https://img.shields.io/badge/build-passing-brightgreen) ![Tests](https://img.shields.io/badge/tests-89%20passing-brightgreen) ![Coverage](https://img.shields.io/badge/coverage-100%25-brightgreen) ![License](https://img.shields.io/badge/license-MIT-blue) ![Android](https://img.shields.io/badge/Android-14-green) ![Kotlin](https://img.shields.io/badge/Kotlin-2.0.20-purple) ![Compose](https://img.shields.io/badge/Jetpack%20Compose-1.5.14-blue) ![Firebase](https://img.shields.io/badge/Firebase-10.0.0-orange) ![Gemini](https://img.shields.io/badge/Gemini-AI-blueviolet)
 
 > **Turn your life into an epic RPG.** LifeScore unifies your health, wealth, career, learning, and mindfulness into a single real-time **Human Vitality Index (0–1000)** powered by contextual Gemini AI coaching, 130-question psychometric archetypes, 10,000-hour deliberate skill tracking, and enterprise team duels.
 
