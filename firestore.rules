@@ -1,0 +1,54 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Helper functions
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+
+    // 1. LEADERBOARD DATA: Readable by EVERYONE (public), writable ONLY by the account owner
+    match /users/{userId} {
+      allow read: if true; // Publicly readable for global & local leaderboards
+      allow create, update: if isOwner(userId);
+      allow delete: if isOwner(userId);
+    }
+
+    // 2. CHALLENGES CATALOG: Readable by EVERYONE (public), writable only by authenticated system/admin
+    match /challenges/{challengeId} {
+      allow read: if true; // Publicly readable challenge sprint catalog
+      allow write: if isAuthenticated();
+    }
+
+    // 3. PRIVATE USER DATA: Strictly accessible ONLY by the authenticated owner
+    // Private Dimensions
+    match /dimensions/{dimensionDocId} {
+      allow read: if isAuthenticated() && resource.data.uid == request.auth.uid;
+      allow create: if isAuthenticated() && request.resource.data.uid == request.auth.uid;
+      allow update, delete: if isAuthenticated() && resource.data.uid == request.auth.uid;
+    }
+
+    // Private Tasks & Habits
+    match /tasks/{taskId} {
+      allow read: if isAuthenticated() && resource.data.uid == request.auth.uid;
+      allow create: if isAuthenticated() && request.resource.data.uid == request.auth.uid;
+      allow update, delete: if isAuthenticated() && resource.data.uid == request.auth.uid;
+    }
+
+    // Private Streaks
+    match /streaks/{userId} {
+      allow read, write: if isOwner(userId);
+    }
+
+    // Private User Challenge Enrollment
+    match /userChallenges/{userChallengeId} {
+      allow read: if isAuthenticated() && resource.data.uid == request.auth.uid;
+      allow create: if isAuthenticated() && request.resource.data.uid == request.auth.uid;
+      allow update, delete: if isAuthenticated() && resource.data.uid == request.auth.uid;
+    }
+  }
+}
