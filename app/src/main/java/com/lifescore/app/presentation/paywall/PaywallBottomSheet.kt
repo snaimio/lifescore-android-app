@@ -178,7 +178,7 @@ fun PaywallBottomSheet(
                             Text("Pro ⚡", fontWeight = FontWeight.Black, fontSize = 12.sp, color = MaterialTheme.colorScheme.primary, modifier = Modifier.weight(1.3f), textAlign = TextAlign.End)
                         }
 
-                        Divider(modifier = Modifier.padding(vertical = 8.dp), thickness = 0.5.dp)
+                        HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp), thickness = 0.5.dp)
 
                         comparisonList.forEach { row ->
                             Row(

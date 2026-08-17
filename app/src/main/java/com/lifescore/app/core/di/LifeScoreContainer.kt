@@ -48,6 +48,49 @@ class LifeScoreContainer(private val context: Context) {
         )
     }
 
+    val aiQuestGeneratorService by lazy {
+        com.lifescore.app.data.ai.AiQuestGeneratorService()
+    }
+
+    val aiQuestRepository: AiQuestRepository by lazy {
+        AiQuestRepositoryImpl(
+            aiQuestDao = database.aiQuestDao(),
+            taskDao = database.taskDao(),
+            aiService = aiQuestGeneratorService
+        )
+    }
+
+    val characterStatsRepository: CharacterStatsRepository by lazy {
+        CharacterStatsRepositoryImpl(
+            dao = database.characterStatsDao()
+        )
+    }
+
+    val groupHabitRepository: GroupHabitRepository by lazy {
+        GroupHabitRepositoryImpl(
+            dao = database.groupHabitDao()
+        )
+    }
+
+    val journalRepository: JournalRepository by lazy {
+        JournalRepositoryImpl(
+            dao = database.journalDao()
+        )
+    }
+
+    val combatRepository: CombatRepository by lazy {
+        CombatRepositoryImpl(
+            bossDao = database.bossDao(),
+            statsDao = database.characterStatsDao()
+        )
+    }
+
+    val analyticsRepository: AnalyticsRepository by lazy {
+        AnalyticsRepositoryImpl(
+            scoreDao = database.dailyScoreDao()
+        )
+    }
+
     // Domain Use Cases
     val calculateLifeScoreUseCase by lazy { CalculateLifeScoreUseCase() }
     val getDailyTasksUseCase by lazy { GetDailyTasksUseCase(lifeScoreRepository) }

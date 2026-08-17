@@ -46,6 +46,24 @@ class LifeScoreApp : Application(), Configuration.Provider {
     lateinit var authRepository: AuthRepository
         private set
 
+    val aiQuestRepository: com.lifescore.app.data.repository.AiQuestRepository
+        get() = container.aiQuestRepository
+
+    val characterStatsRepository: com.lifescore.app.data.repository.CharacterStatsRepository
+        get() = container.characterStatsRepository
+
+    val groupHabitRepository: com.lifescore.app.data.repository.GroupHabitRepository
+        get() = container.groupHabitRepository
+
+    val journalRepository: com.lifescore.app.data.repository.JournalRepository
+        get() = container.journalRepository
+
+    val combatRepository: com.lifescore.app.data.repository.CombatRepository
+        get() = container.combatRepository
+
+    val analyticsRepository: com.lifescore.app.data.repository.AnalyticsRepository
+        get() = container.analyticsRepository
+
     private var firebaseAnalytics: FirebaseAnalytics? = null
 
     override val workManagerConfiguration: Configuration
@@ -68,8 +86,11 @@ class LifeScoreApp : Application(), Configuration.Provider {
 
             val firestore = FirebaseFirestore.getInstance()
             val settings = FirebaseFirestoreSettings.Builder()
-                .setPersistenceEnabled(true)
-                .setCacheSizeBytes(100 * 1024 * 1024) // 100 MB offline cache
+                .setLocalCacheSettings(
+                    com.google.firebase.firestore.PersistentCacheSettings.newBuilder()
+                        .setSizeBytes(100L * 1024 * 1024) // 100 MB offline cache
+                        .build()
+                )
                 .build()
             firestore.firestoreSettings = settings
         } catch (e: Exception) {

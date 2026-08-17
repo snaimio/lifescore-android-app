@@ -176,7 +176,7 @@ fun ArchetypeProfileScreen(
                         }
                         Text(selectedArchetype.superpower, fontSize = 12.sp, fontWeight = FontWeight.Medium, modifier = Modifier.padding(top = 4.dp, bottom = 10.dp))
 
-                        Divider(thickness = 0.5.dp, color = MaterialTheme.colorScheme.outline.copy(alpha = 0.3f))
+                        HorizontalDivider(thickness = 0.5.dp, color = MaterialTheme.colorScheme.outline.copy(alpha = 0.3f))
                         Spacer(Modifier.height(10.dp))
 
                         Row(verticalAlignment = Alignment.CenterVertically) {

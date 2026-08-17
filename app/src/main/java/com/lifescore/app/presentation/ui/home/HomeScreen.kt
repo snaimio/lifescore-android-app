@@ -2,7 +2,6 @@ package com.lifescore.app.presentation.ui.home
 
 import androidx.compose.animation.*
 import androidx.compose.animation.core.*
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -23,22 +22,23 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.lifescore.app.core.designsystem.*
+import com.lifescore.app.core.designsystem.components.GlassCard
+import com.lifescore.app.core.designsystem.components.LoadingSkeleton
+import com.lifescore.app.core.util.ShareCardData
 import com.lifescore.app.domain.model.DimensionType
 import com.lifescore.app.domain.model.HeroArchetype
 import com.lifescore.app.domain.model.LifeTask
 import com.lifescore.app.domain.model.UserProfile
-import com.lifescore.app.core.util.ShareCardData
 import com.lifescore.app.presentation.navigation.Screen
 import com.lifescore.app.presentation.ui.components.CharacterSheetDialog
 import com.lifescore.app.presentation.ui.components.GuardianSponsorshipDialog
 import com.lifescore.app.presentation.ui.components.HardModeSheet
 import com.lifescore.app.presentation.ui.home.components.*
 import com.lifescore.app.presentation.ui.share.ShareScoreCardDialog
-import com.lifescore.app.utils.ShareHelper
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -79,7 +79,7 @@ fun HomeScreen(
                         Surface(
                             shape = CircleShape,
                             color = MaterialTheme.colorScheme.primaryContainer,
-                            modifier = Modifier.size(38.dp)
+                            modifier = Modifier.size(40.dp)
                         ) {
                             Box(contentAlignment = Alignment.Center) {
                                 Text("⚔️", fontSize = 18.sp)
@@ -87,19 +87,33 @@ fun HomeScreen(
                         }
                         Spacer(Modifier.width(10.dp))
                         Column {
-                            Text("LifeScore", fontWeight = FontWeight.Black, fontSize = 18.sp)
+                            Text(
+                                "LifeScore",
+                                style = MaterialTheme.typography.titleLarge,
+                                fontWeight = FontWeight.Black,
+                                color = MaterialTheme.colorScheme.onSurface
+                            )
                             Row(verticalAlignment = Alignment.CenterVertically) {
-                                Text(uiState.userTitle, style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.primary)
+                                Text(
+                                    uiState.userTitle,
+                                    style = MaterialTheme.typography.labelSmall,
+                                    color = MaterialTheme.colorScheme.primary,
+                                    fontWeight = FontWeight.SemiBold
+                                )
                                 Spacer(Modifier.width(6.dp))
                                 Text("•", fontSize = 10.sp, color = MaterialTheme.colorScheme.outline)
                                 Spacer(Modifier.width(6.dp))
-                                Text("Lvl ${uiState.level}", fontWeight = FontWeight.Bold, fontSize = 11.sp, color = MaterialTheme.colorScheme.secondary)
+                                Text(
+                                    "Lvl ${uiState.level}",
+                                    fontWeight = FontWeight.Bold,
+                                    fontSize = 11.sp,
+                                    color = MaterialTheme.colorScheme.secondary
+                                )
                             }
                         }
                     }
                 },
                 actions = {
-                    // Sync Status / Trigger Button
                     IconButton(onClick = { viewModel.triggerManualSync() }) {
                         Icon(
                             Icons.Default.CloudSync,
@@ -109,52 +123,37 @@ fun HomeScreen(
                         )
                     }
 
-                    // Share Progress Button (Opens 9:16 Story Card Generator)
-                    IconButton(
-                        onClick = { showShareCardDialog = true }
-                    ) {
-                        Icon(Icons.Default.Share, contentDescription = "Share LifeScore Card")
+                    IconButton(onClick = { showShareCardDialog = true }) {
+                        Icon(
+                            Icons.Default.Share,
+                            contentDescription = "Share LifeScore Card",
+                            tint = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
                     }
 
-                    // Coin Wallet Store Chip
-                    AssistChip(
-                        onClick = { navController.navigate(Screen.RewardStore.route) },
-                        label = { Text("1,250", fontWeight = FontWeight.Bold) },
-                        leadingIcon = {
-                            Text("🪙", fontSize = 14.sp)
-                        }
-                    )
-
-                    // PRO Upgrade Chip
-                    AssistChip(
-                        onClick = onOpenPaywall,
-                        label = { Text("PRO", fontWeight = FontWeight.Bold) },
-                        leadingIcon = {
-                            Icon(Icons.Default.WorkspacePremium, contentDescription = null, tint = Color(0xFFFFD700), modifier = Modifier.size(18.dp))
-                        }
-                    )
-
-                    // Settings
                     IconButton(onClick = { navController.navigate(Screen.Settings.route) }) {
-                        Icon(Icons.Default.Settings, contentDescription = "Settings")
+                        Icon(
+                            Icons.Default.Settings,
+                            contentDescription = "Settings",
+                            tint = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
                     }
                 }
             )
         }
     ) { paddingValues ->
         if (uiState.isLoading) {
-            // Material 3 Loading State
-            Box(
+            Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(paddingValues),
-                contentAlignment = Alignment.Center
+                    .padding(paddingValues)
+                    .padding(16.dp),
+                verticalArrangement = Arrangement.spacedBy(16.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                    CircularProgressIndicator(color = MaterialTheme.colorScheme.primary, strokeWidth = 3.dp)
-                    Spacer(Modifier.height(16.dp))
-                    Text("Loading your LifeScore from Firestore...", style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.outline)
-                }
+                LoadingSkeleton(modifier = Modifier.fillMaxWidth(), height = 240, shape = RoundedCornerShape(22.dp))
+                LoadingSkeleton(modifier = Modifier.fillMaxWidth(), height = 60, shape = RoundedCornerShape(16.dp))
+                LoadingSkeleton(modifier = Modifier.fillMaxWidth(), height = 180, shape = RoundedCornerShape(20.dp))
             }
         } else {
             LazyColumn(
@@ -162,31 +161,32 @@ fun HomeScreen(
                     .fillMaxSize()
                     .padding(paddingValues)
                     .padding(horizontal = 16.dp),
-                verticalArrangement = Arrangement.spacedBy(16.dp)
+                verticalArrangement = Arrangement.spacedBy(16.dp),
+                contentPadding = PaddingValues(top = 4.dp, bottom = 24.dp)
             ) {
                 // Cloud Sync Status Pill
                 item {
                     Surface(
-                        shape = RoundedCornerShape(12.dp),
-                        color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.6f),
+                        shape = CircleShape,
+                        color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f),
                         modifier = Modifier.fillMaxWidth()
                     ) {
                         Row(
-                            modifier = Modifier.padding(horizontal = 14.dp, vertical = 8.dp),
+                            modifier = Modifier.padding(horizontal = 14.dp, vertical = 6.dp),
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             Icon(
                                 if (uiState.isSyncing) Icons.Default.Sync else Icons.Default.CloudDone,
                                 contentDescription = null,
-                                tint = if (uiState.isSyncing) MaterialTheme.colorScheme.primary else Color(0xFF10B981),
+                                tint = if (uiState.isSyncing) MaterialTheme.colorScheme.primary else Color(0xFF43A047),
                                 modifier = Modifier
-                                    .size(16.dp)
+                                    .size(15.dp)
                                     .let { if (uiState.isSyncing) it.rotate(rotationAngle) else it }
                             )
                             Spacer(Modifier.width(8.dp))
                             Text(
                                 text = uiState.cloudSyncStatus,
-                                fontSize = 12.sp,
+                                fontSize = 11.sp,
                                 fontWeight = FontWeight.Medium,
                                 color = MaterialTheme.colorScheme.onSurfaceVariant
                             )
@@ -194,192 +194,178 @@ fun HomeScreen(
                             Text(
                                 text = "Auto-Sync ON",
                                 fontSize = 10.sp,
-                                fontWeight = FontWeight.Bold,
+                                fontWeight = FontWeight.ExtraBold,
                                 color = MaterialTheme.colorScheme.primary
                             )
                         }
                     }
                 }
 
-                // Hero LifeScore Index Card
+                // Senior Hero Card with Animated Counter & Progression
                 item {
-                    Card(
-                        shape = RoundedCornerShape(24.dp),
-                        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer),
+                    HeroCard(
+                        score = uiState.totalScore,
+                        level = uiState.level,
+                        currentXp = uiState.currentXp,
+                        xpToNextLevel = 1000,
+                        streak = uiState.streak,
+                        userName = uiState.userName.ifEmpty { "Hero" },
+                        onShare = { showShareCardDialog = true },
+                        onLeaderboard = { navController.navigate(Screen.Leaderboard.route) }
+                    )
+                }
+
+                // Quick Action Frosted Chips
+                item {
+                    LazyRow(
+                        horizontalArrangement = Arrangement.spacedBy(8.dp),
                         modifier = Modifier.fillMaxWidth()
                     ) {
-                        Column(
-                            modifier = Modifier.padding(20.dp),
-                            horizontalAlignment = Alignment.CenterHorizontally
-                        ) {
-                            Text("OVERALL LIFESCORE INDEX", style = MaterialTheme.typography.labelMedium, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.8f))
-                            Spacer(Modifier.height(4.dp))
-                            Row(verticalAlignment = Alignment.Bottom) {
-                                Text(
-                                    text = "${uiState.totalScore}",
-                                    fontSize = 54.sp,
-                                    fontWeight = FontWeight.Black,
-                                    color = MaterialTheme.colorScheme.onPrimaryContainer
+                        item {
+                            AssistChip(
+                                onClick = { navController.navigate(Screen.AiQuests.route) },
+                                label = { Text("AI Quests", fontWeight = FontWeight.Bold, fontSize = 12.sp) },
+                                leadingIcon = { Text("🤖", fontSize = 13.sp) },
+                                shape = CircleShape,
+                                colors = AssistChipDefaults.assistChipColors(
+                                    containerColor = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.5f)
                                 )
-                                Text(
-                                    text = "/1000",
-                                    fontSize = 20.sp,
-                                    fontWeight = FontWeight.Bold,
-                                    color = MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.6f),
-                                    modifier = Modifier.padding(bottom = 8.dp, start = 4.dp)
-                                )
-                            }
-
-                            Spacer(Modifier.height(12.dp))
-
-                            // Level & XP Bar
-                            Row(
-                                modifier = Modifier.fillMaxWidth(),
-                                horizontalArrangement = Arrangement.SpaceBetween
-                            ) {
-                                Text("Level ${uiState.level} Progress", style = MaterialTheme.typography.bodySmall, fontWeight = FontWeight.Bold)
-                                Text("${(uiState.levelProgress * 100).toInt()}% to Level ${uiState.level + 1}", style = MaterialTheme.typography.bodySmall)
-                            }
-                            Spacer(Modifier.height(6.dp))
-                            LinearProgressIndicator(
-                                progress = { uiState.levelProgress },
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .height(10.dp)
-                                    .clip(CircleShape),
-                                color = MaterialTheme.colorScheme.primary,
-                                trackColor = MaterialTheme.colorScheme.surface
                             )
-
-                            Spacer(Modifier.height(16.dp))
-
-                            // Streak & Today Completion Row
-                            Row(
-                                modifier = Modifier.fillMaxWidth(),
-                                horizontalArrangement = Arrangement.SpaceEvenly
-                            ) {
-                                Surface(shape = RoundedCornerShape(14.dp), color = MaterialTheme.colorScheme.surface.copy(alpha = 0.8f)) {
-                                    Row(modifier = Modifier.padding(horizontal = 14.dp, vertical = 8.dp), verticalAlignment = Alignment.CenterVertically) {
-                                        Text("🔥", fontSize = 18.sp)
-                                        Spacer(Modifier.width(6.dp))
-                                        Text("${uiState.streak} Day Streak", fontWeight = FontWeight.Bold, fontSize = 13.sp)
-                                    }
-                                }
-                                Surface(shape = RoundedCornerShape(14.dp), color = MaterialTheme.colorScheme.surface.copy(alpha = 0.8f)) {
-                                    Row(modifier = Modifier.padding(horizontal = 14.dp, vertical = 8.dp), verticalAlignment = Alignment.CenterVertically) {
-                                        Text("✅", fontSize = 16.sp)
-                                        Spacer(Modifier.width(6.dp))
-                                        Text("${uiState.tasksCompleted}/${uiState.totalTasks} Quests", fontWeight = FontWeight.Bold, fontSize = 13.sp)
-                                    }
-                                }
-                            }
-
-                            Spacer(Modifier.height(14.dp))
-
-                            // Share My LifeScore 9:16 Card CTA Button
-                            Button(
-                                onClick = { showShareCardDialog = true },
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .height(46.dp),
-                                shape = RoundedCornerShape(14.dp),
-                                colors = ButtonDefaults.buttonColors(
-                                    containerColor = MaterialTheme.colorScheme.primaryContainer,
-                                    contentColor = MaterialTheme.colorScheme.onPrimaryContainer
-                                )
-                            ) {
-                                Icon(Icons.Default.Share, contentDescription = null, modifier = Modifier.size(16.dp))
-                                Spacer(Modifier.width(8.dp))
-                                Text("📸 Share My LifeScore Card", fontWeight = FontWeight.Bold, fontSize = 13.sp)
-                            }
-
-                            Spacer(Modifier.height(8.dp))
-
-                            // 2s Micro-Vlogs & 14s Weekly Reel CTA
-                            OutlinedButton(
-                                onClick = { navController.navigate(Screen.MicroVlogs.route) },
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .height(44.dp),
-                                shape = RoundedCornerShape(14.dp),
-                                border = BorderStroke(1.dp, MaterialTheme.colorScheme.primary.copy(alpha = 0.4f))
-                            ) {
-                                Icon(Icons.Default.Videocam, contentDescription = null, tint = MaterialTheme.colorScheme.primary, modifier = Modifier.size(18.dp))
-                                Spacer(Modifier.width(8.dp))
-                                Text("🎬 2s Daily Micro-Vlogs & 14s Reel", fontWeight = FontWeight.Bold, fontSize = 12.sp, color = MaterialTheme.colorScheme.primary)
-                            }
-
-                            Spacer(Modifier.height(8.dp))
-
-                            // 10,000-Hour Skill Mastery Tracker CTA
-                            OutlinedButton(
-                                onClick = { navController.navigate(Screen.SkillMastery.route) },
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .height(44.dp),
-                                shape = RoundedCornerShape(14.dp),
-                                border = BorderStroke(1.dp, Color(0xFFFFD700).copy(alpha = 0.5f))
-                            ) {
-                                Text("⏱️", fontSize = 16.sp)
-                                Spacer(Modifier.width(8.dp))
-                                Text("10,000-Hour Skill Mastery Tracker", fontWeight = FontWeight.Bold, fontSize = 12.sp, color = Color(0xFFFFD700))
-                            }
-
-                            Spacer(Modifier.height(8.dp))
-
-                            // LifeScore Reward Store CTA
-                            OutlinedButton(
+                        }
+                        item {
+                            AssistChip(
+                                onClick = { navController.navigate(Screen.CharacterStats.route) },
+                                label = { Text("Hunter Stats", fontWeight = FontWeight.Bold, fontSize = 12.sp) },
+                                leadingIcon = { Text("🛡️", fontSize = 13.sp) },
+                                shape = CircleShape
+                            )
+                        }
+                        item {
+                            AssistChip(
+                                onClick = { navController.navigate(Screen.GroupHabits.route) },
+                                label = { Text("Squads", fontWeight = FontWeight.Bold, fontSize = 12.sp) },
+                                leadingIcon = { Text("👥", fontSize = 13.sp) },
+                                shape = CircleShape
+                            )
+                        }
+                        item {
+                            AssistChip(
+                                onClick = { navController.navigate(Screen.Journal.route) },
+                                label = { Text("Journal", fontWeight = FontWeight.Bold, fontSize = 12.sp) },
+                                leadingIcon = { Text("📖", fontSize = 13.sp) },
+                                shape = CircleShape
+                            )
+                        }
+                        item {
+                            AssistChip(
+                                onClick = { navController.navigate(Screen.Combat.route) },
+                                label = { Text("Boss Raids", fontWeight = FontWeight.Bold, fontSize = 12.sp) },
+                                leadingIcon = { Text("⚔️", fontSize = 13.sp) },
+                                shape = CircleShape
+                            )
+                        }
+                        item {
+                            AssistChip(
+                                onClick = { navController.navigate(Screen.Analytics.route) },
+                                label = { Text("Heatmap", fontWeight = FontWeight.Bold, fontSize = 12.sp) },
+                                leadingIcon = { Text("📊", fontSize = 13.sp) },
+                                shape = CircleShape
+                            )
+                        }
+                        item {
+                            AssistChip(
+                                onClick = { navController.navigate(Screen.Privacy.route) },
+                                label = { Text("Privacy", fontWeight = FontWeight.Bold, fontSize = 12.sp) },
+                                leadingIcon = { Text("🔒", fontSize = 13.sp) },
+                                shape = CircleShape
+                            )
+                        }
+                        item {
+                            AssistChip(
                                 onClick = { navController.navigate(Screen.RewardStore.route) },
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .height(44.dp),
-                                shape = RoundedCornerShape(14.dp),
-                                border = BorderStroke(1.dp, MaterialTheme.colorScheme.primary.copy(alpha = 0.5f))
-                            ) {
-                                Text("🎁", fontSize = 16.sp)
-                                Spacer(Modifier.width(8.dp))
-                                Text("LifeScore Reward Store & Custom Rewards", fontWeight = FontWeight.Bold, fontSize = 12.sp, color = MaterialTheme.colorScheme.primary)
-                            }
-
-                            Spacer(Modifier.height(8.dp))
-
-                            // Enterprise Hub CTA
-                            OutlinedButton(
+                                label = { Text("Coins", fontWeight = FontWeight.Bold, fontSize = 12.sp) },
+                                leadingIcon = { Text("🪙", fontSize = 13.sp) },
+                                shape = CircleShape
+                            )
+                        }
+                        item {
+                            AssistChip(
+                                onClick = onOpenPaywall,
+                                label = { Text("PRO", fontWeight = FontWeight.ExtraBold, fontSize = 12.sp) },
+                                leadingIcon = {
+                                    Icon(
+                                        Icons.Default.WorkspacePremium,
+                                        contentDescription = null,
+                                        tint = Color(0xFFFFD700),
+                                        modifier = Modifier.size(16.dp)
+                                    )
+                                },
+                                shape = CircleShape,
+                                colors = AssistChipDefaults.assistChipColors(
+                                    containerColor = Color(0xFFFFD700).copy(alpha = 0.12f)
+                                )
+                            )
+                        }
+                        item {
+                            AssistChip(
+                                onClick = { showShareCardDialog = true },
+                                label = { Text("Share", fontWeight = FontWeight.Bold, fontSize = 12.sp) },
+                                leadingIcon = { Text("📸", fontSize = 13.sp) },
+                                shape = CircleShape
+                            )
+                        }
+                        item {
+                            AssistChip(
+                                onClick = { navController.navigate(Screen.MicroVlogs.route) },
+                                label = { Text("Vlogs", fontWeight = FontWeight.Bold, fontSize = 12.sp) },
+                                leadingIcon = { Text("🎬", fontSize = 13.sp) },
+                                shape = CircleShape
+                            )
+                        }
+                        item {
+                            AssistChip(
+                                onClick = { navController.navigate(Screen.SkillMastery.route) },
+                                label = { Text("Skills", fontWeight = FontWeight.Bold, fontSize = 12.sp) },
+                                leadingIcon = { Text("⏱️", fontSize = 13.sp) },
+                                shape = CircleShape
+                            )
+                        }
+                        item {
+                            AssistChip(
                                 onClick = { navController.navigate(Screen.Enterprise.route) },
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .height(44.dp),
-                                shape = RoundedCornerShape(14.dp),
-                                border = BorderStroke(1.dp, Color(0xFF6366F1).copy(alpha = 0.5f))
-                            ) {
-                                Text("🏢", fontSize = 16.sp)
-                                Spacer(Modifier.width(8.dp))
-                                Text("LifeScore Enterprise & Team Hub", fontWeight = FontWeight.Bold, fontSize = 12.sp, color = Color(0xFF6366F1))
-                            }
-
-                            Spacer(Modifier.height(8.dp))
-
-                            // AI Meme Studio CTA
-                            OutlinedButton(
+                                label = { Text("Teams", fontWeight = FontWeight.Bold, fontSize = 12.sp) },
+                                leadingIcon = { Text("🏢", fontSize = 13.sp) },
+                                shape = CircleShape
+                            )
+                        }
+                        item {
+                            AssistChip(
                                 onClick = { navController.navigate(Screen.MemeStudio.route) },
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .height(44.dp),
-                                shape = RoundedCornerShape(14.dp),
-                                border = BorderStroke(1.dp, Color(0xFFEC4899).copy(alpha = 0.5f))
-                            ) {
-                                Text("🎭", fontSize = 16.sp)
-                                Spacer(Modifier.width(8.dp))
-                                Text("AI Meme Studio & Viral Content", fontWeight = FontWeight.Bold, fontSize = 12.sp, color = Color(0xFFEC4899))
-                            }
+                                label = { Text("Memes", fontWeight = FontWeight.Bold, fontSize = 12.sp) },
+                                leadingIcon = { Text("🎭", fontSize = 13.sp) },
+                                shape = CircleShape
+                            )
                         }
                     }
+                }
+
+                // Daily Progress Bar (Glassmorphic)
+                item {
+                    DailyProgressBar(
+                        progress = if (uiState.totalTasks > 0) uiState.tasksCompleted.toFloat() / uiState.totalTasks else 0f,
+                        tasksCompleted = uiState.tasksCompleted,
+                        totalTasks = uiState.totalTasks
+                    )
                 }
 
                 // 8-Dimension Spider Radar Wheel
                 item {
                     Card(
-                        shape = RoundedCornerShape(24.dp),
+                        shape = RoundedCornerShape(22.dp),
+                        colors = CardDefaults.cardColors(
+                            containerColor = MaterialTheme.colorScheme.surface
+                        ),
+                        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
                         modifier = Modifier.fillMaxWidth()
                     ) {
                         Column(
@@ -391,24 +377,45 @@ fun HomeScreen(
                                 horizontalArrangement = Arrangement.SpaceBetween,
                                 verticalAlignment = Alignment.CenterVertically
                             ) {
-                                Text("8-Dimension Life Balance Wheel", fontWeight = FontWeight.Bold, fontSize = 16.sp)
+                                Row(verticalAlignment = Alignment.CenterVertically) {
+                                    Text("🕸️", fontSize = 16.sp)
+                                    Spacer(Modifier.width(6.dp))
+                                    Text(
+                                        "8-Dimension Balance Wheel",
+                                        style = MaterialTheme.typography.titleMedium,
+                                        fontWeight = FontWeight.Bold
+                                    )
+                                }
                                 TextButton(onClick = { navController.navigate(Screen.Dimensions.route) }) {
-                                    Text("Details", fontSize = 12.sp)
+                                    Text("Breakdown", fontSize = 12.sp, fontWeight = FontWeight.Bold)
                                 }
                             }
                             DimensionRadarChart(
                                 dimensionScores = uiState.dimensionScores,
                                 modifier = Modifier
                                     .fillMaxWidth()
-                                    .height(260.dp)
+                                    .height(250.dp)
                             )
                         }
                     }
                 }
 
-                // 8-Dimension Quick Grid / Scroll
+                // 8 Dimensions Horizontal Chips
                 item {
-                    Text("All 8 Life Dimensions", fontWeight = FontWeight.Bold, style = MaterialTheme.typography.titleMedium)
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text(
+                            "Life Dimensions",
+                            style = MaterialTheme.typography.titleMedium,
+                            fontWeight = FontWeight.Bold
+                        )
+                        TextButton(onClick = { navController.navigate(Screen.Dimensions.route) }) {
+                            Text("See All", fontSize = 12.sp, fontWeight = FontWeight.SemiBold)
+                        }
+                    }
                 }
 
                 item {
@@ -427,13 +434,12 @@ fun HomeScreen(
                     }
                 }
 
-                // Viral Retentive Cards: Hard Mode & Finch Guardian
+                // Retentive Cards: Hard Mode & Finch Guardian
                 item {
                     Row(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.spacedBy(10.dp)
                     ) {
-                        // Life Reset Hard Mode Card
                         Surface(
                             shape = RoundedCornerShape(16.dp),
                             color = if (isHardModeEnabled) MaterialTheme.colorScheme.errorContainer else MaterialTheme.colorScheme.surfaceVariant,
@@ -441,17 +447,20 @@ fun HomeScreen(
                                 .weight(1f)
                                 .clickable { showHardModeSheet = true }
                         ) {
-                            Row(modifier = Modifier.padding(12.dp), verticalAlignment = Alignment.CenterVertically) {
-                                Text("💀", fontSize = 20.sp)
-                                Spacer(Modifier.width(8.dp))
+                            Row(modifier = Modifier.padding(14.dp), verticalAlignment = Alignment.CenterVertically) {
+                                Text("💀", fontSize = 22.sp)
+                                Spacer(Modifier.width(10.dp))
                                 Column {
                                     Text("Hard Mode", fontWeight = FontWeight.Bold, fontSize = 13.sp)
-                                    Text(if (isHardModeEnabled) "Active (-50 XP)" else "Tap to Enable", fontSize = 11.sp, color = MaterialTheme.colorScheme.outline)
+                                    Text(
+                                        if (isHardModeEnabled) "Active (-50 XP)" else "Tap to Enable",
+                                        fontSize = 11.sp,
+                                        color = MaterialTheme.colorScheme.outline
+                                    )
                                 }
                             }
                         }
 
-                        // Finch Guardian Gifting Card
                         Surface(
                             shape = RoundedCornerShape(16.dp),
                             color = MaterialTheme.colorScheme.secondaryContainer,
@@ -459,28 +468,40 @@ fun HomeScreen(
                                 .weight(1f)
                                 .clickable { showGuardianDialog = true }
                         ) {
-                            Row(modifier = Modifier.padding(12.dp), verticalAlignment = Alignment.CenterVertically) {
-                                Text("🎁", fontSize = 20.sp)
-                                Spacer(Modifier.width(8.dp))
+                            Row(modifier = Modifier.padding(14.dp), verticalAlignment = Alignment.CenterVertically) {
+                                Text("🎁", fontSize = 22.sp)
+                                Spacer(Modifier.width(10.dp))
                                 Column {
                                     Text("Guardian Gift", fontWeight = FontWeight.Bold, fontSize = 13.sp)
-                                    Text("Sponsor a Hero", fontSize = 11.sp, color = MaterialTheme.colorScheme.onSecondaryContainer.copy(alpha = 0.8f))
+                                    Text(
+                                        "Sponsor a Hero",
+                                        fontSize = 11.sp,
+                                        color = MaterialTheme.colorScheme.onSecondaryContainer.copy(alpha = 0.8f)
+                                    )
                                 }
                             }
                         }
                     }
                 }
 
-                // Today's Quests & Habits (Auto-syncs on click)
+                // Today's Quests & Habits
                 item {
                     Row(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.SpaceBetween,
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        Text("Today's Dimension Quests", fontWeight = FontWeight.Bold, style = MaterialTheme.typography.titleMedium)
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Text("⚡", fontSize = 16.sp)
+                            Spacer(Modifier.width(6.dp))
+                            Text(
+                                "Today's Dimension Quests",
+                                style = MaterialTheme.typography.titleMedium,
+                                fontWeight = FontWeight.Bold
+                            )
+                        }
                         TextButton(onClick = { navController.navigate(Screen.Tasks.route) }) {
-                            Text("Manage All", fontSize = 12.sp)
+                            Text("Manage All", fontSize = 12.sp, fontWeight = FontWeight.SemiBold)
                         }
                     }
                 }
@@ -493,7 +514,7 @@ fun HomeScreen(
                 }
 
                 item {
-                    Spacer(Modifier.height(24.dp))
+                    Spacer(Modifier.height(16.dp))
                 }
             }
         }
@@ -539,41 +560,5 @@ fun HomeScreen(
             ),
             onDismiss = { showShareCardDialog = false }
         )
-    }
-}
-
-@Composable
-fun DimensionChipCard(
-    dimension: DimensionType,
-    score: Int,
-    onClick: () -> Unit
-) {
-    Card(
-        shape = RoundedCornerShape(16.dp),
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant),
-        modifier = Modifier
-            .width(130.dp)
-            .clickable { onClick() }
-    ) {
-        Column(modifier = Modifier.padding(12.dp)) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Text(dimension.displayName.take(8), fontWeight = FontWeight.Bold, fontSize = 12.sp)
-                Text("$score%", fontWeight = FontWeight.Black, fontSize = 13.sp, color = MaterialTheme.colorScheme.primary)
-            }
-            Spacer(Modifier.height(8.dp))
-            LinearProgressIndicator(
-                progress = { score / 100f },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(6.dp)
-                    .clip(CircleShape),
-                color = MaterialTheme.colorScheme.primary,
-                trackColor = MaterialTheme.colorScheme.surface
-            )
-        }
     }
 }

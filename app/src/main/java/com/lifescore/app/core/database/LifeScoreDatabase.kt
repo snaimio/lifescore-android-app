@@ -13,9 +13,14 @@ import com.lifescore.app.data.local.entity.*
         TaskEntity::class,
         DailyScoreEntity::class,
         UserEntity::class,
-        ChallengeEntity::class
+        ChallengeEntity::class,
+        AiQuestEntity::class,
+        CharacterStatsEntity::class,
+        GroupHabitEntity::class,
+        JournalEntity::class,
+        BossEntity::class
     ],
-    version = 2,
+    version = 4,
     exportSchema = false
 )
 @TypeConverters(Converters::class)
@@ -25,6 +30,11 @@ abstract class LifeScoreDatabase : RoomDatabase() {
     abstract fun dailyScoreDao(): DailyScoreDao
     abstract fun userDao(): UserDao
     abstract fun challengeDao(): ChallengeDao
+    abstract fun aiQuestDao(): AiQuestDao
+    abstract fun characterStatsDao(): CharacterStatsDao
+    abstract fun groupHabitDao(): GroupHabitDao
+    abstract fun journalDao(): JournalDao
+    abstract fun bossDao(): BossDao
 
     companion object {
         @Volatile

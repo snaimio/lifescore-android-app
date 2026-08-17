@@ -1,9 +1,14 @@
 package com.lifescore.app.presentation.navigation
 
+import androidx.compose.animation.*
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -84,10 +89,39 @@ fun LifeScoreNavGraph(
         if (app.authRepository.currentUser != null) Screen.Home.route else Screen.Login.route
     }
 
+    // Transition specs for smooth page navigation
+    val enterTransition: AnimatedContentTransitionScope<*>.() -> EnterTransition = {
+        fadeIn(animationSpec = tween(300)) + slideInHorizontally(
+            initialOffsetX = { fullWidth -> (fullWidth * 0.08f).toInt() },
+            animationSpec = tween(300)
+        )
+    }
+    val exitTransition: AnimatedContentTransitionScope<*>.() -> ExitTransition = {
+        fadeOut(animationSpec = tween(250)) + slideOutHorizontally(
+            targetOffsetX = { fullWidth -> -(fullWidth * 0.08f).toInt() },
+            animationSpec = tween(250)
+        )
+    }
+    val popEnterTransition: AnimatedContentTransitionScope<*>.() -> EnterTransition = {
+        fadeIn(animationSpec = tween(300)) + slideInHorizontally(
+            initialOffsetX = { fullWidth -> -(fullWidth * 0.08f).toInt() },
+            animationSpec = tween(300)
+        )
+    }
+    val popExitTransition: AnimatedContentTransitionScope<*>.() -> ExitTransition = {
+        fadeOut(animationSpec = tween(250)) + slideOutHorizontally(
+            targetOffsetX = { fullWidth -> (fullWidth * 0.08f).toInt() },
+            animationSpec = tween(250)
+        )
+    }
+
     Scaffold(
         bottomBar = {
             if (showBottomBar) {
-                NavigationBar {
+                NavigationBar(
+                    tonalElevation = 2.dp,
+                    containerColor = MaterialTheme.colorScheme.surface
+                ) {
                     bottomBarItems.forEach { screen ->
                         NavigationBarItem(
                             selected = currentRoute == screen.route,
@@ -100,8 +134,27 @@ fun LifeScoreNavGraph(
                                     restoreState = true
                                 }
                             },
-                            icon = { Icon(screen.icon, contentDescription = screen.title) },
-                            label = { Text(screen.title) }
+                            icon = {
+                                Icon(
+                                    screen.icon,
+                                    contentDescription = screen.title
+                                )
+                            },
+                            label = {
+                                Text(
+                                    text = screen.title,
+                                    fontSize = 11.sp,
+                                    fontWeight = if (currentRoute == screen.route) FontWeight.Bold else FontWeight.Normal,
+                                    maxLines = 1
+                                )
+                            },
+                            colors = NavigationBarItemDefaults.colors(
+                                selectedIconColor = MaterialTheme.colorScheme.primary,
+                                selectedTextColor = MaterialTheme.colorScheme.primary,
+                                indicatorColor = MaterialTheme.colorScheme.primaryContainer,
+                                unselectedIconColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                                unselectedTextColor = MaterialTheme.colorScheme.onSurfaceVariant
+                            )
                         )
                     }
                 }
@@ -111,7 +164,11 @@ fun LifeScoreNavGraph(
         NavHost(
             navController = navController,
             startDestination = startDestination,
-            modifier = Modifier.padding(innerPadding)
+            modifier = Modifier.padding(innerPadding),
+            enterTransition = { enterTransition() },
+            exitTransition = { exitTransition() },
+            popEnterTransition = { popEnterTransition() },
+            popExitTransition = { popExitTransition() }
         ) {
             composable(Screen.Home.route) {
                 HomeScreen(
@@ -228,6 +285,87 @@ fun LifeScoreNavGraph(
                             popUpTo(Screen.Login.route) { inclusive = true }
                         }
                     }
+                )
+            }
+            composable(Screen.AiQuests.route) {
+                val aiQuestViewModel = remember {
+                    com.lifescore.app.presentation.quest.AiQuestViewModel(
+                        questRepository = app.aiQuestRepository,
+                        lifeScoreRepository = app.lifeScoreRepository
+                    )
+                }
+                com.lifescore.app.presentation.quest.AiQuestScreen(
+                    viewModel = aiQuestViewModel,
+                    onNavigateBack = { navController.popBackStack() }
+                )
+            }
+            composable(Screen.CharacterStats.route) {
+                val characterViewModel = remember {
+                    com.lifescore.app.presentation.character.CharacterViewModel(
+                        characterRepository = app.characterStatsRepository,
+                        lifeScoreRepository = app.lifeScoreRepository
+                    )
+                }
+                com.lifescore.app.presentation.character.CharacterSystemScreen(
+                    viewModel = characterViewModel,
+                    onNavigateBack = { navController.popBackStack() }
+                )
+            }
+            composable(Screen.GroupHabits.route) {
+                val groupHabitViewModel = remember {
+                    com.lifescore.app.presentation.group.GroupHabitViewModel(
+                        repository = app.groupHabitRepository
+                    )
+                }
+                com.lifescore.app.presentation.group.GroupHabitScreen(
+                    viewModel = groupHabitViewModel,
+                    onNavigateBack = { navController.popBackStack() }
+                )
+            }
+            composable(Screen.Journal.route) {
+                val journalViewModel = remember {
+                    com.lifescore.app.presentation.journal.JournalViewModel(
+                        repository = app.journalRepository
+                    )
+                }
+                com.lifescore.app.presentation.journal.JournalScreen(
+                    viewModel = journalViewModel,
+                    onNavigateBack = { navController.popBackStack() }
+                )
+            }
+            composable(Screen.Combat.route) {
+                val combatViewModel = remember {
+                    com.lifescore.app.presentation.combat.CombatViewModel(
+                        combatRepository = app.combatRepository,
+                        statsRepository = app.characterStatsRepository
+                    )
+                }
+                com.lifescore.app.presentation.combat.CombatScreen(
+                    viewModel = combatViewModel,
+                    onNavigateBack = { navController.popBackStack() }
+                )
+            }
+            composable(Screen.Analytics.route) {
+                val analyticsViewModel = remember {
+                    com.lifescore.app.presentation.analytics.AnalyticsViewModel(
+                        analyticsRepository = app.analyticsRepository,
+                        lifeScoreRepository = app.lifeScoreRepository
+                    )
+                }
+                com.lifescore.app.presentation.analytics.AnalyticsDashboardScreen(
+                    viewModel = analyticsViewModel,
+                    onNavigateBack = { navController.popBackStack() }
+                )
+            }
+            composable(Screen.Privacy.route) {
+                val privacyViewModel = remember {
+                    com.lifescore.app.presentation.privacy.PrivacyViewModel(
+                        database = app.database
+                    )
+                }
+                com.lifescore.app.presentation.privacy.PrivacyDashboardScreen(
+                    viewModel = privacyViewModel,
+                    onNavigateBack = { navController.popBackStack() }
                 )
             }
         }
