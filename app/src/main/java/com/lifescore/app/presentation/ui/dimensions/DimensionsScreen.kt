@@ -20,6 +20,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
+import com.lifescore.app.core.designsystem.Spacing
 import com.lifescore.app.data.repository.LifeScoreRepository
 import com.lifescore.app.domain.model.DimensionType
 import com.lifescore.app.domain.model.LifeTask
@@ -84,7 +85,7 @@ fun DimensionsScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Life Dimensions", fontWeight = FontWeight.Bold) }
+                title = { Text("Life Dimensions", fontWeight = FontWeight.Bold, style = MaterialTheme.typography.titleLarge) }
             )
         },
         floatingActionButton = {
@@ -104,7 +105,7 @@ fun DimensionsScreen(
             // Scrollable Dimension Tabs
             ScrollableTabRow(
                 selectedTabIndex = DimensionType.values().indexOf(uiState.selectedDimension),
-                edgePadding = 16.dp
+                edgePadding = Spacing.responsiveHorizontalPadding()
             ) {
                 DimensionType.values().forEach { dim ->
                     Tab(
@@ -113,7 +114,8 @@ fun DimensionsScreen(
                         text = {
                             Text(
                                 dim.displayName,
-                                fontWeight = if (uiState.selectedDimension == dim) FontWeight.Bold else FontWeight.Normal,
+                                fontWeight = if (uiState.selectedDimension == dim) FontWeight.Bold else FontWeight.Medium,
+                                fontSize = 13.sp,
                                 color = if (uiState.selectedDimension == dim) Color(dim.baseColorHex) else MaterialTheme.colorScheme.onSurface
                             )
                         }
@@ -124,29 +126,30 @@ fun DimensionsScreen(
             LazyColumn(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(16.dp),
-                verticalArrangement = Arrangement.spacedBy(12.dp)
+                    .padding(horizontal = Spacing.responsiveHorizontalPadding()),
+                verticalArrangement = Arrangement.spacedBy(10.dp),
+                contentPadding = PaddingValues(top = 12.dp, bottom = 80.dp)
             ) {
                 item {
                     // Dimension Header Card
                     Card(
                         modifier = Modifier.fillMaxWidth(),
-                        shape = RoundedCornerShape(20.dp),
+                        shape = RoundedCornerShape(18.dp),
                         colors = CardDefaults.cardColors(
                             containerColor = Color(uiState.selectedDimension.baseColorHex).copy(alpha = 0.15f)
                         )
                     ) {
-                        Column(modifier = Modifier.padding(18.dp)) {
+                        Column(modifier = Modifier.padding(16.dp)) {
                             Text(
                                 text = uiState.selectedDimension.displayName,
                                 fontWeight = FontWeight.Black,
-                                fontSize = 22.sp,
+                                fontSize = 20.sp,
                                 color = Color(uiState.selectedDimension.baseColorHex)
                             )
                             Spacer(Modifier.height(4.dp))
                             Text(
                                 text = uiState.selectedDimension.description,
-                                fontSize = 13.sp,
+                                fontSize = 12.sp,
                                 color = MaterialTheme.colorScheme.onSurfaceVariant
                             )
                         }
@@ -167,10 +170,10 @@ fun DimensionsScreen(
                         Box(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .padding(32.dp),
+                                .padding(24.dp),
                             contentAlignment = Alignment.Center
                         ) {
-                            Text("No habits yet. Tap + to add one!", color = MaterialTheme.colorScheme.outline)
+                            Text("No habits yet. Tap + to add one!", color = MaterialTheme.colorScheme.outline, fontSize = 13.sp)
                         }
                     }
                 } else {
@@ -179,12 +182,13 @@ fun DimensionsScreen(
                             shape = RoundedCornerShape(14.dp),
                             colors = CardDefaults.cardColors(
                                 containerColor = if (task.isCompleted) MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f) else MaterialTheme.colorScheme.surface
-                            )
+                            ),
+                            elevation = CardDefaults.cardElevation(defaultElevation = 1.dp)
                         ) {
                             Row(
                                 modifier = Modifier
                                     .fillMaxWidth()
-                                    .padding(14.dp),
+                                    .padding(12.dp),
                                 verticalAlignment = Alignment.CenterVertically
                             ) {
                                 Checkbox(
@@ -194,17 +198,18 @@ fun DimensionsScreen(
                                         checkedColor = Color(uiState.selectedDimension.baseColorHex)
                                     )
                                 )
-                                Spacer(Modifier.width(8.dp))
+                                Spacer(Modifier.width(6.dp))
                                 Text(
                                     text = task.title,
                                     fontWeight = FontWeight.Medium,
+                                    fontSize = 13.sp,
                                     modifier = Modifier.weight(1f),
                                     color = if (task.isCompleted) MaterialTheme.colorScheme.onSurface.copy(alpha = 0.4f) else MaterialTheme.colorScheme.onSurface
                                 )
                                 Text(
                                     text = "+${task.pointsReward} XP",
                                     fontWeight = FontWeight.Bold,
-                                    fontSize = 12.sp,
+                                    fontSize = 11.sp,
                                     color = Color(uiState.selectedDimension.baseColorHex)
                                 )
                             }

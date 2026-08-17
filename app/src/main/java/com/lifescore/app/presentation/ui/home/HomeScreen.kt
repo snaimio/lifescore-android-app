@@ -22,6 +22,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
@@ -74,39 +75,43 @@ fun HomeScreen(
                 title = {
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
-                        modifier = Modifier.clickable { showCharacterSheet = true }
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clickable { showCharacterSheet = true }
                     ) {
                         Surface(
                             shape = CircleShape,
                             color = MaterialTheme.colorScheme.primaryContainer,
-                            modifier = Modifier.size(40.dp)
+                            modifier = Modifier.size(34.dp)
                         ) {
                             Box(contentAlignment = Alignment.Center) {
-                                Text("⚔️", fontSize = 18.sp)
+                                Text("⚔️", fontSize = 16.sp)
                             }
                         }
-                        Spacer(Modifier.width(10.dp))
-                        Column {
+                        Spacer(Modifier.width(8.dp))
+                        Column(modifier = Modifier.weight(1f)) {
                             Text(
                                 "LifeScore",
-                                style = MaterialTheme.typography.titleLarge,
+                                style = MaterialTheme.typography.titleMedium,
                                 fontWeight = FontWeight.Black,
                                 color = MaterialTheme.colorScheme.onSurface
                             )
                             Row(verticalAlignment = Alignment.CenterVertically) {
                                 Text(
-                                    uiState.userTitle,
+                                    text = uiState.userTitle,
                                     style = MaterialTheme.typography.labelSmall,
                                     color = MaterialTheme.colorScheme.primary,
-                                    fontWeight = FontWeight.SemiBold
+                                    fontWeight = FontWeight.SemiBold,
+                                    maxLines = 1,
+                                    overflow = TextOverflow.Ellipsis
                                 )
-                                Spacer(Modifier.width(6.dp))
-                                Text("•", fontSize = 10.sp, color = MaterialTheme.colorScheme.outline)
-                                Spacer(Modifier.width(6.dp))
+                                Spacer(Modifier.width(4.dp))
+                                Text("•", fontSize = 9.sp, color = MaterialTheme.colorScheme.outline)
+                                Spacer(Modifier.width(4.dp))
                                 Text(
-                                    "Lvl ${uiState.level}",
+                                    text = "Lvl ${uiState.level}",
                                     fontWeight = FontWeight.Bold,
-                                    fontSize = 11.sp,
+                                    fontSize = 10.sp,
                                     color = MaterialTheme.colorScheme.secondary
                                 )
                             }
@@ -114,28 +119,41 @@ fun HomeScreen(
                     }
                 },
                 actions = {
-                    IconButton(onClick = { viewModel.triggerManualSync() }) {
+                    IconButton(
+                        onClick = { viewModel.triggerManualSync() },
+                        modifier = Modifier.size(36.dp)
+                    ) {
                         Icon(
                             Icons.Default.CloudSync,
                             contentDescription = "Sync Cloud",
                             tint = if (uiState.isSyncing) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant,
-                            modifier = if (uiState.isSyncing) Modifier.rotate(rotationAngle) else Modifier
+                            modifier = Modifier
+                                .size(20.dp)
+                                .let { if (uiState.isSyncing) it.rotate(rotationAngle) else it }
                         )
                     }
 
-                    IconButton(onClick = { showShareCardDialog = true }) {
+                    IconButton(
+                        onClick = { showShareCardDialog = true },
+                        modifier = Modifier.size(36.dp)
+                    ) {
                         Icon(
                             Icons.Default.Share,
                             contentDescription = "Share LifeScore Card",
-                            tint = MaterialTheme.colorScheme.onSurfaceVariant
+                            tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                            modifier = Modifier.size(20.dp)
                         )
                     }
 
-                    IconButton(onClick = { navController.navigate(Screen.Settings.route) }) {
+                    IconButton(
+                        onClick = { navController.navigate(Screen.Settings.route) },
+                        modifier = Modifier.size(36.dp)
+                    ) {
                         Icon(
                             Icons.Default.Settings,
                             contentDescription = "Settings",
-                            tint = MaterialTheme.colorScheme.onSurfaceVariant
+                            tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                            modifier = Modifier.size(20.dp)
                         )
                     }
                 }
@@ -147,43 +165,43 @@ fun HomeScreen(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(paddingValues)
-                    .padding(16.dp),
-                verticalArrangement = Arrangement.spacedBy(16.dp),
+                    .padding(horizontal = Spacing.responsiveHorizontalPadding(), vertical = 12.dp),
+                verticalArrangement = Arrangement.spacedBy(12.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                LoadingSkeleton(modifier = Modifier.fillMaxWidth(), height = 240, shape = RoundedCornerShape(22.dp))
-                LoadingSkeleton(modifier = Modifier.fillMaxWidth(), height = 60, shape = RoundedCornerShape(16.dp))
-                LoadingSkeleton(modifier = Modifier.fillMaxWidth(), height = 180, shape = RoundedCornerShape(20.dp))
+                LoadingSkeleton(modifier = Modifier.fillMaxWidth(), height = 220, shape = RoundedCornerShape(20.dp))
+                LoadingSkeleton(modifier = Modifier.fillMaxWidth(), height = 50, shape = RoundedCornerShape(14.dp))
+                LoadingSkeleton(modifier = Modifier.fillMaxWidth(), height = 160, shape = RoundedCornerShape(18.dp))
             }
         } else {
             LazyColumn(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(paddingValues)
-                    .padding(horizontal = 16.dp),
-                verticalArrangement = Arrangement.spacedBy(16.dp),
+                    .padding(horizontal = Spacing.responsiveHorizontalPadding()),
+                verticalArrangement = Arrangement.spacedBy(12.dp),
                 contentPadding = PaddingValues(top = 4.dp, bottom = 24.dp)
             ) {
                 // Cloud Sync Status Pill
                 item {
                     Surface(
                         shape = CircleShape,
-                        color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f),
+                        color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.55f),
                         modifier = Modifier.fillMaxWidth()
                     ) {
                         Row(
-                            modifier = Modifier.padding(horizontal = 14.dp, vertical = 6.dp),
+                            modifier = Modifier.padding(horizontal = 12.dp, vertical = 5.dp),
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             Icon(
                                 if (uiState.isSyncing) Icons.Default.Sync else Icons.Default.CloudDone,
                                 contentDescription = null,
-                                tint = if (uiState.isSyncing) MaterialTheme.colorScheme.primary else Color(0xFF43A047),
+                                tint = if (uiState.isSyncing) MaterialTheme.colorScheme.primary else Color(0xFF10B981),
                                 modifier = Modifier
-                                    .size(15.dp)
+                                    .size(14.dp)
                                     .let { if (uiState.isSyncing) it.rotate(rotationAngle) else it }
                             )
-                            Spacer(Modifier.width(8.dp))
+                            Spacer(Modifier.width(6.dp))
                             Text(
                                 text = uiState.cloudSyncStatus,
                                 fontSize = 11.sp,
@@ -194,7 +212,7 @@ fun HomeScreen(
                             Text(
                                 text = "Auto-Sync ON",
                                 fontSize = 10.sp,
-                                fontWeight = FontWeight.ExtraBold,
+                                fontWeight = FontWeight.Bold,
                                 color = MaterialTheme.colorScheme.primary
                             )
                         }
@@ -361,7 +379,7 @@ fun HomeScreen(
                 // 8-Dimension Spider Radar Wheel
                 item {
                     Card(
-                        shape = RoundedCornerShape(22.dp),
+                        shape = RoundedCornerShape(20.dp),
                         colors = CardDefaults.cardColors(
                             containerColor = MaterialTheme.colorScheme.surface
                         ),
@@ -369,7 +387,7 @@ fun HomeScreen(
                         modifier = Modifier.fillMaxWidth()
                     ) {
                         Column(
-                            modifier = Modifier.padding(16.dp),
+                            modifier = Modifier.padding(14.dp),
                             horizontalAlignment = Alignment.CenterHorizontally
                         ) {
                             Row(
@@ -381,20 +399,20 @@ fun HomeScreen(
                                     Text("🕸️", fontSize = 16.sp)
                                     Spacer(Modifier.width(6.dp))
                                     Text(
-                                        "8-Dimension Balance Wheel",
+                                        "8-Dimension Balance",
                                         style = MaterialTheme.typography.titleMedium,
                                         fontWeight = FontWeight.Bold
                                     )
                                 }
                                 TextButton(onClick = { navController.navigate(Screen.Dimensions.route) }) {
-                                    Text("Breakdown", fontSize = 12.sp, fontWeight = FontWeight.Bold)
+                                    Text("Breakdown", fontSize = 11.sp, fontWeight = FontWeight.Bold)
                                 }
                             }
                             DimensionRadarChart(
                                 dimensionScores = uiState.dimensionScores,
                                 modifier = Modifier
                                     .fillMaxWidth()
-                                    .height(250.dp)
+                                    .height(230.dp)
                             )
                         }
                     }
@@ -413,14 +431,14 @@ fun HomeScreen(
                             fontWeight = FontWeight.Bold
                         )
                         TextButton(onClick = { navController.navigate(Screen.Dimensions.route) }) {
-                            Text("See All", fontSize = 12.sp, fontWeight = FontWeight.SemiBold)
+                            Text("See All", fontSize = 11.sp, fontWeight = FontWeight.SemiBold)
                         }
                     }
                 }
 
                 item {
                     LazyRow(
-                        horizontalArrangement = Arrangement.spacedBy(10.dp),
+                        horizontalArrangement = Arrangement.spacedBy(8.dp),
                         contentPadding = PaddingValues(bottom = 4.dp)
                     ) {
                         items(uiState.dimensions) { dimension ->
@@ -438,23 +456,23 @@ fun HomeScreen(
                 item {
                     Row(
                         modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.spacedBy(10.dp)
+                        horizontalArrangement = Arrangement.spacedBy(8.dp)
                     ) {
                         Surface(
-                            shape = RoundedCornerShape(16.dp),
+                            shape = RoundedCornerShape(14.dp),
                             color = if (isHardModeEnabled) MaterialTheme.colorScheme.errorContainer else MaterialTheme.colorScheme.surfaceVariant,
                             modifier = Modifier
                                 .weight(1f)
                                 .clickable { showHardModeSheet = true }
                         ) {
-                            Row(modifier = Modifier.padding(14.dp), verticalAlignment = Alignment.CenterVertically) {
-                                Text("💀", fontSize = 22.sp)
-                                Spacer(Modifier.width(10.dp))
+                            Row(modifier = Modifier.padding(12.dp), verticalAlignment = Alignment.CenterVertically) {
+                                Text("💀", fontSize = 20.sp)
+                                Spacer(Modifier.width(8.dp))
                                 Column {
-                                    Text("Hard Mode", fontWeight = FontWeight.Bold, fontSize = 13.sp)
+                                    Text("Hard Mode", fontWeight = FontWeight.Bold, fontSize = 12.sp)
                                     Text(
                                         if (isHardModeEnabled) "Active (-50 XP)" else "Tap to Enable",
-                                        fontSize = 11.sp,
+                                        fontSize = 10.sp,
                                         color = MaterialTheme.colorScheme.outline
                                     )
                                 }
@@ -462,20 +480,20 @@ fun HomeScreen(
                         }
 
                         Surface(
-                            shape = RoundedCornerShape(16.dp),
+                            shape = RoundedCornerShape(14.dp),
                             color = MaterialTheme.colorScheme.secondaryContainer,
                             modifier = Modifier
                                 .weight(1f)
                                 .clickable { showGuardianDialog = true }
                         ) {
-                            Row(modifier = Modifier.padding(14.dp), verticalAlignment = Alignment.CenterVertically) {
-                                Text("🎁", fontSize = 22.sp)
-                                Spacer(Modifier.width(10.dp))
+                            Row(modifier = Modifier.padding(12.dp), verticalAlignment = Alignment.CenterVertically) {
+                                Text("🎁", fontSize = 20.sp)
+                                Spacer(Modifier.width(8.dp))
                                 Column {
-                                    Text("Guardian Gift", fontWeight = FontWeight.Bold, fontSize = 13.sp)
+                                    Text("Guardian Gift", fontWeight = FontWeight.Bold, fontSize = 12.sp)
                                     Text(
                                         "Sponsor a Hero",
-                                        fontSize = 11.sp,
+                                        fontSize = 10.sp,
                                         color = MaterialTheme.colorScheme.onSecondaryContainer.copy(alpha = 0.8f)
                                     )
                                 }
@@ -501,7 +519,7 @@ fun HomeScreen(
                             )
                         }
                         TextButton(onClick = { navController.navigate(Screen.Tasks.route) }) {
-                            Text("Manage All", fontSize = 12.sp, fontWeight = FontWeight.SemiBold)
+                            Text("Manage All", fontSize = 11.sp, fontWeight = FontWeight.SemiBold)
                         }
                     }
                 }

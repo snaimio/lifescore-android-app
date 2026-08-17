@@ -33,6 +33,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.lifescore.app.domain.model.UserProfile
@@ -94,7 +95,7 @@ fun LoginScreen(
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(24.dp),
+                    .padding(horizontal = com.lifescore.app.core.designsystem.Spacing.responsiveHorizontalPadding(), vertical = 12.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Spacer(Modifier.height(16.dp))
@@ -397,43 +398,53 @@ fun LoginScreen(
 
                         Spacer(Modifier.height(18.dp))
 
-                        // Legal Footer
-                        Row(
-                            horizontalArrangement = Arrangement.Center,
-                            verticalAlignment = Alignment.CenterVertically,
-                            modifier = Modifier.fillMaxWidth()
-                        ) {
-                            Text(
-                                text = "By continuing, you agree to our ",
-                                fontSize = 11.sp,
-                                color = MaterialTheme.colorScheme.outline
-                            )
-                            Text(
-                                text = "Terms",
-                                fontSize = 11.sp,
-                                fontWeight = FontWeight.Bold,
-                                color = MaterialTheme.colorScheme.primary,
-                                modifier = Modifier.clickable {
-                                    val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://lifescore-app.web.app/terms"))
-                                    try { context.startActivity(intent) } catch (e: Exception) {}
-                                }
-                            )
-                            Text(
-                                text = " & ",
-                                fontSize = 11.sp,
-                                color = MaterialTheme.colorScheme.outline
-                            )
-                            Text(
-                                text = "Privacy Policy",
-                                fontSize = 11.sp,
-                                fontWeight = FontWeight.Bold,
-                                color = MaterialTheme.colorScheme.primary,
-                                modifier = Modifier.clickable {
-                                    val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://lifescore-app.web.app/privacy"))
-                                    try { context.startActivity(intent) } catch (e: Exception) {}
-                                }
-                            )
+                        // Legal Footer with proper wrapping
+                        val annotatedLegalText = androidx.compose.ui.text.buildAnnotatedString {
+                            append("By continuing, you agree to our ")
+                            pushStringAnnotation(tag = "TERMS", annotation = "https://lifescore-app.web.app/terms")
+                            withStyle(
+                                style = androidx.compose.ui.text.SpanStyle(
+                                    color = MaterialTheme.colorScheme.primary,
+                                    fontWeight = FontWeight.Bold
+                                )
+                            ) {
+                                append("Terms")
+                            }
+                            pop()
+                            append(" & ")
+                            pushStringAnnotation(tag = "PRIVACY", annotation = "https://lifescore-app.web.app/privacy")
+                            withStyle(
+                                style = androidx.compose.ui.text.SpanStyle(
+                                    color = MaterialTheme.colorScheme.primary,
+                                    fontWeight = FontWeight.Bold
+                                )
+                            ) {
+                                append("Privacy Policy")
+                            }
+                            pop()
                         }
+
+                        androidx.compose.foundation.text.ClickableText(
+                            text = annotatedLegalText,
+                            style = MaterialTheme.typography.bodySmall.copy(
+                                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                textAlign = TextAlign.Center,
+                                fontSize = 11.sp
+                            ),
+                            modifier = Modifier.fillMaxWidth().padding(horizontal = 8.dp),
+                            onClick = { offset ->
+                                annotatedLegalText.getStringAnnotations(tag = "TERMS", start = offset, end = offset)
+                                    .firstOrNull()?.let { annotation ->
+                                        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(annotation.item))
+                                        try { context.startActivity(intent) } catch (e: Exception) {}
+                                    }
+                                annotatedLegalText.getStringAnnotations(tag = "PRIVACY", start = offset, end = offset)
+                                    .firstOrNull()?.let { annotation ->
+                                        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(annotation.item))
+                                        try { context.startActivity(intent) } catch (e: Exception) {}
+                                    }
+                            }
+                        )
 
                         Spacer(Modifier.height(24.dp))
                     }

@@ -39,9 +39,9 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
 
 enum class CoachTab(val title: String) {
-    CHAT("💬 Daily Coach"),
-    AUDIT("📊 Weekly Audit"),
-    MEMORY("🧠 Memory Vault")
+    CHAT("💬 Coach"),
+    AUDIT("📊 Audit"),
+    MEMORY("🧠 Memory")
 }
 
 data class ChatMessage(

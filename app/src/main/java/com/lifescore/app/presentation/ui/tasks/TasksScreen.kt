@@ -45,9 +45,9 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 enum class HabitTab(val title: String) {
-    HABITS("⚡ Today's Habits"),
-    CHAIN("🔗 Don't Break The Chain"),
-    CHALLENGES("🏆 30-Day Challenges")
+    HABITS("⚡ Habits"),
+    CHAIN("🔗 Chains"),
+    CHALLENGES("🏆 30-Day")
 }
 
 data class TasksUiState(

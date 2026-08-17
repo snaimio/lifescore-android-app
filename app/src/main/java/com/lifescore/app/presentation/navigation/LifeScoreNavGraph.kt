@@ -3,6 +3,7 @@ package com.lifescore.app.presentation.navigation
 import androidx.compose.animation.*
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
@@ -46,7 +47,6 @@ fun LifeScoreNavGraph(
         Screen.Home,
         Screen.Dimensions,
         Screen.Tasks,
-        Screen.Challenges,
         Screen.AICoach,
         Screen.Leaderboard
     )
@@ -119,7 +119,7 @@ fun LifeScoreNavGraph(
         bottomBar = {
             if (showBottomBar) {
                 NavigationBar(
-                    tonalElevation = 2.dp,
+                    tonalElevation = 3.dp,
                     containerColor = MaterialTheme.colorScheme.surface
                 ) {
                     bottomBarItems.forEach { screen ->
@@ -137,15 +137,18 @@ fun LifeScoreNavGraph(
                             icon = {
                                 Icon(
                                     screen.icon,
-                                    contentDescription = screen.title
+                                    contentDescription = screen.title,
+                                    modifier = Modifier.size(20.dp)
                                 )
                             },
                             label = {
                                 Text(
                                     text = screen.title,
-                                    fontSize = 11.sp,
-                                    fontWeight = if (currentRoute == screen.route) FontWeight.Bold else FontWeight.Normal,
-                                    maxLines = 1
+                                    fontSize = 10.sp,
+                                    fontWeight = if (currentRoute == screen.route) FontWeight.Bold else FontWeight.Medium,
+                                    maxLines = 1,
+                                    softWrap = false,
+                                    overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis
                                 )
                             },
                             colors = NavigationBarItemDefaults.colors(
