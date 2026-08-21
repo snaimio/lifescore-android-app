@@ -54,6 +54,9 @@ class UseCasesTest {
         override suspend fun askCoachWithMemory(userQuestion: String, memoryContext: String): String {
             return "Contextual coaching with memory: $memoryContext"
         }
+        override suspend fun askCoachWithArchetype(userQuestion: String, archetypeId: String, assessmentSummary: String, memoryContext: String): String {
+            return "Archetype coaching for $archetypeId on $userQuestion"
+        }
         override suspend fun generateWeeklyAudit(scores: Map<DimensionType, Int>, tasksCompleted: Int, totalScore: Int, streak: Int): WeeklyAuditResult {
             return WeeklyAuditResult(
                 headline = "Great consistency!",
@@ -157,4 +160,50 @@ class UseCasesTest {
         assertEquals("Great consistency!", audit.headline)
         assertEquals(DimensionType.FITNESS, audit.topDimension)
     }
+
+    @Test
+    fun testAssessmentToActionEngine() {
+        val sampleAnswers = (1..130).associateWith { (3..5).random() }
+        val assessmentResult = com.lifescore.app.core.util.PsychometricAssessmentEngine.evaluateAssessment(sampleAnswers)
+        assertNotNull(assessmentResult)
+
+        val roadmap = com.lifescore.app.core.engine.AssessmentToActionEngine.generateRoadmap(assessmentResult)
+        assertNotNull(roadmap)
+        assertTrue(roadmap.personalizedDailyQuests.isNotEmpty())
+        assertTrue(roadmap.recommendedCareerQuests.isNotEmpty())
+        assertEquals(30, roadmap.primaryFocusCampaign.durationDays)
+    }
+
+    @Test
+    fun testCareerQuestSystem() {
+        val career = com.lifescore.app.core.util.CareerMatch(
+            title = "AI Solutions Architect",
+            riasecCode = "IRE",
+            matchPercentage = 95,
+            salaryRange = "$160k - $240k",
+            description = "Design autonomous agentic architectures and cloud ML pipelines.",
+            topSkills = listOf("System Design", "Python", "MLOps")
+        )
+        val quest = com.lifescore.app.core.engine.CareerQuestSystem.generateCareerQuest(career)
+        assertEquals(7, quest.days.size)
+        assertTrue(quest.totalXpReward >= 300)
+    }
+
+    @Test
+    fun testChallengePackSystem() {
+        val packs = com.lifescore.app.core.engine.ChallengePackSystem.getPacksForDimension(DimensionType.HEALTH)
+        assertEquals(3, packs.size) // Starter, Progression, Mastery
+        assertEquals(7, packs[0].durationDays)
+        assertEquals(14, packs[1].durationDays)
+        assertEquals(30, packs[2].durationDays)
+    }
+
+    @Test
+    fun testCommunityTribeSystem() {
+        val tribes = com.lifescore.app.core.engine.CommunityTribeSystem.archetypeTribes
+        assertTrue(tribes.isNotEmpty())
+        val architectTribe = com.lifescore.app.core.engine.CommunityTribeSystem.getTribeForArchetype("architect")
+        assertEquals("The Architects Syndicate", architectTribe.tribeName)
+    }
 }
+

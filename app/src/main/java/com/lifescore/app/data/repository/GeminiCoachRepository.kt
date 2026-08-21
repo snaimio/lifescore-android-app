@@ -32,6 +32,12 @@ interface GeminiCoachRepository {
 
     suspend fun askCoach(userQuestion: String, contextScore: Int): String
     suspend fun askCoachWithMemory(userQuestion: String, memoryContext: String): String
+    suspend fun askCoachWithArchetype(
+        userQuestion: String,
+        archetypeId: String,
+        assessmentSummary: String = "",
+        memoryContext: String = ""
+    ): String
 
     suspend fun generateWeeklyAudit(
         scores: Map<DimensionType, Int>,
@@ -138,6 +144,62 @@ class GeminiCoachRepositoryImpl(
         } else {
             getDeterministicMemoryReply(userQuestion, memoryContext)
         }
+    }
+
+    override suspend fun askCoachWithArchetype(
+        userQuestion: String,
+        archetypeId: String,
+        assessmentSummary: String,
+        memoryContext: String
+    ): String = withContext(Dispatchers.IO) {
+        val archetypePrompt = getArchetypeSpecificPrompt(archetypeId)
+        if (generativeModel != null) {
+            try {
+                val fullPrompt = """
+                    You are LifeScore AI, coaching a user with the psychometric profile '$archetypeId'.
+                    
+                    [ARCHETYPE COACHING PERSONA]
+                    $archetypePrompt
+                    
+                    [ASSESSMENT INSIGHTS]
+                    ${assessmentSummary.ifBlank { "Psychometric Assessment: 130 questions evaluated across 6 dimensions." }}
+                    
+                    [BEHAVIORAL MEMORY CONTEXT]
+                    ${memoryContext.ifBlank { "Memory: User is building daily compounding consistency across 8 life dimensions." }}
+                    
+                    [USER QUESTION / MESSAGE]
+                    "$userQuestion"
+                    
+                    Respond directly to the user as their specialized Archetype Coach. Provide precise, actionable, science-backed guidance honoring their strengths while systematically upgrading their blind spots.
+                """.trimIndent()
+                val response = generativeModel?.generateContent(fullPrompt)
+                return@withContext response?.text ?: getDeterministicArchetypeReply(userQuestion, archetypeId)
+            } catch (_: Exception) {
+                return@withContext getDeterministicArchetypeReply(userQuestion, archetypeId)
+            }
+        } else {
+            getDeterministicArchetypeReply(userQuestion, archetypeId)
+        }
+    }
+
+    private fun getArchetypeSpecificPrompt(archetypeId: String): String {
+        return when (archetypeId.lowercase()) {
+            "architect" -> "As The Architect, you thrive on systems, structure, and optimization. Focus on building scalable habits, automating repetitive tasks, and eliminating friction."
+            "warrior" -> "As The Warrior, you excel through discipline, grit, and physical output. Channel your somatic energy into consistent daily action and unwavering follow-through."
+            "healer" -> "As The Healer, your superpower is empathy and emotional intelligence. Focus on deep relationships, active listening, and mental well-being."
+            "visionary" -> "As The Visionary, you see the macro horizon and innovate. Channel your big ideas into concrete daily milestones so execution matches vision."
+            "scholar" -> "As The Scholar, you thrive on deep analytical mastery and first-principles study. Turn abstract theory into practical habit loops."
+            "explorer" -> "As The Explorer, you crave novelty, adventure, and adaptability. Structure habits with variety and dynamic challenges."
+            "diplomat" -> "As The Diplomat, you excel at negotiation, influence, and social resonance. Focus on win-win community building and leadership."
+            "alchemist" -> "As The Alchemist, your gift is creative synthesis and transformation. Bridge disparate disciplines into unique creative output."
+            "strategist" -> "As The Strategist, you operate with high tactical precision and long-term leverage. Focus on asset compounding and 80/20 leverage points."
+            else -> "As The Creator, your essence is originality and creative expression. Focus on daily craft output and shipping authentic work."
+        }
+    }
+
+    private fun getDeterministicArchetypeReply(question: String, archetypeId: String): String {
+        val persona = getArchetypeSpecificPrompt(archetypeId)
+        return "🧠 **${archetypeId.replaceFirstChar { it.uppercase() }} Directive:**\n$persona\n\n🎯 **Action Protocol for \"$question\":**\n1. **Leverage Superpower:** Anchor your next task in your natural cognitive archetype.\n2. **Mitigate Bottleneck:** Execute 1 micro-win in your lowest assessment dimension today.\n3. **Compounding Log:** Record your progress in the Cognitive Journal to cement long-term memory."
     }
 
     private fun getDeterministicMemoryReply(question: String, memoryContext: String): String {

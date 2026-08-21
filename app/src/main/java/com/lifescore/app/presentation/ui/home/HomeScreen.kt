@@ -35,6 +35,7 @@ import com.lifescore.app.presentation.ui.components.CharacterSheetDialog
 import com.lifescore.app.presentation.ui.components.GuardianSponsorshipDialog
 import com.lifescore.app.presentation.ui.components.HardModeSheet
 import com.lifescore.app.presentation.ui.home.components.DimensionRadarChart
+import com.lifescore.app.presentation.ui.home.components.LifeScoreProgressionCard
 import com.lifescore.app.presentation.ui.home.components.QuickActionsRow
 import com.lifescore.app.presentation.ui.home.components.SectionHeader
 import com.lifescore.app.presentation.ui.share.ShareScoreCardDialog
@@ -370,7 +371,15 @@ fun HomeScreen(
                     }
                 }
 
-                // 7. Action Cards Row
+                // 7. LifeScore Trajectory Progression Card
+                item {
+                    LifeScoreProgressionCard(
+                        currentScore = uiState.totalScore,
+                        targetScore = 1000
+                    )
+                }
+
+                // 8. Action Cards Row
                 item {
                     Row(
                         modifier = Modifier.fillMaxWidth(),

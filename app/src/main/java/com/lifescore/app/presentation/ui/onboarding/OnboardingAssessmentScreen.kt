@@ -563,10 +563,61 @@ fun OnboardingAssessmentScreen(
                                 }
                             }
 
+                            // Growth Roadmap & Action Engine Preview
+                            item {
+                                val roadmap = remember(result) {
+                                    com.lifescore.app.core.engine.AssessmentToActionEngine.generateRoadmap(result)
+                                }
+                                Card(
+                                    shape = RoundedCornerShape(18.dp),
+                                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer),
+                                    modifier = Modifier.fillMaxWidth()
+                                ) {
+                                    Column(modifier = Modifier.padding(16.dp)) {
+                                        Row(verticalAlignment = Alignment.CenterVertically) {
+                                            Text("⚡", fontSize = 18.sp)
+                                            Spacer(Modifier.width(8.dp))
+                                            Text("Actionable Growth Loop Activated", fontWeight = FontWeight.Bold, fontSize = 14.sp)
+                                        }
+                                        Spacer(Modifier.height(6.dp))
+                                        Text(
+                                            roadmap.executiveSummary,
+                                            style = MaterialTheme.typography.bodySmall,
+                                            lineHeight = 18.sp
+                                        )
+                                        Spacer(Modifier.height(10.dp))
+                                        Surface(
+                                            shape = RoundedCornerShape(8.dp),
+                                            color = MaterialTheme.colorScheme.surface.copy(alpha = 0.7f),
+                                            modifier = Modifier.fillMaxWidth()
+                                        ) {
+                                            Column(modifier = Modifier.padding(10.dp)) {
+                                                Text(
+                                                    "🎯 Primary 30-Day Campaign:",
+                                                    fontWeight = FontWeight.Bold,
+                                                    fontSize = 11.sp,
+                                                    color = MaterialTheme.colorScheme.primary
+                                                )
+                                                Text(
+                                                    "${roadmap.primaryFocusCampaign.title} (+600 XP)",
+                                                    fontSize = 12.sp,
+                                                    fontWeight = FontWeight.SemiBold
+                                                )
+                                                Text(
+                                                    "Daily: ${roadmap.primaryFocusCampaign.dailyAction}",
+                                                    fontSize = 11.sp,
+                                                    color = MaterialTheme.colorScheme.outline
+                                                )
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+
                             item {
                                 Button(
                                     onClick = {
-                                        Toast.makeText(context, "Assessment Saved to Cloud Firestore! 🎉", Toast.LENGTH_SHORT).show()
+                                        Toast.makeText(context, "Assessment & Growth Engine Activated! 🎉", Toast.LENGTH_SHORT).show()
                                         onCompleteOnboarding(HeroArchetype.WARRIOR, emptyMap())
                                     },
                                     modifier = Modifier.fillMaxWidth().height(48.dp),
