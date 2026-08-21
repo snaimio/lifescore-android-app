@@ -67,6 +67,9 @@ class LifeScoreApp : Application(), Configuration.Provider {
     val hydrationRepository: com.lifescore.app.data.repository.HydrationRepository
         get() = container.hydrationRepository
 
+    val lifeTrackersRepository: com.lifescore.app.data.repository.LifeTrackersRepository
+        get() = container.lifeTrackersRepository
+
     private var firebaseAnalytics: FirebaseAnalytics? = null
 
     override val workManagerConfiguration: Configuration

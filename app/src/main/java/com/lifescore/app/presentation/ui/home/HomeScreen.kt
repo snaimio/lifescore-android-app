@@ -282,6 +282,13 @@ fun HomeScreen(
                         item {
                             FilterChip(
                                 selected = false,
+                                onClick = { navController.navigate(Screen.TrackerHub.route) },
+                                label = { Text("⚡ 15 Trackers", style = MaterialTheme.typography.labelMedium) }
+                            )
+                        }
+                        item {
+                            FilterChip(
+                                selected = false,
                                 onClick = { navController.navigate(Screen.ActionPlan.route) },
                                 label = { Text("🎯 Action Plan", style = MaterialTheme.typography.labelMedium) }
                             )

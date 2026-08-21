@@ -333,5 +333,33 @@ class UseCasesTest {
         assertFalse(stats.isGoalMet)
         assertEquals(4, stats.streakDays)
     }
+
+    @Test
+    fun test15LifeTrackerModulesCatalog() {
+        val allTrackers = com.lifescore.app.core.trackers.TrackerType.getAllTrackers()
+        assertEquals(15, allTrackers.size)
+
+        // Verify each dimension has associated trackers
+        val healthTrackers = com.lifescore.app.core.trackers.TrackerType.getTrackersByDimension(com.lifescore.app.domain.model.DimensionType.HEALTH)
+        assertTrue(healthTrackers.isNotEmpty())
+        assertTrue(healthTrackers.any { it == com.lifescore.app.core.trackers.TrackerType.HYDRATION })
+        assertTrue(healthTrackers.any { it == com.lifescore.app.core.trackers.TrackerType.NUTRITION })
+        assertTrue(healthTrackers.any { it == com.lifescore.app.core.trackers.TrackerType.SLEEP })
+        assertTrue(healthTrackers.any { it == com.lifescore.app.core.trackers.TrackerType.VITALS })
+
+        val fitnessTrackers = com.lifescore.app.core.trackers.TrackerType.getTrackersByDimension(com.lifescore.app.domain.model.DimensionType.FITNESS)
+        assertTrue(fitnessTrackers.any { it == com.lifescore.app.core.trackers.TrackerType.STEPS })
+        assertTrue(fitnessTrackers.any { it == com.lifescore.app.core.trackers.TrackerType.WORKOUTS })
+        assertTrue(fitnessTrackers.any { it == com.lifescore.app.core.trackers.TrackerType.WEIGHT })
+
+        // Verify quick add values and XP rewards
+        allTrackers.forEach { tracker ->
+            assertTrue(tracker.defaultGoal > 0f)
+            assertTrue(tracker.quickAddValues.isNotEmpty())
+            assertTrue(tracker.xpReward >= 20)
+            assertTrue(tracker.unit.isNotBlank())
+            assertTrue(tracker.emoji.isNotBlank())
+        }
+    }
 }
 

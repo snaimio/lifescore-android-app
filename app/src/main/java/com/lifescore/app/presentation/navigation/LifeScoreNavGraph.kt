@@ -405,6 +405,18 @@ fun LifeScoreNavGraph(
                     navController = navController
                 )
             }
+            composable(Screen.TrackerHub.route) {
+                val trackerHubViewModel = remember {
+                    com.lifescore.app.presentation.ui.trackers.TrackerHubViewModel(
+                        lifeTrackersRepository = app.lifeTrackersRepository,
+                        lifeScoreRepository = app.lifeScoreRepository
+                    )
+                }
+                com.lifescore.app.presentation.ui.trackers.TrackerHubScreen(
+                    viewModel = trackerHubViewModel,
+                    navController = navController
+                )
+            }
         }
 
         if (showPaywall) {
