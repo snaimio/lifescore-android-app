@@ -24,10 +24,17 @@ class SyncWorker(
 
     companion object {
         private const val SYNC_WORK_NAME = "lifescore_periodic_sync"
+        private const val PREFS_NAME = "lifescore_sync_prefs"
+        const val PREF_SYNC_ONLY_CHARGING = "sync_only_when_charging"
 
-        fun schedulePeriodicSync(context: Context) {
+        fun schedulePeriodicSync(context: Context, onlyWhenCharging: Boolean = false) {
+            val prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+            val requireCharging = if (onlyWhenCharging) true else prefs.getBoolean(PREF_SYNC_ONLY_CHARGING, false)
+
             val constraints = Constraints.Builder()
                 .setRequiredNetworkType(NetworkType.CONNECTED)
+                .setRequiresBatteryNotLow(true)
+                .setRequiresCharging(requireCharging)
                 .build()
 
             val syncRequest = PeriodicWorkRequestBuilder<SyncWorker>(6, TimeUnit.HOURS)
@@ -37,9 +44,15 @@ class SyncWorker(
 
             WorkManager.getInstance(context).enqueueUniquePeriodicWork(
                 SYNC_WORK_NAME,
-                ExistingPeriodicWorkPolicy.KEEP,
+                ExistingPeriodicWorkPolicy.UPDATE,
                 syncRequest
             )
+        }
+
+        fun updateChargingConstraint(context: Context, onlyWhenCharging: Boolean) {
+            val prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+            prefs.edit().putBoolean(PREF_SYNC_ONLY_CHARGING, onlyWhenCharging).apply()
+            schedulePeriodicSync(context, onlyWhenCharging)
         }
     }
 }

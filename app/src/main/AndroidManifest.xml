@@ -61,6 +61,16 @@
                 android:resource="@xml/lifescore_widget_info" />
         </receiver>
 
+        <!-- Notification Action Receiver for completing tasks and snoozing reminders -->
+        <receiver
+            android:name=".services.NotificationActionReceiver"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.lifescore.app.ACTION_COMPLETE_TASK" />
+                <action android:name="com.lifescore.app.ACTION_SNOOZE_VLOG_PROMPT" />
+            </intent-filter>
+        </receiver>
+
         <!-- FileProvider for Sharing 9:16 Story Cards -->
         <provider
             android:name="androidx.core.content.FileProvider"

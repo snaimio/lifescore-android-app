@@ -11,6 +11,10 @@ class Converters {
 
     @TypeConverter
     fun toDimensionType(value: String): DimensionType {
+        val intId = value.toIntOrNull()
+        if (intId != null) {
+            return DimensionType.fromId(intId)
+        }
         return try {
             DimensionType.valueOf(value)
         } catch (e: Exception) {

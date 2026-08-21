@@ -1,188 +1,116 @@
 package com.lifescore.app.core.designsystem.components
 
-import androidx.compose.animation.*
 import androidx.compose.animation.core.*
-import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.*
+import androidx.compose.material3.LinearProgressIndicator
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.graphics.*
-import androidx.compose.ui.graphics.drawscope.Stroke
-import androidx.compose.ui.hapticfeedback.HapticFeedbackType
-import androidx.compose.ui.platform.LocalHapticFeedback
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.scale
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import com.lifescore.app.core.designsystem.LifeScoreColors
 
-// 🎯 Animated Score Counter
-@OptIn(ExperimentalAnimationApi::class)
+/**
+ * Animated number counter that ticks up with smooth tween animation.
+ */
 @Composable
 fun AnimatedScoreCounter(
     score: Int,
     modifier: Modifier = Modifier,
-    textStyle: TextStyle = MaterialTheme.typography.displayLarge
+    textStyle: TextStyle = TextStyle(
+        fontSize = 48.sp,
+        fontWeight = FontWeight.Black,
+        color = MaterialTheme.colorScheme.onSurface
+    ),
+    durationMillis: Int = 1000
 ) {
-    AnimatedContent(
-        targetState = score,
-        transitionSpec = {
-            if (targetState > initialState) {
-                slideInVertically { height -> height } + fadeIn() togetherWith
-                slideOutVertically { height -> -height } + fadeOut()
-            } else {
-                slideInVertically { height -> -height } + fadeIn() togetherWith
-                slideOutVertically { height -> height } + fadeOut()
-            }.using(
-                SizeTransform(clip = false)
-            )
-        },
-        modifier = modifier,
-        label = "score_counter"
-    ) { targetScore ->
-        Text(
-            text = targetScore.toString(),
-            style = textStyle
+    val animatedScore = remember { Animatable(0f) }
+
+    LaunchedEffect(score) {
+        animatedScore.animateTo(
+            targetValue = score.toFloat(),
+            animationSpec = tween(durationMillis = durationMillis, easing = FastOutSlowInEasing)
         )
     }
+
+    Text(
+        text = animatedScore.value.toInt().toString(),
+        style = textStyle,
+        modifier = modifier
+    )
 }
 
-// 🔄 Animated Progress Ring
+/**
+ * Smoothly animated progress indicator with spring animation.
+ */
 @Composable
-fun AnimatedProgressRing(
+fun AnimatedProgressIndicator(
     progress: Float,
     modifier: Modifier = Modifier,
     color: Color = MaterialTheme.colorScheme.primary,
-    strokeWidth: Float = 8f,
-    size: Int = 80
+    trackColor: Color = MaterialTheme.colorScheme.surfaceVariant,
+    height: Dp = 8.dp,
+    shape: RoundedCornerShape = RoundedCornerShape(4.dp)
 ) {
-    val infiniteTransition = rememberInfiniteTransition(label = "ring_transition")
-    val rotation by infiniteTransition.animateFloat(
-        initialValue = 0f,
-        targetValue = 360f,
-        animationSpec = infiniteRepeatable(
-            animation = tween(2000, easing = LinearEasing)
+    val animatedProgress by animateFloatAsState(
+        targetValue = progress.coerceIn(0f, 1f),
+        animationSpec = spring(
+            dampingRatio = Spring.DampingRatioMediumBouncy,
+            stiffness = Spring.StiffnessLow
         ),
-        label = "ring_rotation"
+        label = "progressAnimation"
     )
-    
-    Box(modifier = modifier.size(size.dp)) {
-        Canvas(modifier = Modifier.fillMaxSize()) {
-            val centerX = size.dp.toPx() / 2
-            val centerY = size.dp.toPx() / 2
-            val radius = size.dp.toPx() / 2 - strokeWidth.dp.toPx() / 2
-            
-            // Background ring
-            drawArc(
-                color = color.copy(alpha = 0.2f),
-                startAngle = -90f,
-                sweepAngle = 360f,
-                useCenter = false,
-                topLeft = Offset(centerX - radius, centerY - radius),
-                size = androidx.compose.ui.geometry.Size(radius * 2, radius * 2),
-                style = Stroke(width = strokeWidth.dp.toPx())
-            )
-            
-            // Progress ring
-            val sweepAngle = progress * 360f
-            drawArc(
-                color = color,
-                startAngle = -90f + rotation,
-                sweepAngle = sweepAngle,
-                useCenter = false,
-                topLeft = Offset(centerX - radius, centerY - radius),
-                size = androidx.compose.ui.geometry.Size(radius * 2, radius * 2),
-                style = Stroke(
-                    width = strokeWidth.dp.toPx(),
-                    cap = StrokeCap.Round
-                )
-            )
-        }
-    }
+
+    LinearProgressIndicator(
+        progress = { animatedProgress },
+        modifier = modifier
+            .fillMaxWidth()
+            .height(height)
+            .clip(shape),
+        color = color,
+        trackColor = trackColor
+    )
 }
 
-// 🌟 Animated Gradient Card
+/**
+ * Card wrapper that provides a subtle 3D scale-down bounce on touch.
+ */
 @Composable
-fun AnimatedGradientCard(
-    modifier: Modifier = Modifier,
-    colors: List<Color>,
-    content: @Composable () -> Unit
-) {
-    val infiniteTransition = rememberInfiniteTransition(label = "grad_transition")
-    val offset by infiniteTransition.animateFloat(
-        initialValue = 0f,
-        targetValue = 1f,
-        animationSpec = infiniteRepeatable(
-            animation = tween(5000, easing = LinearEasing)
-        ),
-        label = "grad_offset"
-    )
-    
-    val brush = Brush.horizontalGradient(
-        colors = colors,
-        startX = offset * 100f,
-        endX = offset * 100f + 200f
-    )
-    
-    Card(
-        modifier = modifier,
-        colors = CardDefaults.cardColors(
-            containerColor = Color.Transparent
-        )
-    ) {
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .background(brush)
-                .padding(16.dp)
-        ) {
-            content()
-        }
-    }
-}
-
-// 💫 Staggered Animation for Lists
-@Composable
-fun <T> StaggeredList(
-    items: List<T>,
-    key: (T) -> Any,
-    content: @Composable (T) -> Unit
-) {
-    Column {
-        items.forEachIndexed { index, item ->
-            AnimatedVisibility(
-                visible = true,
-                enter = fadeIn() + slideInVertically(
-                    initialOffsetY = { it },
-                    animationSpec = tween(
-                        durationMillis = 500,
-                        delayMillis = index * 50
-                    )
-                )
-            ) {
-                content(item)
-            }
-        }
-    }
-}
-
-// 🔔 Haptic Feedback Button
-@Composable
-fun HapticButton(
+fun AnimatedCard(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
     content: @Composable () -> Unit
 ) {
-    val haptic = LocalHapticFeedback.current
-    Button(
-        onClick = {
-            haptic.performHapticFeedback(HapticFeedbackType.LongPress)
-            onClick()
-        },
-        modifier = modifier,
-        enabled = enabled
+    val interactionSource = remember { MutableInteractionSource() }
+    val isPressed by interactionSource.collectIsPressedAsState()
+
+    val scale by animateFloatAsState(
+        targetValue = if (isPressed) 0.97f else 1.0f,
+        animationSpec = spring(dampingRatio = Spring.DampingRatioMediumBouncy),
+        label = "cardScale"
+    )
+
+    Box(
+        modifier = modifier
+            .scale(scale)
+            .clickable(
+                interactionSource = interactionSource,
+                indication = null,
+                enabled = enabled,
+                onClick = onClick
+            )
     ) {
         content()
     }

@@ -524,11 +524,23 @@ fun HomeScreen(
                     }
                 }
 
-                items(uiState.todayTasks) { task ->
-                    TaskCard(
-                        task = task,
-                        onToggle = { viewModel.onToggleTask(task) }
-                    )
+                if (uiState.todayTasks.isEmpty()) {
+                    item {
+                        com.lifescore.app.core.designsystem.components.EmptyState(
+                            icon = "⚡",
+                            title = "All caught up today!",
+                            description = "You've crushed all your daily dimension quests. Tap below to explore more habits.",
+                            actionButtonText = "Explore Quests",
+                            onActionClick = { navController.navigate(Screen.Tasks.route) }
+                        )
+                    }
+                } else {
+                    items(uiState.todayTasks) { task ->
+                        TaskCard(
+                            task = task,
+                            onToggle = { viewModel.onToggleTask(task) }
+                        )
+                    }
                 }
 
                 item {

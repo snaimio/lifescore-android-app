@@ -4,48 +4,46 @@ import androidx.compose.animation.core.*
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.runtime.*
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 
 @Composable
 fun LoadingSkeleton(
     modifier: Modifier = Modifier,
-    width: Int = 200,
-    height: Int = 20,
-    shape: RoundedCornerShape = RoundedCornerShape(4.dp)
+    height: Int = 80,
+    shape: RoundedCornerShape = RoundedCornerShape(16.dp)
 ) {
-    val infiniteTransition = rememberInfiniteTransition(label = "skeleton_transition")
-    val offsetX by infiniteTransition.animateFloat(
+    val transition = rememberInfiniteTransition(label = "shimmer")
+    val translateAnim by transition.animateFloat(
         initialValue = 0f,
         targetValue = 1000f,
         animationSpec = infiniteRepeatable(
-            animation = tween(
-                durationMillis = 1500,
-                easing = LinearEasing
-            )
+            animation = tween(durationMillis = 1200, easing = LinearEasing),
+            repeatMode = RepeatMode.Restart
         ),
-        label = "skeleton_offset"
+        label = "shimmerTranslate"
     )
-    
+
+    val baseColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f)
+    val highlightColor = MaterialTheme.colorScheme.surface.copy(alpha = 0.8f)
+
+    val brush = Brush.linearGradient(
+        colors = listOf(baseColor, highlightColor, baseColor),
+        start = Offset(translateAnim - 200f, translateAnim - 200f),
+        end = Offset(translateAnim, translateAnim)
+    )
+
     Box(
         modifier = modifier
-            .width(width.dp)
+            .fillMaxWidth()
             .height(height.dp)
             .clip(shape)
-            .background(
-                brush = Brush.horizontalGradient(
-                    colors = listOf(
-                        Color.Gray.copy(alpha = 0.2f),
-                        Color.Gray.copy(alpha = 0.08f),
-                        Color.Gray.copy(alpha = 0.2f)
-                    ),
-                    startX = offsetX,
-                    endX = offsetX + 200f
-                )
-            )
+            .background(brush)
     )
 }

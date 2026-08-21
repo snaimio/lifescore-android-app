@@ -7,10 +7,15 @@ import androidx.compose.ui.Modifier
 
 // ⚡ Animation Constants
 object AnimationConstants {
-    val Fast = 200
-    val Medium = 400
-    val Slow = 600
-    val VerySlow = 800
+    const val FAST = 200
+    const val MEDIUM = 400
+    const val SLOW = 600
+    const val VERY_SLOW = 800
+
+    const val Fast = 200
+    const val Medium = 400
+    const val Slow = 600
+    const val VerySlow = 800
     
     val SpringSpec = spring<Float>(
         dampingRatio = Spring.DampingRatioMediumBouncy,

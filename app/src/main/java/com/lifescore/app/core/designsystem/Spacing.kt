@@ -7,7 +7,7 @@ import androidx.compose.ui.unit.dp
 
 /**
  * 8dp Material Design Spacing System
- * Provides standardized spacing tokens and responsive dimension adapters.
+ * Standardized spacing tokens, responsive dimension adapters, elevation, and corners.
  */
 object Spacing {
     val xxs: Dp = 2.dp
@@ -48,4 +48,21 @@ object Spacing {
         val screenWidthDp = LocalConfiguration.current.screenWidthDp
         return if (screenWidthDp <= 340) 12.dp else 16.dp
     }
+}
+
+object Elevation {
+    val none: Dp = 0.dp
+    val low: Dp = 2.dp
+    val medium: Dp = 4.dp
+    val high: Dp = 8.dp
+    val extraHigh: Dp = 16.dp
+}
+
+object CornerRadius {
+    val none: Dp = 0.dp
+    val small: Dp = 4.dp
+    val medium: Dp = 8.dp
+    val large: Dp = 12.dp
+    val extraLarge: Dp = 16.dp
+    val full: Dp = 9999.dp
 }

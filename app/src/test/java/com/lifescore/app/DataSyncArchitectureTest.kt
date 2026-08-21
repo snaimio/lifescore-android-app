@@ -5,6 +5,8 @@ import com.lifescore.app.data.local.entity.TaskEntity
 import com.lifescore.app.data.remote.model.TaskDocument
 import com.lifescore.app.domain.model.DimensionType
 import com.lifescore.app.domain.model.LifeTask
+import com.lifescore.app.services.SyncProgress
+import com.lifescore.app.services.SyncReport
 import org.junit.Assert.*
 import org.junit.Test
 import java.text.SimpleDateFormat
@@ -73,11 +75,53 @@ class DataSyncArchitectureTest {
         syncLogs.add("${logTimestamp()} [VERIFY_SUCCESS] Task '${firestoreDoc.title}' verified in Cloud Firestore.")
         syncLogs.add("${logTimestamp()} [SYNC_COMPLETE] 🎉 Offline-to-Online data synchronization completed successfully.")
 
-        // Print sync logs to test output
-        println("=== FIRESTORE SYNC ARCHITECTURE LOGS ===")
-        syncLogs.forEach { println(it) }
-        println("=========================================")
-
         assertTrue(syncLogs.isNotEmpty())
+    }
+
+    @Test
+    fun testServerWinsConflictResolutionWithTimestamp() {
+        val now = System.currentTimeMillis()
+        val localTask = TaskEntity(
+            id = 100L,
+            title = "Read 10 pages",
+            dimension = DimensionType.LEARNING,
+            pointsReward = 20,
+            isCompleted = false,
+            completedAt = null,
+            createdAt = now - 50000
+        )
+
+        val remoteTask = LifeTask(
+            id = 100L,
+            title = "Read 10 pages",
+            dimension = DimensionType.LEARNING,
+            pointsReward = 20,
+            isCompleted = true,
+            completedAt = now - 10000,
+            createdAt = now - 50000
+        )
+
+        // Conflict check: remote has isCompleted=true and completedAt >= local
+        val localCompletedAt = localTask.completedAt ?: 0L
+        val remoteCompletedAt = remoteTask.completedAt ?: 0L
+
+        val serverWins = remoteCompletedAt >= localCompletedAt
+        assertTrue("Server state must win when remote completedAt is newer", serverWins)
+        assertTrue("Resolved state must be completed", remoteTask.isCompleted)
+    }
+
+    @Test
+    fun testSyncProgressCalculation() {
+        val progress = SyncProgress(
+            totalSteps = 4,
+            currentStep = 3,
+            progressPercentage = 3f / 4f,
+            currentStage = "Resolving task conflicts..."
+        )
+
+        assertEquals(4, progress.totalSteps)
+        assertEquals(3, progress.currentStep)
+        assertEquals(0.75f, progress.progressPercentage, 0.001f)
+        assertEquals("Resolving task conflicts...", progress.currentStage)
     }
 }

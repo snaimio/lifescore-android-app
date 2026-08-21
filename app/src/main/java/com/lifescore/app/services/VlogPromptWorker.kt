@@ -18,22 +18,52 @@ class VlogPromptWorker(
 ) : CoroutineWorker(context, workerParams) {
 
     override suspend fun doWork(): Result {
-        showVlogPromptNotification()
+        // 1. User Opt-Out Check
+        val prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+        val isEnabled = prefs.getBoolean(PREF_VLOG_PROMPTS_ENABLED, true)
+        if (!isEnabled) {
+            return Result.success()
+        }
+
+        // 2. Do Not Disturb (DND) Check
+        val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            val filter = notificationManager.currentInterruptionFilter
+            if (filter == NotificationManager.INTERRUPTION_FILTER_NONE ||
+                filter == NotificationManager.INTERRUPTION_FILTER_ALARMS
+            ) {
+                // Respect DND mode: skip displaying prompt during quiet hours
+                return Result.success()
+            }
+        }
+
+        showVlogPromptNotification(notificationManager)
         return Result.success()
     }
 
-    private fun showVlogPromptNotification() {
-        val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+    private fun showVlogPromptNotification(notificationManager: NotificationManager) {
         ensureChannelExists(notificationManager)
 
-        val intent = Intent(context, MainActivity::class.java).apply {
+        val mainIntent = Intent(context, MainActivity::class.java).apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             putExtra("OPEN_MICRO_VLOGS", true)
         }
-        val pendingIntent = PendingIntent.getActivity(
+        val contentPendingIntent = PendingIntent.getActivity(
             context,
             2001,
-            intent,
+            mainIntent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
+
+        // Notification Action: Snooze (1h)
+        val snoozeIntent = Intent(context, NotificationActionReceiver::class.java).apply {
+            action = NotificationActionReceiver.ACTION_SNOOZE_VLOG_PROMPT
+            putExtra("NOTIFICATION_ID", 2001)
+        }
+        val snoozePendingIntent = PendingIntent.getBroadcast(
+            context,
+            2002,
+            snoozeIntent,
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
 
@@ -50,7 +80,12 @@ class VlogPromptWorker(
             .setContentTitle("🎬 Time for Your 2s Vlog Snap!")
             .setContentText(randomPrompt)
             .setPriority(NotificationCompat.PRIORITY_HIGH)
-            .setContentIntent(pendingIntent)
+            .setContentIntent(contentPendingIntent)
+            .addAction(
+                android.R.drawable.ic_lock_idle_alarm,
+                "⏰ Snooze (1h)",
+                snoozePendingIntent
+            )
             .setAutoCancel(true)
             .build()
 
@@ -72,8 +107,26 @@ class VlogPromptWorker(
 
     companion object {
         private const val WORK_VLOG_PROMPT = "work_vlog_prompt_periodic"
+        const val PREFS_NAME = "lifescore_vlog_prefs"
+        const val PREF_VLOG_PROMPTS_ENABLED = "vlog_prompts_enabled"
 
-        fun schedulePeriodicPrompts(context: Context, intervalHours: Long = 2) {
+        fun setVlogPromptsEnabled(context: Context, enabled: Boolean) {
+            val prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+            prefs.edit().putBoolean(PREF_VLOG_PROMPTS_ENABLED, enabled).apply()
+            if (enabled) {
+                schedulePeriodicPrompts(context)
+            } else {
+                WorkManager.getInstance(context).cancelUniqueWork(WORK_VLOG_PROMPT)
+            }
+        }
+
+        fun schedulePeriodicPrompts(
+            context: Context,
+            intervalHours: Long = 3,
+            enabled: Boolean = true
+        ) {
+            if (!enabled) return
+
             val constraints = Constraints.Builder()
                 .setRequiredNetworkType(NetworkType.NOT_REQUIRED)
                 .build()
@@ -84,7 +137,7 @@ class VlogPromptWorker(
 
             WorkManager.getInstance(context).enqueueUniquePeriodicWork(
                 WORK_VLOG_PROMPT,
-                ExistingPeriodicWorkPolicy.KEEP,
+                ExistingPeriodicWorkPolicy.UPDATE,
                 workRequest
             )
         }

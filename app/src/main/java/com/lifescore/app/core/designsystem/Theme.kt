@@ -3,203 +3,132 @@ package com.lifescore.app.core.designsystem
 import android.app.Activity
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.core.view.WindowCompat
 
-// 🎨 Complete Premium Color System with AMOLED & Material You Support
+// 🎨 Complete Premium Material 3 Color System with AMOLED True Black & Dynamic Color
 object LifeScoreColors {
-    // Primary palette (Vibrant Indigo/Purple)
-    val Primary = Color(0xFF6C5CE7)
-    val PrimaryLight = Color(0xFF8C7CFF)
+    // Primary palette
+    val Primary = md_theme_light_primary
+    val PrimaryLight = Color(0xFF8B83FF)
     val PrimaryDark = Color(0xFF4834D4)
-    val PrimaryContainer = Color(0xFFEDE9FE)
-    val OnPrimaryContainer = Color(0xFF2E1065)
+    val PrimaryContainer = md_theme_light_primaryContainer
+    val OnPrimaryContainer = md_theme_light_onPrimaryContainer
 
-    // Secondary palette (Electric Emerald/Teal)
-    val Secondary = Color(0xFF00CEC9)
-    val SecondaryLight = Color(0xFF55EFC4)
-    val SecondaryDark = Color(0xFF00B894)
-    val SecondaryContainer = Color(0xFFCCFBF1)
-    val OnSecondaryContainer = Color(0xFF042F2E)
+    // Secondary palette
+    val Secondary = md_theme_light_secondary
+    val SecondaryLight = Color(0xFF66FFF0)
+    val SecondaryDark = Color(0xFF00A896)
+    val SecondaryContainer = md_theme_light_secondaryContainer
+    val OnSecondaryContainer = md_theme_light_onSecondaryContainer
 
-    // Tertiary palette (Warm Amber / Rose)
-    val Tertiary = Color(0xFFFF9F43)
-    val TertiaryLight = Color(0xFFFECA57)
-    val TertiaryDark = Color(0xFFEE5253)
-    val TertiaryContainer = Color(0xFFFEF3C7)
-    val OnTertiaryContainer = Color(0xFF78350F)
+    // Tertiary palette
+    val Tertiary = md_theme_light_tertiary
+    val TertiaryLight = Color(0xFFFFD54F)
+    val TertiaryDark = Color(0xFFF57C00)
+    val TertiaryContainer = md_theme_light_tertiaryContainer
+    val OnTertiaryContainer = md_theme_light_onTertiaryContainer
 
-    // Light Neutral palette (Clean, Crisp, Elevated)
-    val Surface = Color(0xFFFFFFFF)
-    val SurfaceVariant = Color(0xFFF1F3F9)
-    val Background = Color(0xFFF7F8FC)
-    val OnBackground = Color(0xFF0F172A)
-    val OnSurface = Color(0xFF0F172A)
-    val Outline = Color(0xFFCBD5E1)
-    val OutlineVariant = Color(0xFFE2E8F0)
+    // Light Neutral palette
+    val Surface = md_theme_light_surface
+    val SurfaceVariant = md_theme_light_surfaceVariant
+    val Background = md_theme_light_background
+    val OnBackground = md_theme_light_onBackground
+    val OnSurface = md_theme_light_onSurface
+    val Outline = md_theme_light_outline
+    val OutlineVariant = md_theme_light_outlineVariant
 
-    val Error = Color(0xFFEF4444)
+    val Error = md_theme_light_error
     val Success = Color(0xFF10B981)
     val Warning = Color(0xFFF59E0B)
     val Info = Color(0xFF3B82F6)
 
-    // AMOLED Dark mode palette (Deep Obsidian & High-Contrast Cards)
-    val DarkBackground = Color(0xFF0B0D14)
-    val DarkSurface = Color(0xFF121520)
-    val DarkSurfaceVariant = Color(0xFF1B2032)
-    val DarkOnBackground = Color(0xFFF8FAFC)
-    val DarkOnSurface = Color(0xFFF8FAFC)
-    val DarkOutline = Color(0xFF334155)
-    val DarkOutlineVariant = Color(0xFF1E293B)
+    // AMOLED True Black palette
+    val DarkBackground = md_theme_dark_background
+    val DarkSurface = md_theme_dark_surface
+    val DarkSurfaceVariant = md_theme_dark_surfaceVariant
+    val DarkOnBackground = md_theme_dark_onBackground
+    val DarkOnSurface = md_theme_dark_onSurface
+    val DarkOutline = md_theme_dark_outline
+    val DarkOutlineVariant = md_theme_dark_outlineVariant
 
     // Premium Gradients
-    val PrimaryGradient = listOf(Primary, Secondary)
-    val HeroGradient = listOf(Color(0xFF6366F1), Color(0xFF8B5CF6), Color(0xFFEC4899))
+    val PrimaryGradient = listOf(Primary, Color(0xFF00CEC9))
+    val HeroGradient = listOf(Color(0xFF6750A4), Color(0xFF4834D4), Color(0xFF00CEC9))
     val GoldGradient = listOf(Color(0xFFF59E0B), Color(0xFFD97706))
     val EmeraldGradient = listOf(Color(0xFF10B981), Color(0xFF059669))
-    val DarkCardGradient = listOf(Color(0xFF161A29), Color(0xFF0F121C))
+    val DarkCardGradient = listOf(Color(0xFF1E1B24), Color(0xFF141218))
 }
 
-// 🔤 Compact & Scalable Typography System for Samsung S24 & Multi-Density
-object LifeScoreTypography {
-    fun getTypography(): Typography {
-        return Typography(
-            displayLarge = TextStyle(
-                fontSize = 48.sp,
-                fontWeight = FontWeight.Bold,
-                letterSpacing = (-0.25).sp,
-                lineHeight = 54.sp
-            ),
-            displayMedium = TextStyle(
-                fontSize = 38.sp,
-                fontWeight = FontWeight.Bold,
-                letterSpacing = 0.sp,
-                lineHeight = 44.sp
-            ),
-            displaySmall = TextStyle(
-                fontSize = 30.sp,
-                fontWeight = FontWeight.Bold,
-                letterSpacing = 0.sp,
-                lineHeight = 36.sp
-            ),
-            headlineLarge = TextStyle(
-                fontSize = 26.sp,
-                fontWeight = FontWeight.Bold,
-                letterSpacing = 0.sp,
-                lineHeight = 32.sp
-            ),
-            headlineMedium = TextStyle(
-                fontSize = 22.sp,
-                fontWeight = FontWeight.Bold,
-                letterSpacing = 0.sp,
-                lineHeight = 28.sp
-            ),
-            headlineSmall = TextStyle(
-                fontSize = 18.sp,
-                fontWeight = FontWeight.SemiBold,
-                letterSpacing = 0.sp,
-                lineHeight = 24.sp
-            ),
-            titleLarge = TextStyle(
-                fontSize = 18.sp,
-                fontWeight = FontWeight.Bold,
-                letterSpacing = 0.sp,
-                lineHeight = 24.sp
-            ),
-            titleMedium = TextStyle(
-                fontSize = 15.sp,
-                fontWeight = FontWeight.SemiBold,
-                letterSpacing = 0.1.sp,
-                lineHeight = 20.sp
-            ),
-            titleSmall = TextStyle(
-                fontSize = 13.sp,
-                fontWeight = FontWeight.SemiBold,
-                letterSpacing = 0.1.sp,
-                lineHeight = 18.sp
-            ),
-            bodyLarge = TextStyle(
-                fontSize = 14.sp,
-                fontWeight = FontWeight.Normal,
-                letterSpacing = 0.2.sp,
-                lineHeight = 20.sp
-            ),
-            bodyMedium = TextStyle(
-                fontSize = 13.sp,
-                fontWeight = FontWeight.Normal,
-                letterSpacing = 0.2.sp,
-                lineHeight = 18.sp
-            ),
-            bodySmall = TextStyle(
-                fontSize = 11.sp,
-                fontWeight = FontWeight.Normal,
-                letterSpacing = 0.3.sp,
-                lineHeight = 15.sp
-            ),
-            labelLarge = TextStyle(
-                fontSize = 13.sp,
-                fontWeight = FontWeight.SemiBold,
-                letterSpacing = 0.1.sp,
-                lineHeight = 18.sp
-            ),
-            labelMedium = TextStyle(
-                fontSize = 11.sp,
-                fontWeight = FontWeight.Medium,
-                letterSpacing = 0.3.sp,
-                lineHeight = 15.sp
-            ),
-            labelSmall = TextStyle(
-                fontSize = 10.sp,
-                fontWeight = FontWeight.Medium,
-                letterSpacing = 0.4.sp,
-                lineHeight = 14.sp
-            )
-        )
-    }
-}
+private val LightColorScheme = lightColorScheme(
+    primary = md_theme_light_primary,
+    onPrimary = md_theme_light_onPrimary,
+    primaryContainer = md_theme_light_primaryContainer,
+    onPrimaryContainer = md_theme_light_onPrimaryContainer,
+    secondary = md_theme_light_secondary,
+    onSecondary = md_theme_light_onSecondary,
+    secondaryContainer = md_theme_light_secondaryContainer,
+    onSecondaryContainer = md_theme_light_onSecondaryContainer,
+    tertiary = md_theme_light_tertiary,
+    onTertiary = md_theme_light_onTertiary,
+    tertiaryContainer = md_theme_light_tertiaryContainer,
+    onTertiaryContainer = md_theme_light_onTertiaryContainer,
+    error = md_theme_light_error,
+    onError = md_theme_light_onError,
+    errorContainer = md_theme_light_errorContainer,
+    onErrorContainer = md_theme_light_onErrorContainer,
+    background = md_theme_light_background,
+    onBackground = md_theme_light_onBackground,
+    surface = md_theme_light_surface,
+    onSurface = md_theme_light_onSurface,
+    surfaceVariant = md_theme_light_surfaceVariant,
+    onSurfaceVariant = md_theme_light_onSurfaceVariant,
+    outline = md_theme_light_outline,
+    outlineVariant = md_theme_light_outlineVariant,
+    inverseSurface = md_theme_dark_surface,
+    inverseOnSurface = md_theme_dark_onSurface,
+    inversePrimary = md_theme_dark_primary
+)
 
-// 📐 Shape System
-object LifeScoreShapes {
-    val None = RoundedCornerShape(0.dp)
-    val ExtraSmall = RoundedCornerShape(6.dp)
-    val Small = RoundedCornerShape(10.dp)
-    val Medium = RoundedCornerShape(14.dp)
-    val Large = RoundedCornerShape(18.dp)
-    val ExtraLarge = RoundedCornerShape(24.dp)
-    val Full = RoundedCornerShape(9999.dp)
+private val DarkColorScheme = darkColorScheme(
+    primary = md_theme_dark_primary,
+    onPrimary = md_theme_dark_onPrimary,
+    primaryContainer = md_theme_dark_primaryContainer,
+    onPrimaryContainer = md_theme_dark_onPrimaryContainer,
+    secondary = md_theme_dark_secondary,
+    onSecondary = md_theme_dark_onSecondary,
+    secondaryContainer = md_theme_dark_secondaryContainer,
+    onSecondaryContainer = md_theme_dark_onSecondaryContainer,
+    tertiary = md_theme_dark_tertiary,
+    onTertiary = md_theme_dark_onTertiary,
+    tertiaryContainer = md_theme_dark_tertiaryContainer,
+    onTertiaryContainer = md_theme_dark_onTertiaryContainer,
+    error = md_theme_dark_error,
+    onError = md_theme_dark_onError,
+    errorContainer = md_theme_dark_errorContainer,
+    onErrorContainer = md_theme_dark_onErrorContainer,
+    background = md_theme_dark_background,
+    onBackground = md_theme_dark_onBackground,
+    surface = md_theme_dark_surface,
+    onSurface = md_theme_dark_onSurface,
+    surfaceVariant = md_theme_dark_surfaceVariant,
+    onSurfaceVariant = md_theme_dark_onSurfaceVariant,
+    outline = md_theme_dark_outline,
+    outlineVariant = md_theme_dark_outlineVariant,
+    inverseSurface = md_theme_light_surface,
+    inverseOnSurface = md_theme_light_onSurface,
+    inversePrimary = md_theme_light_primary
+)
 
-    val Card = RoundedCornerShape(18.dp)
-    val Button = RoundedCornerShape(14.dp)
-    val Chip = RoundedCornerShape(10.dp)
-    val Dialog = RoundedCornerShape(24.dp)
-    val BottomSheet = RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp)
-
-    fun toMaterialShapes(): Shapes {
-        return Shapes(
-            extraSmall = ExtraSmall,
-            small = Small,
-            medium = Medium,
-            large = Large,
-            extraLarge = ExtraLarge
-        )
-    }
-}
-
-// 🌓 Complete Theme
 @Composable
 fun LifeScoreTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
-    dynamicColor: Boolean = false, // Keep high contrast brand palette by default
+    dynamicColor: Boolean = true, // Material You dynamic colors for Android 12+
     content: @Composable () -> Unit
 ) {
     val context = LocalContext.current
@@ -207,64 +136,8 @@ fun LifeScoreTheme(
         dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
             if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
         }
-        darkTheme -> {
-            darkColorScheme(
-                primary = LifeScoreColors.Primary,
-                onPrimary = Color.White,
-                primaryContainer = LifeScoreColors.PrimaryDark,
-                onPrimaryContainer = Color.White,
-                secondary = LifeScoreColors.Secondary,
-                onSecondary = Color(0xFF042F2E),
-                secondaryContainer = Color(0xFF064E3B),
-                onSecondaryContainer = Color.White,
-                tertiary = LifeScoreColors.Tertiary,
-                onTertiary = Color.White,
-                tertiaryContainer = LifeScoreColors.TertiaryDark,
-                onTertiaryContainer = Color.White,
-                error = LifeScoreColors.Error,
-                onError = Color.White,
-                background = LifeScoreColors.DarkBackground,
-                onBackground = LifeScoreColors.DarkOnBackground,
-                surface = LifeScoreColors.DarkSurface,
-                onSurface = LifeScoreColors.DarkOnSurface,
-                surfaceVariant = LifeScoreColors.DarkSurfaceVariant,
-                onSurfaceVariant = Color(0xFF94A3B8),
-                outline = LifeScoreColors.DarkOutline,
-                outlineVariant = LifeScoreColors.DarkOutlineVariant,
-                inverseSurface = Color.White,
-                inverseOnSurface = Color(0xFF0F172A),
-                inversePrimary = LifeScoreColors.PrimaryLight
-            )
-        }
-        else -> {
-            lightColorScheme(
-                primary = LifeScoreColors.Primary,
-                onPrimary = Color.White,
-                primaryContainer = LifeScoreColors.PrimaryContainer,
-                onPrimaryContainer = LifeScoreColors.OnPrimaryContainer,
-                secondary = LifeScoreColors.SecondaryDark,
-                onSecondary = Color.White,
-                secondaryContainer = LifeScoreColors.SecondaryContainer,
-                onSecondaryContainer = LifeScoreColors.OnSecondaryContainer,
-                tertiary = LifeScoreColors.Tertiary,
-                onTertiary = Color.White,
-                tertiaryContainer = LifeScoreColors.TertiaryContainer,
-                onTertiaryContainer = LifeScoreColors.OnTertiaryContainer,
-                error = LifeScoreColors.Error,
-                onError = Color.White,
-                background = LifeScoreColors.Background,
-                onBackground = LifeScoreColors.OnBackground,
-                surface = LifeScoreColors.Surface,
-                onSurface = LifeScoreColors.OnSurface,
-                surfaceVariant = LifeScoreColors.SurfaceVariant,
-                onSurfaceVariant = Color(0xFF64748B),
-                outline = LifeScoreColors.Outline,
-                outlineVariant = LifeScoreColors.OutlineVariant,
-                inverseSurface = LifeScoreColors.DarkSurface,
-                inverseOnSurface = Color.White,
-                inversePrimary = LifeScoreColors.PrimaryLight
-            )
-        }
+        darkTheme -> DarkColorScheme
+        else -> LightColorScheme
     }
 
     val typography = LifeScoreTypography.getTypography()

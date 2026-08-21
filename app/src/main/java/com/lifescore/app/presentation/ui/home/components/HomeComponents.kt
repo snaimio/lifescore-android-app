@@ -348,9 +348,10 @@ fun TaskCard(
                 // Circular Interactive Checkbox
                 Surface(
                     shape = CircleShape,
-                    color = if (task.isCompleted) baseColor else baseColor.copy(alpha = 0.12f),
+                    color = if (task.isCompleted) baseColor else baseColor.copy(alpha = 0.08f),
+                    border = if (!task.isCompleted) androidx.compose.foundation.BorderStroke(1.5.dp, baseColor.copy(alpha = 0.6f)) else null,
                     modifier = Modifier
-                        .size(28.dp)
+                        .size(26.dp)
                         .clickable {
                             haptic.performHapticFeedback(HapticFeedbackType.LongPress)
                             onToggle()
