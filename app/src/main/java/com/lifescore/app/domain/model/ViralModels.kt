@@ -47,7 +47,19 @@ enum class HeroArchetype(
         primaryDimension = DimensionType.MENTAL_HEALTH,
         iconEmoji = "🌿",
         baseColorHex = 0xFF00BCD4
-    )
+    );
+
+    companion object {
+        fun fromLevel(level: Int): HeroArchetype {
+            return when {
+                level >= 20 -> CREATOR
+                level >= 15 -> SAGE
+                level >= 10 -> HEALER
+                level >= 5 -> EXPLORER
+                else -> WARRIOR
+            }
+        }
+    }
 }
 
 data class CollectibleCard(

@@ -18,17 +18,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
-import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.lifescore.app.core.designsystem.*
-import com.lifescore.app.core.designsystem.components.GlassCard
-import com.lifescore.app.core.designsystem.components.LoadingSkeleton
+import com.lifescore.app.core.designsystem.components.*
 import com.lifescore.app.core.util.ShareCardData
 import com.lifescore.app.domain.model.DimensionType
 import com.lifescore.app.domain.model.HeroArchetype
@@ -38,7 +34,9 @@ import com.lifescore.app.presentation.navigation.Screen
 import com.lifescore.app.presentation.ui.components.CharacterSheetDialog
 import com.lifescore.app.presentation.ui.components.GuardianSponsorshipDialog
 import com.lifescore.app.presentation.ui.components.HardModeSheet
-import com.lifescore.app.presentation.ui.home.components.*
+import com.lifescore.app.presentation.ui.home.components.DimensionRadarChart
+import com.lifescore.app.presentation.ui.home.components.QuickActionsRow
+import com.lifescore.app.presentation.ui.home.components.SectionHeader
 import com.lifescore.app.presentation.ui.share.ShareScoreCardDialog
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -70,6 +68,9 @@ fun HomeScreen(
     )
 
     Scaffold(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(MaterialTheme.colorScheme.background),
         topBar = {
             TopAppBar(
                 title = {
@@ -88,75 +89,51 @@ fun HomeScreen(
                                 Text("⚔️", fontSize = 16.sp)
                             }
                         }
-                        Spacer(Modifier.width(8.dp))
+                        Spacer(Modifier.width(Spacing.sm))
                         Column(modifier = Modifier.weight(1f)) {
                             Text(
                                 "LifeScore",
                                 style = MaterialTheme.typography.titleMedium,
-                                fontWeight = FontWeight.Black,
+                                fontWeight = FontWeight.Bold,
                                 color = MaterialTheme.colorScheme.onSurface
                             )
                             Row(verticalAlignment = Alignment.CenterVertically) {
                                 Text(
-                                    text = uiState.userTitle,
+                                    "${uiState.userTitle} • Lvl ${uiState.level}",
                                     style = MaterialTheme.typography.labelSmall,
-                                    color = MaterialTheme.colorScheme.primary,
-                                    fontWeight = FontWeight.SemiBold,
-                                    maxLines = 1,
-                                    overflow = TextOverflow.Ellipsis
-                                )
-                                Spacer(Modifier.width(4.dp))
-                                Text("•", fontSize = 9.sp, color = MaterialTheme.colorScheme.outline)
-                                Spacer(Modifier.width(4.dp))
-                                Text(
-                                    text = "Lvl ${uiState.level}",
-                                    fontWeight = FontWeight.Bold,
-                                    fontSize = 10.sp,
-                                    color = MaterialTheme.colorScheme.secondary
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant
                                 )
                             }
                         }
                     }
                 },
                 actions = {
-                    IconButton(
-                        onClick = { viewModel.triggerManualSync() },
-                        modifier = Modifier.size(36.dp)
-                    ) {
+                    IconButton(onClick = { navController.navigate(Screen.GroupHabits.route) }) {
                         Icon(
-                            Icons.Default.CloudSync,
-                            contentDescription = "Sync Cloud",
-                            tint = if (uiState.isSyncing) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant,
-                            modifier = Modifier
-                                .size(20.dp)
-                                .let { if (uiState.isSyncing) it.rotate(rotationAngle) else it }
+                            Icons.Default.GroupAdd,
+                            contentDescription = "Squads",
+                            tint = MaterialTheme.colorScheme.onSurfaceVariant
                         )
                     }
-
-                    IconButton(
-                        onClick = { showShareCardDialog = true },
-                        modifier = Modifier.size(36.dp)
-                    ) {
+                    IconButton(onClick = { showShareCardDialog = true }) {
                         Icon(
                             Icons.Default.Share,
-                            contentDescription = "Share LifeScore Card",
-                            tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                            modifier = Modifier.size(20.dp)
+                            contentDescription = "Share LifeScore",
+                            tint = MaterialTheme.colorScheme.onSurfaceVariant
                         )
                     }
-
-                    IconButton(
-                        onClick = { navController.navigate(Screen.Settings.route) },
-                        modifier = Modifier.size(36.dp)
-                    ) {
+                    IconButton(onClick = { navController.navigate(Screen.Settings.route) }) {
                         Icon(
                             Icons.Default.Settings,
                             contentDescription = "Settings",
-                            tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                            modifier = Modifier.size(20.dp)
+                            tint = MaterialTheme.colorScheme.onSurfaceVariant
                         )
                     }
-                }
+                },
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = MaterialTheme.colorScheme.background,
+                    scrolledContainerColor = MaterialTheme.colorScheme.background
+                )
             )
         }
     ) { paddingValues ->
@@ -165,61 +142,72 @@ fun HomeScreen(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(paddingValues)
-                    .padding(horizontal = Spacing.responsiveHorizontalPadding(), vertical = 12.dp),
-                verticalArrangement = Arrangement.spacedBy(12.dp),
-                horizontalAlignment = Alignment.CenterHorizontally
+                    .padding(horizontal = Spacing.md),
+                verticalArrangement = Arrangement.spacedBy(Spacing.md)
             ) {
-                LoadingSkeleton(modifier = Modifier.fillMaxWidth(), height = 220, shape = RoundedCornerShape(20.dp))
-                LoadingSkeleton(modifier = Modifier.fillMaxWidth(), height = 50, shape = RoundedCornerShape(14.dp))
-                LoadingSkeleton(modifier = Modifier.fillMaxWidth(), height = 160, shape = RoundedCornerShape(18.dp))
+                Spacer(Modifier.height(Spacing.xs))
+                LoadingSkeleton(height = 140)
+                LoadingSkeleton(height = 60)
+                LoadingSkeleton(height = 200)
+                LoadingSkeleton(height = 100)
             }
         } else {
             LazyColumn(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(paddingValues)
-                    .padding(horizontal = Spacing.responsiveHorizontalPadding()),
-                verticalArrangement = Arrangement.spacedBy(12.dp),
-                contentPadding = PaddingValues(top = 4.dp, bottom = 24.dp)
+                    .padding(horizontal = Spacing.md),
+                verticalArrangement = Arrangement.spacedBy(Spacing.md)
             ) {
-                // Cloud Sync Status Pill
+                // 1. Cloud Sync Banner
                 item {
-                    Surface(
-                        shape = CircleShape,
-                        color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.55f),
-                        modifier = Modifier.fillMaxWidth()
+                    GlassCard(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clickable { viewModel.triggerManualSync() }
                     ) {
                         Row(
-                            modifier = Modifier.padding(horizontal = 12.dp, vertical = 5.dp),
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = Spacing.sm, vertical = Spacing.xs),
                             verticalAlignment = Alignment.CenterVertically
                         ) {
-                            Icon(
-                                if (uiState.isSyncing) Icons.Default.Sync else Icons.Default.CloudDone,
-                                contentDescription = null,
-                                tint = if (uiState.isSyncing) MaterialTheme.colorScheme.primary else Color(0xFF10B981),
-                                modifier = Modifier
-                                    .size(14.dp)
-                                    .let { if (uiState.isSyncing) it.rotate(rotationAngle) else it }
-                            )
-                            Spacer(Modifier.width(6.dp))
+                            if (uiState.isSyncing) {
+                                Icon(
+                                    Icons.Default.Sync,
+                                    contentDescription = "Syncing",
+                                    tint = MaterialTheme.colorScheme.primary,
+                                    modifier = Modifier
+                                        .size(16.dp)
+                                        .rotate(rotationAngle)
+                                )
+                            } else {
+                                Icon(
+                                    Icons.Default.CloudDone,
+                                    contentDescription = "Cloud Synced",
+                                    tint = MaterialTheme.colorScheme.primary,
+                                    modifier = Modifier.size(16.dp)
+                                )
+                            }
+                            Spacer(Modifier.width(Spacing.xs))
                             Text(
-                                text = uiState.cloudSyncStatus,
-                                fontSize = 11.sp,
+                                text = if (uiState.isSyncing) "Syncing with Firestore..." else "Live Cloud Sync Active",
+                                style = MaterialTheme.typography.labelSmall,
                                 fontWeight = FontWeight.Medium,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                                color = MaterialTheme.colorScheme.onSurface,
+                                modifier = Modifier.weight(1f)
                             )
-                            Spacer(Modifier.weight(1f))
                             Text(
                                 text = "Auto-Sync ON",
-                                fontSize = 10.sp,
-                                fontWeight = FontWeight.Bold,
-                                color = MaterialTheme.colorScheme.primary
+                                style = MaterialTheme.typography.labelSmall,
+                                color = MaterialTheme.colorScheme.primary,
+                                fontWeight = FontWeight.SemiBold
                             )
                         }
                     }
                 }
 
-                // Senior Hero Card with Animated Counter & Progression
+                // 2. Hero Card
                 item {
                     HeroCard(
                         score = uiState.totalScore,
@@ -227,168 +215,122 @@ fun HomeScreen(
                         currentXp = uiState.currentXp,
                         xpToNextLevel = 1000,
                         streak = uiState.streak,
-                        userName = uiState.userName.ifEmpty { "Hero" },
+                        userName = uiState.userName,
                         onShare = { showShareCardDialog = true },
                         onLeaderboard = { navController.navigate(Screen.Leaderboard.route) }
                     )
                 }
 
-                // Quick Action Frosted Chips
+                // 3. Quick Actions Row
+                item {
+                    QuickActionsRow(
+                        onTasks = { navController.navigate(Screen.Tasks.route) },
+                        onAI = { navController.navigate(Screen.AICoach.route) },
+                        onLeaderboard = { navController.navigate(Screen.Leaderboard.route) }
+                    )
+                }
+
+                // 4. Feature Pills
                 item {
                     LazyRow(
-                        horizontalArrangement = Arrangement.spacedBy(8.dp),
+                        horizontalArrangement = Arrangement.spacedBy(Spacing.sm),
                         modifier = Modifier.fillMaxWidth()
                     ) {
                         item {
-                            AssistChip(
+                            FilterChip(
+                                selected = false,
                                 onClick = { navController.navigate(Screen.AiQuests.route) },
-                                label = { Text("AI Quests", fontWeight = FontWeight.Bold, fontSize = 12.sp) },
-                                leadingIcon = { Text("🤖", fontSize = 13.sp) },
-                                shape = CircleShape,
-                                colors = AssistChipDefaults.assistChipColors(
-                                    containerColor = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.5f)
-                                )
+                                label = { Text("🤖 AI Quests", style = MaterialTheme.typography.labelMedium) }
                             )
                         }
                         item {
-                            AssistChip(
+                            FilterChip(
+                                selected = false,
                                 onClick = { navController.navigate(Screen.CharacterStats.route) },
-                                label = { Text("Hunter Stats", fontWeight = FontWeight.Bold, fontSize = 12.sp) },
-                                leadingIcon = { Text("🛡️", fontSize = 13.sp) },
-                                shape = CircleShape
+                                label = { Text("🛡️ Hunter Stats", style = MaterialTheme.typography.labelMedium) }
                             )
                         }
                         item {
-                            AssistChip(
+                            FilterChip(
+                                selected = false,
                                 onClick = { navController.navigate(Screen.GroupHabits.route) },
-                                label = { Text("Squads", fontWeight = FontWeight.Bold, fontSize = 12.sp) },
-                                leadingIcon = { Text("👥", fontSize = 13.sp) },
-                                shape = CircleShape
+                                label = { Text("👥 Squads", style = MaterialTheme.typography.labelMedium) }
                             )
                         }
                         item {
-                            AssistChip(
+                            FilterChip(
+                                selected = false,
                                 onClick = { navController.navigate(Screen.Journal.route) },
-                                label = { Text("Journal", fontWeight = FontWeight.Bold, fontSize = 12.sp) },
-                                leadingIcon = { Text("📖", fontSize = 13.sp) },
-                                shape = CircleShape
+                                label = { Text("📖 Journal", style = MaterialTheme.typography.labelMedium) }
                             )
                         }
                         item {
-                            AssistChip(
+                            FilterChip(
+                                selected = false,
                                 onClick = { navController.navigate(Screen.Combat.route) },
-                                label = { Text("Boss Raids", fontWeight = FontWeight.Bold, fontSize = 12.sp) },
-                                leadingIcon = { Text("⚔️", fontSize = 13.sp) },
-                                shape = CircleShape
-                            )
-                        }
-                        item {
-                            AssistChip(
-                                onClick = { navController.navigate(Screen.Analytics.route) },
-                                label = { Text("Heatmap", fontWeight = FontWeight.Bold, fontSize = 12.sp) },
-                                leadingIcon = { Text("📊", fontSize = 13.sp) },
-                                shape = CircleShape
-                            )
-                        }
-                        item {
-                            AssistChip(
-                                onClick = { navController.navigate(Screen.Privacy.route) },
-                                label = { Text("Privacy", fontWeight = FontWeight.Bold, fontSize = 12.sp) },
-                                leadingIcon = { Text("🔒", fontSize = 13.sp) },
-                                shape = CircleShape
-                            )
-                        }
-                        item {
-                            AssistChip(
-                                onClick = { navController.navigate(Screen.RewardStore.route) },
-                                label = { Text("Coins", fontWeight = FontWeight.Bold, fontSize = 12.sp) },
-                                leadingIcon = { Text("🪙", fontSize = 13.sp) },
-                                shape = CircleShape
-                            )
-                        }
-                        item {
-                            AssistChip(
-                                onClick = onOpenPaywall,
-                                label = { Text("PRO", fontWeight = FontWeight.ExtraBold, fontSize = 12.sp) },
-                                leadingIcon = {
-                                    Icon(
-                                        Icons.Default.WorkspacePremium,
-                                        contentDescription = null,
-                                        tint = Color(0xFFFFD700),
-                                        modifier = Modifier.size(16.dp)
-                                    )
-                                },
-                                shape = CircleShape,
-                                colors = AssistChipDefaults.assistChipColors(
-                                    containerColor = Color(0xFFFFD700).copy(alpha = 0.12f)
-                                )
-                            )
-                        }
-                        item {
-                            AssistChip(
-                                onClick = { showShareCardDialog = true },
-                                label = { Text("Share", fontWeight = FontWeight.Bold, fontSize = 12.sp) },
-                                leadingIcon = { Text("📸", fontSize = 13.sp) },
-                                shape = CircleShape
-                            )
-                        }
-                        item {
-                            AssistChip(
-                                onClick = { navController.navigate(Screen.MicroVlogs.route) },
-                                label = { Text("Vlogs", fontWeight = FontWeight.Bold, fontSize = 12.sp) },
-                                leadingIcon = { Text("🎬", fontSize = 13.sp) },
-                                shape = CircleShape
-                            )
-                        }
-                        item {
-                            AssistChip(
-                                onClick = { navController.navigate(Screen.SkillMastery.route) },
-                                label = { Text("Skills", fontWeight = FontWeight.Bold, fontSize = 12.sp) },
-                                leadingIcon = { Text("⏱️", fontSize = 13.sp) },
-                                shape = CircleShape
-                            )
-                        }
-                        item {
-                            AssistChip(
-                                onClick = { navController.navigate(Screen.Enterprise.route) },
-                                label = { Text("Teams", fontWeight = FontWeight.Bold, fontSize = 12.sp) },
-                                leadingIcon = { Text("🏢", fontSize = 13.sp) },
-                                shape = CircleShape
-                            )
-                        }
-                        item {
-                            AssistChip(
-                                onClick = { navController.navigate(Screen.MemeStudio.route) },
-                                label = { Text("Memes", fontWeight = FontWeight.Bold, fontSize = 12.sp) },
-                                leadingIcon = { Text("🎭", fontSize = 13.sp) },
-                                shape = CircleShape
+                                label = { Text("⚔️ Boss Fight", style = MaterialTheme.typography.labelMedium) }
                             )
                         }
                     }
                 }
 
-                // Daily Progress Bar (Glassmorphic)
+                // 5. Daily Goal Progress
                 item {
-                    DailyProgressBar(
-                        progress = if (uiState.totalTasks > 0) uiState.tasksCompleted.toFloat() / uiState.totalTasks else 0f,
-                        tasksCompleted = uiState.tasksCompleted,
-                        totalTasks = uiState.totalTasks
-                    )
+                    GlassCard(modifier = Modifier.fillMaxWidth()) {
+                        Column(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(Spacing.md)
+                        ) {
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalArrangement = Arrangement.SpaceBetween,
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                Row(verticalAlignment = Alignment.CenterVertically) {
+                                    Text("🎯", fontSize = 16.sp)
+                                    Spacer(Modifier.width(Spacing.xs))
+                                    Text(
+                                        "Daily Goal Progress",
+                                        style = MaterialTheme.typography.titleSmall,
+                                        fontWeight = FontWeight.Bold,
+                                        color = MaterialTheme.colorScheme.onSurface
+                                    )
+                                }
+                                Surface(
+                                    color = MaterialTheme.colorScheme.primaryContainer,
+                                    shape = RoundedCornerShape(Spacing.xs)
+                                ) {
+                                    Text(
+                                        "${uiState.tasksCompleted} / ${uiState.totalTasks} Done",
+                                        style = MaterialTheme.typography.labelSmall,
+                                        fontWeight = FontWeight.SemiBold,
+                                        color = MaterialTheme.colorScheme.onPrimaryContainer,
+                                        modifier = Modifier.padding(horizontal = Spacing.sm, vertical = Spacing.xs)
+                                    )
+                                }
+                            }
+                            Spacer(Modifier.height(Spacing.sm))
+                            LinearProgressIndicator(
+                                progress = { uiState.dailyProgress },
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .height(6.dp)
+                                    .clip(RoundedCornerShape(Spacing.xs)),
+                                color = MaterialTheme.colorScheme.primary,
+                                trackColor = MaterialTheme.colorScheme.surfaceVariant
+                            )
+                        }
+                    }
                 }
 
-                // 8-Dimension Spider Radar Wheel
+                // 6. 8-Dimension Spider Chart Balance
                 item {
-                    Card(
-                        shape = RoundedCornerShape(20.dp),
-                        colors = CardDefaults.cardColors(
-                            containerColor = MaterialTheme.colorScheme.surface
-                        ),
-                        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
-                        modifier = Modifier.fillMaxWidth()
-                    ) {
+                    GlassCard(modifier = Modifier.fillMaxWidth()) {
                         Column(
-                            modifier = Modifier.padding(14.dp),
-                            horizontalAlignment = Alignment.CenterHorizontally
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(Spacing.md)
                         ) {
                             Row(
                                 modifier = Modifier.fillMaxWidth(),
@@ -397,104 +339,103 @@ fun HomeScreen(
                             ) {
                                 Row(verticalAlignment = Alignment.CenterVertically) {
                                     Text("🕸️", fontSize = 16.sp)
-                                    Spacer(Modifier.width(6.dp))
+                                    Spacer(Modifier.width(Spacing.xs))
                                     Text(
                                         "8-Dimension Balance",
-                                        style = MaterialTheme.typography.titleMedium,
-                                        fontWeight = FontWeight.Bold
+                                        style = MaterialTheme.typography.titleSmall,
+                                        fontWeight = FontWeight.Bold,
+                                        color = MaterialTheme.colorScheme.onSurface
                                     )
                                 }
-                                TextButton(onClick = { navController.navigate(Screen.Dimensions.route) }) {
-                                    Text("Breakdown", fontSize = 11.sp, fontWeight = FontWeight.Bold)
+                                TextButton(
+                                    onClick = { navController.navigate(Screen.Dimensions.route) },
+                                    contentPadding = PaddingValues(0.dp)
+                                ) {
+                                    Text(
+                                        "Breakdown",
+                                        style = MaterialTheme.typography.labelSmall,
+                                        color = MaterialTheme.colorScheme.primary,
+                                        fontWeight = FontWeight.SemiBold
+                                    )
                                 }
                             }
                             DimensionRadarChart(
                                 dimensionScores = uiState.dimensionScores,
                                 modifier = Modifier
                                     .fillMaxWidth()
-                                    .height(230.dp)
+                                    .height(200.dp)
+                                    .padding(vertical = Spacing.xs)
                             )
                         }
                     }
                 }
 
-                // 8 Dimensions Horizontal Chips
+                // 7. Action Cards Row
                 item {
                     Row(
                         modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        verticalAlignment = Alignment.CenterVertically
+                        horizontalArrangement = Arrangement.spacedBy(Spacing.sm)
                     ) {
-                        Text(
-                            "Life Dimensions",
-                            style = MaterialTheme.typography.titleMedium,
-                            fontWeight = FontWeight.Bold
-                        )
-                        TextButton(onClick = { navController.navigate(Screen.Dimensions.route) }) {
-                            Text("See All", fontSize = 11.sp, fontWeight = FontWeight.SemiBold)
-                        }
-                    }
-                }
-
-                item {
-                    LazyRow(
-                        horizontalArrangement = Arrangement.spacedBy(8.dp),
-                        contentPadding = PaddingValues(bottom = 4.dp)
-                    ) {
-                        items(uiState.dimensions) { dimension ->
-                            val score = uiState.dimensionScores[dimension] ?: 50
-                            DimensionChipCard(
-                                dimension = dimension,
-                                score = score,
-                                onClick = { navController.navigate(Screen.Dimensions.route) }
-                            )
-                        }
-                    }
-                }
-
-                // Retentive Cards: Hard Mode & Finch Guardian
-                item {
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.spacedBy(8.dp)
-                    ) {
-                        Surface(
-                            shape = RoundedCornerShape(14.dp),
-                            color = if (isHardModeEnabled) MaterialTheme.colorScheme.errorContainer else MaterialTheme.colorScheme.surfaceVariant,
+                        Card(
                             modifier = Modifier
                                 .weight(1f)
-                                .clickable { showHardModeSheet = true }
+                                .clip(RoundedCornerShape(12.dp))
+                                .clickable { showHardModeSheet = true },
+                            colors = CardDefaults.cardColors(
+                                containerColor = if (isHardModeEnabled)
+                                    MaterialTheme.colorScheme.errorContainer.copy(alpha = 0.4f)
+                                else
+                                    MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f)
+                            )
                         ) {
-                            Row(modifier = Modifier.padding(12.dp), verticalAlignment = Alignment.CenterVertically) {
+                            Row(
+                                modifier = Modifier.padding(Spacing.md),
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
                                 Text("💀", fontSize = 20.sp)
-                                Spacer(Modifier.width(8.dp))
+                                Spacer(Modifier.width(Spacing.sm))
                                 Column {
-                                    Text("Hard Mode", fontWeight = FontWeight.Bold, fontSize = 12.sp)
                                     Text(
-                                        if (isHardModeEnabled) "Active (-50 XP)" else "Tap to Enable",
-                                        fontSize = 10.sp,
-                                        color = MaterialTheme.colorScheme.outline
+                                        "Hard Mode",
+                                        style = MaterialTheme.typography.labelMedium,
+                                        fontWeight = FontWeight.Bold,
+                                        color = MaterialTheme.colorScheme.onSurface
+                                    )
+                                    Text(
+                                        if (isHardModeEnabled) "Active" else "Tap to Enable",
+                                        style = MaterialTheme.typography.labelSmall,
+                                        color = MaterialTheme.colorScheme.onSurfaceVariant
                                     )
                                 }
                             }
                         }
 
-                        Surface(
-                            shape = RoundedCornerShape(14.dp),
-                            color = MaterialTheme.colorScheme.secondaryContainer,
+                        Card(
                             modifier = Modifier
                                 .weight(1f)
-                                .clickable { showGuardianDialog = true }
+                                .clip(RoundedCornerShape(12.dp))
+                                .clickable { showGuardianDialog = true },
+                            colors = CardDefaults.cardColors(
+                                containerColor = MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.4f)
+                            )
                         ) {
-                            Row(modifier = Modifier.padding(12.dp), verticalAlignment = Alignment.CenterVertically) {
+                            Row(
+                                modifier = Modifier.padding(Spacing.md),
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
                                 Text("🎁", fontSize = 20.sp)
-                                Spacer(Modifier.width(8.dp))
+                                Spacer(Modifier.width(Spacing.sm))
                                 Column {
-                                    Text("Guardian Gift", fontWeight = FontWeight.Bold, fontSize = 12.sp)
+                                    Text(
+                                        "Guardian Gift",
+                                        style = MaterialTheme.typography.labelMedium,
+                                        fontWeight = FontWeight.Bold,
+                                        color = MaterialTheme.colorScheme.onSurface
+                                    )
                                     Text(
                                         "Sponsor a Hero",
-                                        fontSize = 10.sp,
-                                        color = MaterialTheme.colorScheme.onSecondaryContainer.copy(alpha = 0.8f)
+                                        style = MaterialTheme.typography.labelSmall,
+                                        color = MaterialTheme.colorScheme.onSurfaceVariant
                                     )
                                 }
                             }
@@ -502,49 +443,49 @@ fun HomeScreen(
                     }
                 }
 
-                // Today's Quests & Habits
+                // 8. Quests Section
                 item {
                     Row(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.SpaceBetween,
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        Row(verticalAlignment = Alignment.CenterVertically) {
-                            Text("⚡", fontSize = 16.sp)
-                            Spacer(Modifier.width(6.dp))
+                        SectionHeader("⚡ Today's Dimension Quests")
+                        TextButton(
+                            onClick = { navController.navigate(Screen.Tasks.route) },
+                            contentPadding = PaddingValues(0.dp)
+                        ) {
                             Text(
-                                "Today's Dimension Quests",
-                                style = MaterialTheme.typography.titleMedium,
-                                fontWeight = FontWeight.Bold
+                                "Manage All",
+                                style = MaterialTheme.typography.labelSmall,
+                                color = MaterialTheme.colorScheme.primary,
+                                fontWeight = FontWeight.SemiBold
                             )
-                        }
-                        TextButton(onClick = { navController.navigate(Screen.Tasks.route) }) {
-                            Text("Manage All", fontSize = 11.sp, fontWeight = FontWeight.SemiBold)
                         }
                     }
                 }
 
                 if (uiState.todayTasks.isEmpty()) {
                     item {
-                        com.lifescore.app.core.designsystem.components.EmptyState(
-                            icon = "⚡",
-                            title = "All caught up today!",
-                            description = "You've crushed all your daily dimension quests. Tap below to explore more habits.",
-                            actionButtonText = "Explore Quests",
-                            onActionClick = { navController.navigate(Screen.Tasks.route) }
+                        EmptyState(
+                            icon = "🎯",
+                            title = "All Caught Up!",
+                            description = "No pending dimension quests for today. Add new habits or generate quests with AI Coach!",
+                            actionButtonText = "Generate AI Quests",
+                            onActionClick = { navController.navigate(Screen.AiQuests.route) }
                         )
                     }
                 } else {
-                    items(uiState.todayTasks) { task ->
-                        TaskCard(
+                    items(uiState.todayTasks, key = { it.id }) { task ->
+                        TaskItem(
                             task = task,
-                            onToggle = { viewModel.onToggleTask(task) }
+                            onComplete = { viewModel.onToggleTask(task) }
                         )
                     }
                 }
 
                 item {
-                    Spacer(Modifier.height(16.dp))
+                    Spacer(Modifier.height(Spacing.xl))
                 }
             }
         }
@@ -552,14 +493,15 @@ fun HomeScreen(
 
     // Dialogs
     if (showCharacterSheet) {
+        val userProfile = UserProfile(
+            currentXp = uiState.currentXp,
+            currentLevel = uiState.level,
+            currentStreakDays = uiState.streak,
+            title = uiState.userTitle
+        )
         CharacterSheetDialog(
-            userProfile = UserProfile(
-                currentXp = uiState.currentXp,
-                currentLevel = uiState.level,
-                currentStreakDays = uiState.streak,
-                title = uiState.userTitle
-            ),
-            archetype = HeroArchetype.WARRIOR,
+            userProfile = userProfile,
+            archetype = HeroArchetype.fromLevel(uiState.level),
             onDismiss = { showCharacterSheet = false }
         )
     }
@@ -579,15 +521,16 @@ fun HomeScreen(
     }
 
     if (showShareCardDialog) {
+        val shareData = ShareCardData(
+            userName = uiState.userName,
+            score = uiState.totalScore,
+            level = uiState.level,
+            streak = uiState.streak,
+            title = uiState.userTitle,
+            dimensionScores = uiState.dimensionScores
+        )
         ShareScoreCardDialog(
-            data = ShareCardData(
-                userName = uiState.userName,
-                score = uiState.totalScore,
-                level = uiState.level,
-                streak = uiState.streak,
-                title = uiState.userTitle,
-                dimensionScores = uiState.dimensionScores
-            ),
+            data = shareData,
             onDismiss = { showShareCardDialog = false }
         )
     }
