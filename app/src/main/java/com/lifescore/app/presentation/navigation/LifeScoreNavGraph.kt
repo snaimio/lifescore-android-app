@@ -461,6 +461,24 @@ fun LifeScoreNavGraph(
                     navController = navController
                 )
             }
+            composable(Screen.Recovery.route) {
+                val recoveryViewModel = remember {
+                    com.lifescore.app.presentation.ui.recovery.RecoveryViewModel(
+                        repository = app.recoveryRepository
+                    )
+                }
+                com.lifescore.app.presentation.ui.recovery.RecoveryDashboardScreen(
+                    viewModel = recoveryViewModel,
+                    navController = navController,
+                    onOpenSOS = { navController.navigate(Screen.RecoverySos.route) }
+                )
+            }
+            composable(Screen.RecoverySos.route) {
+                com.lifescore.app.presentation.ui.recovery.SOSScreen(
+                    onBack = { navController.popBackStack() },
+                    onOpenAICoach = { navController.navigate(Screen.AICoach.route) }
+                )
+            }
             composable(
                 route = "tracker_detail/{trackerId}",
                 arguments = listOf(androidx.navigation.navArgument("trackerId") { type = androidx.navigation.NavType.StringType })

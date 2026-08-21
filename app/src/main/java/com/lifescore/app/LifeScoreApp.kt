@@ -73,6 +73,9 @@ class LifeScoreApp : Application(), Configuration.Provider {
     val atomicHabitsRepository: com.lifescore.app.data.repository.AtomicHabitsRepository
         get() = container.atomicHabitsRepository
 
+    val recoveryRepository: com.lifescore.app.data.repository.RecoveryRepository
+        get() = container.recoveryRepository
+
     private var firebaseAnalytics: FirebaseAnalytics? = null
 
     override val workManagerConfiguration: Configuration

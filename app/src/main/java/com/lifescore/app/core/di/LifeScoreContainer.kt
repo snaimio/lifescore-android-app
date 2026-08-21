@@ -109,6 +109,13 @@ class LifeScoreContainer(private val context: Context) {
         )
     }
 
+    val recoveryRepository: RecoveryRepository by lazy {
+        RecoveryRepositoryImpl(
+            recoveryDao = database.recoveryDao(),
+            lifeScoreRepository = lifeScoreRepository
+        )
+    }
+
     // Domain Use Cases
     val calculateLifeScoreUseCase by lazy { CalculateLifeScoreUseCase() }
     val getDailyTasksUseCase by lazy { GetDailyTasksUseCase(lifeScoreRepository) }

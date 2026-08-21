@@ -45,6 +45,7 @@ object DrawerNavigationConfig {
 
     // 3. Growth & Science Systems
     val growthItems = listOf(
+        DrawerItem("Addiction Recovery", Icons.Default.HealthAndSafety, Screen.Recovery.route, badge = "Science OS", emoji = "💪"),
         DrawerItem("Atomic Habits OS", Icons.AutoMirrored.Filled.TrendingUp, Screen.AtomicHabits.route, badge = "James Clear", emoji = "⚡"),
         DrawerItem("AI Action Plan", Icons.Default.AutoAwesome, Screen.ActionPlan.route, badge = "AI", emoji = "🎯"),
         DrawerItem("Gemini AI Coach", Icons.Default.Psychology, Screen.AICoach.route, emoji = "🤖"),

@@ -22,9 +22,16 @@ import com.lifescore.app.data.local.entity.*
         JournalEntity::class,
         BossEntity::class,
         HydrationEntity::class,
-        HydrationGoalEntity::class
+        HydrationGoalEntity::class,
+        RecoveryEntry::class,
+        CravingLog::class,
+        RelapseLog::class,
+        RecoveryMilestone::class,
+        MotivationalNote::class,
+        RecoveryPledge::class,
+        RecoverySavingsGoal::class
     ],
-    version = 5,
+    version = 6,
     exportSchema = false
 )
 @TypeConverters(Converters::class)
@@ -40,6 +47,7 @@ abstract class LifeScoreDatabase : RoomDatabase() {
     abstract fun journalDao(): JournalDao
     abstract fun bossDao(): BossDao
     abstract fun hydrationDao(): HydrationDao
+    abstract fun recoveryDao(): RecoveryDao
 
     companion object {
         @Volatile
@@ -72,6 +80,18 @@ abstract class LifeScoreDatabase : RoomDatabase() {
             }
         }
 
+        val MIGRATION_5_6 = object : Migration(5, 6) {
+            override fun migrate(db: SupportSQLiteDatabase) {
+                db.execSQL("CREATE TABLE IF NOT EXISTS recovery_entries (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, userId TEXT NOT NULL, addictionType TEXT NOT NULL, sobrietyStartDate INTEGER NOT NULL, dailyCost REAL NOT NULL DEFAULT 12.0, dailyMinutesConsumed INTEGER NOT NULL DEFAULT 45, dailyItemsConsumed INTEGER NOT NULL DEFAULT 15, currentStreakDays INTEGER NOT NULL DEFAULT 0, longestStreakDays INTEGER NOT NULL DEFAULT 0, totalSobrietyDays INTEGER NOT NULL DEFAULT 0, totalSlipsCount INTEGER NOT NULL DEFAULT 0, moneySaved REAL NOT NULL DEFAULT 0.0, timeSavedHours REAL NOT NULL DEFAULT 0.0, lastUpdated INTEGER NOT NULL, isActive INTEGER NOT NULL DEFAULT 1)")
+                db.execSQL("CREATE TABLE IF NOT EXISTS craving_logs (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, userId TEXT NOT NULL, addictionType TEXT NOT NULL, intensity TEXT NOT NULL, trigger TEXT NOT NULL, durationMinutes INTEGER NOT NULL, survived INTEGER NOT NULL, notes TEXT NOT NULL, distractionUsed TEXT, timestamp INTEGER NOT NULL)")
+                db.execSQL("CREATE TABLE IF NOT EXISTS relapse_logs (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, userId TEXT NOT NULL, addictionType TEXT NOT NULL, relapseType TEXT NOT NULL, trigger TEXT NOT NULL, lessonsLearned TEXT NOT NULL, actionPlan TEXT NOT NULL, streakBeforeSetback INTEGER NOT NULL, timestamp INTEGER NOT NULL)")
+                db.execSQL("CREATE TABLE IF NOT EXISTS recovery_milestones (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, userId TEXT NOT NULL, addictionType TEXT NOT NULL, milestoneDays INTEGER NOT NULL, title TEXT NOT NULL, description TEXT NOT NULL, healthBenefit TEXT NOT NULL, medallionEmoji TEXT NOT NULL, isUnlocked INTEGER NOT NULL, unlockedAt INTEGER)")
+                db.execSQL("CREATE TABLE IF NOT EXISTS motivational_notes (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, userId TEXT NOT NULL, note TEXT NOT NULL, reason TEXT NOT NULL, isActive INTEGER NOT NULL, createdAt INTEGER NOT NULL)")
+                db.execSQL("CREATE TABLE IF NOT EXISTS recovery_pledges (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, userId TEXT NOT NULL, dateIso TEXT NOT NULL, addictionType TEXT NOT NULL, pledgeText TEXT NOT NULL, isEveningReflected INTEGER NOT NULL, eveningReflection TEXT NOT NULL, isKept INTEGER NOT NULL, timestamp INTEGER NOT NULL)")
+                db.execSQL("CREATE TABLE IF NOT EXISTS recovery_savings_goals (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, userId TEXT NOT NULL, title TEXT NOT NULL, targetAmount REAL NOT NULL, iconEmoji TEXT NOT NULL, isReached INTEGER NOT NULL, createdAt INTEGER NOT NULL)")
+            }
+        }
+
         fun getInstance(context: Context): LifeScoreDatabase {
             return INSTANCE ?: synchronized(this) {
                 val instance = Room.databaseBuilder(
@@ -79,7 +99,7 @@ abstract class LifeScoreDatabase : RoomDatabase() {
                     LifeScoreDatabase::class.java,
                     "lifescore.db"
                 )
-                    .addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4, MIGRATION_4_5)
+                    .addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4, MIGRATION_4_5, MIGRATION_5_6)
                     .fallbackToDestructiveMigrationOnDowngrade()
                     .build()
                 INSTANCE = instance
