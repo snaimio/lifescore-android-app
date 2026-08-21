@@ -23,9 +23,10 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.draw.clip
 import androidx.navigation.NavController
 import com.lifescore.app.LifeScoreApp
-import com.lifescore.app.core.designsystem.Spacing
+import com.lifescore.app.core.designsystem.*
 import com.lifescore.app.core.designsystem.components.*
 import kotlinx.coroutines.launch
 
@@ -188,6 +189,16 @@ fun SettingsScreen(
                         Icon(Icons.Default.ChevronRight, contentDescription = null)
                     }
                 }
+            }
+
+            item {
+                val themeManager = rememberThemeManager()
+                val themeMode by themeManager.themeMode.collectAsState()
+
+                ThemePicker(
+                    currentMode = themeMode,
+                    onModeChange = { themeManager.setThemeMode(it) }
+                )
             }
 
             item {
@@ -578,3 +589,106 @@ fun SettingsClickableItem(
         Icon(Icons.Default.ChevronRight, contentDescription = null, tint = MaterialTheme.colorScheme.outline)
     }
 }
+
+@Composable
+fun ThemePicker(
+    currentMode: com.lifescore.app.core.designsystem.AppThemeMode,
+    onModeChange: (com.lifescore.app.core.designsystem.AppThemeMode) -> Unit
+) {
+    Card(
+        modifier = Modifier.fillMaxWidth(),
+        shape = RoundedCornerShape(16.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.surfaceVariant
+        )
+    ) {
+        Column(
+            modifier = Modifier.padding(Spacing.md)
+        ) {
+            Text(
+                text = "🌓 Theme Mode",
+                style = MaterialTheme.typography.titleMedium,
+                fontWeight = FontWeight.Bold,
+                color = MaterialTheme.colorScheme.onSurface
+            )
+            Spacer(Modifier.height(Spacing.xs))
+            Text(
+                text = "Default is colorful Light Mode. Dark Mode enables true AMOLED black.",
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+            Spacer(Modifier.height(Spacing.sm))
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(Spacing.sm)
+            ) {
+                ThemeOptionButton(
+                    icon = "☀️",
+                    label = "Light",
+                    isSelected = currentMode == com.lifescore.app.core.designsystem.AppThemeMode.LIGHT,
+                    onClick = { onModeChange(com.lifescore.app.core.designsystem.AppThemeMode.LIGHT) },
+                    modifier = Modifier.weight(1f)
+                )
+                ThemeOptionButton(
+                    icon = "🌙",
+                    label = "Dark",
+                    isSelected = currentMode == com.lifescore.app.core.designsystem.AppThemeMode.DARK,
+                    onClick = { onModeChange(com.lifescore.app.core.designsystem.AppThemeMode.DARK) },
+                    modifier = Modifier.weight(1f)
+                )
+                ThemeOptionButton(
+                    icon = "🔄",
+                    label = "System",
+                    isSelected = currentMode == com.lifescore.app.core.designsystem.AppThemeMode.SYSTEM,
+                    onClick = { onModeChange(com.lifescore.app.core.designsystem.AppThemeMode.SYSTEM) },
+                    modifier = Modifier.weight(1f)
+                )
+            }
+        }
+    }
+}
+
+@Composable
+fun ThemeOptionButton(
+    icon: String,
+    label: String,
+    isSelected: Boolean,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Surface(
+        modifier = modifier
+            .clip(RoundedCornerShape(12.dp))
+            .clickable(onClick = onClick),
+        shape = RoundedCornerShape(12.dp),
+        color = if (isSelected) {
+            MaterialTheme.colorScheme.primaryContainer
+        } else {
+            MaterialTheme.colorScheme.surface
+        },
+        border = if (isSelected) {
+            androidx.compose.foundation.BorderStroke(2.dp, MaterialTheme.colorScheme.primary)
+        } else {
+            null
+        }
+    ) {
+        Column(
+            modifier = Modifier.padding(vertical = Spacing.md, horizontal = Spacing.sm),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(icon, fontSize = 24.sp)
+            Spacer(Modifier.height(Spacing.xs))
+            Text(
+                label,
+                style = MaterialTheme.typography.labelMedium,
+                fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Medium,
+                color = if (isSelected) {
+                    MaterialTheme.colorScheme.primary
+                } else {
+                    MaterialTheme.colorScheme.onSurfaceVariant
+                }
+            )
+        }
+    }
+}
+

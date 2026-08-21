@@ -2,6 +2,7 @@ package com.lifescore.app.core.designsystem.components
 
 import androidx.compose.animation.*
 import androidx.compose.foundation.background
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -38,14 +39,28 @@ fun HeroCard(
     val isNarrow = LocalConfiguration.current.screenWidthDp <= 340
     val cardPadding = if (isNarrow) 14.dp else 18.dp
 
+    val isDark = isSystemInDarkTheme()
+    val gradientColors = if (isDark) {
+        listOf(
+            Color(0xFF4834D4),
+            Color(0xFF6C63FF)
+        )
+    } else {
+        listOf(
+            Color(0xFF6750A4),  // Deep Purple
+            Color(0xFF006A6A),  // Vibrant Teal
+            Color(0xFFD45A2E)   // Warm Orange Accent
+        )
+    }
+
     Card(
         modifier = modifier
             .fillMaxWidth()
             .shadow(
                 elevation = 12.dp,
                 shape = RoundedCornerShape(20.dp),
-                ambientColor = LifeScoreColors.Primary.copy(alpha = 0.30f),
-                spotColor = LifeScoreColors.PrimaryDark.copy(alpha = 0.35f)
+                ambientColor = if (isDark) LifeScoreColors.Primary.copy(alpha = 0.30f) else Color(0xFF6750A4).copy(alpha = 0.25f),
+                spotColor = if (isDark) LifeScoreColors.PrimaryDark.copy(alpha = 0.35f) else Color(0xFF006A6A).copy(alpha = 0.35f)
             ),
         shape = RoundedCornerShape(20.dp),
         colors = CardDefaults.cardColors(containerColor = Color.Transparent)
@@ -54,12 +69,7 @@ fun HeroCard(
             modifier = Modifier
                 .fillMaxWidth()
                 .background(
-                    brush = Brush.verticalGradient(
-                        colors = listOf(
-                            LifeScoreColors.Primary,
-                            LifeScoreColors.PrimaryDark
-                        )
-                    )
+                    brush = Brush.linearGradient(colors = gradientColors)
                 )
                 .clip(RoundedCornerShape(20.dp))
         ) {
