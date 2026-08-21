@@ -383,6 +383,11 @@ fun LifeScoreNavGraph(
                     onNavigateBack = { navController.popBackStack() }
                 )
             }
+            composable(Screen.HabitLibrary.route) {
+                com.lifescore.app.presentation.ui.habits.HabitLibraryScreen(
+                    navController = navController
+                )
+            }
         }
 
         if (showPaywall) {

@@ -228,5 +228,45 @@ class UseCasesTest {
         val msg = com.lifescore.app.core.engine.FeatureUnlockNotification.getUnlockMessage(com.lifescore.app.core.engine.UserPhase.EXPLORING)
         assertTrue(msg.contains("Unlocked"))
     }
+
+    @Test
+    fun test100HabitsCatalogCompleteness() {
+        val habits = com.lifescore.app.data.HabitData.allHabits
+        assertEquals(100, habits.size)
+
+        // Check dimension coverage across all 8 dimensions
+        val mental = com.lifescore.app.data.HabitData.getHabitsByDimension(DimensionType.MENTAL_HEALTH)
+        val health = com.lifescore.app.data.HabitData.getHabitsByDimension(DimensionType.HEALTH)
+        val fitness = com.lifescore.app.data.HabitData.getHabitsByDimension(DimensionType.FITNESS)
+        val career = com.lifescore.app.data.HabitData.getHabitsByDimension(DimensionType.CAREER)
+        val wealth = com.lifescore.app.data.HabitData.getHabitsByDimension(DimensionType.WEALTH)
+        val relations = com.lifescore.app.data.HabitData.getHabitsByDimension(DimensionType.RELATIONSHIPS)
+        val social = com.lifescore.app.data.HabitData.getHabitsByDimension(DimensionType.SOCIAL_LIFE)
+        val learning = com.lifescore.app.data.HabitData.getHabitsByDimension(DimensionType.LEARNING)
+
+        assertTrue(mental.isNotEmpty())
+        assertTrue(health.isNotEmpty())
+        assertTrue(fitness.isNotEmpty())
+        assertTrue(career.isNotEmpty())
+        assertTrue(wealth.isNotEmpty())
+        assertTrue(relations.isNotEmpty())
+        assertTrue(social.isNotEmpty())
+        assertTrue(learning.isNotEmpty())
+    }
+
+    @Test
+    fun testHabitRecommendationEngine() {
+        val scores = DimensionType.values().associateWith { 30 }
+        val dailyQuests = com.lifescore.app.core.engine.HabitRecommendationEngine.generateDailyQuests(scores, questLimit = 5)
+        assertEquals(5, dailyQuests.size)
+    }
+
+    @Test
+    fun testHabitProgressTracker() {
+        val completedIds = setOf(1, 2, 3, 20, 21)
+        val mastery = com.lifescore.app.core.engine.HabitProgressTracker.calculateMastery(completedIds)
+        assertEquals(8, mastery.size)
+        assertTrue(mastery[DimensionType.MENTAL_HEALTH]!!.completedHabitsCount >= 3)
+    }
 }
 

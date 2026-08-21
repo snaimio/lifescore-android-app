@@ -282,6 +282,13 @@ fun HomeScreen(
                         item {
                             FilterChip(
                                 selected = false,
+                                onClick = { navController.navigate(Screen.HabitLibrary.route) },
+                                label = { Text("📚 100 Habits", style = MaterialTheme.typography.labelMedium) }
+                            )
+                        }
+                        item {
+                            FilterChip(
+                                selected = false,
                                 onClick = { navController.navigate(Screen.AiQuests.route) },
                                 label = { Text("🤖 AI Quests", style = MaterialTheme.typography.labelMedium) }
                             )

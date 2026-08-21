@@ -284,12 +284,13 @@ class GeminiCoachRepositoryImpl(
         score: Int,
         isWeakest: Boolean
     ): String {
+        val habitText = com.lifescore.app.core.engine.HabitRecommendationEngine.getHabitRecommendationText(dimension, score)
         return if (isWeakest) {
-            "⚠️ **${dimension.displayName} is your primary growth bottleneck ($score%)**: Dedicate 10 distraction-free minutes today to complete a pending quest and protect your LifeScore equilibrium."
+            "⚠️ **${dimension.displayName} is your primary growth bottleneck ($score%)**:\n$habitText"
         } else if (score >= 80) {
             "🌟 **${dimension.displayName} is exceptional ($score%)**: You have unlocked top-tier habit momentum. Keep compounding your streak!"
         } else {
-            "⚡ **${dimension.displayName} is steady ($score%)**: Maintain your daily routine to stay in the promotion zone."
+            "⚡ **${dimension.displayName} is steady ($score%)**:\n$habitText"
         }
     }
 

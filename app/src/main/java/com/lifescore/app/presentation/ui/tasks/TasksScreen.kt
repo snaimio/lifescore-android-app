@@ -231,6 +231,12 @@ fun TasksScreen(
             TopAppBar(
                 title = { Text("Quests & Micro-Habits", fontWeight = FontWeight.Black) },
                 actions = {
+                    TextButton(
+                        onClick = { navController.navigate(com.lifescore.app.presentation.navigation.Screen.HabitLibrary.route) },
+                        modifier = Modifier.padding(end = 4.dp)
+                    ) {
+                        Text("📚 100 Habits", fontWeight = FontWeight.Bold, fontSize = 12.sp)
+                    }
                     FilledTonalButton(
                         onClick = { showCreateDialog = true },
                         shape = RoundedCornerShape(12.dp),
@@ -239,7 +245,7 @@ fun TasksScreen(
                     ) {
                         Icon(Icons.Default.Add, contentDescription = null, modifier = Modifier.size(16.dp))
                         Spacer(Modifier.width(4.dp))
-                        Text("New Habit", fontWeight = FontWeight.Bold, fontSize = 12.sp)
+                        Text("New", fontWeight = FontWeight.Bold, fontSize = 12.sp)
                     }
                 }
             )
