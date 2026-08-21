@@ -25,6 +25,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.lifescore.app.LifeScoreApp
+import com.lifescore.app.core.designsystem.Spacing
+import com.lifescore.app.core.designsystem.components.*
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)

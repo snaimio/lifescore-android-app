@@ -43,6 +43,8 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import com.lifescore.app.core.designsystem.Spacing
+import com.lifescore.app.core.designsystem.components.*
 
 enum class HabitTab(val title: String) {
     HABITS("⚡ Habits"),

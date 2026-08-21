@@ -36,6 +36,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.lifescore.app.core.designsystem.Spacing
+import com.lifescore.app.core.designsystem.components.*
 import com.lifescore.app.domain.model.UserProfile
 import kotlinx.coroutines.delay
 

@@ -25,6 +25,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.lifescore.app.core.designsystem.Spacing
+import com.lifescore.app.core.designsystem.components.*
 import com.lifescore.app.core.util.RankZone
 import com.lifescore.app.domain.model.DimensionType
 

@@ -37,6 +37,8 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
+import com.lifescore.app.core.designsystem.Spacing
+import com.lifescore.app.core.designsystem.components.*
 
 enum class CoachTab(val title: String) {
     CHAT("💬 Coach"),

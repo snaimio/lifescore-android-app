@@ -19,6 +19,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.lifescore.app.core.designsystem.*
+import com.lifescore.app.core.designsystem.components.*
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

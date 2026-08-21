@@ -25,6 +25,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
+import com.lifescore.app.core.designsystem.Spacing
+import com.lifescore.app.core.designsystem.components.*
 import com.lifescore.app.domain.model.DimensionType
 import com.lifescore.app.domain.model.MasteryTier
 import com.lifescore.app.domain.model.SkillMastery

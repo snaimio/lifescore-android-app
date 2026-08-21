@@ -23,8 +23,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.lifescore.app.core.designsystem.*
-import com.lifescore.app.core.designsystem.components.GlassCard
-import com.lifescore.app.core.designsystem.components.GradientButton
+import com.lifescore.app.core.designsystem.components.*
 import com.lifescore.app.domain.model.DimensionType
 import com.lifescore.app.domain.model.GroupHabit
 import com.lifescore.app.presentation.ui.home.components.getDimensionEmoji
