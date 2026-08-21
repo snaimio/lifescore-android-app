@@ -20,9 +20,11 @@ import com.lifescore.app.data.local.entity.*
         CharacterStatsEntity::class,
         GroupHabitEntity::class,
         JournalEntity::class,
-        BossEntity::class
+        BossEntity::class,
+        HydrationEntity::class,
+        HydrationGoalEntity::class
     ],
-    version = 4,
+    version = 5,
     exportSchema = false
 )
 @TypeConverters(Converters::class)
@@ -37,6 +39,7 @@ abstract class LifeScoreDatabase : RoomDatabase() {
     abstract fun groupHabitDao(): GroupHabitDao
     abstract fun journalDao(): JournalDao
     abstract fun bossDao(): BossDao
+    abstract fun hydrationDao(): HydrationDao
 
     companion object {
         @Volatile
@@ -62,6 +65,13 @@ abstract class LifeScoreDatabase : RoomDatabase() {
             }
         }
 
+        val MIGRATION_4_5 = object : Migration(4, 5) {
+            override fun migrate(db: SupportSQLiteDatabase) {
+                db.execSQL("CREATE TABLE IF NOT EXISTS hydration_entries (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, userId TEXT NOT NULL, timestamp INTEGER NOT NULL, volumeMl INTEGER NOT NULL, source TEXT NOT NULL DEFAULT 'manual')")
+                db.execSQL("CREATE TABLE IF NOT EXISTS hydration_goals (userId TEXT PRIMARY KEY NOT NULL, dailyGoalMl INTEGER NOT NULL DEFAULT 2500, weightKg REAL, activityLevel TEXT NOT NULL DEFAULT 'moderate', updatedAt INTEGER NOT NULL)")
+            }
+        }
+
         fun getInstance(context: Context): LifeScoreDatabase {
             return INSTANCE ?: synchronized(this) {
                 val instance = Room.databaseBuilder(
@@ -69,7 +79,7 @@ abstract class LifeScoreDatabase : RoomDatabase() {
                     LifeScoreDatabase::class.java,
                     "lifescore.db"
                 )
-                    .addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4)
+                    .addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4, MIGRATION_4_5)
                     .fallbackToDestructiveMigrationOnDowngrade()
                     .build()
                 INSTANCE = instance

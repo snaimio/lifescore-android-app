@@ -311,5 +311,27 @@ class UseCasesTest {
         assertNotNull(reward.badgeEarned)
         assertTrue(reward.message.isNotEmpty())
     }
+
+    @Test
+    fun testHydrationStatsAndModels() {
+        val stats = com.lifescore.app.data.repository.HydrationStats(
+            todayTotalMl = 2000,
+            dailyGoalMl = 2500,
+            progressPercentage = 0.8f,
+            glassesConsumed = 8,
+            glassesGoal = 10,
+            isGoalMet = false,
+            streakDays = 4,
+            last7Days = emptyList()
+        )
+
+        assertEquals(2000, stats.todayTotalMl)
+        assertEquals(2500, stats.dailyGoalMl)
+        assertEquals(0.8f, stats.progressPercentage, 0.01f)
+        assertEquals(8, stats.glassesConsumed)
+        assertEquals(10, stats.glassesGoal)
+        assertFalse(stats.isGoalMet)
+        assertEquals(4, stats.streakDays)
+    }
 }
 

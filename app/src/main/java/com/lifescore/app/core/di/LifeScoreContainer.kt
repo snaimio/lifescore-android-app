@@ -91,6 +91,12 @@ class LifeScoreContainer(private val context: Context) {
         )
     }
 
+    val hydrationRepository: HydrationRepository by lazy {
+        HydrationRepositoryImpl(
+            dao = database.hydrationDao()
+        )
+    }
+
     // Domain Use Cases
     val calculateLifeScoreUseCase by lazy { CalculateLifeScoreUseCase() }
     val getDailyTasksUseCase by lazy { GetDailyTasksUseCase(lifeScoreRepository) }

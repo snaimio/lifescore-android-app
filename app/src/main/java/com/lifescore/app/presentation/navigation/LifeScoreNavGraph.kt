@@ -393,6 +393,18 @@ fun LifeScoreNavGraph(
                     navController = navController
                 )
             }
+            composable(Screen.Hydration.route) {
+                val hydrationViewModel = remember {
+                    com.lifescore.app.presentation.ui.hydration.HydrationViewModel(
+                        hydrationRepository = app.hydrationRepository,
+                        lifeScoreRepository = app.lifeScoreRepository
+                    )
+                }
+                com.lifescore.app.presentation.ui.hydration.HydrationScreen(
+                    viewModel = hydrationViewModel,
+                    navController = navController
+                )
+            }
         }
 
         if (showPaywall) {

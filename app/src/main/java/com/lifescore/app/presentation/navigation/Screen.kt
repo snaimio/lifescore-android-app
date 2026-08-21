@@ -31,4 +31,5 @@ sealed class Screen(val route: String, val title: String, val icon: ImageVector)
     object Privacy : Screen("privacy", "Privacy", Icons.Default.Lock)
     object HabitLibrary : Screen("habit_library", "100 Habits", Icons.Default.ListAlt)
     object ActionPlan : Screen("action_plan", "Action Plan", Icons.Default.TrackChanges)
+    object Hydration : Screen("hydration", "Hydration", Icons.Default.WaterDrop)
 }
