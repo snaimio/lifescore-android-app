@@ -33,6 +33,8 @@ import com.lifescore.app.presentation.ui.tasks.TasksViewModel
 import com.lifescore.app.presentation.vlogs.MicroVlogsScreen
 import com.lifescore.app.presentation.vlogs.MicroVlogsViewModel
 
+import kotlinx.coroutines.launch
+
 @Composable
 fun LifeScoreNavGraph(
     navController: NavHostController,
@@ -42,6 +44,10 @@ fun LifeScoreNavGraph(
     var showPaywall by remember { mutableStateOf(false) }
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
+
+    val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
+    val scope = rememberCoroutineScope()
+    val userProfile by app.lifeScoreRepository.getUserProfile().collectAsState(initial = null)
 
     // ViewModels
     val homeViewModel = remember {
@@ -54,7 +60,7 @@ fun LifeScoreNavGraph(
     val homeState by homeViewModel.uiState.collectAsState()
     val userPhase = homeState.userPhase
 
-    val bottomBarItems = remember(userPhase) {
+    val bottomBarItems: List<Screen> = remember(userPhase) {
         when (userPhase) {
             com.lifescore.app.core.engine.UserPhase.NEW_USER -> listOf(
                 Screen.Home,
@@ -62,11 +68,24 @@ fun LifeScoreNavGraph(
                 Screen.Tasks,
                 Screen.AICoach
             )
-            else -> listOf(
+            com.lifescore.app.core.engine.UserPhase.EXPLORING -> listOf(
                 Screen.Home,
                 Screen.Dimensions,
                 Screen.Tasks,
-                Screen.AICoach,
+                Screen.AICoach
+            )
+            com.lifescore.app.core.engine.UserPhase.ADVANCED -> listOf(
+                Screen.Home,
+                Screen.Dimensions,
+                Screen.Tasks,
+                Screen.Challenges,
+                Screen.AICoach
+            )
+            com.lifescore.app.core.engine.UserPhase.EXPERT -> listOf(
+                Screen.Home,
+                Screen.Dimensions,
+                Screen.Tasks,
+                Screen.Challenges,
                 Screen.Leaderboard
             )
         }
@@ -127,71 +146,84 @@ fun LifeScoreNavGraph(
         )
     }
 
-    Scaffold(
-        bottomBar = {
-            if (showBottomBar) {
-                NavigationBar(
-                    tonalElevation = 3.dp,
-                    containerColor = MaterialTheme.colorScheme.surface
-                ) {
-                    bottomBarItems.forEach { screen ->
-                        NavigationBarItem(
-                            selected = currentRoute == screen.route,
-                            onClick = {
-                                navController.navigate(screen.route) {
-                                    popUpTo(navController.graph.findStartDestination().id) {
-                                        saveState = true
+    ModalNavigationDrawer(
+        drawerState = drawerState,
+        gesturesEnabled = showBottomBar,
+        drawerContent = {
+            LifeScoreDrawerContent(
+                userProfile = userProfile,
+                currentRoute = currentRoute,
+                navController = navController,
+                onCloseDrawer = { scope.launch { drawerState.close() } }
+            )
+        }
+    ) {
+        Scaffold(
+            bottomBar = {
+                if (showBottomBar) {
+                    NavigationBar(
+                        tonalElevation = 3.dp,
+                        containerColor = MaterialTheme.colorScheme.surface
+                    ) {
+                        bottomBarItems.forEach { screen ->
+                            NavigationBarItem(
+                                selected = currentRoute == screen.route,
+                                onClick = {
+                                    navController.navigate(screen.route) {
+                                        popUpTo(navController.graph.findStartDestination().id) {
+                                            saveState = true
+                                        }
+                                        launchSingleTop = true
+                                        restoreState = true
                                     }
-                                    launchSingleTop = true
-                                    restoreState = true
-                                }
-                            },
-                            icon = {
-                                Icon(
-                                    screen.icon,
-                                    contentDescription = screen.title,
-                                    modifier = Modifier.size(20.dp)
+                                },
+                                icon = {
+                                    Icon(
+                                        screen.icon,
+                                        contentDescription = screen.title,
+                                        modifier = Modifier.size(20.dp)
+                                    )
+                                },
+                                label = {
+                                    Text(
+                                        text = screen.title,
+                                        fontSize = 10.sp,
+                                        fontWeight = if (currentRoute == screen.route) FontWeight.Bold else FontWeight.Medium,
+                                        maxLines = 1,
+                                        softWrap = false,
+                                        overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis
+                                    )
+                                },
+                                colors = NavigationBarItemDefaults.colors(
+                                    selectedIconColor = MaterialTheme.colorScheme.primary,
+                                    selectedTextColor = MaterialTheme.colorScheme.primary,
+                                    indicatorColor = MaterialTheme.colorScheme.primaryContainer,
+                                    unselectedIconColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                                    unselectedTextColor = MaterialTheme.colorScheme.onSurfaceVariant
                                 )
-                            },
-                            label = {
-                                Text(
-                                    text = screen.title,
-                                    fontSize = 10.sp,
-                                    fontWeight = if (currentRoute == screen.route) FontWeight.Bold else FontWeight.Medium,
-                                    maxLines = 1,
-                                    softWrap = false,
-                                    overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis
-                                )
-                            },
-                            colors = NavigationBarItemDefaults.colors(
-                                selectedIconColor = MaterialTheme.colorScheme.primary,
-                                selectedTextColor = MaterialTheme.colorScheme.primary,
-                                indicatorColor = MaterialTheme.colorScheme.primaryContainer,
-                                unselectedIconColor = MaterialTheme.colorScheme.onSurfaceVariant,
-                                unselectedTextColor = MaterialTheme.colorScheme.onSurfaceVariant
                             )
-                        )
+                        }
                     }
                 }
             }
-        }
-    ) { innerPadding ->
-        NavHost(
-            navController = navController,
-            startDestination = startDestination,
-            modifier = Modifier.padding(innerPadding),
-            enterTransition = { enterTransition() },
-            exitTransition = { exitTransition() },
-            popEnterTransition = { popEnterTransition() },
-            popExitTransition = { popExitTransition() }
-        ) {
-            composable(Screen.Home.route) {
-                HomeScreen(
-                    navController = navController,
-                    viewModel = homeViewModel,
-                    onOpenPaywall = { showPaywall = true }
-                )
-            }
+        ) { innerPadding ->
+            NavHost(
+                navController = navController,
+                startDestination = startDestination,
+                modifier = Modifier.padding(innerPadding),
+                enterTransition = { enterTransition() },
+                exitTransition = { exitTransition() },
+                popEnterTransition = { popEnterTransition() },
+                popExitTransition = { popExitTransition() }
+            ) {
+                composable(Screen.Home.route) {
+                    HomeScreen(
+                        navController = navController,
+                        viewModel = homeViewModel,
+                        onOpenPaywall = { showPaywall = true },
+                        onOpenDrawer = { scope.launch { drawerState.open() } }
+                    )
+                }
             composable(Screen.Dimensions.route) {
                 DimensionsScreen(
                     navController = navController,
@@ -468,3 +500,6 @@ fun LifeScoreNavGraph(
         }
     }
 }
+}
+
+

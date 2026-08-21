@@ -46,7 +46,8 @@ import com.lifescore.app.presentation.ui.share.ShareScoreCardDialog
 fun HomeScreen(
     navController: NavController,
     viewModel: HomeViewModel,
-    onOpenPaywall: () -> Unit
+    onOpenPaywall: () -> Unit,
+    onOpenDrawer: () -> Unit = {}
 ) {
     val context = LocalContext.current
     val uiState by viewModel.uiState.collectAsState()
@@ -75,6 +76,15 @@ fun HomeScreen(
             .background(MaterialTheme.colorScheme.background),
         topBar = {
             TopAppBar(
+                navigationIcon = {
+                    IconButton(onClick = onOpenDrawer) {
+                        Icon(
+                            Icons.Default.Menu,
+                            contentDescription = "Open Navigation Menu",
+                            tint = MaterialTheme.colorScheme.onSurface
+                        )
+                    }
+                },
                 title = {
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
