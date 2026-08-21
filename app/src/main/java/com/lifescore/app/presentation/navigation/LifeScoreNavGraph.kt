@@ -417,6 +417,18 @@ fun LifeScoreNavGraph(
                     navController = navController
                 )
             }
+            composable(Screen.AtomicHabits.route) {
+                val atomicHabitsViewModel = remember {
+                    com.lifescore.app.presentation.ui.atomichabits.AtomicHabitsViewModel(
+                        repository = app.atomicHabitsRepository,
+                        lifeScoreRepository = app.lifeScoreRepository
+                    )
+                }
+                com.lifescore.app.presentation.ui.atomichabits.AtomicHabitsDashboardScreen(
+                    viewModel = atomicHabitsViewModel,
+                    navController = navController
+                )
+            }
         }
 
         if (showPaywall) {

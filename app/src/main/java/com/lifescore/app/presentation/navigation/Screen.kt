@@ -33,4 +33,5 @@ sealed class Screen(val route: String, val title: String, val icon: ImageVector)
     object ActionPlan : Screen("action_plan", "Action Plan", Icons.Default.TrackChanges)
     object Hydration : Screen("hydration", "Hydration", Icons.Default.WaterDrop)
     object TrackerHub : Screen("tracker_hub", "15 Trackers", Icons.Default.DashboardCustomize)
+    object AtomicHabits : Screen("atomic_habits", "Atomic Habits", Icons.Default.Bolt)
 }

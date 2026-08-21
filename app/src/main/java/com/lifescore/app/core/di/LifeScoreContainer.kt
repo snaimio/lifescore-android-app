@@ -103,6 +103,12 @@ class LifeScoreContainer(private val context: Context) {
         )
     }
 
+    val atomicHabitsRepository: AtomicHabitsRepository by lazy {
+        AtomicHabitsRepositoryImpl(
+            lifeScoreRepository = lifeScoreRepository
+        )
+    }
+
     // Domain Use Cases
     val calculateLifeScoreUseCase by lazy { CalculateLifeScoreUseCase() }
     val getDailyTasksUseCase by lazy { GetDailyTasksUseCase(lifeScoreRepository) }

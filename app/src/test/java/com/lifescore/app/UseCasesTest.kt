@@ -361,5 +361,45 @@ class UseCasesTest {
             assertTrue(tracker.emoji.isNotBlank())
         }
     }
+
+    @Test
+    fun testAtomicHabitsFourLawsAndModels() {
+        val fourLaws = com.lifescore.app.core.engine.FourLawsSystem()
+
+        // Law 1: Habit Stacking
+        val stack = fourLaws.createHabitStack("pour my morning coffee", "meditate for 1 minute")
+        assertEquals("After I pour my morning coffee, I will meditate for 1 minute.", stack)
+        assertTrue(fourLaws.getHabitStackExamples().isNotEmpty())
+
+        // Law 2: Temptation Bundling
+        val bundle = fourLaws.createTemptationBundling("listen to educational podcast", "fold laundry")
+        assertEquals("Only while I fold laundry, will I listen to educational podcast.", bundle)
+        assertTrue(fourLaws.getTemptationBundlingExamples().isNotEmpty())
+
+        // Law 3: 2-Minute Rule
+        val twoMin = fourLaws.createTwoMinuteRule("running 5 miles")
+        assertEquals("Start by doing just 2 minutes of running 5 miles.", twoMin)
+        assertTrue(fourLaws.getTwoMinuteExamples().isNotEmpty())
+
+        // Law 4: Immediate Rewards
+        val rewards = fourLaws.getImmediateRewards()
+        assertEquals(5, rewards.size)
+
+        // Models Verification
+        val identity = com.lifescore.app.domain.model.atomichabits.HabitIdentity(
+            identityStatement = "I am a voracious reader",
+            dailyVotes = 5,
+            targetVotes = 30
+        )
+        assertEquals("I am a voracious reader", identity.identityStatement)
+        assertEquals(5, identity.dailyVotes)
+        assertEquals(30, identity.targetVotes)
+
+        val scorecard = com.lifescore.app.domain.model.atomichabits.HabitScorecardItem(
+            habitName = "Late night snacking",
+            category = com.lifescore.app.domain.model.atomichabits.HabitCategory.BAD
+        )
+        assertEquals("-", scorecard.category.symbol)
+    }
 }
 
