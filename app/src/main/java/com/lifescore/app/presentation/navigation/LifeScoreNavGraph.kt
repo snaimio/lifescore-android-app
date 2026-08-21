@@ -285,7 +285,7 @@ fun LifeScoreNavGraph(
             composable(Screen.Onboarding.route) {
                 com.lifescore.app.presentation.ui.onboarding.OnboardingAssessmentScreen(
                     onCompleteOnboarding = { archetype, ratings ->
-                        navController.navigate(Screen.Home.route) {
+                        navController.navigate(Screen.ActionPlan.route) {
                             popUpTo(Screen.Onboarding.route) { inclusive = true }
                         }
                     }
@@ -385,6 +385,11 @@ fun LifeScoreNavGraph(
             }
             composable(Screen.HabitLibrary.route) {
                 com.lifescore.app.presentation.ui.habits.HabitLibraryScreen(
+                    navController = navController
+                )
+            }
+            composable(Screen.ActionPlan.route) {
+                com.lifescore.app.presentation.ui.actionplan.ActionPlanScreen(
                     navController = navController
                 )
             }

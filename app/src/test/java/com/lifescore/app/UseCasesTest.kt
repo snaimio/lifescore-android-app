@@ -268,5 +268,48 @@ class UseCasesTest {
         assertEquals(8, mastery.size)
         assertTrue(mastery[DimensionType.MENTAL_HEALTH]!!.completedHabitsCount >= 3)
     }
+
+    @Test
+    fun testActionPlanGenerator() {
+        val sampleAnswers = (1..130).associateWith { 4 }
+        val assessment = com.lifescore.app.core.util.PsychometricAssessmentEngine.evaluateAssessment(sampleAnswers)
+        val plan = com.lifescore.app.core.engine.ActionPlanGenerator.generateActionPlan(assessment, "HeroTester")
+
+        assertEquals("HeroTester", plan.userName)
+        assertTrue(plan.strengths.isNotEmpty())
+        assertTrue(plan.weaknesses.isNotEmpty())
+        assertEquals(5, plan.dailyHabits.size)
+        assertTrue(plan.weeklyGoals.isNotEmpty())
+        assertTrue(plan.monthlyMilestones.isNotEmpty())
+        assertTrue(plan.recommendedChallenges.isNotEmpty())
+        assertTrue(plan.aiCoachBriefing.isNotBlank())
+    }
+
+    @Test
+    fun testProgressTracker() {
+        val progress = com.lifescore.app.core.engine.ProgressTracker.calculateDimensionProgress(
+            currentScore = 60,
+            targetScore = 120,
+            habitsCompleted = 10,
+            totalHabits = 20
+        )
+        assertEquals(50f, progress.scoreProgress, 0.1f)
+        assertEquals(50f, progress.habitCompletion, 0.1f)
+        assertTrue(progress.estimatedDaysToTarget > 0)
+        assertTrue(progress.nextMilestone.isNotEmpty())
+    }
+
+    @Test
+    fun testRewardSystem() {
+        val reward = com.lifescore.app.core.engine.RewardSystem.calculateWeeklyReward(
+            habitsCompleted = 15,
+            totalHabits = 20,
+            streakDays = 7
+        )
+        assertTrue(reward.xpEarned > 0)
+        assertTrue(reward.coinsEarned > 0)
+        assertNotNull(reward.badgeEarned)
+        assertTrue(reward.message.isNotEmpty())
+    }
 }
 
