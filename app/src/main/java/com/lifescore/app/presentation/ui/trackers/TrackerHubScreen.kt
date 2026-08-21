@@ -155,6 +155,7 @@ fun TrackerHubScreen(
                 items(filteredTrackers, key = { it.type.id }) { tracker ->
                     TrackerModuleCard(
                         tracker = tracker,
+                        onOpenTracker = { navController.navigate("tracker_detail/${tracker.type.id}") },
                         onQuickLog = { amount -> viewModel.quickLog(tracker.type, amount) },
                         onCustomLog = { selectedTrackerForCustomLog = tracker.type }
                     )
@@ -275,6 +276,7 @@ fun MasterOverviewCard(
 @Composable
 fun TrackerModuleCard(
     tracker: TrackerStatus,
+    onOpenTracker: () -> Unit,
     onQuickLog: (Float) -> Unit,
     onCustomLog: () -> Unit
 ) {
@@ -297,14 +299,16 @@ fun TrackerModuleCard(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
+                Surface(
+                    onClick = onOpenTracker,
+                    color = Color.Transparent,
                     modifier = Modifier.weight(1f)
                 ) {
-                    Surface(
-                        shape = RoundedCornerShape(10.dp),
-                        color = MaterialTheme.colorScheme.primary.copy(alpha = 0.12f)
-                    ) {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Surface(
+                            shape = RoundedCornerShape(10.dp),
+                            color = MaterialTheme.colorScheme.primary.copy(alpha = 0.12f)
+                        ) {
                         Text(
                             text = type.emoji,
                             fontSize = 20.sp,
@@ -325,6 +329,7 @@ fun TrackerModuleCard(
                         )
                     }
                 }
+            }
 
                 Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
                     Surface(

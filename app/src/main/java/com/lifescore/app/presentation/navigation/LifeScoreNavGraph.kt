@@ -429,6 +429,27 @@ fun LifeScoreNavGraph(
                     navController = navController
                 )
             }
+            composable(
+                route = "tracker_detail/{trackerId}",
+                arguments = listOf(androidx.navigation.navArgument("trackerId") { type = androidx.navigation.NavType.StringType })
+            ) { backStackEntry ->
+                val trackerId = backStackEntry.arguments?.getString("trackerId") ?: "steps"
+                val trackerType = com.lifescore.app.core.trackers.TrackerType.values().find { it.id == trackerId }
+                    ?: com.lifescore.app.core.trackers.TrackerType.STEPS
+
+                val dedicatedViewModel = remember(trackerType) {
+                    com.lifescore.app.presentation.ui.trackers.DedicatedTrackerViewModel(
+                        trackerType = trackerType,
+                        lifeTrackersRepository = app.lifeTrackersRepository,
+                        lifeScoreRepository = app.lifeScoreRepository
+                    )
+                }
+
+                com.lifescore.app.presentation.ui.trackers.DedicatedTrackerScreen(
+                    viewModel = dedicatedViewModel,
+                    navController = navController
+                )
+            }
         }
 
         if (showPaywall) {
