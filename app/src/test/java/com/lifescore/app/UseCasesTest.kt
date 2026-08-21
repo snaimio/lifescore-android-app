@@ -205,5 +205,28 @@ class UseCasesTest {
         val architectTribe = com.lifescore.app.core.engine.CommunityTribeSystem.getTribeForArchetype("architect")
         assertEquals("The Architects Syndicate", architectTribe.tribeName)
     }
+
+    @Test
+    fun testUserProgressTrackerPhases() {
+        val newUserProgress = com.lifescore.app.core.engine.UserProgress(daysActive = 1, completedQuests = 1, level = 1, lifeScore = 500)
+        assertEquals(com.lifescore.app.core.engine.UserPhase.NEW_USER, com.lifescore.app.core.engine.UserProgressTracker.determinePhase(newUserProgress))
+        assertEquals(3, com.lifescore.app.core.engine.UserProgressTracker.getDailyQuestLimit(com.lifescore.app.core.engine.UserPhase.NEW_USER))
+
+        val exploringProgress = com.lifescore.app.core.engine.UserProgress(daysActive = 7, completedQuests = 8, level = 3, lifeScore = 650)
+        assertEquals(com.lifescore.app.core.engine.UserPhase.EXPLORING, com.lifescore.app.core.engine.UserProgressTracker.determinePhase(exploringProgress))
+        assertEquals(5, com.lifescore.app.core.engine.UserProgressTracker.getDailyQuestLimit(com.lifescore.app.core.engine.UserPhase.EXPLORING))
+
+        val advancedProgress = com.lifescore.app.core.engine.UserProgress(daysActive = 15, completedQuests = 25, level = 5, lifeScore = 780)
+        assertEquals(com.lifescore.app.core.engine.UserPhase.ADVANCED, com.lifescore.app.core.engine.UserProgressTracker.determinePhase(advancedProgress))
+
+        val expertProgress = com.lifescore.app.core.engine.UserProgress(daysActive = 35, completedQuests = 60, level = 9, lifeScore = 920)
+        assertEquals(com.lifescore.app.core.engine.UserPhase.EXPERT, com.lifescore.app.core.engine.UserProgressTracker.determinePhase(expertProgress))
+    }
+
+    @Test
+    fun testFeatureUnlockNotification() {
+        val msg = com.lifescore.app.core.engine.FeatureUnlockNotification.getUnlockMessage(com.lifescore.app.core.engine.UserPhase.EXPLORING)
+        assertTrue(msg.contains("Unlocked"))
+    }
 }
 

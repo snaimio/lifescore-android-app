@@ -25,6 +25,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.lifescore.app.core.designsystem.*
 import com.lifescore.app.core.designsystem.components.*
+import com.lifescore.app.core.engine.UserPhase
 import com.lifescore.app.core.util.ShareCardData
 import com.lifescore.app.domain.model.DimensionType
 import com.lifescore.app.domain.model.HeroArchetype
@@ -208,6 +209,47 @@ fun HomeScreen(
                     }
                 }
 
+                // 1.5. Progressive User Phase Milestone Banner
+                item {
+                    GlassCard(
+                        modifier = Modifier.fillMaxWidth(),
+                        shape = RoundedCornerShape(16.dp)
+                    ) {
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(Spacing.md),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Surface(
+                                shape = RoundedCornerShape(12.dp),
+                                color = MaterialTheme.colorScheme.primaryContainer
+                            ) {
+                                Text(
+                                    text = uiState.userPhase.badgeEmoji,
+                                    fontSize = 24.sp,
+                                    modifier = Modifier.padding(Spacing.sm)
+                                )
+                            }
+                            Spacer(Modifier.width(Spacing.sm))
+                            Column(modifier = Modifier.weight(1f)) {
+                                Text(
+                                    text = "${uiState.userPhase.title} • ${uiState.userPhase.subtitle}",
+                                    style = MaterialTheme.typography.titleSmall,
+                                    fontWeight = FontWeight.Bold,
+                                    color = MaterialTheme.colorScheme.onSurface
+                                )
+                                Spacer(Modifier.height(2.dp))
+                                Text(
+                                    text = uiState.milestoneMessage ?: "Start simple and build compounding momentum daily.",
+                                    style = MaterialTheme.typography.bodySmall,
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                                )
+                            }
+                        }
+                    }
+                }
+
                 // 2. Hero Card
                 item {
                     HeroCard(
@@ -231,7 +273,7 @@ fun HomeScreen(
                     )
                 }
 
-                // 4. Feature Pills
+                // 4. Feature Pills (Progressively Unlocked)
                 item {
                     LazyRow(
                         horizontalArrangement = Arrangement.spacedBy(Spacing.sm),
@@ -247,30 +289,34 @@ fun HomeScreen(
                         item {
                             FilterChip(
                                 selected = false,
-                                onClick = { navController.navigate(Screen.CharacterStats.route) },
-                                label = { Text("🛡️ Hunter Stats", style = MaterialTheme.typography.labelMedium) }
-                            )
-                        }
-                        item {
-                            FilterChip(
-                                selected = false,
-                                onClick = { navController.navigate(Screen.GroupHabits.route) },
-                                label = { Text("👥 Squads", style = MaterialTheme.typography.labelMedium) }
-                            )
-                        }
-                        item {
-                            FilterChip(
-                                selected = false,
                                 onClick = { navController.navigate(Screen.Journal.route) },
                                 label = { Text("📖 Journal", style = MaterialTheme.typography.labelMedium) }
                             )
                         }
-                        item {
-                            FilterChip(
-                                selected = false,
-                                onClick = { navController.navigate(Screen.Combat.route) },
-                                label = { Text("⚔️ Boss Fight", style = MaterialTheme.typography.labelMedium) }
-                            )
+                        if (uiState.userPhase != UserPhase.NEW_USER) {
+                            item {
+                                FilterChip(
+                                    selected = false,
+                                    onClick = { navController.navigate(Screen.GroupHabits.route) },
+                                    label = { Text("👥 Squads", style = MaterialTheme.typography.labelMedium) }
+                                )
+                            }
+                        }
+                        if (uiState.userPhase == UserPhase.ADVANCED || uiState.userPhase == UserPhase.EXPERT) {
+                            item {
+                                FilterChip(
+                                    selected = false,
+                                    onClick = { navController.navigate(Screen.CharacterStats.route) },
+                                    label = { Text("🛡️ Hunter Stats", style = MaterialTheme.typography.labelMedium) }
+                                )
+                            }
+                            item {
+                                FilterChip(
+                                    selected = false,
+                                    onClick = { navController.navigate(Screen.Combat.route) },
+                                    label = { Text("⚔️ Boss Fight", style = MaterialTheme.typography.labelMedium) }
+                                )
+                            }
                         }
                     }
                 }

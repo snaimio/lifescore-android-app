@@ -43,16 +43,6 @@ fun LifeScoreNavGraph(
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
 
-    val bottomBarItems = listOf(
-        Screen.Home,
-        Screen.Dimensions,
-        Screen.Tasks,
-        Screen.AICoach,
-        Screen.Leaderboard
-    )
-
-    val showBottomBar = bottomBarItems.any { it.route == currentRoute }
-
     // ViewModels
     val homeViewModel = remember {
         HomeViewModel(
@@ -61,6 +51,28 @@ fun LifeScoreNavGraph(
             authRepository = app.authRepository
         )
     }
+    val homeState by homeViewModel.uiState.collectAsState()
+    val userPhase = homeState.userPhase
+
+    val bottomBarItems = remember(userPhase) {
+        when (userPhase) {
+            com.lifescore.app.core.engine.UserPhase.NEW_USER -> listOf(
+                Screen.Home,
+                Screen.Dimensions,
+                Screen.Tasks,
+                Screen.AICoach
+            )
+            else -> listOf(
+                Screen.Home,
+                Screen.Dimensions,
+                Screen.Tasks,
+                Screen.AICoach,
+                Screen.Leaderboard
+            )
+        }
+    }
+
+    val showBottomBar = bottomBarItems.any { it.route == currentRoute }
     val dimensionsViewModel = remember { DimensionsViewModel(app.lifeScoreRepository) }
     val tasksViewModel = remember { TasksViewModel(app.lifeScoreRepository) }
     val coachViewModel = remember {

@@ -30,6 +30,9 @@ data class HomeUiState(
     val dimensions: List<DimensionType> = DimensionType.values().toList(),
     val dimensionScores: Map<DimensionType, Int> = DimensionType.values().associateWith { 50 },
     val todayTasks: List<LifeTask> = emptyList(),
+    val userPhase: com.lifescore.app.core.engine.UserPhase = com.lifescore.app.core.engine.UserPhase.NEW_USER,
+    val unlockedFeatures: List<String> = emptyList(),
+    val milestoneMessage: String? = null,
     val cloudSyncStatus: String = "Synced with Firestore"
 )
 
@@ -80,6 +83,17 @@ class HomeViewModel(
                 val completedCount = tasks.count { it.isCompleted }
                 val taskProgress = if (tasks.isNotEmpty()) completedCount.toFloat() / tasks.size else 0f
 
+                val userProg = com.lifescore.app.core.engine.UserProgress(
+                    daysActive = user.currentStreakDays,
+                    completedQuests = completedCount,
+                    level = level,
+                    lifeScore = overall,
+                    isPremium = false
+                )
+                val phase = com.lifescore.app.core.engine.UserProgressTracker.determinePhase(userProg)
+                val questLimit = com.lifescore.app.core.engine.UserProgressTracker.getDailyQuestLimit(phase)
+                val visibleTasks = tasks.take(questLimit)
+
                 HomeUiState(
                     isLoading = false,
                     isSyncing = false,
@@ -92,10 +106,13 @@ class HomeViewModel(
                     userTitle = LevelCalculator.getTitleForLevel(level),
                     dailyProgress = taskProgress,
                     tasksCompleted = completedCount,
-                    totalTasks = tasks.size,
+                    totalTasks = visibleTasks.size,
                     dimensions = DimensionType.values().toList(),
                     dimensionScores = scores,
-                    todayTasks = tasks,
+                    todayTasks = visibleTasks,
+                    userPhase = phase,
+                    unlockedFeatures = com.lifescore.app.core.engine.UserProgressTracker.getUnlockedFeatures(phase),
+                    milestoneMessage = com.lifescore.app.core.engine.FeatureUnlockNotification.getUnlockMessage(phase),
                     cloudSyncStatus = "Live Cloud Sync Active"
                 )
             }.collect { newState ->
