@@ -1,13 +1,12 @@
 package com.lifescore.app.presentation.ui.dimensions
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Check
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -21,9 +20,13 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
 import com.lifescore.app.core.designsystem.Spacing
+import com.lifescore.app.core.designsystem.components.EmptyState
+import com.lifescore.app.core.designsystem.components.GlassCard
+import com.lifescore.app.core.designsystem.components.TaskItem
 import com.lifescore.app.data.repository.LifeScoreRepository
 import com.lifescore.app.domain.model.DimensionType
 import com.lifescore.app.domain.model.LifeTask
+import com.lifescore.app.presentation.ui.home.components.SectionHeader
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -83,9 +86,23 @@ fun DimensionsScreen(
     var newTaskTitle by remember { mutableStateOf("") }
 
     Scaffold(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(MaterialTheme.colorScheme.background),
         topBar = {
             TopAppBar(
-                title = { Text("Life Dimensions", fontWeight = FontWeight.Bold, style = MaterialTheme.typography.titleLarge) }
+                title = {
+                    Text(
+                        "Life Dimensions",
+                        fontWeight = FontWeight.Bold,
+                        style = MaterialTheme.typography.titleLarge,
+                        color = MaterialTheme.colorScheme.onSurface
+                    )
+                },
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = MaterialTheme.colorScheme.background,
+                    scrolledContainerColor = MaterialTheme.colorScheme.background
+                )
             )
         },
         floatingActionButton = {
@@ -101,11 +118,14 @@ fun DimensionsScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(padding)
+                .background(MaterialTheme.colorScheme.background)
         ) {
             // Scrollable Dimension Tabs
             ScrollableTabRow(
                 selectedTabIndex = DimensionType.values().indexOf(uiState.selectedDimension),
-                edgePadding = Spacing.responsiveHorizontalPadding()
+                edgePadding = Spacing.md,
+                containerColor = MaterialTheme.colorScheme.background,
+                contentColor = MaterialTheme.colorScheme.primary
             ) {
                 DimensionType.values().forEach { dim ->
                     Tab(
@@ -115,8 +135,11 @@ fun DimensionsScreen(
                             Text(
                                 dim.displayName,
                                 fontWeight = if (uiState.selectedDimension == dim) FontWeight.Bold else FontWeight.Medium,
-                                fontSize = 13.sp,
-                                color = if (uiState.selectedDimension == dim) Color(dim.baseColorHex) else MaterialTheme.colorScheme.onSurface
+                                style = MaterialTheme.typography.labelLarge,
+                                color = if (uiState.selectedDimension == dim)
+                                    Color(dim.baseColorHex)
+                                else
+                                    MaterialTheme.colorScheme.onSurfaceVariant
                             )
                         }
                     )
@@ -126,30 +149,26 @@ fun DimensionsScreen(
             LazyColumn(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(horizontal = Spacing.responsiveHorizontalPadding()),
-                verticalArrangement = Arrangement.spacedBy(10.dp),
-                contentPadding = PaddingValues(top = 12.dp, bottom = 80.dp)
+                    .padding(horizontal = Spacing.md),
+                verticalArrangement = Arrangement.spacedBy(Spacing.md),
+                contentPadding = PaddingValues(top = Spacing.sm, bottom = Spacing.xxl)
             ) {
                 item {
                     // Dimension Header Card
-                    Card(
-                        modifier = Modifier.fillMaxWidth(),
-                        shape = RoundedCornerShape(18.dp),
-                        colors = CardDefaults.cardColors(
-                            containerColor = Color(uiState.selectedDimension.baseColorHex).copy(alpha = 0.15f)
-                        )
+                    GlassCard(
+                        modifier = Modifier.fillMaxWidth()
                     ) {
-                        Column(modifier = Modifier.padding(16.dp)) {
+                        Column {
                             Text(
                                 text = uiState.selectedDimension.displayName,
                                 fontWeight = FontWeight.Black,
-                                fontSize = 20.sp,
+                                style = MaterialTheme.typography.titleLarge,
                                 color = Color(uiState.selectedDimension.baseColorHex)
                             )
-                            Spacer(Modifier.height(4.dp))
+                            Spacer(Modifier.height(Spacing.xs))
                             Text(
                                 text = uiState.selectedDimension.description,
-                                fontSize = 12.sp,
+                                style = MaterialTheme.typography.bodyMedium,
                                 color = MaterialTheme.colorScheme.onSurfaceVariant
                             )
                         }
@@ -157,63 +176,25 @@ fun DimensionsScreen(
                 }
 
                 item {
-                    Text(
-                        text = "Active Habits & Quests",
-                        style = MaterialTheme.typography.titleMedium,
-                        fontWeight = FontWeight.Bold,
-                        modifier = Modifier.padding(vertical = 4.dp)
-                    )
+                    SectionHeader("Active Habits & Quests")
                 }
 
                 if (uiState.tasksForSelectedDimension.isEmpty()) {
                     item {
-                        Box(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(24.dp),
-                            contentAlignment = Alignment.Center
-                        ) {
-                            Text("No habits yet. Tap + to add one!", color = MaterialTheme.colorScheme.outline, fontSize = 13.sp)
-                        }
+                        EmptyState(
+                            icon = "🌟",
+                            title = "No habits created yet",
+                            description = "Tap the + button below to create your first ${uiState.selectedDimension.displayName} habit.",
+                            actionButtonText = "Add Habit",
+                            onActionClick = { showAddTaskDialog = true }
+                        )
                     }
                 } else {
-                    items(uiState.tasksForSelectedDimension) { task ->
-                        Card(
-                            shape = RoundedCornerShape(14.dp),
-                            colors = CardDefaults.cardColors(
-                                containerColor = if (task.isCompleted) MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f) else MaterialTheme.colorScheme.surface
-                            ),
-                            elevation = CardDefaults.cardElevation(defaultElevation = 1.dp)
-                        ) {
-                            Row(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(12.dp),
-                                verticalAlignment = Alignment.CenterVertically
-                            ) {
-                                Checkbox(
-                                    checked = task.isCompleted,
-                                    onCheckedChange = { viewModel.toggleTask(task) },
-                                    colors = CheckboxDefaults.colors(
-                                        checkedColor = Color(uiState.selectedDimension.baseColorHex)
-                                    )
-                                )
-                                Spacer(Modifier.width(6.dp))
-                                Text(
-                                    text = task.title,
-                                    fontWeight = FontWeight.Medium,
-                                    fontSize = 13.sp,
-                                    modifier = Modifier.weight(1f),
-                                    color = if (task.isCompleted) MaterialTheme.colorScheme.onSurface.copy(alpha = 0.4f) else MaterialTheme.colorScheme.onSurface
-                                )
-                                Text(
-                                    text = "+${task.pointsReward} XP",
-                                    fontWeight = FontWeight.Bold,
-                                    fontSize = 11.sp,
-                                    color = Color(uiState.selectedDimension.baseColorHex)
-                                )
-                            }
-                        }
+                    items(uiState.tasksForSelectedDimension, key = { it.id }) { task ->
+                        TaskItem(
+                            task = task,
+                            onComplete = { viewModel.toggleTask(task) }
+                        )
                     }
                 }
             }
