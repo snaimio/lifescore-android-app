@@ -1,3 +1,4 @@
+@file:Suppress("SpellCheckingInspection")
 package com.lifescore.app.data.repository
 
 import com.lifescore.app.data.local.dao.*

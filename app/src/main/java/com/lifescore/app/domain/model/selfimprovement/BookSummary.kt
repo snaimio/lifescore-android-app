@@ -1,3 +1,4 @@
+@file:Suppress("SpellCheckingInspection")
 package com.lifescore.app.domain.model.selfimprovement
 
 import com.lifescore.app.domain.model.DimensionType
