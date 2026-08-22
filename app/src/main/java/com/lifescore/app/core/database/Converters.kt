@@ -50,4 +50,24 @@ class Converters {
     } catch (e: Exception) {
         com.lifescore.app.data.local.entity.RelapseType.SLIP
     }
+
+    @TypeConverter
+    fun fromMoodType(type: com.lifescore.app.data.local.entity.MoodType): String = type.name
+
+    @TypeConverter
+    fun toMoodType(value: String): com.lifescore.app.data.local.entity.MoodType = try {
+        com.lifescore.app.data.local.entity.MoodType.valueOf(value)
+    } catch (e: Exception) {
+        com.lifescore.app.data.local.entity.MoodType.CALM
+    }
+
+    @TypeConverter
+    fun fromTreeType(type: com.lifescore.app.data.local.entity.TreeType): String = type.name
+
+    @TypeConverter
+    fun toTreeType(value: String): com.lifescore.app.data.local.entity.TreeType = try {
+        com.lifescore.app.data.local.entity.TreeType.valueOf(value)
+    } catch (e: Exception) {
+        com.lifescore.app.data.local.entity.TreeType.OAK
+    }
 }

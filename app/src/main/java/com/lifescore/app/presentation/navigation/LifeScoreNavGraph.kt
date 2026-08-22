@@ -479,6 +479,77 @@ fun LifeScoreNavGraph(
                     onOpenAICoach = { navController.navigate(Screen.AICoach.route) }
                 )
             }
+            composable(Screen.BookLibrary.route) {
+                val bookViewModel = remember {
+                    com.lifescore.app.presentation.ui.books.BookSummaryViewModel(
+                        repository = app.bookSummaryRepository
+                    )
+                }
+                com.lifescore.app.presentation.ui.books.BookSummaryLibraryScreen(
+                    viewModel = bookViewModel,
+                    navController = navController
+                )
+            }
+            composable(
+                route = "book_detail/{bookId}",
+                arguments = listOf(androidx.navigation.navArgument("bookId") { type = androidx.navigation.NavType.StringType })
+            ) { backStackEntry ->
+                val bookId = backStackEntry.arguments?.getString("bookId") ?: "atomic_habits"
+                val bookViewModel = remember {
+                    com.lifescore.app.presentation.ui.books.BookSummaryViewModel(
+                        repository = app.bookSummaryRepository
+                    )
+                }
+                com.lifescore.app.presentation.ui.books.BookDetailSummaryScreen(
+                    bookId = bookId,
+                    viewModel = bookViewModel,
+                    navController = navController
+                )
+            }
+            composable(Screen.DailyGrowth.route) {
+                val dailyGrowthViewModel = remember {
+                    com.lifescore.app.presentation.ui.growth.DailyGrowthViewModel(
+                        repository = app.dailyGrowthRepository
+                    )
+                }
+                com.lifescore.app.presentation.ui.growth.DailyGrowthScreen(
+                    viewModel = dailyGrowthViewModel,
+                    navController = navController
+                )
+            }
+            composable(Screen.FocusTimer.route) {
+                val focusViewModel = remember {
+                    com.lifescore.app.presentation.ui.focus.FocusViewModel(
+                        repository = app.focusRepository
+                    )
+                }
+                com.lifescore.app.presentation.ui.focus.FocusTimerScreen(
+                    viewModel = focusViewModel,
+                    navController = navController
+                )
+            }
+            composable(Screen.MoodTracker.route) {
+                val moodViewModel = remember {
+                    com.lifescore.app.presentation.ui.mood.MoodViewModel(
+                        repository = app.moodRepository
+                    )
+                }
+                com.lifescore.app.presentation.ui.mood.MoodTrackerScreen(
+                    viewModel = moodViewModel,
+                    navController = navController
+                )
+            }
+            composable(Screen.SleepSoundscapes.route) {
+                val sleepViewModel = remember {
+                    com.lifescore.app.presentation.ui.sleep.SleepViewModel(
+                        lifeScoreRepository = app.lifeScoreRepository
+                    )
+                }
+                com.lifescore.app.presentation.ui.sleep.SleepStoriesScreen(
+                    viewModel = sleepViewModel,
+                    navController = navController
+                )
+            }
             composable(
                 route = "tracker_detail/{trackerId}",
                 arguments = listOf(androidx.navigation.navArgument("trackerId") { type = androidx.navigation.NavType.StringType })

@@ -76,6 +76,18 @@ class LifeScoreApp : Application(), Configuration.Provider {
     val recoveryRepository: com.lifescore.app.data.repository.RecoveryRepository
         get() = container.recoveryRepository
 
+    val bookSummaryRepository: com.lifescore.app.data.repository.BookSummaryRepository
+        get() = container.bookSummaryRepository
+
+    val dailyGrowthRepository: com.lifescore.app.data.repository.DailyGrowthRepository
+        get() = container.dailyGrowthRepository
+
+    val focusRepository: com.lifescore.app.data.repository.FocusRepository
+        get() = container.focusRepository
+
+    val moodRepository: com.lifescore.app.data.repository.MoodRepository
+        get() = container.moodRepository
+
     private var firebaseAnalytics: FirebaseAnalytics? = null
 
     override val workManagerConfiguration: Configuration

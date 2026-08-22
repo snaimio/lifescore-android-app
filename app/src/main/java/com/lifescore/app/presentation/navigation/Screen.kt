@@ -1,6 +1,7 @@
 package com.lifescore.app.presentation.navigation
 
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.MenuBook
 import androidx.compose.material.icons.filled.*
 import androidx.compose.ui.graphics.vector.ImageVector
 
@@ -36,4 +37,9 @@ sealed class Screen(val route: String, val title: String, val icon: ImageVector)
     object AtomicHabits : Screen("atomic_habits", "Atomic Habits", Icons.Default.Bolt)
     object Recovery : Screen("recovery", "Addiction Recovery", Icons.Default.HealthAndSafety)
     object RecoverySos : Screen("recovery_sos", "Craving SOS", Icons.Default.Warning)
+    object BookLibrary : Screen("book_library", "Book Summaries", Icons.AutoMirrored.Filled.MenuBook)
+    object DailyGrowth : Screen("daily_growth", "15-Min Growth", Icons.Default.Lightbulb)
+    object FocusTimer : Screen("focus_timer", "Mindful Focus", Icons.Default.Timer)
+    object MoodTracker : Screen("mood_tracker", "Mood Tracker", Icons.Default.Mood)
+    object SleepSoundscapes : Screen("sleep_soundscapes", "Sleep & Sounds", Icons.Default.Bedtime)
 }

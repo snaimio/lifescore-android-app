@@ -45,6 +45,11 @@ object DrawerNavigationConfig {
 
     // 3. Growth & Science Systems
     val growthItems = listOf(
+        DrawerItem("Book Summaries", Icons.AutoMirrored.Filled.MenuBook, Screen.BookLibrary.route, badge = "Headway", emoji = "📚"),
+        DrawerItem("15-Min Daily Growth", Icons.Default.Lightbulb, Screen.DailyGrowth.route, badge = "Alux", emoji = "⚡"),
+        DrawerItem("Forest Focus Timer", Icons.Default.Timer, Screen.FocusTimer.route, badge = "Forest", emoji = "🌲"),
+        DrawerItem("Mood & Telemetry", Icons.Default.Mood, Screen.MoodTracker.route, badge = "Reframe", emoji = "🎭"),
+        DrawerItem("Sleep & Soundscapes", Icons.Default.Bedtime, Screen.SleepSoundscapes.route, badge = "Calm", emoji = "🌙"),
         DrawerItem("Addiction Recovery", Icons.Default.HealthAndSafety, Screen.Recovery.route, badge = "Science OS", emoji = "💪"),
         DrawerItem("Atomic Habits OS", Icons.AutoMirrored.Filled.TrendingUp, Screen.AtomicHabits.route, badge = "James Clear", emoji = "⚡"),
         DrawerItem("AI Action Plan", Icons.Default.AutoAwesome, Screen.ActionPlan.route, badge = "AI", emoji = "🎯"),

@@ -116,6 +116,34 @@ class LifeScoreContainer(private val context: Context) {
         )
     }
 
+    val bookSummaryRepository: BookSummaryRepository by lazy {
+        BookSummaryRepositoryImpl(
+            bookSummaryDao = database.bookSummaryDao(),
+            lifeScoreRepository = lifeScoreRepository
+        )
+    }
+
+    val dailyGrowthRepository: DailyGrowthRepository by lazy {
+        DailyGrowthRepositoryImpl(
+            dailyGrowthDao = database.dailyGrowthDao(),
+            lifeScoreRepository = lifeScoreRepository
+        )
+    }
+
+    val focusRepository: FocusRepository by lazy {
+        FocusRepositoryImpl(
+            focusDao = database.focusDao(),
+            lifeScoreRepository = lifeScoreRepository
+        )
+    }
+
+    val moodRepository: MoodRepository by lazy {
+        MoodRepositoryImpl(
+            moodDao = database.moodDao(),
+            lifeScoreRepository = lifeScoreRepository
+        )
+    }
+
     // Domain Use Cases
     val calculateLifeScoreUseCase by lazy { CalculateLifeScoreUseCase() }
     val getDailyTasksUseCase by lazy { GetDailyTasksUseCase(lifeScoreRepository) }

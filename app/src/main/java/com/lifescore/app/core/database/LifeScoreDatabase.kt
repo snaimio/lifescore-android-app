@@ -29,9 +29,13 @@ import com.lifescore.app.data.local.entity.*
         RecoveryMilestone::class,
         MotivationalNote::class,
         RecoveryPledge::class,
-        RecoverySavingsGoal::class
+        RecoverySavingsGoal::class,
+        BookSummaryProgressEntity::class,
+        DailyGrowthProgressEntity::class,
+        FocusSessionEntity::class,
+        MoodLogEntity::class
     ],
-    version = 6,
+    version = 7,
     exportSchema = false
 )
 @TypeConverters(Converters::class)
@@ -48,6 +52,10 @@ abstract class LifeScoreDatabase : RoomDatabase() {
     abstract fun bossDao(): BossDao
     abstract fun hydrationDao(): HydrationDao
     abstract fun recoveryDao(): RecoveryDao
+    abstract fun bookSummaryDao(): BookSummaryDao
+    abstract fun dailyGrowthDao(): DailyGrowthDao
+    abstract fun focusDao(): FocusDao
+    abstract fun moodDao(): MoodDao
 
     companion object {
         @Volatile
@@ -92,6 +100,15 @@ abstract class LifeScoreDatabase : RoomDatabase() {
             }
         }
 
+        val MIGRATION_6_7 = object : Migration(6, 7) {
+            override fun migrate(db: SupportSQLiteDatabase) {
+                db.execSQL("CREATE TABLE IF NOT EXISTS book_summary_progress (bookId TEXT PRIMARY KEY NOT NULL, userId TEXT NOT NULL, isCompleted INTEGER NOT NULL, isBookmarked INTEGER NOT NULL, completedKeyTakeawaysCount INTEGER NOT NULL, appliedQuestCompleted INTEGER NOT NULL, lastReadChapterIndex INTEGER NOT NULL, lastReadTimestamp INTEGER NOT NULL)")
+                db.execSQL("CREATE TABLE IF NOT EXISTS daily_growth_progress (sessionId INTEGER PRIMARY KEY NOT NULL, userId TEXT NOT NULL, dateIso TEXT NOT NULL, isCompleted INTEGER NOT NULL, journalReflection TEXT NOT NULL, actionItemCompleted INTEGER NOT NULL, completedAt INTEGER NOT NULL)")
+                db.execSQL("CREATE TABLE IF NOT EXISTS focus_sessions (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, userId TEXT NOT NULL, durationMinutes INTEGER NOT NULL, dimensionTag TEXT NOT NULL, treeType TEXT NOT NULL, wasSuccessful INTEGER NOT NULL, notes TEXT NOT NULL, timestamp INTEGER NOT NULL)")
+                db.execSQL("CREATE TABLE IF NOT EXISTS mood_logs (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, userId TEXT NOT NULL, mood TEXT NOT NULL, energyLevel INTEGER NOT NULL, stressLevel INTEGER NOT NULL, factorTags TEXT NOT NULL, note TEXT NOT NULL, dateIso TEXT NOT NULL, timestamp INTEGER NOT NULL)")
+            }
+        }
+
         fun getInstance(context: Context): LifeScoreDatabase {
             return INSTANCE ?: synchronized(this) {
                 val instance = Room.databaseBuilder(
@@ -99,7 +116,7 @@ abstract class LifeScoreDatabase : RoomDatabase() {
                     LifeScoreDatabase::class.java,
                     "lifescore.db"
                 )
-                    .addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4, MIGRATION_4_5, MIGRATION_5_6)
+                    .addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4, MIGRATION_4_5, MIGRATION_5_6, MIGRATION_6_7)
                     .fallbackToDestructiveMigrationOnDowngrade()
                     .build()
                 INSTANCE = instance
