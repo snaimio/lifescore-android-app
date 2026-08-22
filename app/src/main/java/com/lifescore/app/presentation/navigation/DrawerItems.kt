@@ -45,6 +45,10 @@ object DrawerNavigationConfig {
 
     // 3. Growth & Science Systems
     val growthItems = listOf(
+        DrawerItem("Screen Time & Detox", Icons.Default.PhoneAndroid, Screen.ScreenTime.route, badge = "Opal/Sweat", emoji = "📱"),
+        DrawerItem("Minimalist Mode", Icons.Default.FilterNone, Screen.MinimalistLauncher.route, badge = "Minimal", emoji = "🔲"),
+        DrawerItem("Task Breakthrough", Icons.Default.Bolt, Screen.TaskBreakthrough.route, badge = "AI Focus", emoji = "⚡"),
+        DrawerItem("Thought Break (CBT)", Icons.Default.Psychology, Screen.ThoughtBreak.route, badge = "Reframe", emoji = "🧠"),
         DrawerItem("Book Summaries", Icons.AutoMirrored.Filled.MenuBook, Screen.BookLibrary.route, badge = "Headway", emoji = "📚"),
         DrawerItem("15-Min Daily Growth", Icons.Default.Lightbulb, Screen.DailyGrowth.route, badge = "Alux", emoji = "⚡"),
         DrawerItem("Forest Focus Timer", Icons.Default.Timer, Screen.FocusTimer.route, badge = "Forest", emoji = "🌲"),

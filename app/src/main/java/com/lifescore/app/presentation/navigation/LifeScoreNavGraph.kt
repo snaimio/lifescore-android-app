@@ -550,6 +550,44 @@ fun LifeScoreNavGraph(
                     navController = navController
                 )
             }
+            composable(Screen.ScreenTime.route) {
+                val screenTimeViewModel = remember {
+                    com.lifescore.app.presentation.ui.screentime.ScreenTimeViewModel(
+                        repository = app.screenTimeRepository
+                    )
+                }
+                com.lifescore.app.presentation.ui.screentime.ScreenTimeDashboardScreen(
+                    viewModel = screenTimeViewModel,
+                    onBack = { navController.popBackStack() },
+                    onNavigateToMinimalist = { navController.navigate(Screen.MinimalistLauncher.route) },
+                    onNavigateToFocusTimer = { navController.navigate(Screen.FocusTimer.route) }
+                )
+            }
+            composable(Screen.MinimalistLauncher.route) {
+                com.lifescore.app.presentation.ui.screentime.MinimalistLauncherScreen(
+                    onBack = { navController.popBackStack() },
+                    onLaunchApp = { appName ->
+                        if (appName == "LifeScore") navController.navigate(Screen.Home.route)
+                        else navController.popBackStack()
+                    }
+                )
+            }
+            composable(Screen.TaskBreakthrough.route) {
+                com.lifescore.app.presentation.ui.wellness.TaskBreakthroughScreen(
+                    onBack = { navController.popBackStack() }
+                )
+            }
+            composable(Screen.ThoughtBreak.route) {
+                val screenTimeViewModel = remember {
+                    com.lifescore.app.presentation.ui.screentime.ScreenTimeViewModel(
+                        repository = app.screenTimeRepository
+                    )
+                }
+                com.lifescore.app.presentation.ui.wellness.ThoughtBreakScreen(
+                    viewModel = screenTimeViewModel,
+                    onBack = { navController.popBackStack() }
+                )
+            }
             composable(
                 route = "tracker_detail/{trackerId}",
                 arguments = listOf(androidx.navigation.navArgument("trackerId") { type = androidx.navigation.NavType.StringType })

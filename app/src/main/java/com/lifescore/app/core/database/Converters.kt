@@ -70,4 +70,14 @@ class Converters {
     } catch (e: Exception) {
         com.lifescore.app.data.local.entity.TreeType.OAK
     }
+
+    @TypeConverter
+    fun fromScreenTimeActionType(type: com.lifescore.app.data.local.entity.ScreenTimeActionType): String = type.name
+
+    @TypeConverter
+    fun toScreenTimeActionType(value: String): com.lifescore.app.data.local.entity.ScreenTimeActionType = try {
+        com.lifescore.app.data.local.entity.ScreenTimeActionType.valueOf(value)
+    } catch (e: Exception) {
+        com.lifescore.app.data.local.entity.ScreenTimeActionType.OTHER
+    }
 }

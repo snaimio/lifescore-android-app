@@ -144,6 +144,13 @@ class LifeScoreContainer(private val context: Context) {
         )
     }
 
+    val screenTimeRepository: ScreenTimeRepository by lazy {
+        ScreenTimeRepositoryImpl(
+            screenTimeDao = database.screenTimeDao(),
+            lifeScoreRepository = lifeScoreRepository
+        )
+    }
+
     // Domain Use Cases
     val calculateLifeScoreUseCase by lazy { CalculateLifeScoreUseCase() }
     val getDailyTasksUseCase by lazy { GetDailyTasksUseCase(lifeScoreRepository) }

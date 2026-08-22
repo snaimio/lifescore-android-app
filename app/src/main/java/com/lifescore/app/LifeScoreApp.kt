@@ -88,6 +88,9 @@ class LifeScoreApp : Application(), Configuration.Provider {
     val moodRepository: com.lifescore.app.data.repository.MoodRepository
         get() = container.moodRepository
 
+    val screenTimeRepository: com.lifescore.app.data.repository.ScreenTimeRepository
+        get() = container.screenTimeRepository
+
     private var firebaseAnalytics: FirebaseAnalytics? = null
 
     override val workManagerConfiguration: Configuration

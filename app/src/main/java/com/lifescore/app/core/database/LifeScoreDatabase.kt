@@ -33,9 +33,14 @@ import com.lifescore.app.data.local.entity.*
         BookSummaryProgressEntity::class,
         DailyGrowthProgressEntity::class,
         FocusSessionEntity::class,
-        MoodLogEntity::class
+        MoodLogEntity::class,
+        ScreenTimeEntry::class,
+        ScreenTimeGoalEntity::class,
+        ScreenTimeSession::class,
+        ScreenTimeChallenge::class,
+        ThoughtBreakLog::class
     ],
-    version = 7,
+    version = 8,
     exportSchema = false
 )
 @TypeConverters(Converters::class)
@@ -56,6 +61,7 @@ abstract class LifeScoreDatabase : RoomDatabase() {
     abstract fun dailyGrowthDao(): DailyGrowthDao
     abstract fun focusDao(): FocusDao
     abstract fun moodDao(): MoodDao
+    abstract fun screenTimeDao(): ScreenTimeDao
 
     companion object {
         @Volatile
@@ -109,6 +115,16 @@ abstract class LifeScoreDatabase : RoomDatabase() {
             }
         }
 
+        val MIGRATION_7_8 = object : Migration(7, 8) {
+            override fun migrate(db: SupportSQLiteDatabase) {
+                db.execSQL("CREATE TABLE IF NOT EXISTS screen_time_entries (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, userId TEXT NOT NULL, date TEXT NOT NULL, totalMinutes INTEGER NOT NULL, socialMediaMinutes INTEGER NOT NULL DEFAULT 0, gamingMinutes INTEGER NOT NULL DEFAULT 0, videoMinutes INTEGER NOT NULL DEFAULT 0, shoppingMinutes INTEGER NOT NULL DEFAULT 0, pickups INTEGER NOT NULL DEFAULT 0, firstPickup INTEGER, lastPickup INTEGER, screenTimeGoalMet INTEGER NOT NULL DEFAULT 0)")
+                db.execSQL("CREATE TABLE IF NOT EXISTS screen_time_goals (userId TEXT PRIMARY KEY NOT NULL, dailyLimitMinutes INTEGER NOT NULL DEFAULT 120, appWhitelist TEXT NOT NULL DEFAULT '', isFocusModeEnabled INTEGER NOT NULL DEFAULT 0, intentionalDelaySeconds INTEGER NOT NULL DEFAULT 10, earnedBonusMinutes INTEGER NOT NULL DEFAULT 0)")
+                db.execSQL("CREATE TABLE IF NOT EXISTS screen_time_sessions (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, userId TEXT NOT NULL, sessionType TEXT NOT NULL, startTime INTEGER NOT NULL, endTime INTEGER, durationMinutes INTEGER NOT NULL DEFAULT 0, appsBlocked TEXT NOT NULL DEFAULT '', wasSuccessful INTEGER NOT NULL DEFAULT 0)")
+                db.execSQL("CREATE TABLE IF NOT EXISTS screen_time_challenges (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, userId TEXT NOT NULL, challengeType TEXT NOT NULL, title TEXT NOT NULL DEFAULT '7-Day Digital Detox', targetDays INTEGER NOT NULL DEFAULT 7, currentDay INTEGER NOT NULL DEFAULT 0, isActive INTEGER NOT NULL DEFAULT 1, xpReward INTEGER NOT NULL DEFAULT 100, completedAt INTEGER)")
+                db.execSQL("CREATE TABLE IF NOT EXISTS thought_break_logs (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, userId TEXT NOT NULL, automaticThought TEXT NOT NULL, cognitiveDistortion TEXT NOT NULL, evidenceAgainst TEXT NOT NULL, reframedThought TEXT NOT NULL, emotionalReliefRating INTEGER NOT NULL DEFAULT 8, timestamp INTEGER NOT NULL)")
+            }
+        }
+
         fun getInstance(context: Context): LifeScoreDatabase {
             return INSTANCE ?: synchronized(this) {
                 val instance = Room.databaseBuilder(
@@ -116,7 +132,7 @@ abstract class LifeScoreDatabase : RoomDatabase() {
                     LifeScoreDatabase::class.java,
                     "lifescore.db"
                 )
-                    .addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4, MIGRATION_4_5, MIGRATION_5_6, MIGRATION_6_7)
+                    .addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4, MIGRATION_4_5, MIGRATION_5_6, MIGRATION_6_7, MIGRATION_7_8)
                     .fallbackToDestructiveMigrationOnDowngrade()
                     .build()
                 INSTANCE = instance

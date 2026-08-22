@@ -42,4 +42,8 @@ sealed class Screen(val route: String, val title: String, val icon: ImageVector)
     object FocusTimer : Screen("focus_timer", "Mindful Focus", Icons.Default.Timer)
     object MoodTracker : Screen("mood_tracker", "Mood Tracker", Icons.Default.Mood)
     object SleepSoundscapes : Screen("sleep_soundscapes", "Sleep & Sounds", Icons.Default.Bedtime)
+    object ScreenTime : Screen("screen_time", "Screen Time & Detox", Icons.Default.PhoneAndroid)
+    object MinimalistLauncher : Screen("minimalist_launcher", "Minimalist Mode", Icons.Default.FilterNone)
+    object TaskBreakthrough : Screen("task_breakthrough", "Task Breakthrough", Icons.Default.Bolt)
+    object ThoughtBreak : Screen("thought_break", "Thought Break", Icons.Default.Psychology)
 }
