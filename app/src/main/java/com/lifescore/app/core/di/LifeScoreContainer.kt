@@ -151,6 +151,61 @@ class LifeScoreContainer(private val context: Context) {
         )
     }
 
+    val bookLearningRepository: BookLearningRepository by lazy {
+        BookLearningRepositoryImpl(
+            flashcardDao = database.flashcardDao(),
+            lifeScoreRepository = lifeScoreRepository
+        )
+    }
+
+    val energyScheduleRepository: EnergyScheduleRepository by lazy {
+        EnergyScheduleRepositoryImpl(
+            energyDao = database.energyDao(),
+            lifeScoreRepository = lifeScoreRepository
+        )
+    }
+
+    val virtualPetRepository: VirtualPetRepository by lazy {
+        VirtualPetRepositoryImpl(
+            virtualPetDao = database.virtualPetDao(),
+            lifeScoreRepository = lifeScoreRepository
+        )
+    }
+
+    val meditationLibraryRepository: MeditationLibraryRepository by lazy {
+        MeditationLibraryRepositoryImpl(
+            meditationDao = database.meditationDao(),
+            lifeScoreRepository = lifeScoreRepository
+        )
+    }
+
+    val partySystemRepository: PartySystemRepository by lazy {
+        PartySystemRepositoryImpl(
+            partyDao = database.partyDao(),
+            lifeScoreRepository = lifeScoreRepository
+        )
+    }
+
+    val coachMarketplaceRepository: CoachMarketplaceRepository by lazy {
+        CoachMarketplaceRepositoryImpl(
+            coachDao = database.coachDao()
+        )
+    }
+
+    val scienceJourneyRepository: ScienceJourneyRepository by lazy {
+        ScienceJourneyRepositoryImpl(
+            journeyDao = database.journeyDao(),
+            lifeScoreRepository = lifeScoreRepository
+        )
+    }
+
+    val viralGrowthRepository: ViralGrowthRepository by lazy {
+        ViralGrowthRepositoryImpl(
+            viralDao = database.viralGrowthDao(),
+            lifeScoreRepository = lifeScoreRepository
+        )
+    }
+
     // Domain Use Cases
     val calculateLifeScoreUseCase by lazy { CalculateLifeScoreUseCase() }
     val getDailyTasksUseCase by lazy { GetDailyTasksUseCase(lifeScoreRepository) }

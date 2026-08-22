@@ -588,6 +588,158 @@ fun LifeScoreNavGraph(
                     onBack = { navController.popBackStack() }
                 )
             }
+            composable(Screen.BookFlashcards.route) {
+                val bookLearningViewModel = remember {
+                    com.lifescore.app.presentation.ui.books.BookLearningViewModel(
+                        repository = app.bookLearningRepository
+                    )
+                }
+                com.lifescore.app.presentation.ui.books.BookDiscoveryAndFlashcardsScreen(
+                    viewModel = bookLearningViewModel,
+                    onNavigateBack = { navController.popBackStack() }
+                )
+            }
+            composable(Screen.EnergySchedule.route) {
+                val energyViewModel = remember {
+                    com.lifescore.app.presentation.ui.energy.EnergyScheduleViewModel(
+                        repository = app.energyScheduleRepository
+                    )
+                }
+                com.lifescore.app.presentation.ui.energy.EnergyScheduleScreen(
+                    viewModel = energyViewModel,
+                    onNavigateBack = { navController.popBackStack() }
+                )
+            }
+            composable(Screen.VirtualPet.route) {
+                val petViewModel = remember {
+                    com.lifescore.app.presentation.ui.pet.VirtualPetViewModel(
+                        repository = app.virtualPetRepository
+                    )
+                }
+                com.lifescore.app.presentation.ui.pet.PetDashboardScreen(
+                    viewModel = petViewModel,
+                    onNavigateBack = { navController.popBackStack() }
+                )
+            }
+            composable(Screen.MeditationLibrary.route) {
+                val meditationViewModel = remember {
+                    com.lifescore.app.presentation.ui.meditation.MeditationViewModel(
+                        repository = app.meditationLibraryRepository
+                    )
+                }
+                com.lifescore.app.presentation.ui.meditation.MeditationLibraryScreen(
+                    viewModel = meditationViewModel,
+                    onNavigateBack = { navController.popBackStack() }
+                )
+            }
+            composable(Screen.PartySystem.route) {
+                val partyViewModel = remember {
+                    com.lifescore.app.presentation.ui.party.PartyViewModel(
+                        repository = app.partySystemRepository
+                    )
+                }
+                com.lifescore.app.presentation.ui.party.PartyDashboardScreen(
+                    viewModel = partyViewModel,
+                    onNavigateBack = { navController.popBackStack() }
+                )
+            }
+            composable(Screen.CoachMarketplace.route) {
+                val coachViewModel = remember {
+                    com.lifescore.app.presentation.ui.coach.CoachMarketplaceViewModel(
+                        repository = app.coachMarketplaceRepository
+                    )
+                }
+                com.lifescore.app.presentation.ui.coach.CoachMarketplaceScreen(
+                    viewModel = coachViewModel,
+                    onNavigateBack = { navController.popBackStack() }
+                )
+            }
+            composable(Screen.NeurodivergentHub.route) {
+                val neuroViewModel = remember {
+                    com.lifescore.app.presentation.ui.neuro.NeurodivergentViewModel()
+                }
+                com.lifescore.app.presentation.ui.neuro.NeurodivergentHubScreen(
+                    viewModel = neuroViewModel,
+                    onNavigateBack = { navController.popBackStack() }
+                )
+            }
+            composable(Screen.ScienceJourneys.route) {
+                val journeyViewModel = remember {
+                    com.lifescore.app.presentation.ui.journeys.ScienceJourneyViewModel(
+                        repository = app.scienceJourneyRepository
+                    )
+                }
+                com.lifescore.app.presentation.ui.journeys.ScienceJourneyScreen(
+                    viewModel = journeyViewModel,
+                    onNavigateBack = { navController.popBackStack() }
+                )
+            }
+            composable(Screen.ViralReferrals.route) {
+                val viralViewModel = remember {
+                    com.lifescore.app.presentation.ui.viral.ViralReferralViewModel(
+                        repository = app.viralGrowthRepository
+                    )
+                }
+                com.lifescore.app.presentation.ui.viral.ViralReferralScreen(
+                    viewModel = viralViewModel,
+                    onNavigateBack = { navController.popBackStack() }
+                )
+            }
+            composable(Screen.LeagueTiers.route) {
+                val leagueViewModel = remember {
+                    com.lifescore.app.presentation.ui.leagues.LeagueTiersViewModel(
+                        repository = app.viralGrowthRepository
+                    )
+                }
+                com.lifescore.app.presentation.ui.leagues.LeagueTiersScreen(
+                    viewModel = leagueViewModel,
+                    onNavigateBack = { navController.popBackStack() }
+                )
+            }
+            composable(Screen.StreakVault.route) {
+                val streakViewModel = remember {
+                    com.lifescore.app.presentation.ui.streaks.StreakVaultViewModel(
+                        repository = app.viralGrowthRepository
+                    )
+                }
+                com.lifescore.app.presentation.ui.streaks.StreakVaultScreen(
+                    viewModel = streakViewModel,
+                    onNavigateBack = { navController.popBackStack() }
+                )
+            }
+            composable(Screen.CustomRewards.route) {
+                val rewardsViewModel = remember {
+                    com.lifescore.app.presentation.ui.rewards.CustomRewardsViewModel(
+                        repository = app.viralGrowthRepository
+                    )
+                }
+                com.lifescore.app.presentation.ui.rewards.CustomRewardsScreen(
+                    viewModel = rewardsViewModel,
+                    onNavigateBack = { navController.popBackStack() }
+                )
+            }
+            composable(Screen.FriendsFeed.route) {
+                val feedViewModel = remember {
+                    com.lifescore.app.presentation.ui.social.FriendsFeedViewModel(
+                        repository = app.viralGrowthRepository
+                    )
+                }
+                com.lifescore.app.presentation.ui.social.FriendsFeedScreen(
+                    viewModel = feedViewModel,
+                    onNavigateBack = { navController.popBackStack() }
+                )
+            }
+            composable(Screen.AiMemoryInspector.route) {
+                val memoryViewModel = remember {
+                    com.lifescore.app.presentation.ui.ai.AiMemoryInspectorViewModel(
+                        repository = app.viralGrowthRepository
+                    )
+                }
+                com.lifescore.app.presentation.ui.ai.AiMemoryInspectorScreen(
+                    viewModel = memoryViewModel,
+                    onNavigateBack = { navController.popBackStack() }
+                )
+            }
             composable(
                 route = "tracker_detail/{trackerId}",
                 arguments = listOf(androidx.navigation.navArgument("trackerId") { type = androidx.navigation.NavType.StringType })

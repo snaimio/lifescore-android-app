@@ -45,6 +45,16 @@ object DrawerNavigationConfig {
 
     // 3. Growth & Science Systems
     val growthItems = listOf(
+        DrawerItem("Invite Friends (Premium)", Icons.Default.CardGiftcard, Screen.ViralReferrals.route, badge = "Free Month", emoji = "🎁"),
+        DrawerItem("Streak Vault & Shield", Icons.Default.Shield, Screen.StreakVault.route, badge = "Vault", emoji = "🛡️"),
+        DrawerItem("Custom Treats Store", Icons.Default.MonetizationOn, Screen.CustomRewards.route, badge = "Gold", emoji = "💰"),
+        DrawerItem("AI Memory Inspector", Icons.Default.Psychology, Screen.AiMemoryInspector.route, badge = "Stanford MI", emoji = "🧠"),
+        DrawerItem("Flashcards & Plans", Icons.Default.School, Screen.BookFlashcards.route, badge = "Blinkist", emoji = "📇"),
+        DrawerItem("Energy Schedule", Icons.Default.ElectricBolt, Screen.EnergySchedule.route, badge = "Lifestack", emoji = "⚡"),
+        DrawerItem("Virtual Pet Companion", Icons.Default.Pets, Screen.VirtualPet.route, badge = "Finch", emoji = "🐥"),
+        DrawerItem("Insight Meditation", Icons.Default.SelfImprovement, Screen.MeditationLibrary.route, badge = "Insight", emoji = "🧘"),
+        DrawerItem("Science Journeys", Icons.Default.Biotech, Screen.ScienceJourneys.route, badge = "Fabulous", emoji = "🧬"),
+        DrawerItem("Soft Focus (ADHD)", Icons.Default.Visibility, Screen.NeurodivergentHub.route, badge = "Sensory", emoji = "🎨"),
         DrawerItem("Screen Time & Detox", Icons.Default.PhoneAndroid, Screen.ScreenTime.route, badge = "Opal/Sweat", emoji = "📱"),
         DrawerItem("Minimalist Mode", Icons.Default.FilterNone, Screen.MinimalistLauncher.route, badge = "Minimal", emoji = "🔲"),
         DrawerItem("Task Breakthrough", Icons.Default.Bolt, Screen.TaskBreakthrough.route, badge = "AI Focus", emoji = "⚡"),
@@ -65,6 +75,10 @@ object DrawerNavigationConfig {
 
     // 4. Community & Settings
     val communityItems = listOf(
+        DrawerItem("10-Tier Leagues", Icons.Default.EmojiEvents, Screen.LeagueTiers.route, badge = "Competitive", emoji = "🥇"),
+        DrawerItem("Friends Social Feed", Icons.Default.Group, Screen.FriendsFeed.route, badge = "Social", emoji = "🔥"),
+        DrawerItem("RPG Party & Raids", Icons.Default.Shield, Screen.PartySystem.route, badge = "Habitica", emoji = "🛡️"),
+        DrawerItem("Coach Marketplace", Icons.Default.SupportAgent, Screen.CoachMarketplace.route, badge = "Coach.me", emoji = "👨‍💼"),
         DrawerItem("Global Leaderboard", Icons.Default.Leaderboard, Screen.Leaderboard.route, emoji = "🏆"),
         DrawerItem("Boss Raids & Combat", Icons.Default.FlashOn, Screen.Combat.route, emoji = "⚔️"),
         DrawerItem("Squads & Circles", Icons.Default.Group, Screen.GroupHabits.route, emoji = "👥"),

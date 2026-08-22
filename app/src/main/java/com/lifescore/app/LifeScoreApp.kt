@@ -91,6 +91,30 @@ class LifeScoreApp : Application(), Configuration.Provider {
     val screenTimeRepository: com.lifescore.app.data.repository.ScreenTimeRepository
         get() = container.screenTimeRepository
 
+    val bookLearningRepository: com.lifescore.app.data.repository.BookLearningRepository
+        get() = container.bookLearningRepository
+
+    val energyScheduleRepository: com.lifescore.app.data.repository.EnergyScheduleRepository
+        get() = container.energyScheduleRepository
+
+    val virtualPetRepository: com.lifescore.app.data.repository.VirtualPetRepository
+        get() = container.virtualPetRepository
+
+    val meditationLibraryRepository: com.lifescore.app.data.repository.MeditationLibraryRepository
+        get() = container.meditationLibraryRepository
+
+    val partySystemRepository: com.lifescore.app.data.repository.PartySystemRepository
+        get() = container.partySystemRepository
+
+    val coachMarketplaceRepository: com.lifescore.app.data.repository.CoachMarketplaceRepository
+        get() = container.coachMarketplaceRepository
+
+    val scienceJourneyRepository: com.lifescore.app.data.repository.ScienceJourneyRepository
+        get() = container.scienceJourneyRepository
+
+    val viralGrowthRepository: com.lifescore.app.data.repository.ViralGrowthRepository
+        get() = container.viralGrowthRepository
+
     private var firebaseAnalytics: FirebaseAnalytics? = null
 
     override val workManagerConfiguration: Configuration

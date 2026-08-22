@@ -38,9 +38,28 @@ import com.lifescore.app.data.local.entity.*
         ScreenTimeGoalEntity::class,
         ScreenTimeSession::class,
         ScreenTimeChallenge::class,
-        ThoughtBreakLog::class
+        ThoughtBreakLog::class,
+        FlashcardEntity::class,
+        LearningPlanEntity::class,
+        EnergyPredictionEntity::class,
+        SmartScheduledTaskEntity::class,
+        VirtualPetEntity::class,
+        MeditationTrackEntity::class,
+        LiveEventEntity::class,
+        PartyEntity::class,
+        PartyMessageEntity::class,
+        CoachEntity::class,
+        CoachBookingEntity::class,
+        ScienceJourneyEntity::class,
+        HabitStackEntity::class,
+        ReferralEntity::class,
+        LeagueTierEntity::class,
+        StreakInventoryEntity::class,
+        CustomRewardEntity::class,
+        FriendActivityEntity::class,
+        AiMemoryEntity::class
     ],
-    version = 8,
+    version = 10,
     exportSchema = false
 )
 @TypeConverters(Converters::class)
@@ -62,6 +81,14 @@ abstract class LifeScoreDatabase : RoomDatabase() {
     abstract fun focusDao(): FocusDao
     abstract fun moodDao(): MoodDao
     abstract fun screenTimeDao(): ScreenTimeDao
+    abstract fun flashcardDao(): FlashcardDao
+    abstract fun energyDao(): EnergyDao
+    abstract fun virtualPetDao(): VirtualPetDao
+    abstract fun meditationDao(): MeditationDao
+    abstract fun partyDao(): PartyDao
+    abstract fun coachDao(): CoachDao
+    abstract fun journeyDao(): JourneyDao
+    abstract fun viralGrowthDao(): ViralGrowthDao
 
     companion object {
         @Volatile
@@ -125,6 +152,35 @@ abstract class LifeScoreDatabase : RoomDatabase() {
             }
         }
 
+        val MIGRATION_8_9 = object : Migration(8, 9) {
+            override fun migrate(db: SupportSQLiteDatabase) {
+                db.execSQL("CREATE TABLE IF NOT EXISTS flashcard_entities (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, bookId TEXT NOT NULL, bookTitle TEXT NOT NULL, question TEXT NOT NULL, answer TEXT NOT NULL, keyConcept TEXT NOT NULL, boxLevel INTEGER NOT NULL DEFAULT 1, nextReviewTimestamp INTEGER NOT NULL, repetitions INTEGER NOT NULL DEFAULT 0, lastReviewedAt INTEGER)")
+                db.execSQL("CREATE TABLE IF NOT EXISTS learning_plans (planId TEXT PRIMARY KEY NOT NULL, userId TEXT NOT NULL DEFAULT 'default_user', title TEXT NOT NULL, targetDimension TEXT NOT NULL, totalDays INTEGER NOT NULL DEFAULT 30, currentDay INTEGER NOT NULL DEFAULT 1, bookIdsCsv TEXT NOT NULL, isCompleted INTEGER NOT NULL DEFAULT 0, createdAt INTEGER NOT NULL)")
+                db.execSQL("CREATE TABLE IF NOT EXISTS energy_predictions (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, userId TEXT NOT NULL DEFAULT 'default_user', dateIso TEXT NOT NULL, morningPeakHour INTEGER NOT NULL DEFAULT 9, afternoonDipHour INTEGER NOT NULL DEFAULT 14, eveningPeakHour INTEGER NOT NULL DEFAULT 18, predictedFocusScore INTEGER NOT NULL DEFAULT 85, sleepQualityScore INTEGER NOT NULL DEFAULT 88, restingHeartRate INTEGER NOT NULL DEFAULT 62, peakEnergyStartHour INTEGER NOT NULL DEFAULT 9, peakEnergyEndHour INTEGER NOT NULL DEFAULT 12)")
+                db.execSQL("CREATE TABLE IF NOT EXISTS smart_scheduled_tasks (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, userId TEXT NOT NULL DEFAULT 'default_user', taskTitle TEXT NOT NULL, estimatedMinutes INTEGER NOT NULL DEFAULT 45, cognitiveDemand TEXT NOT NULL DEFAULT 'HIGH', scheduledTimeIso TEXT NOT NULL, energyMatchPercentage INTEGER NOT NULL DEFAULT 94, isCompleted INTEGER NOT NULL DEFAULT 0)")
+                db.execSQL("CREATE TABLE IF NOT EXISTS virtual_pets (userId TEXT PRIMARY KEY NOT NULL, petName TEXT NOT NULL DEFAULT 'Pip', petType TEXT NOT NULL DEFAULT 'Phoenix', happinessLevel INTEGER NOT NULL DEFAULT 80, energyLevel INTEGER NOT NULL DEFAULT 90, evolutionStage INTEGER NOT NULL DEFAULT 1, equippedHat TEXT NOT NULL DEFAULT 'Wizard Hat', equippedAccessory TEXT NOT NULL DEFAULT 'Golden Scarf', petMoodEmoji TEXT NOT NULL DEFAULT '🐥', lastFedTimestamp INTEGER NOT NULL, totalAffectionInteractions INTEGER NOT NULL DEFAULT 0, gentleStreakDays INTEGER NOT NULL DEFAULT 5)")
+                db.execSQL("CREATE TABLE IF NOT EXISTS meditation_tracks (trackId TEXT PRIMARY KEY NOT NULL, title TEXT NOT NULL, teacherName TEXT NOT NULL, category TEXT NOT NULL, durationMinutes INTEGER NOT NULL, playsCount INTEGER NOT NULL DEFAULT 12400, rating REAL NOT NULL DEFAULT 4.9, audioUrl TEXT NOT NULL DEFAULT '', ambientSound TEXT NOT NULL DEFAULT 'Tibetan Singing Bowls', isBookmarked INTEGER NOT NULL DEFAULT 0)")
+                db.execSQL("CREATE TABLE IF NOT EXISTS live_meditation_events (eventId TEXT PRIMARY KEY NOT NULL, title TEXT NOT NULL, hostName TEXT NOT NULL, startTimeIso TEXT NOT NULL, registeredCount INTEGER NOT NULL DEFAULT 340, isRegistered INTEGER NOT NULL DEFAULT 0)")
+                db.execSQL("CREATE TABLE IF NOT EXISTS rpg_parties (partyId TEXT PRIMARY KEY NOT NULL, partyName TEXT NOT NULL, leaderName TEXT NOT NULL, memberCount INTEGER NOT NULL DEFAULT 4, activeQuestName TEXT NOT NULL, questBossMaxHp INTEGER NOT NULL DEFAULT 500, questBossCurrentHp INTEGER NOT NULL DEFAULT 230, teamXpMultiplier REAL NOT NULL DEFAULT 1.25, isCurrentUserLeader INTEGER NOT NULL DEFAULT 0)")
+                db.execSQL("CREATE TABLE IF NOT EXISTS party_messages (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, partyId TEXT NOT NULL, senderName TEXT NOT NULL, senderAvatar TEXT NOT NULL, messageText TEXT NOT NULL, timestamp INTEGER NOT NULL, questDamageDealt INTEGER NOT NULL DEFAULT 0)")
+                db.execSQL("CREATE TABLE IF NOT EXISTS coach_profiles (coachId TEXT PRIMARY KEY NOT NULL, name TEXT NOT NULL, title TEXT NOT NULL, specialty TEXT NOT NULL, avatarEmoji TEXT NOT NULL, rating REAL NOT NULL DEFAULT 4.95, reviewsCount INTEGER NOT NULL DEFAULT 128, hourlyRateUsd INTEGER NOT NULL DEFAULT 45, bio TEXT NOT NULL, isVerified INTEGER NOT NULL DEFAULT 1)")
+                db.execSQL("CREATE TABLE IF NOT EXISTS coach_bookings (bookingId INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, userId TEXT NOT NULL DEFAULT 'default_user', coachId TEXT NOT NULL, coachName TEXT NOT NULL, scheduledDateIso TEXT NOT NULL, sessionGoal TEXT NOT NULL, isConfirmed INTEGER NOT NULL DEFAULT 1, createdAt INTEGER NOT NULL)")
+                db.execSQL("CREATE TABLE IF NOT EXISTS science_journeys (journeyId TEXT PRIMARY KEY NOT NULL, title TEXT NOT NULL, subtitle TEXT NOT NULL, behavioralPrinciple TEXT NOT NULL, durationDays INTEGER NOT NULL DEFAULT 21, currentDay INTEGER NOT NULL DEFAULT 1, currentMilestone TEXT NOT NULL, isEnrolled INTEGER NOT NULL DEFAULT 0, completionPercentage INTEGER NOT NULL DEFAULT 0)")
+                db.execSQL("CREATE TABLE IF NOT EXISTS habit_stacks (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, triggerHabit TEXT NOT NULL, newActionHabit TEXT NOT NULL, rewardHabit TEXT NOT NULL, targetDimension TEXT NOT NULL, streakDays INTEGER NOT NULL DEFAULT 0, isCompletedToday INTEGER NOT NULL DEFAULT 0)")
+            }
+        }
+
+        val MIGRATION_9_10 = object : Migration(9, 10) {
+            override fun migrate(db: SupportSQLiteDatabase) {
+                db.execSQL("CREATE TABLE IF NOT EXISTS referrals (userId TEXT PRIMARY KEY NOT NULL, referralCode TEXT NOT NULL, invitedCount INTEGER NOT NULL DEFAULT 2, targetInviteCount INTEGER NOT NULL DEFAULT 3, isOneMonthPremiumUnlocked INTEGER NOT NULL DEFAULT 0, totalBonusXpEarned INTEGER NOT NULL DEFAULT 300, invitedFriendNamesCsv TEXT NOT NULL DEFAULT '')")
+                db.execSQL("CREATE TABLE IF NOT EXISTS league_tiers (userId TEXT PRIMARY KEY NOT NULL, tierName TEXT NOT NULL DEFAULT 'Gold II', tierLevel INTEGER NOT NULL DEFAULT 5, currentWeeklyXp INTEGER NOT NULL DEFAULT 1450, userRankInLeague INTEGER NOT NULL DEFAULT 4, totalCompetitorsInPool INTEGER NOT NULL DEFAULT 30, promotionCutoffRank INTEGER NOT NULL DEFAULT 10, relegationCutoffRank INTEGER NOT NULL DEFAULT 25, seasonDaysRemaining INTEGER NOT NULL DEFAULT 3, tierBadgeEmoji TEXT NOT NULL DEFAULT '🥇')")
+                db.execSQL("CREATE TABLE IF NOT EXISTS streak_inventory (userId TEXT PRIMARY KEY NOT NULL, streakFreezesAvailable INTEGER NOT NULL DEFAULT 2, isFreezeShieldArmed INTEGER NOT NULL DEFAULT 1, currentActiveStreakDays INTEGER NOT NULL DEFAULT 12, isResurrectionQuestActive INTEGER NOT NULL DEFAULT 0, resurrectionStreakDaysToRecover INTEGER NOT NULL DEFAULT 0, resurrectionDayProgress INTEGER NOT NULL DEFAULT 0, totalFreezesUsed INTEGER NOT NULL DEFAULT 1)")
+                db.execSQL("CREATE TABLE IF NOT EXISTS custom_rewards (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, userId TEXT NOT NULL DEFAULT 'default_user', title TEXT NOT NULL, goldPrice INTEGER NOT NULL, iconEmoji TEXT NOT NULL, category TEXT NOT NULL, timesRedeemed INTEGER NOT NULL DEFAULT 0, isAvailable INTEGER NOT NULL DEFAULT 1)")
+                db.execSQL("CREATE TABLE IF NOT EXISTS friend_feed_items (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, friendName TEXT NOT NULL, avatarEmoji TEXT NOT NULL, actionDescription TEXT NOT NULL, dimensionTag TEXT NOT NULL, streakDays INTEGER NOT NULL, timestamp INTEGER NOT NULL, isNudgedToday INTEGER NOT NULL DEFAULT 0, isGiftReceived INTEGER NOT NULL DEFAULT 0)")
+                db.execSQL("CREATE TABLE IF NOT EXISTS ai_long_term_memories (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, userId TEXT NOT NULL DEFAULT 'default_user', patternType TEXT NOT NULL, observedInsight TEXT NOT NULL, recommendedMicroIntervention TEXT NOT NULL, confidenceScore REAL NOT NULL DEFAULT 0.92, detectedAtTimestamp INTEGER NOT NULL)")
+            }
+        }
+
         fun getInstance(context: Context): LifeScoreDatabase {
             return INSTANCE ?: synchronized(this) {
                 val instance = Room.databaseBuilder(
@@ -132,7 +188,7 @@ abstract class LifeScoreDatabase : RoomDatabase() {
                     LifeScoreDatabase::class.java,
                     "lifescore.db"
                 )
-                    .addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4, MIGRATION_4_5, MIGRATION_5_6, MIGRATION_6_7, MIGRATION_7_8)
+                    .addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4, MIGRATION_4_5, MIGRATION_5_6, MIGRATION_6_7, MIGRATION_7_8, MIGRATION_8_9, MIGRATION_9_10)
                     .fallbackToDestructiveMigrationOnDowngrade()
                     .build()
                 INSTANCE = instance
@@ -141,3 +197,4 @@ abstract class LifeScoreDatabase : RoomDatabase() {
         }
     }
 }
+
