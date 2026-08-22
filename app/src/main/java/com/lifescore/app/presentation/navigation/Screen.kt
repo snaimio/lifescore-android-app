@@ -67,4 +67,7 @@ sealed class Screen(val route: String, val title: String, val icon: ImageVector)
     object QuickAssessment : Screen("quick_assessment", "Quick Assessment", Icons.Default.Psychology)
     object QuickResults : Screen("quick_results", "Your Archetype", Icons.Default.Shield)
     object FirstQuest : Screen("first_quest", "First Quest", Icons.Default.TaskAlt)
+    object GemStore : Screen("gem_store", "Gem Store", Icons.Default.Diamond)
+    object CosmeticStore : Screen("cosmetic_store", "Cosmetic Vault", Icons.Default.ShoppingBag)
+    object SupporterSubscription : Screen("supporter_subscription", "Supporter Program", Icons.Default.MilitaryTech)
 }

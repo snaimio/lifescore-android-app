@@ -82,7 +82,9 @@ object DrawerNavigationConfig {
         DrawerItem("Coach Marketplace", Icons.Default.SupportAgent, Screen.CoachMarketplace.route, badge = "Coach.me", emoji = "👨‍💼"),
         DrawerItem("Global Leaderboard", Icons.Default.Leaderboard, Screen.Leaderboard.route, emoji = "🏆"),
         DrawerItem("Boss Raids & Combat", Icons.Default.FlashOn, Screen.Combat.route, emoji = "⚔️"),
-        DrawerItem("Squads & Circles", Icons.Default.Group, Screen.GroupHabits.route, emoji = "👥"),
+        DrawerItem("💎 Gem Store", Icons.Default.Diamond, Screen.GemStore.route, badge = "Store", emoji = "💎"),
+        DrawerItem("🎨 Cosmetic Vault", Icons.Default.ShoppingBag, Screen.CosmeticStore.route, badge = "Skins & Themes", emoji = "🎨"),
+        DrawerItem("👑 Supporter Program", Icons.Default.MilitaryTech, Screen.SupporterSubscription.route, badge = "$4.99/mo", emoji = "👑"),
         DrawerItem("App Settings", Icons.Default.Settings, Screen.Settings.route, emoji = "⚙️")
     )
 }

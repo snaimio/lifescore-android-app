@@ -857,6 +857,26 @@ fun LifeScoreNavGraph(
                     navController = navController
                 )
             }
+            composable(Screen.GemStore.route) {
+                com.lifescore.app.presentation.ui.store.GemStoreScreen(
+                    onNavigateBack = { navController.popBackStack() },
+                    onOpenSupporter = { navController.navigate(Screen.SupporterSubscription.route) },
+                    onOpenCosmetics = { navController.navigate(Screen.CosmeticStore.route) }
+                )
+            }
+            composable(Screen.CosmeticStore.route) {
+                com.lifescore.app.presentation.ui.store.CosmeticStoreScreen(
+                    onNavigateBack = { navController.popBackStack() },
+                    onOpenGemStore = { navController.navigate(Screen.GemStore.route) },
+                    onOpenSupporter = { navController.navigate(Screen.SupporterSubscription.route) }
+                )
+            }
+            composable(Screen.SupporterSubscription.route) {
+                com.lifescore.app.presentation.ui.store.SubscriptionScreen(
+                    onNavigateBack = { navController.popBackStack() },
+                    onOpenGemStore = { navController.navigate(Screen.GemStore.route) }
+                )
+            }
         }
 
         if (showPaywall) {
