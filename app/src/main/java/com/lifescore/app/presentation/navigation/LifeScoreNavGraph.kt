@@ -60,35 +60,13 @@ fun LifeScoreNavGraph(
     val homeState by homeViewModel.uiState.collectAsState()
     val userPhase = homeState.userPhase
 
-    val bottomBarItems: List<Screen> = remember(userPhase) {
-        when (userPhase) {
-            com.lifescore.app.core.engine.UserPhase.NEW_USER -> listOf(
-                Screen.Home,
-                Screen.Dimensions,
-                Screen.Tasks,
-                Screen.AICoach
-            )
-            com.lifescore.app.core.engine.UserPhase.EXPLORING -> listOf(
-                Screen.Home,
-                Screen.Dimensions,
-                Screen.Tasks,
-                Screen.AICoach
-            )
-            com.lifescore.app.core.engine.UserPhase.ADVANCED -> listOf(
-                Screen.Home,
-                Screen.Dimensions,
-                Screen.Tasks,
-                Screen.Challenges,
-                Screen.AICoach
-            )
-            com.lifescore.app.core.engine.UserPhase.EXPERT -> listOf(
-                Screen.Home,
-                Screen.Dimensions,
-                Screen.Tasks,
-                Screen.Challenges,
-                Screen.Leaderboard
-            )
-        }
+    val bottomBarItems: List<Screen> = remember {
+        listOf(
+            Screen.Home,
+            Screen.Tasks,
+            Screen.Dimensions,
+            Screen.Profile
+        )
     }
 
     val showBottomBar = bottomBarItems.any { it.route == currentRoute }
@@ -186,8 +164,13 @@ fun LifeScoreNavGraph(
                                 },
                                 label = {
                                     Text(
-                                        text = screen.title,
-                                        fontSize = 10.sp,
+                                        text = when (screen) {
+                                            Screen.Tasks -> "Quests"
+                                            Screen.Dimensions -> "Stats"
+                                            Screen.Profile -> "Me"
+                                            else -> screen.title
+                                        },
+                                        fontSize = 11.sp,
                                         fontWeight = if (currentRoute == screen.route) FontWeight.Bold else FontWeight.Medium,
                                         maxLines = 1,
                                         softWrap = false,
@@ -315,12 +298,38 @@ fun LifeScoreNavGraph(
                 )
             }
             composable(Screen.Onboarding.route) {
-                com.lifescore.app.presentation.ui.onboarding.OnboardingAssessmentScreen(
-                    onCompleteOnboarding = { archetype, ratings ->
-                        navController.navigate(Screen.ActionPlan.route) {
+                com.lifescore.app.presentation.ui.onboarding.SimplifiedOnboardingScreen(
+                    onCompleteOnboarding = { archetype, ratings, startingScore, firstQuestTitle ->
+                        scope.launch {
+                            app.lifeScoreRepository.addTask(
+                                title = firstQuestTitle,
+                                dimension = com.lifescore.app.domain.model.DimensionType.HEALTH,
+                                points = 50
+                            )
+                        }
+                        navController.navigate(Screen.Home.route) {
                             popUpTo(Screen.Onboarding.route) { inclusive = true }
                         }
+                    },
+                    onOpenFullAssessment = {
+                        navController.navigate(Screen.FullAssessment.route)
                     }
+                )
+            }
+            composable(Screen.FullAssessment.route) {
+                com.lifescore.app.presentation.ui.onboarding.OnboardingAssessmentScreen(
+                    onCompleteOnboarding = { archetype, ratings ->
+                        navController.navigate(Screen.Home.route) {
+                            popUpTo(Screen.FullAssessment.route) { inclusive = true }
+                        }
+                    }
+                )
+            }
+            composable(Screen.Explore.route) {
+                com.lifescore.app.presentation.ui.explore.ExploreSectionScreen(
+                    currentPhase = userPhase,
+                    onNavigateToRoute = { route -> navController.navigate(route) },
+                    onNavigateBack = { navController.popBackStack() }
                 )
             }
             composable(Screen.Login.route) {

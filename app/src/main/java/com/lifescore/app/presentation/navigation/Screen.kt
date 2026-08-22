@@ -60,4 +60,6 @@ sealed class Screen(val route: String, val title: String, val icon: ImageVector)
     object CustomRewards : Screen("custom_rewards", "Custom Gold Rewards Store", Icons.Default.MonetizationOn)
     object FriendsFeed : Screen("friends_feed", "Friends Social Feed", Icons.Default.Group)
     object AiMemoryInspector : Screen("ai_memory_inspector", "AI Memory & Coaching", Icons.Default.Psychology)
+    object Explore : Screen("explore", "Explore", Icons.Default.Explore)
+    object FullAssessment : Screen("full_assessment", "Full Psychometric Assessment", Icons.Default.Psychology)
 }

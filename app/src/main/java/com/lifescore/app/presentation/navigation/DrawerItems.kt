@@ -18,6 +18,7 @@ object DrawerNavigationConfig {
     // 1. Core / Main
     val mainItems = listOf(
         DrawerItem("Home Hub", Icons.Default.Home, Screen.Home.route, emoji = "🏠"),
+        DrawerItem("Explore All Features", Icons.Default.Explore, Screen.Explore.route, badge = "88+ Features", emoji = "🌟"),
         DrawerItem("15 Life Trackers Hub", Icons.Default.DashboardCustomize, Screen.TrackerHub.route, badge = "15 Mini-Apps", emoji = "📊"),
         DrawerItem("Dimensions OS", Icons.Default.PieChart, Screen.Dimensions.route, emoji = "🌐"),
         DrawerItem("Daily Quests", Icons.Default.TaskAlt, Screen.Tasks.route, badge = "Daily", emoji = "⚔️"),
