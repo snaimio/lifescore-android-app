@@ -877,6 +877,33 @@ fun LifeScoreNavGraph(
                     onOpenGemStore = { navController.navigate(Screen.GemStore.route) }
                 )
             }
+            composable(Screen.SeasonalEvents.route) {
+                com.lifescore.app.presentation.ui.events.SeasonalEventsScreen(
+                    onNavigateBack = { navController.popBackStack() },
+                    onOpenBossRaid = { navController.navigate(Screen.Combat.route) }
+                )
+            }
+            composable(Screen.HabitTemplates.route) {
+                com.lifescore.app.presentation.ui.templates.HabitTemplatesHubScreen(
+                    onNavigateBack = { navController.popBackStack() },
+                    onAdoptStack = { stack ->
+                        scope.launch {
+                            stack.habits.forEach { habit ->
+                                app.lifeScoreRepository.addTask(
+                                    title = habit.title,
+                                    dimension = habit.dimension,
+                                    points = habit.points
+                                )
+                            }
+                        }
+                    }
+                )
+            }
+            composable(Screen.IdentityHabits.route) {
+                com.lifescore.app.presentation.ui.identity.IdentityHabitScreen(
+                    onNavigateBack = { navController.popBackStack() }
+                )
+            }
         }
 
         if (showPaywall) {

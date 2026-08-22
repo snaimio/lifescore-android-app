@@ -70,4 +70,7 @@ sealed class Screen(val route: String, val title: String, val icon: ImageVector)
     object GemStore : Screen("gem_store", "Gem Store", Icons.Default.Diamond)
     object CosmeticStore : Screen("cosmetic_store", "Cosmetic Vault", Icons.Default.ShoppingBag)
     object SupporterSubscription : Screen("supporter_subscription", "Supporter Program", Icons.Default.MilitaryTech)
+    object SeasonalEvents : Screen("seasonal_events", "Seasonal Live Events", Icons.Default.WbSunny)
+    object HabitTemplates : Screen("habit_templates", "Goal Starter Stacks", Icons.Default.ContentPaste)
+    object IdentityHabits : Screen("identity_habits", "Identity Habits", Icons.Default.HowToVote)
 }
