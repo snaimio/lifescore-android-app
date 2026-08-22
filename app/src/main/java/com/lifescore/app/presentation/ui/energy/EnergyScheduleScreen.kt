@@ -9,6 +9,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -44,13 +45,13 @@ fun EnergyScheduleScreen(
             TopAppBar(
                 title = {
                     Column {
-                        Text("Energy-Aware Scheduling", fontWeight = FontWeight.Bold, fontSize = 18.sp)
-                        Text("Lifestack Circadian Peak Orchestrator", fontSize = 12.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                        Text("Circadian Energy Schedule", fontWeight = FontWeight.Bold, fontSize = 18.sp)
+                        Text("Lifestack Energy Curve & Smart Task Alignment", fontSize = 12.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
                     }
                 },
                 navigationIcon = {
                     IconButton(onClick = onNavigateBack) {
-                        Icon(Icons.Default.ArrowBack, contentDescription = "Back")
+                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
                     }
                 },
                 actions = {

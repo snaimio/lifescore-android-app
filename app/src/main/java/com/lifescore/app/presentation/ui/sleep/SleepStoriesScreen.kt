@@ -144,7 +144,7 @@ fun SleepStoriesScreen(
                         // Volume sliders for active tracks
                         if (state.activeTrackVolumes.isNotEmpty()) {
                             Spacer(Modifier.height(Spacing.sm))
-                            Divider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f))
+                            HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f))
                             Spacer(Modifier.height(Spacing.xs))
 
                             state.activeTrackVolumes.forEach { (trackId, volume) ->
