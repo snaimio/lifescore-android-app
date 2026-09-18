@@ -3,7 +3,7 @@
 *Last Updated: August 15, 2026*  
 *Effective Date: August 15, 2026*
 
-LifeScore Technologies Inc. ("LifeScore", "we", "us", or "our") is dedicated to protecting your privacy. This Privacy Policy describes how we collect, store, process, and protect your personal information in compliance with the **General Data Protection Regulation (GDPR)**, the **California Consumer Privacy Act (CCPA)**, and the **Google Play Developer Policy**.
+LifeScore ("we", "us", or "our") is dedicated to protecting your privacy. This Privacy Policy describes how we collect, store, process, and protect your personal information in compliance with the **General Data Protection Regulation (GDPR)**, the **California Consumer Privacy Act (CCPA)**, and the **Google Play Developer Policy**.
 
 ---
 
@@ -61,12 +61,8 @@ To permanently delete your LifeScore account and all stored data:
 3. Tap **"Delete Account & Wipe Cloud Data"**.
 4. Confirm the prompt. All Firestore collections (`/users/{uid}`, `/tasks`, `/dimensions`) and local Room databases will be permanently destroyed within 24 hours.
 
-Alternatively, you may submit a deletion request via email to: **privacy@lifescore.app** with the subject line *"Data Erasure Request"*.
-
 ---
 
 ## 6. Contact Us
 
-If you have any questions or data protection inquiries, please contact our Data Protection Officer (DPO) at:
-* **Email**: privacy@lifescore.app
-* **Address**: LifeScore Technologies Inc., 500 Howard Street, San Francisco, CA 94105
+If you have any questions or data protection inquiries, please contact support through the LifeScore application.

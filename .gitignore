@@ -1,40 +1,48 @@
-# Android
-*.iml
-.gradle
-/local.properties
-/.idea
-.DS_Store
-**/.DS_Store
-/build
+# Gradle
+.gradle/
 build/
-app/build/
-.kotlin/
-.kotlin
-/captures
-.externalNativeBuild
-.cxx
-app/google-services.json
-google-services.json
-*.keystore
-*.jks
-secrets.properties
-**/*.aab
-**/*.apk
-**/*.dex
-gradle/wrapper/gradle-wrapper.jar
 !gradle/wrapper/gradle-wrapper.jar
+!**/src/main/**/build/
+!**/src/test/**/build/
 
-# Firebase
-app/google-services.json
-google-services.json
-firebase-debug.log
+# Android Studio
+.idea/
+*.iml
+.DS_Store
+captures/
+.externalNativeBuild/
+.cxx/
+local.properties
 
-# Keystore files
+# Signing
 *.jks
 *.keystore
 keystore.properties
 
-# Environment variables
+# Firebase
+google-services.json
+firebase-debug.log
+.firebase/
+
+# Secrets
 .env
 .env.local
 secrets.properties
+
+# Build outputs
+*.apk
+*.aab
+*.ap_
+*.dex
+*.class
+bin/
+gen/
+out/
+release/
+
+# Logs
+*.log
+logs/
+
+# OS files
+Thumbs.db

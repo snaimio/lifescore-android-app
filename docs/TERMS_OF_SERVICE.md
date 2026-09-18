@@ -3,7 +3,7 @@
 *Last Updated: August 15, 2026*  
 *Effective Date: August 15, 2026*
 
-Please read these Terms of Service ("Terms") carefully before using the **LifeScore** mobile application ("Service") operated by LifeScore Technologies Inc. ("we", "us", or "our").
+Please read these Terms of Service ("Terms") carefully before using the **LifeScore** mobile application ("Service") operated by LifeScore ("we", "us", or "our").
 
 ---
 
@@ -34,7 +34,7 @@ You agree **NOT** to:
 ---
 
 ## 5. Intellectual Property
-All rights, title, and interest in and to LifeScore (including software, algorithms, 8-dimension scoring models, design system, illustrations, and trademarks) are the exclusive property of LifeScore Technologies Inc.
+All rights, title, and interest in and to LifeScore (including software, algorithms, 8-dimension scoring models, design system, illustrations, and trademarks) are the exclusive property of LifeScore.
 
 ---
 
@@ -63,7 +63,7 @@ We reserve the right to suspend or terminate your account if you violate these T
 ---
 
 ## 10. Disclaimer of Warranties & Limitation of Liability
-The Service is provided **"AS IS"** without warranties of any kind. To the maximum extent permitted by law, LifeScore Technologies Inc. shall not be liable for any indirect, incidental, special, or consequential damages resulting from your use of the Service.
+The Service is provided **"AS IS"** without warranties of any kind. To the maximum extent permitted by law, LifeScore shall not be liable for any indirect, incidental, special, or consequential damages resulting from your use of the Service.
 
 ---
 
@@ -73,7 +73,4 @@ These Terms shall be governed by the laws of the State of California, United Sta
 ---
 
 ## 12. Contact Information
-For questions regarding these Terms, please contact us at:
-* **Email:** legal@[YOUR_WEBSITE] (or [YOUR_EMAIL])
-* **Website:** https://[YOUR_WEBSITE]
-* **Address:** LifeScore Technologies Inc., 500 Howard Street, San Francisco, CA 94105
+For questions regarding these Terms, please contact support through the LifeScore application.

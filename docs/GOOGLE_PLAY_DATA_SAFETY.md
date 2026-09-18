@@ -11,8 +11,7 @@ Use this guide to complete the **Data Safety Section** in the Google Play Consol
 2. **Is all of the user data collected by your app encrypted in transit?**
    * 👉 **YES** (All network traffic uses TLS 1.3 / HTTPS).
 3. **Do you provide a way for users to request that their data is deleted?**
-   * 👉 **YES** (Users can tap "Delete My Account" in Settings or email privacy@[YOUR_WEBSITE]).
-   * **URL for deletion request:** `https://[YOUR_WEBSITE]/privacy_policy.html#deletion`
+   * 👉 **YES** (Users can tap "Delete My Account" directly in the app's Settings screen).
 
 ---
 
