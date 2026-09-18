@@ -9,7 +9,7 @@ import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.FirebaseFirestoreSettings
-import com.lifescore.app.BuildConfig
+import com.lifescore.app.core.config.AppConfig
 import com.lifescore.app.core.database.LifeScoreDatabase
 import com.lifescore.app.data.remote.repository.AuthRepository
 import com.lifescore.app.data.remote.repository.AuthRepositoryImpl
@@ -120,7 +120,7 @@ class LifeScoreApp : Application(), Configuration.Provider {
 
     override val workManagerConfiguration: Configuration
         get() = Configuration.Builder()
-            .setMinimumLoggingLevel(if (BuildConfig.DEBUG_MODE) Log.DEBUG else Log.ERROR)
+            .setMinimumLoggingLevel(if (AppConfig.DEBUG_MODE) Log.DEBUG else Log.ERROR)
             .build()
 
     override fun onCreate() {
@@ -132,8 +132,8 @@ class LifeScoreApp : Application(), Configuration.Provider {
             firebaseAnalytics = FirebaseAnalytics.getInstance(this)
             FirebaseCrashlytics.getInstance().apply {
                 isCrashlyticsCollectionEnabled = true
-                setCustomKey("debug_mode", BuildConfig.DEBUG_MODE)
-                setCustomKey("app_version", BuildConfig.VERSION_NAME)
+                setCustomKey("debug_mode", AppConfig.DEBUG_MODE)
+                setCustomKey("app_version", AppConfig.VERSION_NAME)
             }
 
             val firestore = FirebaseFirestore.getInstance()
@@ -154,7 +154,7 @@ class LifeScoreApp : Application(), Configuration.Provider {
         container = com.lifescore.app.core.di.LifeScoreContainer(this)
         database = LifeScoreDatabase.getInstance(this)
         lifeScoreRepository = LifeScoreRepositoryImpl(database)
-        coachRepository = GeminiCoachRepositoryImpl(apiKey = BuildConfig.GEMINI_API_KEY)
+        coachRepository = GeminiCoachRepositoryImpl(apiKey = AppConfig.GEMINI_API_KEY)
         billingRepository = BillingRepositoryImpl(this, lifeScoreRepository).apply {
             startBillingConnection()
         }

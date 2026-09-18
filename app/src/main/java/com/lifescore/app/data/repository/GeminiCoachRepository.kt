@@ -1,6 +1,7 @@
 package com.lifescore.app.data.repository
 
 import com.google.ai.client.generativeai.GenerativeModel
+import com.lifescore.app.core.config.AppConfig
 import com.lifescore.app.domain.model.DimensionType
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -60,14 +61,14 @@ interface GeminiCoachRepository {
 }
 
 class GeminiCoachRepositoryImpl(
-    private val apiKey: String? = com.lifescore.app.BuildConfig.GEMINI_API_KEY
+    private val apiKey: String? = AppConfig.GEMINI_API_KEY
 ) : GeminiCoachRepository {
 
     private val generativeModel by lazy {
         if (!apiKey.isNullOrBlank() && apiKey != "DEMO_KEY") {
             try {
                 GenerativeModel(
-                    modelName = com.lifescore.app.BuildConfig.GEMINI_MODEL,
+                    modelName = AppConfig.GEMINI_MODEL,
                     apiKey = apiKey
                 )
             } catch (_: Exception) {

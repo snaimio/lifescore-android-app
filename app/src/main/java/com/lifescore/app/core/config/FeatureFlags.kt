@@ -1,7 +1,5 @@
 package com.lifescore.app.core.config
 
-import com.lifescore.app.BuildConfig
-
 object FeatureFlags {
     // A/B testing and feature rollout
     const val ENABLE_AI_QUESTS = true
@@ -13,6 +11,6 @@ object FeatureFlags {
     const val ENABLE_ENTERPRISE = true
     
     // Debug features
-    val SHOW_DEBUG_LOGS = BuildConfig.DEBUG
-    val ENABLE_MOCK_BILLING = BuildConfig.DEBUG
+    val SHOW_DEBUG_LOGS = AppConfig.DEBUG
+    val ENABLE_MOCK_BILLING = AppConfig.DEBUG
 }

@@ -1,7 +1,7 @@
 package com.lifescore.app.data.repository
 
 import com.google.ai.client.generativeai.GenerativeModel
-import com.lifescore.app.BuildConfig
+import com.lifescore.app.core.config.AppConfig
 import com.lifescore.app.data.local.dao.JournalDao
 import com.lifescore.app.data.local.entity.JournalEntity
 import com.lifescore.app.domain.model.DimensionType
@@ -27,14 +27,14 @@ interface JournalRepository {
 
 class JournalRepositoryImpl(
     private val dao: JournalDao,
-    private val apiKey: String? = BuildConfig.GEMINI_API_KEY
+    private val apiKey: String? = AppConfig.GEMINI_API_KEY
 ) : JournalRepository {
 
     private val generativeModel by lazy {
         if (!apiKey.isNullOrBlank() && apiKey != "DEMO_KEY") {
             try {
                 GenerativeModel(
-                    modelName = BuildConfig.GEMINI_MODEL,
+                    modelName = AppConfig.GEMINI_MODEL,
                     apiKey = apiKey
                 )
             } catch (_: Exception) {

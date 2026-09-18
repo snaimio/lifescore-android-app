@@ -3,6 +3,7 @@ package com.lifescore.app.data.repository
 import android.app.Activity
 import android.content.Context
 import com.lifescore.app.core.billing.BillingManager
+import com.lifescore.app.core.config.AppConfig
 import com.lifescore.app.data.remote.repository.FirebaseRepository
 import com.lifescore.app.domain.model.SubscriptionTier
 import kotlinx.coroutines.CoroutineScope
@@ -55,7 +56,7 @@ class BillingRepositoryImpl(
     }
 
     override fun launchPurchaseFlow(activity: Activity, tier: SubscriptionTier) {
-        if (com.lifescore.app.BuildConfig.DEBUG_MODE) {
+        if (AppConfig.DEBUG_MODE) {
             // Instant 1-tap sandbox simulated purchase unlock for evaluators & debug testing
             applyPremiumEntitlement(tier)
             return

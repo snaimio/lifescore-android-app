@@ -1,7 +1,7 @@
 package com.lifescore.app.data.ai
 
 import com.google.ai.client.generativeai.GenerativeModel
-import com.lifescore.app.BuildConfig
+import com.lifescore.app.core.config.AppConfig
 import com.lifescore.app.domain.model.AiQuest
 import com.lifescore.app.domain.model.DimensionType
 import com.lifescore.app.domain.model.QuestDifficulty
@@ -12,13 +12,13 @@ import org.json.JSONObject
 import java.util.UUID
 
 class AiQuestGeneratorService(
-    private val apiKey: String? = BuildConfig.GEMINI_API_KEY
+    private val apiKey: String? = AppConfig.GEMINI_API_KEY
 ) {
     private val generativeModel by lazy {
         if (!apiKey.isNullOrBlank() && apiKey != "DEMO_KEY") {
             try {
                 GenerativeModel(
-                    modelName = BuildConfig.GEMINI_MODEL,
+                    modelName = AppConfig.GEMINI_MODEL,
                     apiKey = apiKey
                 )
             } catch (_: Exception) {
