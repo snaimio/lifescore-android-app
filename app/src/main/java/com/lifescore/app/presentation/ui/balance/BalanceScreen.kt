@@ -339,21 +339,13 @@ fun BalanceScreen(
                                                 Surface(
                                                     shape = CircleShape,
                                                     color = dimColor.copy(alpha = 0.18f),
-                                                    modifier = Modifier.size(32.dp)
+                                                    modifier = Modifier.size(34.dp)
                                                 ) {
                                                     Box(contentAlignment = Alignment.Center) {
-                                                        Text(
-                                                            text = when (dimension) {
-                                                                DimensionType.HEALTH -> "💚"
-                                                                DimensionType.WEALTH -> "💰"
-                                                                DimensionType.RELATIONSHIPS -> "❤️"
-                                                                DimensionType.CAREER -> "💼"
-                                                                DimensionType.LEARNING -> "🎓"
-                                                                DimensionType.FITNESS -> "🏋️"
-                                                                DimensionType.MENTAL_HEALTH -> "🧠"
-                                                                DimensionType.SOCIAL_LIFE -> "👥"
-                                                            },
-                                                            fontSize = 14.sp
+                                                        LifeIcon(
+                                                            icon = LifeIcons.forDimension(dimension),
+                                                            size = 18.dp,
+                                                            tint = dimColor
                                                         )
                                                     }
                                                 }

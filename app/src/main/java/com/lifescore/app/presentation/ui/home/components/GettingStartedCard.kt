@@ -28,18 +28,16 @@ fun GettingStartedCard(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Text("🚀", fontSize = 18.sp)
-                    Spacer(Modifier.width(8.dp))
-                    Text(
-                        text = "Getting Started Guide",
-                        style = MaterialTheme.typography.titleMedium,
-                        fontWeight = FontWeight.Bold
-                    )
-                }
+                Text(
+                    text = "Getting Started Guide",
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.onSurface
+                )
                 Surface(
                     shape = RoundedCornerShape(8.dp),
-                    color = MaterialTheme.colorScheme.primaryContainer
+                    color = MaterialTheme.colorScheme.primaryContainer,
+                    border = androidx.compose.foundation.BorderStroke(0.5.dp, MaterialTheme.colorScheme.primary.copy(alpha = 0.4f))
                 ) {
                     Text(
                         text = "$completedSteps of $totalSteps Complete",
@@ -67,13 +65,13 @@ fun GettingStartedCard(
 
             Text(
                 text = when (completedSteps) {
-                    0 -> "👉 Next: Complete your first daily habit"
-                    1 -> "👉 Next: View your 360° Life Matrix radar"
-                    2 -> "👉 Next: Chat with your Gemini AI Coach"
-                    else -> "🎉 You're all set! Explore at your own pace."
+                    0 -> "Next: Complete your first daily habit"
+                    1 -> "Next: View your 360° Life Matrix radar"
+                    2 -> "Next: Chat with your Gemini AI Coach"
+                    else -> "Setup complete. Explore your personalized dashboard."
                 },
                 style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurface,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
                 fontWeight = FontWeight.Medium
             )
 
@@ -91,13 +89,13 @@ fun GettingStartedCard(
             ) {
                 Text(
                     text = when (completedSteps) {
-                        0 -> "Complete First Habit ✅"
-                        1 -> "View Life Matrix 📊"
-                        2 -> "Ask AI Coach 🤖"
-                        else -> "Explore All Features 🌟"
+                        0 -> "Complete First Habit"
+                        1 -> "View Life Matrix"
+                        2 -> "Ask AI Coach"
+                        else -> "Explore All Features"
                     },
                     fontWeight = FontWeight.Bold,
-                    fontSize = 14.sp,
+                    fontSize = 13.sp,
                     color = MaterialTheme.colorScheme.onPrimary
                 )
             }

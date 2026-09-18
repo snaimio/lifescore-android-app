@@ -124,35 +124,35 @@ val LightColorScheme = lightColorScheme(
     onError = Neutrals.White
 )
 
-// Dark theme — Deep warm charcoal (not pure cold black)
+// Dark theme — Luxury Obsidian & Champagne Gold
 val DarkColorScheme = darkColorScheme(
-    primary = Color(0xFFB8B5E8),             // Softer indigo for dark
-    onPrimary = Color(0xFF1F1D4A),
-    primaryContainer = Color(0xFF353273),
-    onPrimaryContainer = Color(0xFFE6E5F5),
+    primary = Color(0xFFD4A24C),             // Champagne Gold
+    onPrimary = Color(0xFF1B1408),
+    primaryContainer = Color(0xFF2E2413),
+    onPrimaryContainer = Color(0xFFFDE68A),
     
-    secondary = Color(0xFFF0B49C),
-    onSecondary = Color(0xFF4A2618),
-    secondaryContainer = Color(0xFF6B3E28),
-    onSecondaryContainer = Color(0xFFF5E5DC),
+    secondary = Color(0xFFD97757),           // Warm terracotta
+    onSecondary = Color(0xFF2C130B),
+    secondaryContainer = Color(0xFF38231E),
+    onSecondaryContainer = Color(0xFFF0B49C),
     
-    tertiary = Color(0xFFA8D5CB),
-    onTertiary = Color(0xFF1A3D37),
-    tertiaryContainer = Color(0xFF355E58),
-    onTertiaryContainer = Color(0xFFDCF0EC),
+    tertiary = Color(0xFF6BA89C),            // Sage teal
+    onTertiary = Color(0xFF0F2622),
+    tertiaryContainer = Color(0xFF1E3531),
+    onTertiaryContainer = Color(0xFFA8D5CB),
     
-    background = Color(0xFF0E0D0C),          // Warm near-black
-    onBackground = Color(0xFFEDE7DF),
-    surface = Color(0xFF171614),             // Card surface
-    onSurface = Color(0xFFEDE7DF),
-    surfaceVariant = Color(0xFF262421),
-    onSurfaceVariant = Color(0xFFB8B0A7),
+    background = Color(0xFF0C0B12),          // Obsidian Luxury Deep Black
+    onBackground = Color(0xFFF6F4F0),        // Crisp Oyster White
+    surface = Color(0xFF14131E),             // Frosted Card Surface
+    onSurface = Color(0xFFF6F4F0),
+    surfaceVariant = Color(0xFF1D1B2B),      // Elevated Card Surface
+    onSurfaceVariant = Color(0xFF9E9AA8),    // Soft Muted Lavender-Gray
     
-    outline = Color(0xFF3A3632),
-    outlineVariant = Color(0xFF2A2724),
+    outline = Color(0xFF2E2B3E),
+    outlineVariant = Color(0xFF222030),
     
-    error = Color(0xFFE89B8A),
-    onError = Color(0xFF5A1F12)
+    error = Color(0xFFE85D5D),
+    onError = Color(0xFF3B0F0F)
 )
 
 // ──────────────────────────────────────────────

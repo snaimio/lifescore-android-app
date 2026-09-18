@@ -19,26 +19,30 @@ import com.lifescore.app.core.designsystem.GlassBorderLight
 import com.lifescore.app.core.designsystem.GlassFillDark
 import com.lifescore.app.core.designsystem.GlassFillLight
 
+import androidx.compose.ui.graphics.luminance
+
 @Composable
 fun GlassCard(
     modifier: Modifier = Modifier,
     shape: RoundedCornerShape = RoundedCornerShape(18.dp),
-    elevation: Dp = 4.dp,
+    elevation: Dp = 0.dp,
     content: @Composable ColumnScope.() -> Unit
 ) {
-    val isDark = isSystemInDarkTheme()
-    val backgroundBrush = if (isDark) GlassFillDark else GlassFillLight
-    val borderColor = if (isDark) GlassBorderDark else GlassBorderLight
+    val isDark = MaterialTheme.colorScheme.background.luminance() < 0.5f
+    val backgroundBrush = if (isDark) {
+        Brush.verticalGradient(
+            listOf(
+                Color(0xFF161522),
+                Color(0xFF12111A)
+            )
+        )
+    } else {
+        GlassFillLight
+    }
+    val borderColor = if (isDark) Color(0x30D4A24C) else GlassBorderLight
 
     Surface(
-        modifier = modifier
-            .fillMaxWidth()
-            .shadow(
-                elevation = elevation,
-                shape = shape,
-                ambientColor = if (isDark) Color.Black.copy(alpha = 0.5f) else Color.Black.copy(alpha = 0.08f),
-                spotColor = if (isDark) Color.Black.copy(alpha = 0.6f) else Color.Black.copy(alpha = 0.12f)
-            ),
+        modifier = modifier.fillMaxWidth(),
         shape = shape,
         color = Color.Transparent,
         border = BorderStroke(1.dp, borderColor)

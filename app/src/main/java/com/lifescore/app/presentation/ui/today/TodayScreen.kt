@@ -100,14 +100,15 @@ fun TodayScreen(
                     ) {
                         Surface(
                             shape = CircleShape,
-                            color = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.6f),
-                            modifier = Modifier.size(34.dp)
+                            color = Color(0xFF1D1B2B),
+                            border = BorderStroke(1.dp, Color(0x50D4A24C)),
+                            modifier = Modifier.size(36.dp)
                         ) {
                             Box(contentAlignment = Alignment.Center) {
                                 LifeIcon(
                                     icon = LifeIcons.Profile,
                                     size = 18.dp,
-                                    tint = MaterialTheme.colorScheme.primary
+                                    tint = Color(0xFFD4A24C)
                                 )
                             }
                         }
@@ -116,7 +117,7 @@ fun TodayScreen(
                             Text(
                                 "Today",
                                 style = MaterialTheme.typography.titleMedium,
-                                fontWeight = FontWeight.SemiBold,
+                                fontWeight = FontWeight.Bold,
                                 color = MaterialTheme.colorScheme.onSurface
                             )
                             Text(
@@ -132,7 +133,7 @@ fun TodayScreen(
                         Icon(
                             Icons.Default.Psychology,
                             contentDescription = "AI Coach",
-                            tint = MaterialTheme.colorScheme.primary
+                            tint = Color(0xFFD4A24C)
                         )
                     }
                     IconButton(onClick = { showShareCardDialog = true }) {
@@ -231,83 +232,101 @@ fun TodayScreen(
                 val topPendingTask = uiState.todayTasks.firstOrNull { !it.isCompleted } ?: uiState.todayTasks.firstOrNull()
                 if (topPendingTask != null) {
                     item {
-                        LifeCard(
-                            variant = CardVariant.Cream,
-                            onClick = {
-                                viewModel.onToggleTask(topPendingTask)
-                                gettingStartedManager.markStepCompleted(GettingStartedManager.STEP_FIRST_HABIT)
-                                completedSteps = gettingStartedManager.getCompletedStepCount()
-                            }
-                        ) {
-                            Row(
-                                modifier = Modifier.fillMaxWidth(),
-                                horizontalArrangement = Arrangement.SpaceBetween,
-                                verticalAlignment = Alignment.CenterVertically
-                            ) {
-                                Row(verticalAlignment = Alignment.CenterVertically) {
-                                    LifeIcon(
-                                        icon = LifeIcons.Goal,
-                                        size = 16.dp
-                                    )
-                                    Spacer(Modifier.width(Space.xs))
-                                    Text(
-                                        "Today's Primary Focus",
-                                        style = MaterialTheme.typography.labelSmall,
-                                        fontWeight = FontWeight.Bold,
-                                        color = MaterialTheme.colorScheme.primary
-                                    )
-                                }
-                                Surface(
-                                    shape = LifeScoreShapes.pill,
-                                    color = Color(topPendingTask.dimension.baseColorHex).copy(alpha = 0.15f)
-                                ) {
-                                    Text(
-                                        text = topPendingTask.dimension.displayName,
-                                        style = MaterialTheme.typography.labelSmall,
-                                        fontWeight = FontWeight.Bold,
-                                        color = Color(topPendingTask.dimension.baseColorHex),
-                                        modifier = Modifier.padding(horizontal = 8.dp, vertical = 2.dp)
-                                    )
-                                }
-                            }
-
-                            Spacer(Modifier.height(Space.sm))
-
-                            Text(
-                                text = topPendingTask.title,
-                                style = MaterialTheme.typography.titleMedium,
-                                fontWeight = FontWeight.Bold,
-                                color = MaterialTheme.colorScheme.onSurface
-                            )
-
-                            Spacer(Modifier.height(Space.xxs))
-
-                            Text(
-                                text = "Focusing on ${topPendingTask.dimension.displayName} builds compounding consistency today.",
-                                style = MaterialTheme.typography.bodySmall,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant
-                            )
-
-                            Spacer(Modifier.height(Space.md))
-
-                            Button(
-                                onClick = {
+                        Surface(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .clip(LifeScoreShapes.card)
+                                .clickable {
                                     viewModel.onToggleTask(topPendingTask)
                                     gettingStartedManager.markStepCompleted(GettingStartedManager.STEP_FIRST_HABIT)
                                     completedSteps = gettingStartedManager.getCompletedStepCount()
                                 },
-                                shape = LifeScoreShapes.button,
-                                modifier = Modifier.fillMaxWidth(),
-                                colors = ButtonDefaults.buttonColors(
-                                    containerColor = if (topPendingTask.isCompleted) MaterialTheme.colorScheme.surfaceVariant else MaterialTheme.colorScheme.primary
+                            shape = LifeScoreShapes.card,
+                            color = Color(0xFF14131E),
+                            border = BorderStroke(
+                                1.dp,
+                                androidx.compose.ui.graphics.Brush.linearGradient(
+                                    colors = listOf(
+                                        Color(0xFFD4A24C).copy(alpha = 0.4f),
+                                        Color(0xFF2E2B3E).copy(alpha = 0.5f)
+                                    )
                                 )
-                            ) {
+                            )
+                        ) {
+                            Column(modifier = Modifier.padding(Space.cardH)) {
+                                Row(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    horizontalArrangement = Arrangement.SpaceBetween,
+                                    verticalAlignment = Alignment.CenterVertically
+                                ) {
+                                    Row(verticalAlignment = Alignment.CenterVertically) {
+                                        LifeIcon(
+                                            icon = LifeIcons.Goal,
+                                            size = 16.dp,
+                                            tint = Color(0xFFD4A24C)
+                                        )
+                                        Spacer(Modifier.width(Space.xs))
+                                        Text(
+                                            "Today's Keystone Focus",
+                                            style = MaterialTheme.typography.labelSmall,
+                                            fontWeight = FontWeight.Bold,
+                                            color = Color(0xFFD4A24C),
+                                            letterSpacing = 0.4.sp
+                                        )
+                                    }
+                                    Surface(
+                                        shape = LifeScoreShapes.pill,
+                                        color = Color(topPendingTask.dimension.baseColorHex).copy(alpha = 0.18f),
+                                        border = BorderStroke(0.5.dp, Color(topPendingTask.dimension.baseColorHex).copy(alpha = 0.4f))
+                                    ) {
+                                        Text(
+                                            text = topPendingTask.dimension.displayName,
+                                            style = MaterialTheme.typography.labelSmall.copy(fontSize = 10.sp),
+                                            fontWeight = FontWeight.Bold,
+                                            color = Color(topPendingTask.dimension.baseColorHex),
+                                            modifier = Modifier.padding(horizontal = 8.dp, vertical = 2.dp)
+                                        )
+                                    }
+                                }
+
+                                Spacer(Modifier.height(Space.sm))
+
                                 Text(
-                                    text = if (topPendingTask.isCompleted) "Completed" else "Mark Complete",
+                                    text = topPendingTask.title,
+                                    style = MaterialTheme.typography.titleMedium,
                                     fontWeight = FontWeight.Bold,
-                                    fontSize = 13.sp,
-                                    color = if (topPendingTask.isCompleted) MaterialTheme.colorScheme.onSurfaceVariant else MaterialTheme.colorScheme.onPrimary
+                                    color = Color(0xFFFBF8F3)
                                 )
+
+                                Spacer(Modifier.height(Space.xxs))
+
+                                Text(
+                                    text = "Focusing on ${topPendingTask.dimension.displayName} builds compounding momentum today.",
+                                    style = MaterialTheme.typography.bodySmall,
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                                )
+
+                                Spacer(Modifier.height(Space.md))
+
+                                Button(
+                                    onClick = {
+                                        viewModel.onToggleTask(topPendingTask)
+                                        gettingStartedManager.markStepCompleted(GettingStartedManager.STEP_FIRST_HABIT)
+                                        completedSteps = gettingStartedManager.getCompletedStepCount()
+                                    },
+                                    shape = LifeScoreShapes.button,
+                                    modifier = Modifier.fillMaxWidth(),
+                                    colors = ButtonDefaults.buttonColors(
+                                        containerColor = if (topPendingTask.isCompleted) Color(0xFF1D1B2B) else Color(0xFFD4A24C)
+                                    )
+                                ) {
+                                    Text(
+                                        text = if (topPendingTask.isCompleted) "Completed" else "Mark Complete",
+                                        fontWeight = FontWeight.Bold,
+                                        fontSize = 13.sp,
+                                        color = if (topPendingTask.isCompleted) Color(0xFF9E9AA8) else Color(0xFF1B1408)
+                                    )
+                                }
                             }
                         }
                     }
@@ -322,7 +341,7 @@ fun TodayScreen(
                         subtitle = if (pendingCount > 0) "$pendingCount habits remaining today" else "All daily habits completed!",
                         action = {
                             TextButton(onClick = { showAddHabitDialog = true }) {
-                                Text("+ Add Habit", fontWeight = FontWeight.Bold, fontSize = 12.sp)
+                                Text("+ Add Habit", fontWeight = FontWeight.Bold, fontSize = 12.sp, color = Color(0xFFD4A24C))
                             }
                         }
                     )
@@ -354,10 +373,10 @@ fun TodayScreen(
                                                     completedSteps = gettingStartedManager.getCompletedStepCount()
                                                 },
                                             shape = LifeScoreShapes.card,
-                                            color = if (isCompleted) MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.45f) else MaterialTheme.colorScheme.surface,
+                                            color = if (isCompleted) Color(0xFF12111A) else Color(0xFF151422),
                                             border = BorderStroke(
                                                 width = 1.dp,
-                                                color = if (isCompleted) dimColor.copy(alpha = 0.3f) else MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.6f)
+                                                color = if (isCompleted) Color(0x3010B981) else Color(0x20D4A24C)
                                             )
                                         ) {
                                             Column(
@@ -392,7 +411,7 @@ fun TodayScreen(
                                                     style = MaterialTheme.typography.titleSmall,
                                                     fontWeight = FontWeight.Bold,
                                                     maxLines = 2,
-                                                    color = if (isCompleted) MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f) else MaterialTheme.colorScheme.onSurface
+                                                    color = if (isCompleted) MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f) else Color(0xFFFBF8F3)
                                                 )
 
                                                 Spacer(Modifier.height(Space.xs))
@@ -414,7 +433,8 @@ fun TodayScreen(
                                                 ) {
                                                     Surface(
                                                         shape = CircleShape,
-                                                        color = if (isCompleted) Color(0xFF10B981) else MaterialTheme.colorScheme.surfaceVariant,
+                                                        color = if (isCompleted) Color(0xFF10B981) else Color(0xFF1D1B2B),
+                                                        border = if (!isCompleted) BorderStroke(1.dp, Color(0x30D4A24C)) else null,
                                                         modifier = Modifier.size(24.dp)
                                                     ) {
                                                         Box(contentAlignment = Alignment.Center) {

@@ -41,19 +41,19 @@ fun LifeBottomNav(
 ) {
     Surface(
         modifier = modifier.fillMaxWidth(),
-        color = MaterialTheme.colorScheme.surface,
+        color = MaterialTheme.colorScheme.surface.copy(alpha = 0.95f),
         tonalElevation = 0.dp,
         shadowElevation = 0.dp,
         border = androidx.compose.foundation.BorderStroke(
-            0.5.dp,
-            MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f)
+            1.dp,
+            MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.6f)
         )
     ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
                 .navigationBarsPadding()
-                .padding(horizontal = Space.sm, vertical = 6.dp),
+                .padding(horizontal = Space.md, vertical = 8.dp),
             horizontalArrangement = Arrangement.SpaceAround,
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -79,9 +79,11 @@ private fun LifeNavItem(
         (route == "balance" && selectedRoute == "dimensions") ||
         (route == "me" && selectedRoute == "profile")
 
+    val activeGold = Color(0xFFD4A24C)
+    val inactiveGray = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f)
+
     val iconColor by animateColorAsState(
-        targetValue = if (isSelected) MaterialTheme.colorScheme.primary
-        else MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f),
+        targetValue = if (isSelected) activeGold else inactiveGray,
         animationSpec = tween(Motion.Medium),
         label = "navColor"
     )
@@ -102,22 +104,23 @@ private fun LifeNavItem(
             tint = iconColor,
             modifier = Modifier.size(22.dp)
         )
-        Spacer(Modifier.height(2.dp))
+        Spacer(Modifier.height(3.dp))
         Text(
             text = label,
             style = MaterialTheme.typography.labelSmall,
             fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Medium,
             fontSize = 10.sp,
-            color = iconColor
+            color = iconColor,
+            letterSpacing = 0.3.sp
         )
-        Spacer(Modifier.height(2.dp))
-        // Subtle dot indicator under selected
+        Spacer(Modifier.height(3.dp))
+        // Subtle glowing dot indicator under selected
         Box(
             modifier = Modifier
-                .size(3.5.dp)
+                .size(width = if (isSelected) 12.dp else 0.dp, height = 3.dp)
                 .clip(CircleShape)
                 .background(
-                    if (isSelected) MaterialTheme.colorScheme.primary
+                    if (isSelected) activeGold
                     else Color.Transparent
                 )
         )

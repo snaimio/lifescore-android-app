@@ -23,11 +23,11 @@ class ThemeManager(context: Context) {
     val themeMode: StateFlow<AppThemeMode> = _themeMode.asStateFlow()
 
     private fun getInitialThemeMode(): AppThemeMode {
-        val saved = prefs.getString(KEY_THEME_MODE, AppThemeMode.LIGHT.name)
+        val saved = prefs.getString(KEY_THEME_MODE, AppThemeMode.DARK.name)
         return try {
-            AppThemeMode.valueOf(saved ?: AppThemeMode.LIGHT.name)
+            AppThemeMode.valueOf(saved ?: AppThemeMode.DARK.name)
         } catch (_: Exception) {
-            AppThemeMode.LIGHT
+            AppThemeMode.DARK
         }
     }
 

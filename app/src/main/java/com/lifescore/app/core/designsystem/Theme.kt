@@ -11,50 +11,49 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
 
-// 🎨 Complete Premium Editorial Material 3 Color System
 object LifeScoreColors {
-    val Primary = Accent.Primary
-    val PrimaryLight = Accent.PrimaryLight
-    val PrimaryDark = Accent.PrimaryDark
-    val PrimaryContainer = Color(0xFFE6E5F5)
-    val OnPrimaryContainer = Accent.PrimaryDark
+    val Primary = Color(0xFFD4A24C)
+    val PrimaryLight = Color(0xFFE5B869)
+    val PrimaryDark = Color(0xFFB38230)
+    val PrimaryContainer = Color(0xFF2E2413)
+    val OnPrimaryContainer = Color(0xFFFDE68A)
 
     val Secondary = Accent.Secondary
     val SecondaryLight = Color(0xFFF0B49C)
     val SecondaryDark = Color(0xFF4A2618)
-    val SecondaryContainer = Color(0xFFF5E5DC)
-    val OnSecondaryContainer = Color(0xFF4A2618)
+    val SecondaryContainer = Color(0xFF38231E)
+    val OnSecondaryContainer = Color(0xFFF0B49C)
 
     val Tertiary = Accent.Tertiary
     val TertiaryLight = Color(0xFFA8D5CB)
     val TertiaryDark = Color(0xFF1A3D37)
-    val TertiaryContainer = Color(0xFFDCF0EC)
-    val OnTertiaryContainer = Color(0xFF1A3D37)
+    val TertiaryContainer = Color(0xFF1E3531)
+    val OnTertiaryContainer = Color(0xFFA8D5CB)
 
-    val Surface = Neutrals.White
-    val SurfaceVariant = Neutrals.Ink_50
-    val Background = Neutrals.Paper
-    val OnBackground = Neutrals.Ink_900
-    val OnSurface = Neutrals.Ink_900
-    val Outline = Neutrals.Ink_200
-    val OutlineVariant = Neutrals.Ink_100
+    val Surface = Color(0xFF14131E)
+    val SurfaceVariant = Color(0xFF1D1B2B)
+    val Background = Color(0xFF0C0B12)
+    val OnBackground = Color(0xFFF6F4F0)
+    val OnSurface = Color(0xFFF6F4F0)
+    val Outline = Color(0xFF2E2B3E)
+    val OutlineVariant = Color(0xFF222030)
 
     val Error = Accent.Error
     val Success = Accent.Success
     val Warning = Accent.Warning
     val Info = DimensionColors.Career
 
-    val DarkBackground = Color(0xFF0E0D0C)
-    val DarkSurface = Color(0xFF171614)
-    val DarkSurfaceVariant = Color(0xFF262421)
-    val DarkOnBackground = Color(0xFFEDE7DF)
-    val DarkOnSurface = Color(0xFFEDE7DF)
-    val DarkOutline = Color(0xFF3A3632)
-    val DarkOutlineVariant = Color(0xFF2A2724)
+    val DarkBackground = Color(0xFF0C0B12)
+    val DarkSurface = Color(0xFF14131E)
+    val DarkSurfaceVariant = Color(0xFF1D1B2B)
+    val DarkOnBackground = Color(0xFFF6F4F0)
+    val DarkOnSurface = Color(0xFFF6F4F0)
+    val DarkOutline = Color(0xFF2E2B3E)
+    val DarkOutlineVariant = Color(0xFF222030)
 
-    val PrimaryGradient = listOf(Accent.Primary, Accent.PrimaryLight, Accent.Secondary)
-    val HeroGradientLight = listOf(Color(0xFF2A2750), Color(0xFF3D3A8C), Color(0xFF6B4B8C))
-    val HeroGradientDark = listOf(Color(0xFF1E1C38), Color(0xFF2D295C), Color(0xFF4A3B69))
+    val PrimaryGradient = listOf(Color(0xFFD4A24C), Color(0xFFE5B869))
+    val HeroGradientLight = listOf(Color(0xFF181524), Color(0xFF221E33), Color(0xFF2A243D))
+    val HeroGradientDark = listOf(Color(0xFF14121E), Color(0xFF1D1A2A), Color(0xFF262238))
     val GoldGradient = listOf(Color(0xFFD4A24C), Color(0xFFE5B869))
     val EmeraldGradient = listOf(Color(0xFF6BA89C), Color(0xFF52877D))
 }
