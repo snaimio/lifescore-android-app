@@ -1,6 +1,7 @@
 package com.lifescore.app.presentation.ui.onboarding
 
 import androidx.compose.animation.core.*
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
@@ -12,12 +13,15 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.lifescore.app.core.designsystem.Spacing
+import com.lifescore.app.R
+import com.lifescore.app.core.designsystem.LifeGradients
+import com.lifescore.app.core.designsystem.Space
 import kotlinx.coroutines.delay
 
 @Composable
@@ -26,10 +30,10 @@ fun SplashScreen(
 ) {
     val infiniteTransition = rememberInfiniteTransition(label = "pulse")
     val pulseScale by infiniteTransition.animateFloat(
-        initialValue = 0.92f,
-        targetValue = 1.08f,
+        initialValue = 0.96f,
+        targetValue = 1.04f,
         animationSpec = infiniteRepeatable(
-            animation = tween(1200, easing = FastOutSlowInEasing),
+            animation = tween(1400, easing = FastOutSlowInEasing),
             repeatMode = RepeatMode.Reverse
         ),
         label = "pulseScale"
@@ -37,7 +41,7 @@ fun SplashScreen(
 
     var startAnimation by remember { mutableStateOf(false) }
     val entryScale by animateFloatAsState(
-        targetValue = if (startAnimation) 1f else 0.4f,
+        targetValue = if (startAnimation) 1f else 0.5f,
         animationSpec = spring(
             dampingRatio = Spring.DampingRatioMediumBouncy,
             stiffness = Spring.StiffnessLow
@@ -54,26 +58,18 @@ fun SplashScreen(
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(
-                Brush.verticalGradient(
-                    colors = listOf(
-                        Color(0xFF6C63FF),
-                        Color(0xFF4A3FC8),
-                        Color(0xFF03DAC6)
-                    )
-                )
-            ),
+            .background(LifeGradients.HeroDark),
         contentAlignment = Alignment.Center
     ) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center,
-            modifier = Modifier.padding(Spacing.xl)
+            modifier = Modifier.padding(Space.xl)
         ) {
-            // App Hero Badge with Pulsing Halo
+            // Sunrise Arc Brand Mark Halo
             Surface(
                 shape = CircleShape,
-                color = Color.White.copy(alpha = 0.2f),
+                color = Color(0x15D4A24C),
                 modifier = Modifier
                     .size(130.dp)
                     .scale(pulseScale * entryScale)
@@ -81,41 +77,47 @@ fun SplashScreen(
                 Box(contentAlignment = Alignment.Center) {
                     Surface(
                         shape = CircleShape,
-                        color = Color.White,
+                        color = Color(0x303D3A8C),
                         modifier = Modifier.size(96.dp)
                     ) {
                         Box(contentAlignment = Alignment.Center) {
-                            Text("✨", fontSize = 48.sp)
+                            Image(
+                                painter = painterResource(R.drawable.ic_launcher_foreground),
+                                contentDescription = "LifeScore Sunrise Arc",
+                                modifier = Modifier.size(72.dp)
+                            )
                         }
                     }
                 }
             }
 
-            Spacer(Modifier.height(Spacing.lg))
+            Spacer(Modifier.height(Space.xl))
 
             Text(
                 "LifeScore",
-                style = MaterialTheme.typography.displayMedium,
-                color = Color.White,
-                fontWeight = FontWeight.Black,
-                letterSpacing = 1.sp
+                style = MaterialTheme.typography.displayMedium.copy(
+                    fontFamily = FontFamily.Serif,
+                    fontWeight = FontWeight.Bold
+                ),
+                color = Color(0xFFFBF8F3),
+                letterSpacing = 1.5.sp
             )
 
-            Spacer(Modifier.height(Spacing.xs))
+            Spacer(Modifier.height(Space.xs))
 
             Text(
-                "Level Up Your Life Across 8 Dimensions",
-                style = MaterialTheme.typography.bodyLarge,
-                color = Color.White.copy(alpha = 0.9f),
+                "Architect the life you're meant to live.",
+                style = MaterialTheme.typography.bodyMedium,
+                color = Color(0xFFD4A24C),
                 fontWeight = FontWeight.Medium
             )
 
-            Spacer(Modifier.height(Spacing.xxl))
+            Spacer(Modifier.height(Space.xxxl))
 
             CircularProgressIndicator(
-                modifier = Modifier.size(32.dp),
-                color = Color.White,
-                strokeWidth = 3.dp
+                modifier = Modifier.size(24.dp),
+                color = Color(0xFFE08556),
+                strokeWidth = 2.dp
             )
         }
     }

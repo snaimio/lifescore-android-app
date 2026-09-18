@@ -1,0 +1,46 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="120dp"
+    android:height="120dp"
+    android:viewportWidth="120"
+    android:viewportHeight="120">
+    <!-- Pathfinder Halo -->
+    <path
+        android:fillColor="#156BA89C"
+        android:pathData="M60,12 A48,48 0 1,0 60,108 A48,48 0 1,0 60,12 Z"/>
+        
+    <!-- Mountain Horizon Silhouette -->
+    <path
+        android:fillColor="#256BA89C"
+        android:strokeColor="#6BA89C"
+        android:strokeWidth="1.5"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round"
+        android:pathData="M24,84 L46,54 L62,72 L76,46 L96,84 Z"/>
+        
+    <!-- Mountain Ridges -->
+    <path
+        android:strokeColor="#6BA89C"
+        android:strokeWidth="1.5"
+        android:strokeLineCap="round"
+        android:pathData="M46,54 L52,84 M76,46 L78,84"/>
+        
+    <!-- Navigator's Compass Rose in Sky -->
+    <path
+        android:strokeColor="#D4A24C"
+        android:strokeWidth="1.5"
+        android:strokeLineCap="round"
+        android:pathData="M60,20 L60,40 M50,30 L70,30"/>
+    <path
+        android:fillColor="#D4A24C"
+        android:pathData="M60,22 L63,30 L60,38 L57,30 Z"/>
+    <path
+        android:fillColor="#E08556"
+        android:pathData="M52,30 L60,27 L68,30 L60,33 Z"/>
+        
+    <!-- Winding Trail Line -->
+    <path
+        android:strokeColor="#E08556"
+        android:strokeWidth="1.5"
+        android:strokeLineCap="round"
+        android:pathData="M38,84 C46,88 56,88 64,94 C70,98 78,98 84,94"/>
+</vector>

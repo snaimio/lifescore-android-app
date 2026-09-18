@@ -1,0 +1,45 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="120dp"
+    android:height="120dp"
+    android:viewportWidth="120"
+    android:viewportHeight="120">
+    <!-- Halo of Grit -->
+    <path
+        android:fillColor="#15E85D5D"
+        android:pathData="M60,12 A48,48 0 1,0 60,108 A48,48 0 1,0 60,12 Z"/>
+        
+    <!-- Outer Shield Boundary -->
+    <path
+        android:strokeColor="#E85D5D"
+        android:strokeWidth="1.5"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round"
+        android:pathData="M60,20 L88,32 C88,62 76,82 60,94 C44,82 32,62 32,32 Z"/>
+        
+    <!-- Tactical Blade & Mountain Peak -->
+    <path
+        android:fillColor="#25E85D5D"
+        android:strokeColor="#E08556"
+        android:strokeWidth="2"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round"
+        android:pathData="M60,30 L74,70 L60,62 L46,70 Z"/>
+        
+    <path
+        android:strokeColor="#D4A24C"
+        android:strokeWidth="2"
+        android:strokeLineCap="round"
+        android:pathData="M60,30 L60,86"/>
+        
+    <!-- Victory Star Badge at Apex -->
+    <path
+        android:fillColor="#D4A24C"
+        android:pathData="M60,22 L62,27 L67,27 L63,30 L65,35 L60,32 L55,35 L57,30 L53,27 L58,27 Z"/>
+        
+    <!-- Forward Momentum Vectors -->
+    <path
+        android:strokeColor="#E08556"
+        android:strokeWidth="1.5"
+        android:strokeLineCap="round"
+        android:pathData="M24,78 L34,70 M96,78 L86,70"/>
+</vector>

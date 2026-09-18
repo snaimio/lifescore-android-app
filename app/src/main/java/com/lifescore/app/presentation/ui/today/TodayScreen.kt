@@ -295,7 +295,7 @@ fun TodayScreen(
                             Spacer(Modifier.height(Space.xxs))
 
                             Text(
-                                text = "Why it matters: Completing this builds compounding momentum for your ${topPendingTask.dimension.displayName} dimension and earns +${topPendingTask.pointsReward} XP.",
+                                text = "${uiState.userTitle.ifBlank { "Architect" }}, focusing on ${topPendingTask.dimension.displayName} builds compounding momentum today (+${topPendingTask.pointsReward} XP).",
                                 style = MaterialTheme.typography.bodySmall,
                                 color = MaterialTheme.colorScheme.onSurfaceVariant
                             )
@@ -413,7 +413,7 @@ fun TodayScreen(
                 item {
                     SectionHeader(
                         title = "Today's habits",
-                        subtitle = if (pendingCount > 0) "$pendingCount remaining" else "All complete!",
+                        subtitle = if (pendingCount > 0) "$pendingCount left. Then you're done." else "You showed up. All habits complete for today.",
                         action = {
                             TextButton(onClick = { showAddHabitDialog = true }) {
                                 Text("+ Add Habit", fontWeight = FontWeight.Bold, fontSize = 12.sp)
@@ -503,7 +503,7 @@ fun TodayScreen(
                     item {
                         SectionHeader(
                             title = "Evening reflection",
-                            subtitle = "Close your day with intentional gratitude"
+                            subtitle = "How did today feel? Close your day with intention."
                         )
                     }
 
@@ -526,7 +526,7 @@ fun TodayScreen(
                                             style = MaterialTheme.typography.titleSmall
                                         )
                                         Text(
-                                            "Great job closing your day with intention and clarity.",
+                                            "You closed your day with intention and clarity.",
                                             style = MaterialTheme.typography.bodySmall,
                                             color = MaterialTheme.colorScheme.onSurfaceVariant
                                         )
@@ -556,7 +556,7 @@ fun TodayScreen(
                                     onClick = {
                                         if (eveningReflectionText.isNotBlank()) {
                                             isReflectionSaved = true
-                                            Toast.makeText(context, "✨ Daily reflection saved (+25 XP)", Toast.LENGTH_SHORT).show()
+                                            Toast.makeText(context, "Daily reflection saved (+25 XP)", Toast.LENGTH_SHORT).show()
                                         }
                                     },
                                     modifier = Modifier.fillMaxWidth(),

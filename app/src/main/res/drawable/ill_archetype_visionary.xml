@@ -1,0 +1,59 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="120dp"
+    android:height="120dp"
+    android:viewportWidth="120"
+    android:viewportHeight="120">
+    <!-- Cosmic Horizon Halo -->
+    <path
+        android:fillColor="#15D4A24C"
+        android:pathData="M60,12 A48,48 0 1,0 60,108 A48,48 0 1,0 60,12 Z"/>
+        
+    <!-- Ascending Trajectory Orbit Arc -->
+    <path
+        android:strokeColor="#5B7BA8"
+        android:strokeWidth="1.5"
+        android:strokeLineCap="round"
+        android:pathData="M26,86 C26,44 60,22 96,28"/>
+        
+    <!-- Rocket Propulsion Fuselage -->
+    <path
+        android:fillColor="#25D4A24C"
+        android:strokeColor="#E08556"
+        android:strokeWidth="2"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round"
+        android:pathData="M60,24 C68,34 72,50 72,66 L48,66 C48,50 52,34 60,24 Z"/>
+        
+    <!-- Wings / Stabilizers -->
+    <path
+        android:strokeColor="#E08556"
+        android:strokeWidth="1.5"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round"
+        android:pathData="M48,52 L36,66 L48,66 M72,52 L84,66 L72,66"/>
+        
+    <!-- Central Porthole Window -->
+    <path
+        android:fillColor="#D4A24C"
+        android:pathData="M60,42 m-5,0 a5,5 0 1,0 10,0 a5,5 0 1,0 -10,0"/>
+        
+    <!-- Ignition Plume Flames -->
+    <path
+        android:strokeColor="#E85D5D"
+        android:strokeWidth="2"
+        android:strokeLineCap="round"
+        android:pathData="M54,66 L60,82 L66,66"/>
+    <path
+        android:strokeColor="#D4A24C"
+        android:strokeWidth="1.5"
+        android:strokeLineCap="round"
+        android:pathData="M57,66 L60,76 L63,66"/>
+        
+    <!-- Guiding North Stars -->
+    <path
+        android:fillColor="#D4A24C"
+        android:pathData="M88,26 L89,29 L92,29 L90,31 L91,34 L88,32 L85,34 L86,31 L84,29 L87,29 Z"/>
+    <path
+        android:fillColor="#7B6BA8"
+        android:pathData="M34,36 L35,38 L37,38 L35,39 L36,41 L34,40 L32,41 L33,39 L31,38 L33,38 Z"/>
+</vector>

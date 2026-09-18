@@ -1,0 +1,45 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="120dp"
+    android:height="120dp"
+    android:viewportWidth="120"
+    android:viewportHeight="120">
+    <!-- Resonance Halo -->
+    <path
+        android:fillColor="#15E85D5D"
+        android:pathData="M60,12 A48,48 0 1,0 60,108 A48,48 0 1,0 60,12 Z"/>
+        
+    <!-- Interlocking Harmonic Rings (Social & Empathy Synergy) -->
+    <path
+        android:strokeColor="#E85D5D"
+        android:strokeWidth="2"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round"
+        android:pathData="M48,58 A22,22 0 1,0 48,57.9 Z"/>
+        
+    <path
+        android:strokeColor="#7B6BA8"
+        android:strokeWidth="2"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round"
+        android:pathData="M72,58 A22,22 0 1,0 72,57.9 Z"/>
+        
+    <!-- Central Radiating Pulse / Heart Spark -->
+    <path
+        android:fillColor="#D4A24C"
+        android:pathData="M60,48 C64,42 70,44 70,50 C70,56 60,64 60,64 C60,64 50,56 50,50 C50,44 56,42 60,48 Z"/>
+        
+    <!-- Harmonic Soundwave Ripple Arcs -->
+    <path
+        android:strokeColor="#6BA89C"
+        android:strokeWidth="1.5"
+        android:strokeLineCap="round"
+        android:pathData="M22,58 C22,40 36,26 54,24 M98,58 C98,76 84,90 66,92"/>
+        
+    <!-- Spark Nodes -->
+    <path
+        android:fillColor="#E08556"
+        android:pathData="M60,24 m-3,0 a3,3 0 1,0 6,0 a3,3 0 1,0 -6,0"/>
+    <path
+        android:fillColor="#E08556"
+        android:pathData="M60,92 m-3,0 a3,3 0 1,0 6,0 a3,3 0 1,0 -6,0"/>
+</vector>

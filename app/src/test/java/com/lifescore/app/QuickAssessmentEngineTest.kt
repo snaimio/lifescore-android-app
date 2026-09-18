@@ -17,24 +17,24 @@ class QuickAssessmentEngineTest {
 
     @Test
     fun testEvaluateProducesValidArchetypeAndScore() {
-        // High scores on questions 2 and 6 (Creator affinity)
+        // High scores on questions 2, 6, and 10 (Architect affinity)
         val answers = mapOf(
-            1 to 4,
+            1 to 1,
             2 to 5,
-            3 to 3,
-            4 to 3,
-            5 to 4,
+            3 to 1,
+            4 to 1,
+            5 to 1,
             6 to 5,
-            7 to 3,
-            8 to 3,
-            9 to 4,
-            10 to 3
+            7 to 1,
+            8 to 1,
+            9 to 1,
+            10 to 5
         )
 
         val result = QuickAssessmentEngine.evaluate(answers)
 
         assertNotNull(result)
-        assertEquals(HeroArchetype.CREATOR, result.archetype)
+        assertEquals(HeroArchetype.ARCHITECT, result.archetype)
         assertTrue(result.startingLifeScore in 300..950)
         assertEquals(8, result.dimensionScores.size)
         assertTrue(result.primaryStrength.isNotEmpty())
@@ -42,7 +42,7 @@ class QuickAssessmentEngineTest {
     }
 
     @Test
-    fun testEvaluateExplorerOrWarriorForHighPhysicalAndSleep() {
+    fun testEvaluateNomadOrWarriorForHighPhysicalAndSleep() {
         val answers = mapOf(
             1 to 5,
             2 to 1,
@@ -51,15 +51,15 @@ class QuickAssessmentEngineTest {
             5 to 2,
             6 to 1,
             7 to 2,
-            8 to 4,
-            9 to 2,
-            10 to 2
+            8 to 1,
+            9 to 1,
+            10 to 1
         )
 
         val result = QuickAssessmentEngine.evaluate(answers)
 
         assertNotNull(result)
-        assertTrue(result.archetype == HeroArchetype.EXPLORER || result.archetype == HeroArchetype.WARRIOR)
+        assertTrue(result.archetype == HeroArchetype.NOMAD || result.archetype == HeroArchetype.WARRIOR)
         assertEquals(DimensionType.HEALTH, result.dimensionScores.keys.first { it == DimensionType.HEALTH })
     }
 }

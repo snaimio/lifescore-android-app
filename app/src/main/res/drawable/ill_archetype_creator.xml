@@ -1,0 +1,40 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="120dp"
+    android:height="120dp"
+    android:viewportWidth="120"
+    android:viewportHeight="120">
+    <!-- Creative Aurora Halo -->
+    <path
+        android:fillColor="#15E08556"
+        android:pathData="M60,12 A48,48 0 1,0 60,108 A48,48 0 1,0 60,12 Z"/>
+        
+    <!-- Geometric Diamond / Prism Core -->
+    <path
+        android:fillColor="#25D4A24C"
+        android:strokeColor="#E08556"
+        android:strokeWidth="2"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round"
+        android:pathData="M60,26 L86,52 L60,94 L34,52 Z"/>
+        
+    <!-- Internal Refraction Facets -->
+    <path
+        android:strokeColor="#D4A24C"
+        android:strokeWidth="1.5"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round"
+        android:pathData="M34,52 L86,52 M60,26 L60,94 M48,52 L60,26 L72,52 L60,94 L48,52"/>
+        
+    <!-- Radiating Creative Spark Flares -->
+    <path
+        android:strokeColor="#E85D5D"
+        android:strokeWidth="1.5"
+        android:strokeLineCap="round"
+        android:pathData="M60,18 L60,14 M60,98 L60,102 M26,52 L22,52 M94,52 L98,52"/>
+        
+    <path
+        android:strokeColor="#7B6BA8"
+        android:strokeWidth="1.5"
+        android:strokeLineCap="round"
+        android:pathData="M38,30 L34,26 M82,30 L86,26 M38,74 L34,78 M82,74 L86,78"/>
+</vector>

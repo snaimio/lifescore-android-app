@@ -1,0 +1,59 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="120dp"
+    android:height="120dp"
+    android:viewportWidth="120"
+    android:viewportHeight="120">
+    <!-- Background Halo -->
+    <path
+        android:fillColor="#155B7BA8"
+        android:pathData="M60,10 A50,50 0 1,0 60,110 A50,50 0 1,0 60,10 Z"/>
+    
+    <!-- Outer Blueprint Geometric Ring -->
+    <path
+        android:strokeColor="#5B7BA8"
+        android:strokeWidth="1.5"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round"
+        android:pathData="M60,20 A40,40 0 1,0 60,100 A40,40 0 1,0 60,20 Z"/>
+    
+    <!-- Inner Structural Triangle / Compass Geometry -->
+    <path
+        android:fillColor="#255B7BA8"
+        android:strokeColor="#5B7BA8"
+        android:strokeWidth="1.5"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round"
+        android:pathData="M60,32 L86,82 L34,82 Z"/>
+    
+    <!-- Central Pillar / Golden Ratio Grid -->
+    <path
+        android:strokeColor="#E08556"
+        android:strokeWidth="2"
+        android:strokeLineCap="round"
+        android:pathData="M60,32 L60,82"/>
+    <path
+        android:strokeColor="#E08556"
+        android:strokeWidth="1.5"
+        android:strokeLineCap="round"
+        android:pathData="M46,64 L74,64"/>
+        
+    <!-- Top Apex Milestone Node -->
+    <path
+        android:fillColor="#D4A24C"
+        android:pathData="M60,32 m-4,0 a4,4 0 1,0 8,0 a4,4 0 1,0 -8,0"/>
+        
+    <!-- Base Foundation Nodes -->
+    <path
+        android:fillColor="#5B7BA8"
+        android:pathData="M34,82 m-3,0 a3,3 0 1,0 6,0 a3,3 0 1,0 -6,0"/>
+    <path
+        android:fillColor="#5B7BA8"
+        android:pathData="M86,82 m-3,0 a3,3 0 1,0 6,0 a3,3 0 1,0 -6,0"/>
+        
+    <!-- Architectural Horizon Plinth -->
+    <path
+        android:strokeColor="#D4A24C"
+        android:strokeWidth="2"
+        android:strokeLineCap="round"
+        android:pathData="M24,92 L96,92"/>
+</vector>

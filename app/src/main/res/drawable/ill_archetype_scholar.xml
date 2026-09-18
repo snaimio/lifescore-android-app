@@ -1,0 +1,71 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="120dp"
+    android:height="120dp"
+    android:viewportWidth="120"
+    android:viewportHeight="120">
+    <!-- Academic Halo -->
+    <path
+        android:fillColor="#155B7BA8"
+        android:pathData="M60,12 A48,48 0 1,0 60,108 A48,48 0 1,0 60,12 Z"/>
+        
+    <!-- Book 1 (Bottom Base Volume) -->
+    <path
+        android:fillColor="#255B7BA8"
+        android:strokeColor="#5B7BA8"
+        android:strokeWidth="1.5"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round"
+        android:pathData="M34,84 L86,84 L86,72 L34,72 Z"/>
+    <path
+        android:strokeColor="#D4A24C"
+        android:strokeWidth="1.5"
+        android:strokeLineCap="round"
+        android:pathData="M34,78 L86,78"/>
+        
+    <!-- Book 2 (Middle Volume) -->
+    <path
+        android:fillColor="#257B6BA8"
+        android:strokeColor="#7B6BA8"
+        android:strokeWidth="1.5"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round"
+        android:pathData="M38,72 L82,72 L82,60 L38,60 Z"/>
+    <path
+        android:strokeColor="#7B6BA8"
+        android:strokeWidth="1.5"
+        android:strokeLineCap="round"
+        android:pathData="M38,66 L82,66"/>
+        
+    <!-- Book 3 (Top Open Tome) -->
+    <path
+        android:strokeColor="#E08556"
+        android:strokeWidth="1.5"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round"
+        android:pathData="M42,60 C48,54 54,54 60,57 C66,54 72,54 78,60 L78,44 C72,38 66,38 60,41 C54,38 48,38 42,44 Z"/>
+    <path
+        android:strokeColor="#E08556"
+        android:strokeWidth="1.5"
+        android:strokeLineCap="round"
+        android:pathData="M60,41 L60,57"/>
+        
+    <!-- Lantern of Enlightenment -->
+    <path
+        android:strokeColor="#D4A24C"
+        android:strokeWidth="1.5"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round"
+        android:pathData="M54,26 L66,26 L64,36 L56,36 Z"/>
+    <path
+        android:fillColor="#D4A24C"
+        android:pathData="M60,20 m-3,0 a3,3 0 1,0 6,0 a3,3 0 1,0 -6,0"/>
+    <path
+        android:strokeColor="#D4A24C"
+        android:strokeWidth="1.5"
+        android:strokeLineCap="round"
+        android:pathData="M60,23 L60,26"/>
+    <!-- Glowing core in lantern -->
+    <path
+        android:fillColor="#E08556"
+        android:pathData="M60,31 m-2,0 a2,2 0 1,0 4,0 a2,2 0 1,0 -4,0"/>
+</vector>

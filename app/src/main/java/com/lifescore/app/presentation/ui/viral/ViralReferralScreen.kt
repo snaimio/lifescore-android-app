@@ -3,8 +3,10 @@ package com.lifescore.app.presentation.ui.viral
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
+import android.content.Intent
 import android.widget.Toast
 import androidx.compose.animation.*
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -22,10 +24,21 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.lifescore.app.core.designsystem.LifeGradients
+import com.lifescore.app.core.designsystem.LifeScoreShapes
+import com.lifescore.app.core.designsystem.Space
+import com.lifescore.app.core.designsystem.components.CardVariant
+import com.lifescore.app.core.designsystem.components.LifeCard
+import com.lifescore.app.core.designsystem.components.LifeIcon
+import com.lifescore.app.core.designsystem.components.LifeIcons
+import com.lifescore.app.presentation.ui.share.ShareStoryCardDialog
+import com.lifescore.app.presentation.ui.share.StoryCardData
+import com.lifescore.app.presentation.ui.share.StoryCardType
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -36,6 +49,12 @@ fun ViralReferralScreen(
     val uiState by viewModel.uiState.collectAsState()
     val context = LocalContext.current
     val ref = uiState.referral
+    var showStoryDialog by remember { mutableStateOf(false) }
+
+    val formattedCode = remember(ref?.referralCode) {
+        val raw = ref?.referralCode ?: "7821"
+        if (raw.startsWith("LIFE-")) raw else "LIFE-ARCH-${raw.takeLast(4)}"
+    }
 
     LaunchedEffect(uiState.toastMessage) {
         uiState.toastMessage?.let {
@@ -49,8 +68,16 @@ fun ViralReferralScreen(
             TopAppBar(
                 title = {
                     Column {
-                        Text("Invite Friends & Earn Premium", fontWeight = FontWeight.Bold, fontSize = 18.sp)
-                        Text("Viral Referral Loop • 1 Month Free", fontSize = 12.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                        Text(
+                            "Invite Friends & Earn Pro",
+                            fontWeight = FontWeight.Bold,
+                            style = MaterialTheme.typography.titleMedium
+                        )
+                        Text(
+                            "1 Month Free for You and a Friend",
+                            style = MaterialTheme.typography.labelSmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
                     }
                 },
                 navigationIcon = {
@@ -66,113 +93,116 @@ fun ViralReferralScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
-                .padding(16.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp),
+                .padding(horizontal = Space.screenH),
+            verticalArrangement = Arrangement.spacedBy(Space.md),
+            contentPadding = PaddingValues(top = Space.xs, bottom = Space.xxxl),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             // Referral Hero Banner
             item {
-                Card(
+                LifeCard(
                     modifier = Modifier.fillMaxWidth(),
-                    shape = RoundedCornerShape(24.dp),
-                    colors = CardDefaults.cardColors(containerColor = Color.Transparent)
+                    variant = CardVariant.Primary
                 ) {
-                    Box(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .background(
-                                Brush.linearGradient(
-                                    listOf(
-                                        Color(0xFF6200EA),
-                                        Color(0xFF7C4DFF),
-                                        Color(0xFF304FFE)
-                                    )
-                                )
-                            )
-                            .padding(24.dp)
+                    Column(
+                        modifier = Modifier.padding(Space.sm),
+                        horizontalAlignment = Alignment.CenterHorizontally
                     ) {
-                        Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                            Surface(
-                                color = Color.White.copy(alpha = 0.2f),
-                                shape = CircleShape
+                        Surface(
+                            color = MaterialTheme.colorScheme.primaryContainer,
+                            shape = LifeScoreShapes.tag
+                        ) {
+                            Row(
+                                modifier = Modifier.padding(horizontal = Space.sm, vertical = 4.dp),
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.spacedBy(Space.xs)
                             ) {
+                                LifeIcon(LifeIcons.Rocket, size = 14.dp, tint = MaterialTheme.colorScheme.primary)
                                 Text(
-                                    "🎁 Viral Reward Loop",
-                                    modifier = Modifier.padding(horizontal = 14.dp, vertical = 6.dp),
-                                    color = Color.White,
-                                    fontSize = 12.sp,
+                                    "Referral Reward Program",
+                                    color = MaterialTheme.colorScheme.primary,
+                                    style = MaterialTheme.typography.labelSmall,
                                     fontWeight = FontWeight.Bold
                                 )
                             }
+                        }
 
-                            Spacer(modifier = Modifier.height(16.dp))
+                        Spacer(modifier = Modifier.height(Space.md))
 
-                            Text(
-                                "Invite 3 Friends → Unlock 1-Month LifeScore Premium ($14.99 Value)",
-                                color = Color.White,
-                                fontSize = 19.sp,
-                                fontWeight = FontWeight.ExtraBold,
-                                textAlign = TextAlign.Center
-                            )
+                        Text(
+                            "Invite 3 Friends → Unlock 1-Month Free Pro",
+                            style = MaterialTheme.typography.titleLarge.copy(
+                                fontFamily = FontFamily.Serif,
+                                fontWeight = FontWeight.Bold
+                            ),
+                            color = MaterialTheme.colorScheme.onSurface,
+                            textAlign = TextAlign.Center
+                        )
 
-                            Spacer(modifier = Modifier.height(16.dp))
+                        Spacer(modifier = Modifier.height(Space.md))
 
-                            // Progress Steps (1, 2, 3)
-                            val invited = ref?.invitedCount ?: 2
-                            Row(
-                                modifier = Modifier.fillMaxWidth(),
-                                horizontalArrangement = Arrangement.SpaceEvenly,
-                                verticalAlignment = Alignment.CenterVertically
-                            ) {
-                                (1..3).forEach { step ->
-                                    val isFilled = step <= invited
-                                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                                        Box(
-                                            modifier = Modifier
-                                                .size(36.dp)
-                                                .clip(CircleShape)
-                                                .background(if (isFilled) Color(0xFF00E676) else Color.White.copy(alpha = 0.3f)),
-                                            contentAlignment = Alignment.Center
-                                        ) {
+                        // Progress Steps (1, 2, 3)
+                        val invited = ref?.invitedCount ?: 1
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceEvenly,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            (1..3).forEach { step ->
+                                val isFilled = step <= invited
+                                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                                    Box(
+                                        modifier = Modifier
+                                            .size(40.dp)
+                                            .clip(CircleShape)
+                                            .background(if (isFilled) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.surfaceVariant),
+                                        contentAlignment = Alignment.Center
+                                    ) {
+                                        if (isFilled) {
+                                            LifeIcon(LifeIcons.Check, size = 18.dp, tint = MaterialTheme.colorScheme.onPrimary)
+                                        } else {
                                             Text(
-                                                if (isFilled) "✓" else "$step",
-                                                color = if (isFilled) Color(0xFF004D40) else Color.White,
+                                                "$step",
+                                                color = MaterialTheme.colorScheme.onSurfaceVariant,
                                                 fontWeight = FontWeight.Bold,
-                                                fontSize = 16.sp
+                                                style = MaterialTheme.typography.titleSmall
                                             )
                                         }
-                                        Spacer(modifier = Modifier.height(4.dp))
-                                        Text("Friend $step", color = Color.White.copy(alpha = 0.8f), fontSize = 11.sp)
                                     }
-                                }
-                            }
-
-                            Spacer(modifier = Modifier.height(16.dp))
-
-                            if (invited >= 3 || (ref?.isOneMonthPremiumUnlocked == true)) {
-                                Button(
-                                    onClick = { viewModel.claimPremiumReward() },
-                                    modifier = Modifier.fillMaxWidth(),
-                                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF00E676), contentColor = Color(0xFF004D40)),
-                                    shape = RoundedCornerShape(12.dp)
-                                ) {
-                                    Icon(Icons.Default.Star, contentDescription = null)
-                                    Spacer(modifier = Modifier.width(8.dp))
-                                    Text("Claim 1-Month Free Premium (+200 XP)", fontWeight = FontWeight.Bold)
-                                }
-                            } else {
-                                Surface(
-                                    color = Color.White.copy(alpha = 0.15f),
-                                    shape = RoundedCornerShape(10.dp)
-                                ) {
+                                    Spacer(modifier = Modifier.height(Space.xxs))
                                     Text(
-                                        "Only ${3 - invited} more friend needed to unlock Free Premium!",
-                                        modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp),
-                                        color = Color.White,
-                                        fontSize = 12.sp,
-                                        fontWeight = FontWeight.SemiBold
+                                        "Friend $step",
+                                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                        style = MaterialTheme.typography.labelSmall
                                     )
                                 }
+                            }
+                        }
+
+                        Spacer(modifier = Modifier.height(Space.md))
+
+                        if (invited >= 3 || (ref?.isOneMonthPremiumUnlocked == true)) {
+                            Button(
+                                onClick = { viewModel.claimPremiumReward() },
+                                modifier = Modifier.fillMaxWidth(),
+                                shape = LifeScoreShapes.button
+                            ) {
+                                LifeIcon(LifeIcons.Star, size = 18.dp, tint = MaterialTheme.colorScheme.onPrimary)
+                                Spacer(modifier = Modifier.width(Space.xs))
+                                Text("Claim 1-Month Free Pro (+200 XP)", fontWeight = FontWeight.Bold)
+                            }
+                        } else {
+                            Surface(
+                                color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f),
+                                shape = LifeScoreShapes.cardSmall
+                            ) {
+                                Text(
+                                    "Only ${3 - invited} more friend needed to unlock Free Pro",
+                                    modifier = Modifier.padding(horizontal = Space.sm, vertical = Space.xs),
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                    style = MaterialTheme.typography.bodySmall,
+                                    fontWeight = FontWeight.Medium
+                                )
                             }
                         }
                     }
@@ -181,43 +211,67 @@ fun ViralReferralScreen(
 
             // Unique Referral Code Card
             item {
-                Card(
+                LifeCard(
                     modifier = Modifier.fillMaxWidth(),
-                    shape = RoundedCornerShape(18.dp),
-                    elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
+                    variant = CardVariant.Default
                 ) {
-                    Column(modifier = Modifier.padding(16.dp)) {
-                        Text("🔗 Your Unique Invite Code", fontWeight = FontWeight.Bold, fontSize = 15.sp)
-                        Text("Share this code or link with friends. Both get +150 XP.", fontSize = 12.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    Column(
+                        modifier = Modifier.padding(Space.sm),
+                        verticalArrangement = Arrangement.spacedBy(Space.xs)
+                    ) {
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            LifeIcon(LifeIcons.Goal, size = 18.dp)
+                            Spacer(Modifier.width(Space.xs))
+                            Text(
+                                "Your Unique Invite Code",
+                                style = MaterialTheme.typography.titleSmall,
+                                fontWeight = FontWeight.Bold
+                            )
+                        }
+                        Text(
+                            "Share your unique code. Both you and your friend get 1 month of LifeScore Pro.",
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
 
-                        Spacer(modifier = Modifier.height(12.dp))
+                        Spacer(modifier = Modifier.height(Space.sm))
 
                         Row(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .background(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f), RoundedCornerShape(12.dp))
-                                .padding(horizontal = 16.dp, vertical = 12.dp),
+                                .background(
+                                    MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f),
+                                    LifeScoreShapes.cardSmall
+                                )
+                                .padding(horizontal = Space.md, vertical = Space.sm),
                             horizontalArrangement = Arrangement.SpaceBetween,
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             Text(
-                                ref?.referralCode ?: "HERO-7782",
-                                fontSize = 20.sp,
-                                fontWeight = FontWeight.ExtraBold,
-                                letterSpacing = 2.sp,
+                                formattedCode,
+                                style = MaterialTheme.typography.titleMedium.copy(
+                                    fontFamily = FontFamily.Monospace,
+                                    fontWeight = FontWeight.Bold
+                                ),
+                                letterSpacing = 1.sp,
                                 color = MaterialTheme.colorScheme.primary
                             )
 
                             Button(
                                 onClick = {
                                     val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-                                    clipboard.setPrimaryClip(ClipData.newPlainText("LifeScore Referral", "Join me on LifeScore and get +150 XP! Use code: ${ref?.referralCode ?: "HERO-7782"} https://lifescore.app/invite/${ref?.referralCode ?: "HERO-7782"}"))
-                                    Toast.makeText(context, "Invite link copied to clipboard!", Toast.LENGTH_SHORT).show()
+                                    clipboard.setPrimaryClip(
+                                        ClipData.newPlainText(
+                                            "LifeScore Referral",
+                                            "Join me on LifeScore! Use my invite code: $formattedCode https://lifescore.app/invite/$formattedCode"
+                                        )
+                                    )
+                                    Toast.makeText(context, "Invite link copied to clipboard", Toast.LENGTH_SHORT).show()
                                 },
-                                shape = RoundedCornerShape(10.dp)
+                                shape = LifeScoreShapes.button
                             ) {
                                 Icon(Icons.Default.ContentCopy, contentDescription = null, modifier = Modifier.size(16.dp))
-                                Spacer(modifier = Modifier.width(6.dp))
+                                Spacer(modifier = Modifier.width(Space.xs))
                                 Text("Copy Link")
                             }
                         }
@@ -225,109 +279,57 @@ fun ViralReferralScreen(
                 }
             }
 
-            // Holographic Shareable LifeScore Card Generator
+            // Shareable Story Card Trigger
             item {
-                Card(
-                    modifier = Modifier.fillMaxWidth(),
-                    shape = RoundedCornerShape(20.dp),
-                    colors = CardDefaults.cardColors(containerColor = Color(0xFF1E1E2C))
+                LifeCard(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clickable { showStoryDialog = true },
+                    variant = CardVariant.Cream
                 ) {
-                    Column(modifier = Modifier.padding(20.dp), horizontalAlignment = Alignment.CenterHorizontally) {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(Space.sm),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
                         Surface(
-                            color = Color(0xFF3F51B5).copy(alpha = 0.4f),
-                            shape = CircleShape
+                            shape = LifeScoreShapes.button,
+                            color = Color(0x20D4A24C),
+                            modifier = Modifier.size(44.dp)
                         ) {
-                            Text(
-                                "✨ Holographic Scorecard Preview",
-                                modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp),
-                                color = Color(0xFF8C9EFF),
-                                fontSize = 11.sp,
-                                fontWeight = FontWeight.Bold
-                            )
-                        }
-
-                        Spacer(modifier = Modifier.height(12.dp))
-
-                        Text("LifeScore Master • Level 12", color = Color.White, fontWeight = FontWeight.Bold, fontSize = 18.sp)
-                        Text("🔥 12-Day Unbroken Streak • 8 Dimensions Harmonized", color = Color.White.copy(alpha = 0.8f), fontSize = 12.sp)
-
-                        Spacer(modifier = Modifier.height(16.dp))
-
-                        Row(
-                            modifier = Modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.SpaceEvenly
-                        ) {
-                            ScoreStatBadge("Health", "88%", Color(0xFF66BB6A))
-                            ScoreStatBadge("Career", "92%", Color(0xFF42A5F5))
-                            ScoreStatBadge("Mind", "95%", Color(0xFFAB47BC))
-                            ScoreStatBadge("Wealth", "84%", Color(0xFFFFCA28))
-                        }
-
-                        Spacer(modifier = Modifier.height(16.dp))
-
-                        Button(
-                            onClick = {
-                                Toast.makeText(context, "Holographic Scorecard saved & ready to share to Stories/WhatsApp!", Toast.LENGTH_SHORT).show()
-                            },
-                            modifier = Modifier.fillMaxWidth(),
-                            shape = RoundedCornerShape(12.dp),
-                            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF8C9EFF), contentColor = Color(0xFF1A237E))
-                        ) {
-                            Icon(Icons.Default.Share, contentDescription = null, modifier = Modifier.size(16.dp))
-                            Spacer(modifier = Modifier.width(8.dp))
-                            Text("Share Holographic Card to Instagram / TikTok", fontWeight = FontWeight.Bold)
-                        }
-                    }
-                }
-            }
-
-            // Quick Simulate Friend Join (For testing & capstone verification)
-            item {
-                Card(
-                    modifier = Modifier.fillMaxWidth(),
-                    shape = RoundedCornerShape(16.dp)
-                ) {
-                    Column(modifier = Modifier.padding(16.dp)) {
-                        Text("🧪 Simulate Friend Joining (Capstone Demo)", fontWeight = FontWeight.Bold, fontSize = 14.sp)
-                        Spacer(modifier = Modifier.height(8.dp))
-                        Row(
-                            modifier = Modifier.fillMaxWidth(),
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            OutlinedTextField(
-                                value = uiState.simulatedFriendNameInput,
-                                onValueChange = { viewModel.onFriendNameChange(it) },
-                                placeholder = { Text("Friend Name (e.g. Jordan)") },
-                                modifier = Modifier.weight(1f),
-                                shape = RoundedCornerShape(10.dp)
-                            )
-                            Spacer(modifier = Modifier.width(8.dp))
-                            Button(
-                                onClick = { viewModel.simulateFriendSignup() },
-                                shape = RoundedCornerShape(10.dp)
-                            ) {
-                                Text("Join")
+                            Box(contentAlignment = Alignment.Center) {
+                                LifeIcon(LifeIcons.Star, size = 22.dp, tint = Color(0xFFD4A24C))
                             }
                         }
+                        Spacer(Modifier.width(Space.md))
+                        Column(modifier = Modifier.weight(1f)) {
+                            Text(
+                                "Generate 9:16 Instagram Story",
+                                style = MaterialTheme.typography.titleSmall,
+                                fontWeight = FontWeight.Bold
+                            )
+                            Text(
+                                "Share your archetype portrait, baseline score, and invite link to your story",
+                                style = MaterialTheme.typography.bodySmall,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                            )
+                        }
+                        Icon(Icons.Default.Share, contentDescription = null, tint = MaterialTheme.colorScheme.primary)
                     }
                 }
             }
         }
     }
-}
 
-@Composable
-fun ScoreStatBadge(dim: String, score: String, color: Color) {
-    Surface(
-        color = color.copy(alpha = 0.2f),
-        shape = RoundedCornerShape(10.dp)
-    ) {
-        Column(
-            modifier = Modifier.padding(horizontal = 10.dp, vertical = 6.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Text(dim, color = color, fontSize = 10.sp, fontWeight = FontWeight.Bold)
-            Text(score, color = Color.White, fontSize = 12.sp, fontWeight = FontWeight.Bold)
-        }
+    if (showStoryDialog) {
+        ShareStoryCardDialog(
+            data = StoryCardData(
+                cardType = StoryCardType.ARCHETYPE_REVEAL,
+                score = 720,
+                primaryStrength = "Scalable Systems & Structural Order"
+            ),
+            onDismiss = { showStoryDialog = false }
+        )
     }
 }

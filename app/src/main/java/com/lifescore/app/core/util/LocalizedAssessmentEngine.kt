@@ -50,32 +50,44 @@ object LocalizedAssessmentEngine {
     ): Pair<String, String> {
         return when (language) {
             AppLanguage.SPANISH -> when (archetype) {
-                HeroArchetype.WARRIOR -> Pair("El Guerrero", "Fuerza implacable y resistencia, motivado por la victoria y el dominio físico.")
+                HeroArchetype.ARCHITECT -> Pair("El Arquitecto", "Maestro de sistemas, hábitos compuestos y estructura operativa.")
                 HeroArchetype.SAGE -> Pair("El Sabio", "Buscador profundo de la verdad, impulsado por el intelecto y el conocimiento.")
-                HeroArchetype.EXPLORER -> Pair("El Explorador", "Prospera en la salud, la aventura al aire libre y la vitalidad.")
-                HeroArchetype.CREATOR -> Pair("El Creador", "Enfocado en avances profesionales, riqueza y maestría.")
-                HeroArchetype.HEALER -> Pair("El Sanador", "Guardián de la empatía, restaurador del bienestar y la armonía.")
+                HeroArchetype.WARRIOR -> Pair("El Guerrero", "Fuerza implacable y resistencia, motivado por la victoria y el dominio físico.")
+                HeroArchetype.VISIONARY -> Pair("El Visionario", "Estratega futurista que impulsa la ambición y la escala.")
+                HeroArchetype.SCHOLAR -> Pair("El Erudito", "Guardián del conocimiento y la síntesis profunda de ideas.")
+                HeroArchetype.CREATOR -> Pair("El Creador", "Pionero estético que transforma la inspiración en realidad.")
+                HeroArchetype.NOMAD, HeroArchetype.EXPLORER -> Pair("El Nómada", "Prospera en la salud, la aventura al aire libre y la vitalidad.")
+                HeroArchetype.CATALYST, HeroArchetype.HEALER -> Pair("El Catalizador", "Guardián de la empatía, la armonía y la seguridad psicológica.")
             }
             AppLanguage.CHINESE -> when (archetype) {
-                HeroArchetype.WARRIOR -> Pair("勇士", "无畏的行动派与征服者，以坚韧体魄和钢铁意志破局。")
+                HeroArchetype.ARCHITECT -> Pair("建筑师", "系统架构大师，以清晰秩序与复合习惯构建卓越人生。")
                 HeroArchetype.SAGE -> Pair("智者", "真理的探索者，以无尽的好奇心与深度思考驱动人生。")
-                HeroArchetype.EXPLORER -> Pair("探索者", "拥抱自然与户外探索，以充沛生命力和健康体魄前行。")
-                HeroArchetype.CREATOR -> Pair("创造者", "聚焦事业突破、财富自由与卓越创造力。")
-                HeroArchetype.HEALER -> Pair("治愈者", "同理心与身心能量的守护者，致力于修复与平衡。")
+                HeroArchetype.WARRIOR -> Pair("勇士", "无畏的行动派与征服者，以坚韧体魄和钢铁意志破局。")
+                HeroArchetype.VISIONARY -> Pair("远见者", "战略未来学家，以宏大视野和变革之力开创新局。")
+                HeroArchetype.SCHOLAR -> Pair("学者", "知识的守护者，通过刻意练习沉淀非凡学识。")
+                HeroArchetype.CREATOR -> Pair("创造者", "美学先驱，将灵感化为卓越创造力与作品。")
+                HeroArchetype.NOMAD, HeroArchetype.EXPLORER -> Pair("游牧者", "拥抱自然与户外探索，以充沛生命力和健康体魄前行。")
+                HeroArchetype.CATALYST, HeroArchetype.HEALER -> Pair("催化者", "同理心与身心能量的守护者，致力于修复与连接。")
             }
             AppLanguage.ARABIC -> when (archetype) {
-                HeroArchetype.WARRIOR -> Pair("المحارب", "طاقة صلبة وشجاعة لا تلين لتحقيق الأهداف وتجاوز العقبات.")
+                HeroArchetype.ARCHITECT -> Pair("المعماري", "مهندس الأنظمة والعادات اليومية المتراكمة لتحقيق النجاح.")
                 HeroArchetype.SAGE -> Pair("الحكيم", "باحث شغوف عن المعرفة والحقيقة والتحليل العميق.")
-                HeroArchetype.EXPLORER -> Pair("المستكشف", "يعشق المغامرة والحيوية والنشاط البدني في الهواء الطلق.")
-                HeroArchetype.CREATOR -> Pair("المبتكر", "يركز على النجاح المهني وصناعة الثروة والتميز.")
-                HeroArchetype.HEALER -> Pair("المعالج", "حارس السلام الداخلي والتعافي والتوازن الإنساني.")
+                HeroArchetype.WARRIOR -> Pair("المحارب", "طاقة صلبة وشجاعة لا تلين لتحقيق الأهداف وتجاوز العقبات.")
+                HeroArchetype.VISIONARY -> Pair("صاحب الرؤية", "مستشرف المستقبل وطموح التحولات الكبرى.")
+                HeroArchetype.SCHOLAR -> Pair("العالم", "حارس المعرفة والفهم العميق للمفاهيم الأساسية.")
+                HeroArchetype.CREATOR -> Pair("المبتكر", "رائد الابتكار الجمالي والإبداع الفريد.")
+                HeroArchetype.NOMAD, HeroArchetype.EXPLORER -> Pair("الرحالة", "يعشق المغامرة والحيوية والنشاط البدني في الهواء الطلق.")
+                HeroArchetype.CATALYST, HeroArchetype.HEALER -> Pair("المحفز", "حارس السلام الداخلي والتعاطف والتوازن الإنساني.")
             }
             AppLanguage.HINDI -> when (archetype) {
-                HeroArchetype.WARRIOR -> Pair("योद्धा (द वॉरियर)", "अदम्य साहस और अटूट अनुशासन से हर चुनौती को जीतने वाला।")
+                HeroArchetype.ARCHITECT -> Pair("वास्तुकार (द आर्किटेक्ट)", "संरचित प्रणालियों और दैनिक आदतों का निर्माता।")
                 HeroArchetype.SAGE -> Pair("ज्ञानी (द सेज)", "सत्य और आत्म-ज्ञान का गहरा खोजी, बुद्धिमान विचारक।")
-                HeroArchetype.EXPLORER -> Pair("अन्वेषक (द एक्सप्लोरर)", "प्रकृति, स्वास्थ्य और नई खोजों का उत्साही पथिक।")
-                HeroArchetype.CREATOR -> Pair("सर्जक (द क्रिएटर)", "करियर में नई ऊंचाइयां, संपत्ति और महारत हासिल करने वाला।")
-                HeroArchetype.HEALER -> Pair("उपचारक (द हीलर)", "सहानुभूति और जीवन में संतुलन लाने वाला रक्षक।")
+                HeroArchetype.WARRIOR -> Pair("योद्धा (द वॉरियर)", "अदम्य साहस और अटूट अनुशासन से हर चुनौती को जीतने वाला।")
+                HeroArchetype.VISIONARY -> Pair("दूरदर्शी (द विजनरी)", "भविष्य की रणनीतियों और बड़ी सफलताओं का मार्गदर्शक।")
+                HeroArchetype.SCHOLAR -> Pair("विद्वान (द स्कॉलर)", "गहन ज्ञान और निरंतर अभ्यास से निपुण बनने वाला।")
+                HeroArchetype.CREATOR -> Pair("सर्जक (द क्रिएटर)", "सौंदर्य और नवाचार से नए आयाम रचने वाला।")
+                HeroArchetype.NOMAD, HeroArchetype.EXPLORER -> Pair("पथिक (द नोमैड)", "प्रकृति, स्वास्थ्य और नई खोजों का उत्साही पथिक।")
+                HeroArchetype.CATALYST, HeroArchetype.HEALER -> Pair("प्रेरक (द कैटालिस्ट)", "सहानुभूति और जीवन में संतुलन लाने वाला रक्षक।")
             }
             AppLanguage.ENGLISH -> Pair(archetype.displayName, archetype.description)
         }

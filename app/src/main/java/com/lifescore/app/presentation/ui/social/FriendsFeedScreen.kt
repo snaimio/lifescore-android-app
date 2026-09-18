@@ -2,6 +2,7 @@ package com.lifescore.app.presentation.ui.social
 
 import android.widget.Toast
 import androidx.compose.animation.*
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -16,12 +17,19 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.lifescore.app.core.designsystem.LifeScoreShapes
+import com.lifescore.app.core.designsystem.Space
+import com.lifescore.app.core.designsystem.components.CardVariant
+import com.lifescore.app.core.designsystem.components.LifeCard
+import com.lifescore.app.core.designsystem.components.LifeIcon
+import com.lifescore.app.core.designsystem.components.LifeIcons
+import com.lifescore.app.core.designsystem.components.SectionHeader
 import com.lifescore.app.data.local.entity.FriendActivityEntity
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -45,8 +53,16 @@ fun FriendsFeedScreen(
             TopAppBar(
                 title = {
                     Column {
-                        Text("Friends Activity & Social Feed", fontWeight = FontWeight.Bold, fontSize = 18.sp)
-                        Text("2.8x Higher Success Through Accountability", fontSize = 12.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                        Text(
+                            "Friends & Squad Feed",
+                            fontWeight = FontWeight.Bold,
+                            style = MaterialTheme.typography.titleMedium
+                        )
+                        Text(
+                            "Social Accountability & Mutual Cheering",
+                            style = MaterialTheme.typography.labelSmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
                     }
                 },
                 navigationIcon = {
@@ -62,72 +78,80 @@ fun FriendsFeedScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
-                .padding(16.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp)
+                .padding(horizontal = Space.screenH),
+            verticalArrangement = Arrangement.spacedBy(Space.cardGap),
+            contentPadding = PaddingValues(top = Space.xs, bottom = Space.xxxl)
         ) {
             // Accountability Hero Card
             item {
-                Card(
+                LifeCard(
                     modifier = Modifier.fillMaxWidth(),
-                    shape = RoundedCornerShape(24.dp),
-                    colors = CardDefaults.cardColors(containerColor = Color.Transparent)
+                    variant = CardVariant.Primary
                 ) {
-                    Box(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .background(
-                                Brush.linearGradient(
-                                    listOf(
-                                        Color(0xFFE91E63),
-                                        Color(0xFFFF4081),
-                                        Color(0xFFFF80AB)
-                                    )
-                                )
-                            )
-                            .padding(24.dp)
-                    ) {
-                        Column {
-                            Row(
-                                modifier = Modifier.fillMaxWidth(),
-                                horizontalArrangement = Arrangement.SpaceBetween,
-                                verticalAlignment = Alignment.CenterVertically
+                    Column(modifier = Modifier.padding(Space.sm)) {
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Surface(
+                                color = MaterialTheme.colorScheme.primaryContainer,
+                                shape = LifeScoreShapes.tag
                             ) {
-                                Surface(
-                                    color = Color.White.copy(alpha = 0.25f),
-                                    shape = CircleShape
+                                Row(
+                                    modifier = Modifier.padding(horizontal = Space.sm, vertical = 4.dp),
+                                    verticalAlignment = Alignment.CenterVertically,
+                                    horizontalArrangement = Arrangement.spacedBy(Space.xs)
                                 ) {
+                                    LifeIcon(LifeIcons.Social, size = 14.dp, tint = MaterialTheme.colorScheme.primary)
                                     Text(
-                                        "🤝 Social Accountability",
-                                        modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp),
-                                        color = Color.White,
-                                        fontSize = 12.sp,
+                                        "Social Accountability",
+                                        color = MaterialTheme.colorScheme.primary,
+                                        style = MaterialTheme.typography.labelSmall,
                                         fontWeight = FontWeight.Bold
                                     )
                                 }
-                                Text("4 Friends Active 🔥", color = Color.White, fontSize = 12.sp, fontWeight = FontWeight.Bold)
                             }
-
-                            Spacer(modifier = Modifier.height(16.dp))
-
-                            Text(
-                                "Celebrate Wins & Nudge Friends",
-                                color = Color.White,
-                                fontSize = 22.sp,
-                                fontWeight = FontWeight.ExtraBold
-                            )
-                            Text(
-                                "Research shows sharing habit progress makes you 2.8x more likely to maintain consistency.",
-                                color = Color.White.copy(alpha = 0.9f),
-                                fontSize = 13.sp
-                            )
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.spacedBy(4.dp)
+                            ) {
+                                LifeIcon(LifeIcons.Streak, size = 14.dp)
+                                Text(
+                                    "4 Friends Active",
+                                    style = MaterialTheme.typography.labelSmall,
+                                    fontWeight = FontWeight.Bold,
+                                    color = MaterialTheme.colorScheme.primary
+                                )
+                            }
                         }
+
+                        Spacer(modifier = Modifier.height(Space.md))
+
+                        Text(
+                            "Celebrate Wins & Nudge Your Squad",
+                            style = MaterialTheme.typography.titleLarge.copy(
+                                fontFamily = FontFamily.Serif,
+                                fontWeight = FontWeight.Bold
+                            ),
+                            color = MaterialTheme.colorScheme.onSurface
+                        )
+                        Spacer(modifier = Modifier.height(Space.xxs))
+                        Text(
+                            "Sharing consistency makes you 2.8x more likely to maintain daily compounding habits.",
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
                     }
                 }
             }
 
             // Live Feed List Header
             item {
-                Text("🔥 Live Friends Activity Stream", fontWeight = FontWeight.Bold, fontSize = 16.sp)
+                SectionHeader(
+                    title = "Live Squad Activity Stream",
+                    subtitle = "Real-time updates from your accountability circle"
+                )
             }
 
             items(uiState.activities) { act ->
@@ -147,54 +171,77 @@ fun FriendActivityCard(
     onNudge: () -> Unit,
     onGift: () -> Unit
 ) {
-    Card(
+    LifeCard(
         modifier = Modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(16.dp),
-        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
+        variant = CardVariant.Default
     ) {
-        Column(modifier = Modifier.padding(16.dp)) {
+        Column(modifier = Modifier.padding(Space.sm)) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Text(activity.avatarEmoji, fontSize = 24.sp)
-                Spacer(modifier = Modifier.width(10.dp))
+                Surface(
+                    shape = CircleShape,
+                    color = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.6f),
+                    modifier = Modifier.size(40.dp)
+                ) {
+                    Box(contentAlignment = Alignment.Center) {
+                        LifeIcon(LifeIcons.Profile, size = 20.dp, tint = MaterialTheme.colorScheme.primary)
+                    }
+                }
+                Spacer(modifier = Modifier.width(Space.sm))
                 Column(modifier = Modifier.weight(1f)) {
-                    Text(activity.friendName, fontWeight = FontWeight.Bold, fontSize = 15.sp)
-                    Text("Streak: ${activity.streakDays} Days 🔥 • ${activity.dimensionTag}", fontSize = 12.sp, color = MaterialTheme.colorScheme.primary)
+                    Text(activity.friendName, fontWeight = FontWeight.Bold, style = MaterialTheme.typography.titleSmall)
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(4.dp)
+                    ) {
+                        LifeIcon(LifeIcons.Streak, size = 12.dp)
+                        Text(
+                            "${activity.streakDays}d streak • ${activity.dimensionTag}",
+                            style = MaterialTheme.typography.labelSmall,
+                            color = MaterialTheme.colorScheme.primary
+                        )
+                    }
                 }
             }
 
-            Spacer(modifier = Modifier.height(10.dp))
+            Spacer(modifier = Modifier.height(Space.sm))
 
             Text(
                 activity.actionDescription,
-                fontSize = 14.sp,
-                fontWeight = FontWeight.Medium,
+                style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurface
             )
 
-            Spacer(modifier = Modifier.height(12.dp))
+            Spacer(modifier = Modifier.height(Space.md))
 
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(8.dp)
+                horizontalArrangement = Arrangement.spacedBy(Space.sm)
             ) {
                 OutlinedButton(
                     onClick = onNudge,
                     modifier = Modifier.weight(1f),
-                    shape = RoundedCornerShape(10.dp)
+                    shape = LifeScoreShapes.button
                 ) {
-                    Text(if (activity.isNudgedToday) "Nudged 🔥" else "Send Nudge 🔥")
+                    LifeIcon(LifeIcons.Streak, size = 14.dp)
+                    Spacer(Modifier.width(Space.xs))
+                    Text(if (activity.isNudgedToday) "Nudged" else "Send Nudge", style = MaterialTheme.typography.labelMedium)
                 }
 
                 Button(
                     onClick = onGift,
                     modifier = Modifier.weight(1f),
-                    shape = RoundedCornerShape(10.dp),
-                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFE91E63))
+                    shape = LifeScoreShapes.button,
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = MaterialTheme.colorScheme.secondary,
+                        contentColor = MaterialTheme.colorScheme.onSecondary
+                    )
                 ) {
-                    Text("Gift Freeze 🎁")
+                    LifeIcon(LifeIcons.Goal, size = 14.dp, tint = MaterialTheme.colorScheme.onSecondary)
+                    Spacer(Modifier.width(Space.xs))
+                    Text("Gift Freeze", style = MaterialTheme.typography.labelMedium)
                 }
             }
         }

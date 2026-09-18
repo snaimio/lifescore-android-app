@@ -84,7 +84,20 @@ enum class LifeIllustrations(
     EmptySocial(R.drawable.ill_empty_social, "Empty Social Feed Illustration"),
     EmptyProgress(R.drawable.ill_empty_progress, "Empty Progress Illustration"),
     EmptyMeditation(R.drawable.ill_empty_meditation, "Empty Meditation Illustration"),
-    EmptySleep(R.drawable.ill_empty_sleep, "Empty Sleep Illustration")
+    EmptySleep(R.drawable.ill_empty_sleep, "Empty Sleep Illustration"),
+
+    // Archetype Vector Portraits
+    ArchetypeArchitect(R.drawable.ill_archetype_architect, "The Architect Archetype"),
+    ArchetypeSage(R.drawable.ill_archetype_sage, "The Sage Archetype"),
+    ArchetypeWarrior(R.drawable.ill_archetype_warrior, "The Warrior Archetype"),
+    ArchetypeVisionary(R.drawable.ill_archetype_visionary, "The Visionary Archetype"),
+    ArchetypeScholar(R.drawable.ill_archetype_scholar, "The Scholar Archetype"),
+    ArchetypeCreator(R.drawable.ill_archetype_creator, "The Creator Archetype"),
+    ArchetypeNomad(R.drawable.ill_archetype_nomad, "The Nomad Archetype"),
+    ArchetypeCatalyst(R.drawable.ill_archetype_catalyst, "The Catalyst Archetype"),
+
+    // Milestone Celebration
+    Celebration(R.drawable.ill_celebration, "Celebration Milestone")
 }
 
 @Composable

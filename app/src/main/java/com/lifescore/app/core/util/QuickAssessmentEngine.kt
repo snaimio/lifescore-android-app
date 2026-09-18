@@ -29,7 +29,7 @@ object QuickAssessmentEngine {
             id = 1,
             text = "I prioritize 7-8 hours of restful sleep and hydrate consistently throughout the day.",
             dimension = DimensionType.HEALTH,
-            archetypeAffinity = HeroArchetype.EXPLORER,
+            archetypeAffinity = HeroArchetype.NOMAD,
             lowLabel = "Struggling",
             highLabel = "Locked In"
         ),
@@ -37,7 +37,7 @@ object QuickAssessmentEngine {
             id = 2,
             text = "I enjoy planning structured routines, organizing tasks, and executing step-by-step systems.",
             dimension = DimensionType.CAREER,
-            archetypeAffinity = HeroArchetype.CREATOR,
+            archetypeAffinity = HeroArchetype.ARCHITECT,
             lowLabel = "Chaotic",
             highLabel = "Highly Structured"
         ),
@@ -45,7 +45,7 @@ object QuickAssessmentEngine {
             id = 3,
             text = "I actively seek out books, podcasts, and deep learning to master new skills.",
             dimension = DimensionType.LEARNING,
-            archetypeAffinity = HeroArchetype.SAGE,
+            archetypeAffinity = HeroArchetype.SCHOLAR,
             lowLabel = "Passive",
             highLabel = "Voracious"
         ),
@@ -61,7 +61,7 @@ object QuickAssessmentEngine {
             id = 5,
             text = "I stay calm under pressure, practicing mindfulness, deep breathing, or journaling.",
             dimension = DimensionType.MENTAL_HEALTH,
-            archetypeAffinity = HeroArchetype.HEALER,
+            archetypeAffinity = HeroArchetype.SAGE,
             lowLabel = "Easily Stressed",
             highLabel = "Zen & Grounded"
         ),
@@ -69,7 +69,7 @@ object QuickAssessmentEngine {
             id = 6,
             text = "I manage my budget wisely, track expenses, and focus on automated investments.",
             dimension = DimensionType.WEALTH,
-            archetypeAffinity = HeroArchetype.CREATOR,
+            archetypeAffinity = HeroArchetype.ARCHITECT,
             lowLabel = "Impulsive",
             highLabel = "Disciplined"
         ),
@@ -77,7 +77,7 @@ object QuickAssessmentEngine {
             id = 7,
             text = "I make intentional time to nurture deep, meaningful connections with friends and family.",
             dimension = DimensionType.RELATIONSHIPS,
-            archetypeAffinity = HeroArchetype.HEALER,
+            archetypeAffinity = HeroArchetype.CATALYST,
             lowLabel = "Isolated",
             highLabel = "Deeply Connected"
         ),
@@ -85,23 +85,23 @@ object QuickAssessmentEngine {
             id = 8,
             text = "I bring positive energy, organize social gatherings, and inspire others to grow.",
             dimension = DimensionType.SOCIAL_LIFE,
-            archetypeAffinity = HeroArchetype.EXPLORER,
+            archetypeAffinity = HeroArchetype.VISIONARY,
             lowLabel = "Reserved",
             highLabel = "Inspiring Catalyst"
         ),
         QuickQuestion(
             id = 9,
-            text = "When I face obstacles, I treat them as valuable data and adjust my strategy quickly.",
+            text = "When I face obstacles, I treat them as creative puzzles and experiment with novel ideas.",
             dimension = DimensionType.CAREER,
-            archetypeAffinity = HeroArchetype.WARRIOR,
+            archetypeAffinity = HeroArchetype.CREATOR,
             lowLabel = "Get Discouraged",
-            highLabel = "Relentless Focus"
+            highLabel = "Highly Inventive"
         ),
         QuickQuestion(
             id = 10,
             text = "I am committed to replacing mindless screen scrolling with intentional life building.",
             dimension = DimensionType.MENTAL_HEALTH,
-            archetypeAffinity = HeroArchetype.SAGE,
+            archetypeAffinity = HeroArchetype.ARCHITECT,
             lowLabel = "Distracted",
             highLabel = "Laser Focused"
         )
@@ -126,24 +126,30 @@ object QuickAssessmentEngine {
             archetypeVotes[q.archetypeAffinity] = current + score
         }
 
-        val topArchetype = archetypeVotes.maxByOrNull { it.value }?.key ?: HeroArchetype.CREATOR
+        val topArchetype = archetypeVotes.maxByOrNull { it.value }?.key ?: HeroArchetype.ARCHITECT
         val overallAverage = dimScores.values.average().toFloat()
         val calculatedLifeScore = ((overallAverage / 100f) * 600f + 250f).toInt().coerceIn(300, 950)
 
         val (strength, growthArea) = when (topArchetype) {
-            HeroArchetype.CREATOR -> "Visionary Building & Structured Systems" to "Mindful Downtime"
-            HeroArchetype.WARRIOR -> "Relentless Grit & Fitness Drive" to "Emotional Recovery"
-            HeroArchetype.SAGE -> "Curiosity & Continuous Learning" to "Immediate Action"
-            HeroArchetype.EXPLORER -> "Vitality, Energy & Health Habits" to "Detailed Planning"
-            HeroArchetype.HEALER -> "Inner Harmony & Relationship Bonds" to "Personal Boundaries"
+            HeroArchetype.ARCHITECT -> "Scalable Systems & Structural Order" to "Spontaneous Flexibility"
+            HeroArchetype.SAGE -> "Deep Contemplation & Wisdom" to "Tangible Execution"
+            HeroArchetype.WARRIOR -> "Relentless Grit & High Somatic Drive" to "Mindful Recovery"
+            HeroArchetype.VISIONARY -> "Audacious Strategy & 10-Year Foresight" to "Granular Follow-Through"
+            HeroArchetype.SCHOLAR -> "First-Principles Synthesis & Mastery" to "Somatic Balance"
+            HeroArchetype.CREATOR -> "Aesthetic Innovation & Novel Synthesis" to "Procedural Routine"
+            HeroArchetype.NOMAD, HeroArchetype.EXPLORER -> "Vitality, Nature & Movement" to "Detailed Planning"
+            HeroArchetype.CATALYST, HeroArchetype.HEALER -> "Empathetic Connection & Psychological Safety" to "Personal Boundaries"
         }
 
         val (firstQuestTitle, firstQuestDim) = when (topArchetype) {
-            HeroArchetype.CREATOR -> "Plan your top 3 priorities for tomorrow" to DimensionType.CAREER
-            HeroArchetype.WARRIOR -> "Complete a 10-minute energizing walk" to DimensionType.FITNESS
-            HeroArchetype.SAGE -> "Read 5 pages of an insightful book" to DimensionType.LEARNING
-            HeroArchetype.EXPLORER -> "Drink 500ml of water with mindful breaths" to DimensionType.HEALTH
-            HeroArchetype.HEALER -> "Practice 3 minutes of box breathing" to DimensionType.MENTAL_HEALTH
+            HeroArchetype.ARCHITECT -> "Drink 1 glass of fresh water & set day's intention" to DimensionType.HEALTH
+            HeroArchetype.SAGE -> "Take 3 deep grounding breaths before starting" to DimensionType.MENTAL_HEALTH
+            HeroArchetype.WARRIOR -> "Complete 10 intentional bodyweight squats" to DimensionType.FITNESS
+            HeroArchetype.VISIONARY -> "Define your single #1 high-leverage goal for today" to DimensionType.CAREER
+            HeroArchetype.SCHOLAR -> "Read 2 pages of a transformative book" to DimensionType.LEARNING
+            HeroArchetype.CREATOR -> "Capture 1 creative thought or insight in your journal" to DimensionType.CAREER
+            HeroArchetype.NOMAD, HeroArchetype.EXPLORER -> "Drink 1 tall glass of water with mindful focus" to DimensionType.HEALTH
+            HeroArchetype.CATALYST, HeroArchetype.HEALER -> "Send a 1-sentence gratitude text to a friend" to DimensionType.RELATIONSHIPS
         }
 
         return QuickAssessmentResult(

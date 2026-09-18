@@ -1,0 +1,75 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="120dp"
+    android:height="120dp"
+    android:viewportWidth="120"
+    android:viewportHeight="120">
+    <!-- Warm Celebration Glow Background -->
+    <path
+        android:fillColor="#15D4A24C"
+        android:pathData="M60,10 A50,50 0 1,0 60,110 A50,50 0 1,0 60,10 Z"/>
+        
+    <!-- Laurel Wreath (Left branch) -->
+    <path
+        android:strokeColor="#6BA89C"
+        android:strokeWidth="2"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round"
+        android:pathData="M60,94 C42,94 28,78 28,58 C28,42 38,28 50,22"/>
+    <path
+        android:fillColor="#6BA89C"
+        android:pathData="M34,42 C30,40 28,44 32,48 C36,46 36,44 34,42 Z"/>
+    <path
+        android:fillColor="#6BA89C"
+        android:pathData="M28,58 C24,58 24,64 30,64 C32,62 30,60 28,58 Z"/>
+    <path
+        android:fillColor="#6BA89C"
+        android:pathData="M36,74 C32,76 34,82 40,80 C40,78 38,76 36,74 Z"/>
+        
+    <!-- Laurel Wreath (Right branch) -->
+    <path
+        android:strokeColor="#6BA89C"
+        android:strokeWidth="2"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round"
+        android:pathData="M60,94 C78,94 92,78 92,58 C92,42 82,28 70,22"/>
+    <path
+        android:fillColor="#6BA89C"
+        android:pathData="M86,42 C90,40 92,44 88,48 C84,46 84,44 86,42 Z"/>
+    <path
+        android:fillColor="#6BA89C"
+        android:pathData="M92,58 C96,58 96,64 90,64 C88,62 90,60 92,58 Z"/>
+    <path
+        android:fillColor="#6BA89C"
+        android:pathData="M84,74 C88,76 86,82 80,80 C80,78 82,76 84,74 Z"/>
+        
+    <!-- Center Milestone Trophy Shield -->
+    <path
+        android:fillColor="#25D4A24C"
+        android:strokeColor="#D4A24C"
+        android:strokeWidth="2"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round"
+        android:pathData="M46,38 L74,38 L74,56 C74,68 60,76 60,76 C60,76 46,68 46,56 Z"/>
+        
+    <!-- Star Inside Shield -->
+    <path
+        android:fillColor="#E08556"
+        android:pathData="M60,44 L62,49 L67,49 L63,52 L65,57 L60,54 L55,57 L57,52 L53,49 L58,49 Z"/>
+        
+    <!-- Confetti & Celebration Sparks -->
+    <path
+        android:fillColor="#E85D5D"
+        android:pathData="M24,24 L28,26 L26,30 L22,28 Z"/>
+    <path
+        android:fillColor="#7B6BA8"
+        android:pathData="M92,20 L96,24 L94,26 L90,22 Z"/>
+    <path
+        android:fillColor="#D4A24C"
+        android:pathData="M60,14 L62,18 L60,22 L58,18 Z"/>
+    <path
+        android:fillColor="#E08556"
+        android:pathData="M18,50 L22,52 L20,54 L16,52 Z"/>
+    <path
+        android:fillColor="#5B7BA8"
+        android:pathData="M98,46 L102,48 L100,52 L96,50 Z"/>
+</vector>

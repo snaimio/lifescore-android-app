@@ -1,0 +1,55 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="120dp"
+    android:height="120dp"
+    android:viewportWidth="120"
+    android:viewportHeight="120">
+    <!-- Halo of Contemplation -->
+    <path
+        android:fillColor="#157B6BA8"
+        android:pathData="M60,12 A48,48 0 1,0 60,108 A48,48 0 1,0 60,12 Z"/>
+        
+    <!-- Outer Wisdom Ring -->
+    <path
+        android:strokeColor="#7B6BA8"
+        android:strokeWidth="1.5"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round"
+        android:pathData="M60,22 A38,38 0 1,0 60,98 A38,38 0 1,0 60,22 Z"/>
+        
+    <!-- Open Wisdom Scroll / Codex Base -->
+    <path
+        android:strokeColor="#D4A24C"
+        android:strokeWidth="2"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round"
+        android:pathData="M32,76 C42,70 52,70 60,74 C68,70 78,70 88,76 L88,52 C78,46 68,46 60,50 C52,46 42,46 32,52 Z"/>
+        
+    <path
+        android:strokeColor="#7B6BA8"
+        android:strokeWidth="1.5"
+        android:strokeLineCap="round"
+        android:pathData="M60,50 L60,74"/>
+        
+    <!-- Eternal Flame / Candle of Wisdom -->
+    <path
+        android:fillColor="#E08556"
+        android:pathData="M60,28 C64,36 65,40 60,46 C55,40 56,36 60,28 Z"/>
+        
+    <path
+        android:fillColor="#D4A24C"
+        android:pathData="M60,34 C62,38 62,40 60,43 C58,40 58,38 60,34 Z"/>
+        
+    <!-- Radiating Insight Sparks -->
+    <path
+        android:strokeColor="#D4A24C"
+        android:strokeWidth="1.5"
+        android:strokeLineCap="round"
+        android:pathData="M44,36 L40,32 M76,36 L80,32 M36,54 L30,54 M84,54 L90,54"/>
+        
+    <!-- Base Platform -->
+    <path
+        android:strokeColor="#7B6BA8"
+        android:strokeWidth="2"
+        android:strokeLineCap="round"
+        android:pathData="M30,88 L90,88"/>
+</vector>
