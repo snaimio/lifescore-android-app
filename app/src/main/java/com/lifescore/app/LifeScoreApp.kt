@@ -9,6 +9,7 @@ import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.FirebaseFirestoreSettings
+import com.lifescore.app.BuildConfig
 import com.lifescore.app.core.database.LifeScoreDatabase
 import com.lifescore.app.data.remote.repository.AuthRepository
 import com.lifescore.app.data.remote.repository.AuthRepositoryImpl
@@ -130,7 +131,7 @@ class LifeScoreApp : Application(), Configuration.Provider {
             FirebaseApp.initializeApp(this)
             firebaseAnalytics = FirebaseAnalytics.getInstance(this)
             FirebaseCrashlytics.getInstance().apply {
-                setCrashlyticsCollectionEnabled(true)
+                isCrashlyticsCollectionEnabled = true
                 setCustomKey("debug_mode", BuildConfig.DEBUG_MODE)
                 setCustomKey("app_version", BuildConfig.VERSION_NAME)
             }
@@ -144,6 +145,7 @@ class LifeScoreApp : Application(), Configuration.Provider {
                 )
                 .build()
             firestore.firestoreSettings = settings
+            logAnalyticsEvent(FirebaseAnalytics.Event.APP_OPEN)
         } catch (e: Exception) {
             Log.w("LifeScoreApp", "Firebase initialization in offline/fallback mode: ${e.localizedMessage}")
         }
@@ -169,6 +171,7 @@ class LifeScoreApp : Application(), Configuration.Provider {
         SyncWorker.schedulePeriodicSync(this)
     }
 
+    @Suppress("MemberVisibilityCanBePrivate")
     fun logAnalyticsEvent(eventName: String, params: Bundle? = null) {
         try {
             firebaseAnalytics?.logEvent(eventName, params)
