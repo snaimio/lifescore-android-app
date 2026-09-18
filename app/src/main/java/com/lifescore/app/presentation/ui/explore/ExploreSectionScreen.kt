@@ -39,6 +39,7 @@ fun ExploreSectionScreen(
     onNavigateToRoute: (String) -> Unit,
     onNavigateBack: () -> Unit
 ) {
+    var searchQuery by remember { mutableStateOf("") }
     var selectedCategoryFilter by remember { mutableStateOf<FeatureCategory?>(null) }
     var showOnlyUnlocked by remember { mutableStateOf(false) }
     var powerUserUnlockAll by remember { mutableStateOf(false) }
@@ -46,8 +47,15 @@ fun ExploreSectionScreen(
 
     val effectivePhase = if (powerUserUnlockAll) UserPhase.EXPERT else currentPhase
 
-    val features = remember(selectedCategoryFilter, showOnlyUnlocked, effectivePhase) {
+    val features = remember(searchQuery, selectedCategoryFilter, showOnlyUnlocked, effectivePhase) {
         var list = FeatureUnlockManager.allFeatures
+        if (searchQuery.isNotBlank()) {
+            list = list.filter {
+                it.title.contains(searchQuery, ignoreCase = true) ||
+                it.description.contains(searchQuery, ignoreCase = true) ||
+                it.category.displayName.contains(searchQuery, ignoreCase = true)
+            }
+        }
         selectedCategoryFilter?.let { cat ->
             list = list.filter { it.category == cat }
         }
@@ -150,6 +158,26 @@ fun ExploreSectionScreen(
                         }
                     }
                 }
+            }
+
+            // Search Bar
+            item {
+                OutlinedTextField(
+                    value = searchQuery,
+                    onValueChange = { searchQuery = it },
+                    placeholder = { Text("Search 40+ features & trackers...") },
+                    leadingIcon = { Icon(Icons.Default.Search, contentDescription = "Search") },
+                    trailingIcon = {
+                        if (searchQuery.isNotEmpty()) {
+                            IconButton(onClick = { searchQuery = "" }) {
+                                Icon(Icons.Default.Close, contentDescription = "Clear")
+                            }
+                        }
+                    },
+                    singleLine = true,
+                    shape = RoundedCornerShape(14.dp),
+                    modifier = Modifier.fillMaxWidth()
+                )
             }
 
             // Category Filter Chips

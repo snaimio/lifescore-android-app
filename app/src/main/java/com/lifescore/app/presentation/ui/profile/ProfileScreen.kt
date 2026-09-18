@@ -208,13 +208,38 @@ fun ProfileScreen(
                 }
             }
 
-            // 5. Quick Links (Referral, Enterprise, Skill Mastery)
+            // 5. Quick Links (Explore, Referral, Enterprise, Skill Mastery)
             item {
-                Text("⚡ Quick Hubs", fontWeight = FontWeight.Black, fontSize = 16.sp)
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text("⚡ Quick Hubs & Directory", fontWeight = FontWeight.Black, fontSize = 16.sp)
+                    TextButton(onClick = { navController.navigate(Screen.Explore.route) }) {
+                        Text("View All 40+ →", fontWeight = FontWeight.Bold, fontSize = 12.sp)
+                    }
+                }
             }
 
             item {
                 Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                    Surface(
+                        shape = RoundedCornerShape(14.dp),
+                        color = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.6f),
+                        modifier = Modifier.fillMaxWidth().clickable { navController.navigate(Screen.Explore.route) }
+                    ) {
+                        Row(modifier = Modifier.padding(14.dp), verticalAlignment = Alignment.CenterVertically) {
+                            Text("🧭", fontSize = 20.sp)
+                            Spacer(Modifier.width(12.dp))
+                            Column(modifier = Modifier.weight(1f)) {
+                                Text("Explore LifeScore Directory", fontWeight = FontWeight.Bold, fontSize = 14.sp)
+                                Text("Discover all 40+ modules, 15 trackers & RPG systems", fontSize = 11.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                            }
+                            Icon(Icons.Default.ChevronRight, contentDescription = null, tint = MaterialTheme.colorScheme.primary)
+                        }
+                    }
+
                     Surface(
                         shape = RoundedCornerShape(14.dp),
                         color = MaterialTheme.colorScheme.surfaceVariant,

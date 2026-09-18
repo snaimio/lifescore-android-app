@@ -35,8 +35,10 @@ import com.lifescore.app.domain.model.LifeTask
 import com.lifescore.app.domain.model.UserProfile
 import com.lifescore.app.presentation.navigation.Screen
 import com.lifescore.app.presentation.ui.components.CharacterSheetDialog
-import com.lifescore.app.presentation.ui.components.FeatureUnlockBanner
+import com.lifescore.app.core.util.GettingStartedManager
+import com.lifescore.app.presentation.ui.home.components.DailyFocusCard
 import com.lifescore.app.presentation.ui.home.components.DimensionRadarChart
+import com.lifescore.app.presentation.ui.home.components.GettingStartedCard
 import com.lifescore.app.presentation.ui.share.ShareScoreCardDialog
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -53,6 +55,9 @@ fun HomeScreen(
     var showCharacterSheet by remember { mutableStateOf(false) }
     var showShareCardDialog by remember { mutableStateOf(false) }
     var isStatsExpanded by remember { mutableStateOf(false) }
+
+    val gettingStartedManager = remember { GettingStartedManager(context) }
+    var completedSteps by remember { mutableStateOf(gettingStartedManager.getCompletedStepCount()) }
 
     val maxVisibleQuests = when (uiState.userPhase) {
         UserPhase.NEW_USER -> 3
@@ -169,9 +174,37 @@ fun HomeScreen(
                     .padding(horizontal = Spacing.md),
                 verticalArrangement = Arrangement.spacedBy(Spacing.md)
             ) {
+                // 0. Getting Started Guide for New Users
+                if (completedSteps < GettingStartedManager.TOTAL_STEPS) {
+                    item {
+                        GettingStartedCard(
+                            completedSteps = completedSteps,
+                            totalSteps = GettingStartedManager.TOTAL_STEPS,
+                            onContinue = {
+                                when (completedSteps) {
+                                    0 -> {
+                                        navController.navigate(Screen.Tasks.route)
+                                    }
+                                    1 -> {
+                                        gettingStartedManager.markStepCompleted(GettingStartedManager.STEP_LIFE_MATRIX)
+                                        completedSteps = gettingStartedManager.getCompletedStepCount()
+                                        navController.navigate(Screen.Dimensions.route)
+                                    }
+                                    2 -> {
+                                        gettingStartedManager.markStepCompleted(GettingStartedManager.STEP_AI_COACH)
+                                        completedSteps = gettingStartedManager.getCompletedStepCount()
+                                        navController.navigate(Screen.AICoach.route)
+                                    }
+                                    else -> navController.navigate(Screen.Explore.route)
+                                }
+                            }
+                        )
+                    }
+                }
+
                 // Tier Unlock Banner (Progressive Milestone)
                 item {
-                    FeatureUnlockBanner(
+                    com.lifescore.app.presentation.ui.components.FeatureUnlockBanner(
                         phase = uiState.userPhase,
                         onExploreClick = { navController.navigate(Screen.Explore.route) }
                     )
@@ -191,6 +224,24 @@ fun HomeScreen(
                         onShare = { showShareCardDialog = true },
                         onLeaderboard = { navController.navigate(Screen.LeagueTiers.route) }
                     )
+                }
+
+                // ==========================================
+                // 1.5 DAILY PRIMARY FOCUS CARD
+                // ==========================================
+                val topPendingTask = uiState.todayTasks.firstOrNull { !it.isCompleted } ?: uiState.todayTasks.firstOrNull()
+                if (topPendingTask != null) {
+                    item {
+                        DailyFocusCard(
+                            task = topPendingTask,
+                            onToggle = { task ->
+                                viewModel.onToggleTask(task)
+                                gettingStartedManager.markStepCompleted(GettingStartedManager.STEP_FIRST_HABIT)
+                                completedSteps = gettingStartedManager.getCompletedStepCount()
+                            },
+                            onOpenAll = { navController.navigate(Screen.Tasks.route) }
+                        )
+                    }
                 }
 
                 // ==========================================
@@ -249,7 +300,11 @@ fun HomeScreen(
                                 visibleQuests.forEach { task ->
                                     DailyQuestRow(
                                         task = task,
-                                        onToggle = { viewModel.onToggleTask(task) }
+                                        onToggle = {
+                                            viewModel.onToggleTask(task)
+                                            gettingStartedManager.markStepCompleted(GettingStartedManager.STEP_FIRST_HABIT)
+                                            completedSteps = gettingStartedManager.getCompletedStepCount()
+                                        }
                                     )
                                     Spacer(Modifier.height(Spacing.xs))
                                 }

@@ -43,8 +43,13 @@ fun SleepStoriesScreen(
         }
     }
 
-    Scaffold(
-        topBar = {
+    val context = androidx.compose.ui.platform.LocalContext.current
+    val coachMarkManager = remember { com.lifescore.app.core.util.CoachMarkManager(context) }
+    var showCoachMark by remember { mutableStateOf(!coachMarkManager.hasSeen("sleep")) }
+
+    Box(modifier = Modifier.fillMaxSize()) {
+        Scaffold(
+            topBar = {
             TopAppBar(
                 title = {
                     Row(verticalAlignment = Alignment.CenterVertically) {
@@ -328,4 +333,17 @@ fun SleepStoriesScreen(
             }
         }
     }
+
+    if (showCoachMark) {
+        com.lifescore.app.core.designsystem.components.CoachMarkOverlay(
+            emoji = "🌙",
+            title = "Sleep & Soundscapes",
+            description = "Mix ambient sounds (rain, ocean, white noise) with calming sleep stories to fall asleep faster and improve Sleep quality.",
+            onDismiss = {
+                coachMarkManager.markSeen("sleep")
+                showCoachMark = false
+            }
+        )
+    }
+}
 }

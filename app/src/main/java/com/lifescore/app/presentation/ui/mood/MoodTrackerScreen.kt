@@ -42,8 +42,13 @@ fun MoodTrackerScreen(
         }
     }
 
-    Scaffold(
-        topBar = {
+    val context = androidx.compose.ui.platform.LocalContext.current
+    val coachMarkManager = remember { com.lifescore.app.core.util.CoachMarkManager(context) }
+    var showCoachMark by remember { mutableStateOf(!coachMarkManager.hasSeen("mood")) }
+
+    Box(modifier = Modifier.fillMaxSize()) {
+        Scaffold(
+            topBar = {
             TopAppBar(
                 title = {
                     Row(verticalAlignment = Alignment.CenterVertically) {
@@ -357,4 +362,17 @@ fun MoodTrackerScreen(
             }
         }
     }
+
+    if (showCoachMark) {
+        com.lifescore.app.core.designsystem.components.CoachMarkOverlay(
+            emoji = "🎭",
+            title = "Mood & Well-Being Tracker",
+            description = "Log your emotional valence, tag environmental factors, and discover hidden correlations between habits and your Mental Health score.",
+            onDismiss = {
+                coachMarkManager.markSeen("mood")
+                showCoachMark = false
+            }
+        )
+    }
+}
 }

@@ -48,16 +48,20 @@ fun HydrationScreen(
         }
     }
 
+    val coachMarkManager = remember { com.lifescore.app.core.util.CoachMarkManager(context) }
+    var showCoachMark by remember { mutableStateOf(!coachMarkManager.hasSeen("hydration")) }
+
     Surface(
         modifier = Modifier.fillMaxSize(),
         color = MaterialTheme.colorScheme.background
     ) {
-        Scaffold(
-            topBar = {
-                TopAppBar(
-                    title = {
-                        Column {
-                            Text(
+        Box(modifier = Modifier.fillMaxSize()) {
+            Scaffold(
+                topBar = {
+                    TopAppBar(
+                        title = {
+                            Column {
+                                Text(
                                 "💧 Hydration Tracker",
                                 style = MaterialTheme.typography.titleLarge,
                                 fontWeight = FontWeight.Black
@@ -201,6 +205,19 @@ fun HydrationScreen(
             }
         )
     }
+
+    if (showCoachMark) {
+        com.lifescore.app.core.designsystem.components.CoachMarkOverlay(
+            emoji = "💧",
+            title = "Hydration Tracker",
+            description = "Tap quick-add containers to log water intake in seconds, set daily hydration targets, and build your Health score.",
+            onDismiss = {
+                coachMarkManager.markSeen("hydration")
+                showCoachMark = false
+            }
+        )
+    }
+}
 }
 
 @Composable
