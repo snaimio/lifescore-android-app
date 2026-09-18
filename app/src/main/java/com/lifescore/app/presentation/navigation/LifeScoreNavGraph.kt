@@ -321,8 +321,21 @@ fun LifeScoreNavGraph(
             }
             composable(Screen.Welcome.route) {
                 com.lifescore.app.presentation.ui.onboarding.WelcomeScreen(
-                    onGetStarted = {
-                        navController.navigate(Screen.QuickAssessment.route)
+                    onGetStarted = { name, focusArea ->
+                        scope.launch {
+                            app.lifeScoreRepository.updateUserProfile(
+                                com.lifescore.app.domain.model.UserProfile(
+                                    name = name.ifBlank { "Alex" },
+                                    title = focusArea.ifBlank { "High Performance" },
+                                    currentLevel = 1,
+                                    currentXp = 50,
+                                    currentStreakDays = 1
+                                )
+                            )
+                        }
+                        navController.navigate(Screen.Home.route) {
+                            popUpTo(Screen.Welcome.route) { inclusive = true }
+                        }
                     },
                     onSignIn = {
                         navController.navigate(Screen.Login.route)
@@ -330,98 +343,71 @@ fun LifeScoreNavGraph(
                 )
             }
             composable(Screen.QuickAssessment.route) {
-                com.lifescore.app.presentation.ui.onboarding.QuickAssessmentScreen(
-                    onComplete = { answers ->
-                        val res = com.lifescore.app.core.util.QuickAssessmentEngine.evaluate(answers)
-                        quickAssessmentResult = res
+                com.lifescore.app.presentation.ui.onboarding.WelcomeScreen(
+                    onGetStarted = { name, focusArea ->
                         scope.launch {
                             app.lifeScoreRepository.updateUserProfile(
                                 com.lifescore.app.domain.model.UserProfile(
-                                    name = "Hero",
-                                    title = res.archetype.displayName,
-                                    currentLevel = 1,
-                                    currentXp = 0
-                                )
-                            )
-                        }
-                        navController.navigate(Screen.QuickResults.route)
-                    },
-                    onBack = { navController.popBackStack() }
-                )
-            }
-            composable(Screen.QuickResults.route) {
-                val fallbackRes = remember {
-                    com.lifescore.app.core.util.QuickAssessmentEngine.evaluate(emptyMap())
-                }
-                com.lifescore.app.presentation.ui.onboarding.QuickResultsScreen(
-                    result = quickAssessmentResult ?: fallbackRes,
-                    onContinue = {
-                        navController.navigate(Screen.FirstQuest.route)
-                    },
-                    onBack = { navController.popBackStack() }
-                )
-            }
-            composable(Screen.FirstQuest.route) {
-                val activeResult = quickAssessmentResult ?: remember {
-                    com.lifescore.app.core.util.QuickAssessmentEngine.evaluate(emptyMap())
-                }
-                com.lifescore.app.presentation.ui.onboarding.FirstQuestScreen(
-                    questTitle = activeResult.firstQuestTitle,
-                    dimension = activeResult.firstQuestDimension,
-                    onCompleteQuest = {
-                        scope.launch {
-                            app.lifeScoreRepository.addTask(
-                                title = activeResult.firstQuestTitle,
-                                dimension = activeResult.firstQuestDimension,
-                                points = 50
-                            )
-                            app.lifeScoreRepository.updateUserProfile(
-                                com.lifescore.app.domain.model.UserProfile(
-                                    name = "Hero",
-                                    title = activeResult.archetype.displayName,
+                                    name = name.ifBlank { "Alex" },
+                                    title = focusArea.ifBlank { "High Performance" },
                                     currentLevel = 1,
                                     currentXp = 50,
                                     currentStreakDays = 1
                                 )
                             )
                         }
-                    },
-                    onSkip = {
                         navController.navigate(Screen.Home.route) {
-                            popUpTo(Screen.Welcome.route) { inclusive = true }
+                            popUpTo(Screen.QuickAssessment.route) { inclusive = true }
                         }
                     },
-                    onBack = { navController.popBackStack() }
+                    onSignIn = {
+                        navController.navigate(Screen.Login.route)
+                    }
                 )
             }
+            composable(Screen.QuickResults.route) {
+                LaunchedEffect(Unit) {
+                    navController.navigate(Screen.Home.route) {
+                        popUpTo(Screen.QuickResults.route) { inclusive = true }
+                    }
+                }
+            }
+            composable(Screen.FirstQuest.route) {
+                LaunchedEffect(Unit) {
+                    navController.navigate(Screen.Home.route) {
+                        popUpTo(Screen.FirstQuest.route) { inclusive = true }
+                    }
+                }
+            }
             composable(Screen.Onboarding.route) {
-                com.lifescore.app.presentation.ui.onboarding.SimplifiedOnboardingScreen(
-                    onCompleteOnboarding = { archetype, ratings, startingScore, firstQuestTitle ->
+                com.lifescore.app.presentation.ui.onboarding.WelcomeScreen(
+                    onGetStarted = { name, focusArea ->
                         scope.launch {
-                            app.lifeScoreRepository.addTask(
-                                title = firstQuestTitle,
-                                dimension = com.lifescore.app.domain.model.DimensionType.HEALTH,
-                                points = 50
+                            app.lifeScoreRepository.updateUserProfile(
+                                com.lifescore.app.domain.model.UserProfile(
+                                    name = name.ifBlank { "Alex" },
+                                    title = focusArea.ifBlank { "High Performance" },
+                                    currentLevel = 1,
+                                    currentXp = 50,
+                                    currentStreakDays = 1
+                                )
                             )
                         }
                         navController.navigate(Screen.Home.route) {
                             popUpTo(Screen.Onboarding.route) { inclusive = true }
                         }
                     },
-                    onOpenFullAssessment = {
-                        navController.navigate(Screen.FullAssessment.route)
+                    onSignIn = {
+                        navController.navigate(Screen.Login.route)
                     }
                 )
             }
             composable(Screen.FullAssessment.route) {
-                com.lifescore.app.presentation.ui.onboarding.OnboardingAssessmentScreen(
-                    onCompleteOnboarding = { archetype, ratings ->
-                        navController.navigate(Screen.Home.route) {
-                            popUpTo(Screen.FullAssessment.route) { inclusive = true }
-                        }
-                    },
-                    onBack = { navController.popBackStack() }
-                )
+                LaunchedEffect(Unit) {
+                    navController.navigate(Screen.Home.route) {
+                        popUpTo(Screen.FullAssessment.route) { inclusive = true }
+                    }
+                }
             }
             composable(Screen.Explore.route) {
                 ExploreScreen(
