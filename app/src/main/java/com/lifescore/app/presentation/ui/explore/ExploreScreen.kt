@@ -26,8 +26,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.lifescore.app.core.designsystem.Spacing
-import com.lifescore.app.core.designsystem.components.GlassCard
+import com.lifescore.app.core.designsystem.components.CardVariant
+import com.lifescore.app.core.designsystem.LifeScoreShapes
+import com.lifescore.app.core.designsystem.Space
+import com.lifescore.app.core.designsystem.components.LifeCard
+import com.lifescore.app.core.designsystem.components.SectionHeader
+import com.lifescore.app.core.designsystem.components.StaggeredAppear
 import com.lifescore.app.core.engine.FeatureCategory
 import com.lifescore.app.core.engine.FeatureItem
 import com.lifescore.app.core.engine.FeatureUnlockManager
@@ -73,8 +77,8 @@ fun ExploreScreen(
                     Column {
                         Text(
                             "Explore",
-                            fontWeight = FontWeight.Bold,
                             style = MaterialTheme.typography.titleLarge,
+                            fontWeight = FontWeight.Bold,
                             color = MaterialTheme.colorScheme.onSurface
                         )
                         Text(
@@ -104,20 +108,21 @@ fun ExploreScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
-                .padding(horizontal = Spacing.md),
-            verticalArrangement = Arrangement.spacedBy(Spacing.md),
-            contentPadding = PaddingValues(top = Spacing.sm, bottom = Spacing.xxl)
+                .padding(horizontal = Space.screenH),
+            verticalArrangement = Arrangement.spacedBy(Space.cardGap),
+            contentPadding = PaddingValues(top = Space.xs, bottom = Space.xxxl)
         ) {
             // ==========================================
             // 1. COMMUNITY & FRIENDS FEED PREVIEW
             // ==========================================
             item {
-                GlassCard(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .clickable { navController.navigate(Screen.FriendsFeed.route) }
-                ) {
-                    Column(modifier = Modifier.padding(Spacing.md)) {
+                StaggeredAppear(index = 0) {
+                    LifeCard(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clickable { navController.navigate(Screen.FriendsFeed.route) },
+                        variant = CardVariant.Default
+                    ) {
                         Row(
                             modifier = Modifier.fillMaxWidth(),
                             horizontalArrangement = Arrangement.SpaceBetween,
@@ -125,7 +130,7 @@ fun ExploreScreen(
                         ) {
                             Row(verticalAlignment = Alignment.CenterVertically) {
                                 Text("🔥", fontSize = 20.sp)
-                                Spacer(Modifier.width(8.dp))
+                                Spacer(Modifier.width(Space.sm))
                                 Text(
                                     "Friends & Social Feed",
                                     style = MaterialTheme.typography.titleSmall,
@@ -133,23 +138,23 @@ fun ExploreScreen(
                                 )
                             }
                             Surface(
-                                shape = RoundedCornerShape(6.dp),
+                                shape = LifeScoreShapes.tag,
                                 color = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.5f)
                             ) {
                                 Text(
                                     text = "3 Live Nudges",
-                                    fontSize = 10.sp,
+                                    style = MaterialTheme.typography.labelSmall,
                                     fontWeight = FontWeight.Bold,
                                     color = MaterialTheme.colorScheme.primary,
-                                    modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp)
+                                    modifier = Modifier.padding(horizontal = Space.sm, vertical = Space.xxs)
                                 )
                             }
                         }
 
-                        Spacer(Modifier.height(Spacing.xs))
+                        Spacer(Modifier.height(Space.xs))
                         Text(
                             text = "Alex just completed a 14-day meditation streak! Send a high-five or nudge your squad.",
-                            fontSize = 12.sp,
+                            style = MaterialTheme.typography.bodySmall,
                             color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
                     }
@@ -160,32 +165,33 @@ fun ExploreScreen(
             // 2. VIRAL REFERRALS CARD
             // ==========================================
             item {
-                Card(
-                    shape = RoundedCornerShape(16.dp),
-                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.7f)),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .clickable { navController.navigate(Screen.ViralReferrals.route) }
-                ) {
-                    Row(
-                        modifier = Modifier.padding(Spacing.md),
-                        verticalAlignment = Alignment.CenterVertically
+                StaggeredAppear(index = 1) {
+                    LifeCard(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clickable { navController.navigate(Screen.ViralReferrals.route) },
+                        variant = CardVariant.Cream
                     ) {
-                        Surface(
-                            shape = CircleShape,
-                            color = MaterialTheme.colorScheme.secondary,
-                            modifier = Modifier.size(44.dp)
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            verticalAlignment = Alignment.CenterVertically
                         ) {
-                            Box(contentAlignment = Alignment.Center) {
-                                Text("🎁", fontSize = 22.sp)
+                            Surface(
+                                shape = CircleShape,
+                                color = MaterialTheme.colorScheme.secondary,
+                                modifier = Modifier.size(44.dp)
+                            ) {
+                                Box(contentAlignment = Alignment.Center) {
+                                    Text("🎁", fontSize = 22.sp)
+                                }
                             }
+                            Spacer(Modifier.width(Space.md))
+                            Column(modifier = Modifier.weight(1f)) {
+                                Text("Invite Friends, Get Free Pro", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold)
+                                Text("Share your invite link. Both you & your friend receive 1 month of LifeScore Pro.", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                            }
+                            Icon(Icons.AutoMirrored.Filled.ArrowForward, contentDescription = null, tint = MaterialTheme.colorScheme.secondary)
                         }
-                        Spacer(Modifier.width(Spacing.md))
-                        Column(modifier = Modifier.weight(1f)) {
-                            Text("Invite Friends, Get Free Pro", fontWeight = FontWeight.Bold, fontSize = 14.sp)
-                            Text("Share your invite link. Both you & your friend receive 1 month of LifeScore Pro.", fontSize = 11.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
-                        }
-                        Icon(Icons.AutoMirrored.Filled.ArrowForward, contentDescription = null, tint = MaterialTheme.colorScheme.secondary)
                     }
                 }
             }
@@ -194,60 +200,62 @@ fun ExploreScreen(
             // 3. HIDDEN GEMS & RPG HIGHLIGHTS
             // ==========================================
             item {
-                Text(
-                    "🌟 Featured Highlights",
-                    style = MaterialTheme.typography.titleMedium,
-                    fontWeight = FontWeight.Bold
+                SectionHeader(
+                    title = "🌟 Featured Highlights",
+                    subtitle = "Specialized mini-apps and multiplayer features"
                 )
             }
 
             item {
                 Row(
                     modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(Spacing.sm)
+                    horizontalArrangement = Arrangement.spacedBy(Space.sm)
                 ) {
                     Surface(
-                        shape = RoundedCornerShape(14.dp),
-                        color = MaterialTheme.colorScheme.surfaceVariant,
+                        shape = LifeScoreShapes.cardSmall,
+                        color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f),
+                        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f)),
                         modifier = Modifier
                             .weight(1f)
                             .clickable { navController.navigate(Screen.Combat.route) }
                     ) {
-                        Column(modifier = Modifier.padding(12.dp)) {
+                        Column(modifier = Modifier.padding(Space.sm)) {
                             Text("⚔️", fontSize = 24.sp)
-                            Spacer(Modifier.height(4.dp))
-                            Text("Boss Raids", fontWeight = FontWeight.Bold, fontSize = 13.sp)
-                            Text("Team up to beat bosses", fontSize = 10.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                            Spacer(Modifier.height(Space.xs))
+                            Text("Boss Raids", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold)
+                            Text("Team up to beat bosses", style = MaterialTheme.typography.bodySmall.copy(fontSize = 10.sp), color = MaterialTheme.colorScheme.onSurfaceVariant)
                         }
                     }
 
                     Surface(
-                        shape = RoundedCornerShape(14.dp),
-                        color = MaterialTheme.colorScheme.surfaceVariant,
+                        shape = LifeScoreShapes.cardSmall,
+                        color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f),
+                        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f)),
                         modifier = Modifier
                             .weight(1f)
                             .clickable { navController.navigate(Screen.VirtualPet.route) }
                     ) {
-                        Column(modifier = Modifier.padding(12.dp)) {
+                        Column(modifier = Modifier.padding(Space.sm)) {
                             Text("🐥", fontSize = 24.sp)
-                            Spacer(Modifier.height(4.dp))
-                            Text("Virtual Pet", fontWeight = FontWeight.Bold, fontSize = 13.sp)
-                            Text("Evolves with habits", fontSize = 10.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                            Spacer(Modifier.height(Space.xs))
+                            Text("Virtual Pet", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold)
+                            Text("Evolves with habits", style = MaterialTheme.typography.bodySmall.copy(fontSize = 10.sp), color = MaterialTheme.colorScheme.onSurfaceVariant)
                         }
                     }
 
                     Surface(
-                        shape = RoundedCornerShape(14.dp),
-                        color = MaterialTheme.colorScheme.surfaceVariant,
+                        shape = LifeScoreShapes.cardSmall,
+                        color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f),
+                        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f)),
                         modifier = Modifier
                             .weight(1f)
                             .clickable { navController.navigate(Screen.LeagueTiers.route) }
                     ) {
-                        Column(modifier = Modifier.padding(12.dp)) {
+                        Column(modifier = Modifier.padding(Space.sm)) {
                             Text("🏆", fontSize = 24.sp)
-                            Spacer(Modifier.height(4.dp))
-                            Text("10-Tier Leagues", fontWeight = FontWeight.Bold, fontSize = 13.sp)
-                            Text("Weekly leaderboards", fontSize = 10.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                            Spacer(Modifier.height(Space.xs))
+                            Text("10-Tier Leagues", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold)
+                            Text("Weekly leaderboards", style = MaterialTheme.typography.bodySmall.copy(fontSize = 10.sp), color = MaterialTheme.colorScheme.onSurfaceVariant)
                         }
                     }
                 }
@@ -257,28 +265,29 @@ fun ExploreScreen(
             // 4. HOLOGRAPHIC SHARE CARD PREVIEW
             // ==========================================
             item {
-                GlassCard(
+                LifeCard(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .clickable { showShareCardDialog = true }
+                        .clickable { showShareCardDialog = true },
+                    variant = CardVariant.Default
                 ) {
                     Row(
-                        modifier = Modifier.padding(Spacing.md),
+                        modifier = Modifier.fillMaxWidth(),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Surface(
-                            shape = RoundedCornerShape(12.dp),
-                            color = Color(0xFF6366F1).copy(alpha = 0.2f),
+                            shape = LifeScoreShapes.button,
+                            color = Color(0xFF6366F1).copy(alpha = 0.15f),
                             modifier = Modifier.size(44.dp)
                         ) {
                             Box(contentAlignment = Alignment.Center) {
                                 Text("✨", fontSize = 22.sp)
                             }
                         }
-                        Spacer(Modifier.width(12.dp))
+                        Spacer(Modifier.width(Space.md))
                         Column(modifier = Modifier.weight(1f)) {
-                            Text("Generate Holographic Share Card", fontWeight = FontWeight.Bold, fontSize = 14.sp)
-                            Text("Share your 360° Life Matrix & level milestones on Instagram or Twitter", fontSize = 11.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                            Text("Generate Holographic Share Card", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold)
+                            Text("Share your 360° Life Matrix & level milestones on Instagram or Twitter", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                         }
                         Icon(Icons.Default.Share, contentDescription = null, tint = MaterialTheme.colorScheme.primary)
                     }
@@ -289,11 +298,10 @@ fun ExploreScreen(
             // 5. DIRECTORY SEARCH & CATEGORY FILTERS
             // ==========================================
             item {
-                Column(verticalArrangement = Arrangement.spacedBy(Spacing.xs)) {
-                    Text(
-                        "🔍 All Features Directory",
-                        style = MaterialTheme.typography.titleMedium,
-                        fontWeight = FontWeight.Bold
+                Column(verticalArrangement = Arrangement.spacedBy(Space.xs)) {
+                    SectionHeader(
+                        title = "🔍 All Features Directory",
+                        subtitle = "Access every specialized module and tracker"
                     )
                     OutlinedTextField(
                         value = searchQuery,
@@ -308,7 +316,7 @@ fun ExploreScreen(
                             }
                         },
                         singleLine = true,
-                        shape = RoundedCornerShape(14.dp),
+                        shape = LifeScoreShapes.input,
                         modifier = Modifier.fillMaxWidth()
                     )
                 }
@@ -316,14 +324,15 @@ fun ExploreScreen(
 
             item {
                 LazyRow(
-                    horizontalArrangement = Arrangement.spacedBy(Spacing.xs),
+                    horizontalArrangement = Arrangement.spacedBy(Space.xs),
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     item {
                         FilterChip(
                             selected = selectedCategoryFilter == null,
                             onClick = { selectedCategoryFilter = null },
-                            label = { Text("All (${FeatureUnlockManager.allFeatures.size})") }
+                            label = { Text("All (${FeatureUnlockManager.allFeatures.size})") },
+                            shape = LifeScoreShapes.chip
                         )
                     }
                     items(FeatureCategory.values()) { cat ->
@@ -332,7 +341,8 @@ fun ExploreScreen(
                         FilterChip(
                             selected = isSelected,
                             onClick = { selectedCategoryFilter = if (isSelected) null else cat },
-                            label = { Text("${cat.iconEmoji} ${cat.displayName} ($count)") }
+                            label = { Text("${cat.iconEmoji} ${cat.displayName} ($count)") },
+                            shape = LifeScoreShapes.chip
                         )
                     }
                 }
@@ -340,44 +350,57 @@ fun ExploreScreen(
 
             // List of Features
             items(features, key = { it.id }) { feature ->
-                GlassCard(
+                LifeCard(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .clickable { navController.navigate(feature.route) }
+                        .clickable { navController.navigate(feature.route) },
+                    variant = CardVariant.Default
                 ) {
                     Row(
-                        modifier = Modifier.padding(Spacing.md),
+                        modifier = Modifier.fillMaxWidth(),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Surface(
-                            shape = RoundedCornerShape(12.dp),
-                            color = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.5f),
+                            shape = LifeScoreShapes.button,
+                            color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.6f),
                             modifier = Modifier.size(42.dp)
                         ) {
                             Box(contentAlignment = Alignment.Center) {
                                 Text(feature.iconEmoji, fontSize = 20.sp)
                             }
                         }
-
-                        Spacer(Modifier.width(12.dp))
-
+                        Spacer(Modifier.width(Space.md))
                         Column(modifier = Modifier.weight(1f)) {
+                            Row(verticalAlignment = Alignment.CenterVertically) {
+                                Text(
+                                    feature.title,
+                                    style = MaterialTheme.typography.titleSmall,
+                                    fontWeight = FontWeight.Bold
+                                )
+                                Spacer(Modifier.width(Space.xs))
+                                Surface(
+                                    shape = LifeScoreShapes.tag,
+                                    color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f)
+                                ) {
+                                    Text(
+                                        feature.category.displayName,
+                                        style = MaterialTheme.typography.labelSmall.copy(fontSize = 9.sp),
+                                        fontWeight = FontWeight.Bold,
+                                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                        modifier = Modifier.padding(horizontal = Space.xxs, vertical = 1.dp)
+                                    )
+                                }
+                            }
                             Text(
-                                text = feature.title,
-                                style = MaterialTheme.typography.titleSmall,
-                                fontWeight = FontWeight.Bold
-                            )
-                            Text(
-                                text = feature.description,
-                                fontSize = 11.sp,
+                                feature.description,
+                                style = MaterialTheme.typography.bodySmall,
                                 color = MaterialTheme.colorScheme.onSurfaceVariant
                             )
                         }
-
                         Icon(
                             Icons.AutoMirrored.Filled.ArrowForward,
                             contentDescription = "Open",
-                            tint = MaterialTheme.colorScheme.primary,
+                            tint = MaterialTheme.colorScheme.onSurfaceVariant,
                             modifier = Modifier.size(16.dp)
                         )
                     }
@@ -387,18 +410,24 @@ fun ExploreScreen(
     }
 
     if (showShareCardDialog) {
-        val sampleShareData = remember {
-            ShareCardData(
-                userName = "Achiever",
-                score = 650,
-                level = 5,
-                streak = 7,
-                title = "The Architect",
-                dimensionScores = DimensionType.values().associateWith { 70 }
-            )
-        }
         ShareScoreCardDialog(
-            data = sampleShareData,
+            data = ShareCardData(
+                userName = "Alex",
+                score = 824,
+                level = 12,
+                streak = 14,
+                title = "The Architect",
+                dimensionScores = mapOf(
+                    DimensionType.HEALTH to 88,
+                    DimensionType.FITNESS to 76,
+                    DimensionType.CAREER to 84,
+                    DimensionType.LEARNING to 92,
+                    DimensionType.MENTAL_HEALTH to 80,
+                    DimensionType.WEALTH to 75,
+                    DimensionType.RELATIONSHIPS to 85,
+                    DimensionType.SOCIAL_LIFE to 70
+                )
+            ),
             onDismiss = { showShareCardDialog = false }
         )
     }

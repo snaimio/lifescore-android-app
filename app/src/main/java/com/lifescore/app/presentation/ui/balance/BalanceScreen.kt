@@ -22,9 +22,16 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.lifescore.app.core.designsystem.Spacing
-import com.lifescore.app.core.designsystem.components.EmptyState
-import com.lifescore.app.core.designsystem.components.GlassCard
+import com.lifescore.app.core.designsystem.components.CardVariant
+import com.lifescore.app.core.designsystem.DimensionColors
+import com.lifescore.app.core.designsystem.LifeScoreShapes
+import com.lifescore.app.core.designsystem.Motion
+import com.lifescore.app.core.designsystem.Neutrals
+import com.lifescore.app.core.designsystem.Space
+import com.lifescore.app.core.designsystem.components.AnimatedNumber
+import com.lifescore.app.core.designsystem.components.LifeCard
+import com.lifescore.app.core.designsystem.components.SectionHeader
+import com.lifescore.app.core.designsystem.components.StaggeredAppear
 import com.lifescore.app.core.designsystem.components.TaskItem
 import com.lifescore.app.domain.model.DimensionType
 import com.lifescore.app.domain.model.LifeTask
@@ -63,8 +70,8 @@ fun BalanceScreen(
                     Column {
                         Text(
                             "Life Balance",
-                            fontWeight = FontWeight.Bold,
                             style = MaterialTheme.typography.titleLarge,
+                            fontWeight = FontWeight.Bold,
                             color = MaterialTheme.colorScheme.onSurface
                         )
                         Text(
@@ -92,7 +99,8 @@ fun BalanceScreen(
         floatingActionButton = {
             FloatingActionButton(
                 onClick = { showAddTaskDialog = true },
-                containerColor = Color(uiState.selectedDimension.baseColorHex)
+                containerColor = DimensionColors.forDimension(uiState.selectedDimension),
+                shape = LifeScoreShapes.fab
             ) {
                 Icon(Icons.Default.Add, contentDescription = "Add Habit", tint = Color.White)
             }
@@ -118,16 +126,19 @@ fun BalanceScreen(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(padding)
-                    .padding(horizontal = Spacing.md),
-                verticalArrangement = Arrangement.spacedBy(Spacing.md),
-                contentPadding = PaddingValues(top = Spacing.sm, bottom = Spacing.xxl)
+                    .padding(horizontal = Space.screenH),
+                verticalArrangement = Arrangement.spacedBy(Space.cardGap),
+                contentPadding = PaddingValues(top = Space.xs, bottom = Space.xxxl)
             ) {
                 // ==========================================
                 // 1. 360° LIFE MATRIX HERO CARD
                 // ==========================================
                 item {
-                    GlassCard(modifier = Modifier.fillMaxWidth()) {
-                        Column(modifier = Modifier.padding(Spacing.md)) {
+                    StaggeredAppear(index = 0) {
+                        LifeCard(
+                            modifier = Modifier.fillMaxWidth(),
+                            variant = CardVariant.Default
+                        ) {
                             Row(
                                 modifier = Modifier.fillMaxWidth(),
                                 horizontalArrangement = Arrangement.SpaceBetween,
@@ -141,25 +152,34 @@ fun BalanceScreen(
                                     )
                                     Text(
                                         "Equilibrium across all life domains",
-                                        fontSize = 11.sp,
+                                        style = MaterialTheme.typography.bodySmall,
                                         color = MaterialTheme.colorScheme.onSurfaceVariant
                                     )
                                 }
                                 Surface(
-                                    shape = RoundedCornerShape(8.dp),
+                                    shape = LifeScoreShapes.tag,
                                     color = MaterialTheme.colorScheme.primaryContainer
                                 ) {
-                                    Text(
-                                        text = "$avgBalance% Balance",
-                                        style = MaterialTheme.typography.labelSmall,
-                                        fontWeight = FontWeight.Bold,
-                                        color = MaterialTheme.colorScheme.onPrimaryContainer,
-                                        modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp)
-                                    )
+                                    Row(
+                                        modifier = Modifier.padding(horizontal = Space.sm, vertical = Space.xxs),
+                                        verticalAlignment = Alignment.CenterVertically
+                                    ) {
+                                        AnimatedNumber(
+                                            value = avgBalance,
+                                            style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.Bold),
+                                            color = MaterialTheme.colorScheme.onPrimaryContainer
+                                        )
+                                        Text(
+                                            text = "% Balance",
+                                            style = MaterialTheme.typography.labelMedium,
+                                            fontWeight = FontWeight.Bold,
+                                            color = MaterialTheme.colorScheme.onPrimaryContainer
+                                        )
+                                    }
                                 }
                             }
 
-                            Spacer(Modifier.height(Spacing.sm))
+                            Spacer(Modifier.height(Space.md))
 
                             DimensionRadarChart(
                                 dimensionScores = uiState.dimensionScores,
@@ -168,7 +188,7 @@ fun BalanceScreen(
                                     .height(210.dp)
                             )
 
-                            Spacer(Modifier.height(Spacing.sm))
+                            Spacer(Modifier.height(Space.sm))
 
                             DimensionLegend(dimensionScores = uiState.dimensionScores)
                         }
@@ -179,22 +199,24 @@ fun BalanceScreen(
                 // 2. BEHAVIORAL CROSS-DIMENSION INSIGHTS
                 // ==========================================
                 item {
-                    GlassCard(modifier = Modifier.fillMaxWidth()) {
-                        Column(modifier = Modifier.padding(Spacing.md)) {
+                    StaggeredAppear(index = 1) {
+                        LifeCard(
+                            modifier = Modifier.fillMaxWidth(),
+                            variant = CardVariant.Cream
+                        ) {
                             Row(verticalAlignment = Alignment.CenterVertically) {
                                 Text("💡", fontSize = 18.sp)
-                                Spacer(Modifier.width(8.dp))
+                                Spacer(Modifier.width(Space.sm))
                                 Text(
                                     "Cross-Dimension Insight",
                                     style = MaterialTheme.typography.titleSmall,
                                     fontWeight = FontWeight.Bold
                                 )
                             }
-                            Spacer(Modifier.height(Spacing.xs))
+                            Spacer(Modifier.height(Space.xs))
                             Text(
-                                text = "“Your Fitness and Mental Health dimensions have an 84% positive correlation. Consistent physical movement consistently elevates your overall focus and emotional resilience.”",
-                                fontSize = 12.sp,
-                                lineHeight = 18.sp,
+                                text = "“Your Fitness and Mental Health dimensions have an 84% positive correlation. Consistent physical movement elevates your overall focus and emotional resilience.”",
+                                style = MaterialTheme.typography.bodyMedium,
                                 color = MaterialTheme.colorScheme.onSurfaceVariant
                             )
                         }
@@ -205,8 +227,11 @@ fun BalanceScreen(
                 // 3. 30-DAY TRAJECTORY FORECAST
                 // ==========================================
                 item {
-                    GlassCard(modifier = Modifier.fillMaxWidth()) {
-                        Column(modifier = Modifier.padding(Spacing.md)) {
+                    StaggeredAppear(index = 2) {
+                        LifeCard(
+                            modifier = Modifier.fillMaxWidth(),
+                            variant = CardVariant.Default
+                        ) {
                             Row(
                                 modifier = Modifier.fillMaxWidth(),
                                 horizontalArrangement = Arrangement.SpaceBetween,
@@ -219,7 +244,7 @@ fun BalanceScreen(
                                         tint = MaterialTheme.colorScheme.primary,
                                         modifier = Modifier.size(20.dp)
                                     )
-                                    Spacer(Modifier.width(8.dp))
+                                    Spacer(Modifier.width(Space.sm))
                                     Text(
                                         "30-Day Trajectory Forecast",
                                         style = MaterialTheme.typography.titleSmall,
@@ -227,22 +252,22 @@ fun BalanceScreen(
                                     )
                                 }
                                 Surface(
-                                    shape = RoundedCornerShape(6.dp),
+                                    shape = LifeScoreShapes.tag,
                                     color = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.5f)
                                 ) {
                                     Text(
                                         text = "Projected +42 pts",
-                                        fontSize = 10.sp,
+                                        style = MaterialTheme.typography.labelSmall,
                                         fontWeight = FontWeight.Bold,
                                         color = MaterialTheme.colorScheme.primary,
-                                        modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp)
+                                        modifier = Modifier.padding(horizontal = Space.sm, vertical = Space.xxs)
                                     )
                                 }
                             }
-                            Spacer(Modifier.height(Spacing.xs))
+                            Spacer(Modifier.height(Space.xs))
                             Text(
                                 text = "Based on your current 80%+ habit consistency, your weakest dimension (Learning) is on track to increase by +18% over the next 30 days.",
-                                fontSize = 12.sp,
+                                style = MaterialTheme.typography.bodySmall,
                                 color = MaterialTheme.colorScheme.onSurfaceVariant
                             )
                         }
@@ -253,11 +278,9 @@ fun BalanceScreen(
                 // 4. 8-DIMENSION BREAKDOWN PROGRESS CARDS
                 // ==========================================
                 item {
-                    Text(
-                        "Dimension Breakdown",
-                        style = MaterialTheme.typography.titleMedium,
-                        fontWeight = FontWeight.Bold,
-                        modifier = Modifier.padding(vertical = Spacing.xs)
+                    SectionHeader(
+                        title = "Dimension Breakdown",
+                        subtitle = "Detailed balance metrics for each life domain"
                     )
                 }
 
@@ -300,13 +323,20 @@ fun BalanceScreen(
     if (showAddTaskDialog) {
         AlertDialog(
             onDismissRequest = { showAddTaskDialog = false },
-            title = { Text("Add ${uiState.selectedDimension.displayName} Habit") },
+            title = {
+                Text(
+                    "Add ${uiState.selectedDimension.displayName} Habit",
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.Bold
+                )
+            },
             text = {
                 OutlinedTextField(
                     value = newTaskTitle,
                     onValueChange = { newTaskTitle = it },
                     label = { Text("Habit name (e.g. 15m Morning Walk)") },
                     singleLine = true,
+                    shape = LifeScoreShapes.input,
                     modifier = Modifier.fillMaxWidth()
                 )
             },
@@ -318,7 +348,8 @@ fun BalanceScreen(
                             newTaskTitle = ""
                             showAddTaskDialog = false
                         }
-                    }
+                    },
+                    shape = LifeScoreShapes.button
                 ) {
                     Text("Add")
                 }
@@ -327,7 +358,8 @@ fun BalanceScreen(
                 TextButton(onClick = { showAddTaskDialog = false }) {
                     Text("Cancel")
                 }
-            }
+            },
+            shape = LifeScoreShapes.modal
         )
     }
 }
@@ -343,107 +375,108 @@ private fun DimensionDetailCard(
     onToggleTask: (LifeTask) -> Unit,
     onAddTask: () -> Unit
 ) {
-    GlassCard(
+    val dimColor = DimensionColors.forDimension(dimension)
+
+    LifeCard(
         modifier = Modifier
             .fillMaxWidth()
-            .clickable { onToggleExpand() }
+            .clickable { onToggleExpand() },
+        variant = CardVariant.Default
     ) {
-        Column(modifier = Modifier.padding(Spacing.md)) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Box(
-                        modifier = Modifier
-                            .size(10.dp)
-                            .clip(CircleShape)
-                            .background(Color(dimension.baseColorHex))
-                    )
-                    Spacer(Modifier.width(8.dp))
-                    Text(
-                        dimension.displayName,
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 15.sp
-                    )
-                }
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Surface(
-                        shape = RoundedCornerShape(6.dp),
-                        color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.6f)
-                    ) {
-                        Text(
-                            text = trendText,
-                            fontSize = 10.sp,
-                            fontWeight = FontWeight.SemiBold,
-                            color = if (trendText.startsWith("+")) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant,
-                            modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp)
-                        )
-                    }
-                    Spacer(Modifier.width(8.dp))
-                    Text(
-                        "$score%",
-                        fontWeight = FontWeight.Black,
-                        fontSize = 14.sp,
-                        color = Color(dimension.baseColorHex)
-                    )
-                }
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Box(
+                    modifier = Modifier
+                        .size(10.dp)
+                        .clip(CircleShape)
+                        .background(dimColor)
+                )
+                Spacer(Modifier.width(Space.sm))
+                Text(
+                    dimension.displayName,
+                    style = MaterialTheme.typography.titleSmall,
+                    fontWeight = FontWeight.Bold
+                )
             }
-
-            Spacer(Modifier.height(6.dp))
-
-            LinearProgressIndicator(
-                progress = { (score.toFloat() / 100f).coerceIn(0f, 1f) },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(6.dp)
-                    .clip(RoundedCornerShape(3.dp)),
-                color = Color(dimension.baseColorHex),
-                trackColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.4f)
-            )
-
-            AnimatedVisibility(
-                visible = isExpanded,
-                enter = fadeIn() + expandVertically(),
-                exit = fadeOut() + shrinkVertically()
-            ) {
-                Column(modifier = Modifier.padding(top = Spacing.sm)) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Surface(
+                    shape = LifeScoreShapes.tag,
+                    color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.6f)
+                ) {
                     Text(
-                        dimension.description,
-                        fontSize = 12.sp,
+                        text = trendText,
+                        style = MaterialTheme.typography.labelSmall,
+                        fontWeight = FontWeight.SemiBold,
+                        color = if (trendText.startsWith("+")) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant,
+                        modifier = Modifier.padding(horizontal = Space.xs, vertical = Space.xxs)
+                    )
+                }
+                Spacer(Modifier.width(Space.sm))
+                Text(
+                    "$score%",
+                    style = MaterialTheme.typography.labelLarge,
+                    fontWeight = FontWeight.Black,
+                    color = dimColor
+                )
+            }
+        }
+
+        Spacer(Modifier.height(Space.xs))
+
+        LinearProgressIndicator(
+            progress = { (score.toFloat() / 100f).coerceIn(0f, 1f) },
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(6.dp)
+                .clip(RoundedCornerShape(3.dp)),
+            color = dimColor,
+            trackColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.4f)
+        )
+
+        AnimatedVisibility(
+            visible = isExpanded,
+            enter = fadeIn(Motion.Gentle) + expandVertically(),
+            exit = fadeOut(Motion.Snappy) + shrinkVertically()
+        ) {
+            Column(modifier = Modifier.padding(top = Space.sm)) {
+                Text(
+                    dimension.description,
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+
+                Spacer(Modifier.height(Space.sm))
+
+                if (tasks.isEmpty()) {
+                    Text(
+                        "No active habits in this dimension yet.",
+                        style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
-
-                    Spacer(Modifier.height(Spacing.sm))
-
-                    if (tasks.isEmpty()) {
-                        Text(
-                            "No active habits in this dimension yet.",
-                            fontSize = 12.sp,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                } else {
+                    tasks.forEach { task ->
+                        TaskItem(
+                            task = task,
+                            onComplete = { onToggleTask(task) }
                         )
-                    } else {
-                        tasks.forEach { task ->
-                            TaskItem(
-                                task = task,
-                                onComplete = { onToggleTask(task) }
-                            )
-                            Spacer(Modifier.height(Spacing.xs))
-                        }
+                        Spacer(Modifier.height(Space.xs))
                     }
+                }
 
-                    Spacer(Modifier.height(Spacing.xs))
+                Spacer(Modifier.height(Space.xs))
 
-                    OutlinedButton(
-                        onClick = onAddTask,
-                        modifier = Modifier.fillMaxWidth(),
-                        shape = RoundedCornerShape(8.dp)
-                    ) {
-                        Icon(Icons.Default.Add, contentDescription = null, modifier = Modifier.size(16.dp))
-                        Spacer(Modifier.width(4.dp))
-                        Text("Add ${dimension.displayName} Habit", fontSize = 12.sp)
-                    }
+                OutlinedButton(
+                    onClick = onAddTask,
+                    modifier = Modifier.fillMaxWidth(),
+                    shape = LifeScoreShapes.button
+                ) {
+                    Icon(Icons.Default.Add, contentDescription = null, modifier = Modifier.size(16.dp))
+                    Spacer(Modifier.width(Space.xs))
+                    Text("Add ${dimension.displayName} Habit", style = MaterialTheme.typography.labelMedium)
                 }
             }
         }

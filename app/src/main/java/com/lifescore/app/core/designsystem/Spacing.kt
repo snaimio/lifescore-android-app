@@ -5,31 +5,51 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 
-/**
- * 8dp Material Design Spacing System
- * Standardized spacing tokens, responsive dimension adapters, elevation, and corners.
- */
+// ============================================
+// LIFESCORE — Strict 4dp Spacing Grid
+// ============================================
+
+object Space {
+    val xxs = 2.dp
+    val xs = 4.dp
+    val sm = 8.dp
+    val md = 12.dp
+    val lg = 16.dp
+    val xl = 24.dp
+    val xxl = 32.dp
+    val xxxl = 48.dp
+    val huge = 64.dp
+
+    // Screen paddings
+    val screenH = 20.dp
+    val screenV = 24.dp
+    val screenTop = 16.dp
+
+    // Card paddings
+    val cardH = 20.dp
+    val cardV = 20.dp
+    val cardGap = 12.dp
+
+    // Section spacing
+    val sectionGap = 32.dp
+}
+
 object Spacing {
-    val xxs: Dp = 2.dp
-    val xs: Dp = 4.dp
-    val sm: Dp = 8.dp
-    val md: Dp = 16.dp
-    val lg: Dp = 24.dp
-    val xl: Dp = 32.dp
-    val xxl: Dp = 48.dp
-    val xxxl: Dp = 64.dp
+    val xxs: Dp = Space.xxs
+    val xs: Dp = Space.xs
+    val sm: Dp = Space.sm
+    val md: Dp = Space.lg
+    val lg: Dp = Space.xl
+    val xl: Dp = Space.xxl
+    val xxl: Dp = Space.xxxl
+    val xxxl: Dp = Space.huge
 
-    // Standard Semantic Tokens
-    val defaultPadding: Dp = 16.dp
-    val cardPadding: Dp = 16.dp
-    val screenPadding: Dp = 16.dp
-    val itemSpacing: Dp = 12.dp
-    val sectionSpacing: Dp = 20.dp
+    val defaultPadding: Dp = Space.screenH
+    val cardPadding: Dp = Space.cardH
+    val screenPadding: Dp = Space.screenH
+    val itemSpacing: Dp = Space.cardGap
+    val sectionSpacing: Dp = Space.sectionGap
 
-    /**
-     * Responsive horizontal screen padding that scales down gracefully on narrow
-     * viewports (like Samsung S24 at 540dpi = 320dp width).
-     */
     @Composable
     fun responsiveHorizontalPadding(): Dp {
         val screenWidthDp = LocalConfiguration.current.screenWidthDp
@@ -40,29 +60,17 @@ object Spacing {
         }
     }
 
-    /**
-     * Responsive card padding for compact viewports.
-     */
     @Composable
     fun responsiveCardPadding(): Dp {
         val screenWidthDp = LocalConfiguration.current.screenWidthDp
-        return if (screenWidthDp <= 340) 12.dp else 16.dp
+        return if (screenWidthDp <= 340) 12.dp else 20.dp
     }
 }
 
 object Elevation {
     val none: Dp = 0.dp
-    val low: Dp = 2.dp
-    val medium: Dp = 4.dp
-    val high: Dp = 8.dp
-    val extraHigh: Dp = 16.dp
-}
-
-object CornerRadius {
-    val none: Dp = 0.dp
-    val small: Dp = 4.dp
-    val medium: Dp = 8.dp
-    val large: Dp = 12.dp
-    val extraLarge: Dp = 16.dp
-    val full: Dp = 9999.dp
+    val low: Dp = 1.dp
+    val medium: Dp = 3.dp
+    val high: Dp = 6.dp
+    val extraHigh: Dp = 12.dp
 }

@@ -12,8 +12,6 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowForward
-import androidx.compose.material.icons.automirrored.filled.MenuBook
-import androidx.compose.material.icons.automirrored.filled.TrendingUp
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -21,13 +19,17 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.lifescore.app.core.designsystem.Spacing
-import com.lifescore.app.core.designsystem.components.GlassCard
+import com.lifescore.app.core.designsystem.components.CardVariant
+import com.lifescore.app.core.designsystem.LifeScoreShapes
+import com.lifescore.app.core.designsystem.Motion
+import com.lifescore.app.core.designsystem.Space
+import com.lifescore.app.core.designsystem.components.LifeCard
+import com.lifescore.app.core.designsystem.components.SectionHeader
+import com.lifescore.app.core.designsystem.components.StaggeredAppear
 import com.lifescore.app.presentation.navigation.Screen
 
 data class GrowthToolItem(
@@ -174,8 +176,8 @@ fun GrowScreen(
                     Column {
                         Text(
                             "Growth Hub",
-                            fontWeight = FontWeight.Bold,
                             style = MaterialTheme.typography.titleLarge,
+                            fontWeight = FontWeight.Bold,
                             color = MaterialTheme.colorScheme.onSurface
                         )
                         Text(
@@ -205,38 +207,43 @@ fun GrowScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(padding)
-                .padding(horizontal = Spacing.md),
-            verticalArrangement = Arrangement.spacedBy(Spacing.md),
-            contentPadding = PaddingValues(top = Spacing.sm, bottom = Spacing.xxl)
+                .padding(horizontal = Space.screenH),
+            verticalArrangement = Arrangement.spacedBy(Space.cardGap),
+            contentPadding = PaddingValues(top = Space.xs, bottom = Space.xxxl)
         ) {
             // Header Banner
             item {
-                GlassCard(modifier = Modifier.fillMaxWidth()) {
-                    Row(
-                        modifier = Modifier.padding(Spacing.md),
-                        verticalAlignment = Alignment.CenterVertically
+                StaggeredAppear(index = 0) {
+                    LifeCard(
+                        modifier = Modifier.fillMaxWidth(),
+                        variant = CardVariant.Cream
                     ) {
-                        Surface(
-                            shape = CircleShape,
-                            color = MaterialTheme.colorScheme.primaryContainer,
-                            modifier = Modifier.size(46.dp)
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            verticalAlignment = Alignment.CenterVertically
                         ) {
-                            Box(contentAlignment = Alignment.Center) {
-                                Text("🌱", fontSize = 24.sp)
+                            Surface(
+                                shape = CircleShape,
+                                color = MaterialTheme.colorScheme.primaryContainer,
+                                modifier = Modifier.size(46.dp)
+                            ) {
+                                Box(contentAlignment = Alignment.Center) {
+                                    Text("🌱", fontSize = 24.sp)
+                                }
                             }
-                        }
-                        Spacer(Modifier.width(Spacing.md))
-                        Column(modifier = Modifier.weight(1f)) {
-                            Text(
-                                "What are you working on?",
-                                style = MaterialTheme.typography.titleMedium,
-                                fontWeight = FontWeight.Black
-                            )
-                            Text(
-                                "Explore specialized tools to develop any domain of your life.",
-                                style = MaterialTheme.typography.bodySmall,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant
-                            )
+                            Spacer(Modifier.width(Space.md))
+                            Column(modifier = Modifier.weight(1f)) {
+                                Text(
+                                    "What are you working on?",
+                                    style = MaterialTheme.typography.titleMedium,
+                                    fontWeight = FontWeight.Bold
+                                )
+                                Text(
+                                    "Explore specialized tools to develop any domain of your life.",
+                                    style = MaterialTheme.typography.bodySmall,
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                                )
+                            }
                         }
                     }
                 }
@@ -245,14 +252,15 @@ fun GrowScreen(
             // Quick Category Chips
             item {
                 LazyRow(
-                    horizontalArrangement = Arrangement.spacedBy(Spacing.xs),
+                    horizontalArrangement = Arrangement.spacedBy(Space.xs),
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     item {
                         FilterChip(
                             selected = selectedFilter == null,
                             onClick = { selectedFilter = null },
-                            label = { Text("All 8 Areas") }
+                            label = { Text("All 8 Areas") },
+                            shape = LifeScoreShapes.chip
                         )
                     }
                     items(growthAreas) { area ->
@@ -260,7 +268,8 @@ fun GrowScreen(
                         FilterChip(
                             selected = isSelected,
                             onClick = { selectedFilter = if (isSelected) null else area.id },
-                            label = { Text("${area.emoji} ${area.title.split(" ").first()}") }
+                            label = { Text("${area.emoji} ${area.title.split(" ").first()}") },
+                            shape = LifeScoreShapes.chip
                         )
                     }
                 }
@@ -289,117 +298,116 @@ private fun GrowthAreaCard(
     onToggle: () -> Unit,
     onOpenTool: (String) -> Unit
 ) {
-    GlassCard(
+    LifeCard(
         modifier = Modifier
             .fillMaxWidth()
-            .clickable { onToggle() }
+            .clickable { onToggle() },
+        variant = CardVariant.Default
     ) {
-        Column(modifier = Modifier.padding(Spacing.md)) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.weight(1f)) {
-                    Surface(
-                        shape = RoundedCornerShape(12.dp),
-                        color = area.color.copy(alpha = 0.15f),
-                        modifier = Modifier.size(42.dp)
-                    ) {
-                        Box(contentAlignment = Alignment.Center) {
-                            Text(area.emoji, fontSize = 20.sp)
-                        }
-                    }
-                    Spacer(Modifier.width(Spacing.sm))
-                    Column {
-                        Text(
-                            area.title,
-                            fontWeight = FontWeight.Bold,
-                            fontSize = 15.sp
-                        )
-                        Text(
-                            area.subtitle,
-                            fontSize = 11.sp,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant,
-                            maxLines = 1
-                        )
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.weight(1f)) {
+                Surface(
+                    shape = LifeScoreShapes.button,
+                    color = area.color.copy(alpha = 0.12f),
+                    modifier = Modifier.size(42.dp)
+                ) {
+                    Box(contentAlignment = Alignment.Center) {
+                        Text(area.emoji, fontSize = 20.sp)
                     }
                 }
-
-                Surface(
-                    shape = RoundedCornerShape(6.dp),
-                    color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.6f)
-                ) {
+                Spacer(Modifier.width(Space.sm))
+                Column {
                     Text(
-                        text = "${area.tools.size} tools",
-                        fontSize = 10.sp,
-                        fontWeight = FontWeight.SemiBold,
+                        area.title,
+                        style = MaterialTheme.typography.titleSmall,
+                        fontWeight = FontWeight.Bold
+                    )
+                    Text(
+                        area.subtitle,
+                        style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp)
+                        maxLines = 1
                     )
                 }
             }
 
-            AnimatedVisibility(
-                visible = isExpanded,
-                enter = fadeIn() + expandVertically(),
-                exit = fadeOut() + shrinkVertically()
+            Surface(
+                shape = LifeScoreShapes.tag,
+                color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.6f)
             ) {
-                Column(
-                    modifier = Modifier.padding(top = Spacing.md),
-                    verticalArrangement = Arrangement.spacedBy(Spacing.xs)
-                ) {
-                    area.tools.forEach { tool ->
-                        Surface(
-                            shape = RoundedCornerShape(10.dp),
-                            color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.4f),
-                            border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f)),
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .clickable { onOpenTool(tool.route) }
+                Text(
+                    text = "${area.tools.size} tools",
+                    style = MaterialTheme.typography.labelSmall,
+                    fontWeight = FontWeight.SemiBold,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    modifier = Modifier.padding(horizontal = Space.xs, vertical = Space.xxs)
+                )
+            }
+        }
+
+        AnimatedVisibility(
+            visible = isExpanded,
+            enter = fadeIn(Motion.Gentle) + expandVertically(),
+            exit = fadeOut(Motion.Snappy) + shrinkVertically()
+        ) {
+            Column(
+                modifier = Modifier.padding(top = Space.md),
+                verticalArrangement = Arrangement.spacedBy(Space.xs)
+            ) {
+                area.tools.forEach { tool ->
+                    Surface(
+                        shape = LifeScoreShapes.cardSmall,
+                        color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.35f),
+                        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f)),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clickable { onOpenTool(tool.route) }
+                    ) {
+                        Row(
+                            modifier = Modifier.padding(horizontal = Space.md, vertical = Space.sm),
+                            verticalAlignment = Alignment.CenterVertically
                         ) {
-                            Row(
-                                modifier = Modifier.padding(horizontal = 12.dp, vertical = 10.dp),
-                                verticalAlignment = Alignment.CenterVertically
-                            ) {
-                                Text(tool.emoji, fontSize = 18.sp)
-                                Spacer(Modifier.width(10.dp))
-                                Column(modifier = Modifier.weight(1f)) {
-                                    Row(verticalAlignment = Alignment.CenterVertically) {
-                                        Text(
-                                            tool.title,
-                                            fontWeight = FontWeight.SemiBold,
-                                            fontSize = 13.sp
-                                        )
-                                        if (tool.badge != null) {
-                                            Spacer(Modifier.width(6.dp))
-                                            Surface(
-                                                shape = RoundedCornerShape(4.dp),
-                                                color = area.color.copy(alpha = 0.2f)
-                                            ) {
-                                                Text(
-                                                    tool.badge,
-                                                    fontSize = 9.sp,
-                                                    fontWeight = FontWeight.Bold,
-                                                    color = area.color,
-                                                    modifier = Modifier.padding(horizontal = 4.dp, vertical = 1.dp)
-                                                )
-                                            }
+                            Text(tool.emoji, fontSize = 18.sp)
+                            Spacer(Modifier.width(Space.sm))
+                            Column(modifier = Modifier.weight(1f)) {
+                                Row(verticalAlignment = Alignment.CenterVertically) {
+                                    Text(
+                                        tool.title,
+                                        style = MaterialTheme.typography.labelLarge,
+                                        fontWeight = FontWeight.SemiBold
+                                    )
+                                    if (tool.badge != null) {
+                                        Spacer(Modifier.width(Space.xs))
+                                        Surface(
+                                            shape = LifeScoreShapes.tag,
+                                            color = area.color.copy(alpha = 0.15f)
+                                        ) {
+                                            Text(
+                                                tool.badge,
+                                                style = MaterialTheme.typography.labelSmall.copy(fontSize = 9.sp),
+                                                fontWeight = FontWeight.Bold,
+                                                color = area.color,
+                                                modifier = Modifier.padding(horizontal = Space.xxs, vertical = 1.dp)
+                                            )
                                         }
                                     }
-                                    Text(
-                                        tool.subtitle,
-                                        fontSize = 11.sp,
-                                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                                    )
                                 }
-                                Icon(
-                                    Icons.AutoMirrored.Filled.ArrowForward,
-                                    contentDescription = "Open",
-                                    tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                                    modifier = Modifier.size(16.dp)
+                                Text(
+                                    tool.subtitle,
+                                    style = MaterialTheme.typography.bodySmall,
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant
                                 )
                             }
+                            Icon(
+                                Icons.AutoMirrored.Filled.ArrowForward,
+                                contentDescription = "Open",
+                                tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                                modifier = Modifier.size(16.dp)
+                            )
                         }
                     }
                 }

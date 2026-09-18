@@ -37,7 +37,7 @@ import com.lifescore.app.presentation.ui.tasks.TasksScreen
 import com.lifescore.app.presentation.ui.tasks.TasksViewModel
 import com.lifescore.app.presentation.vlogs.MicroVlogsScreen
 import com.lifescore.app.presentation.vlogs.MicroVlogsViewModel
-
+import com.lifescore.app.core.designsystem.components.LifeBottomNav
 import kotlinx.coroutines.launch
 
 @Composable
@@ -145,52 +145,24 @@ fun LifeScoreNavGraph(
         Scaffold(
             bottomBar = {
                 if (showBottomBar) {
-                    NavigationBar(
-                        tonalElevation = 3.dp,
-                        containerColor = MaterialTheme.colorScheme.surface
-                    ) {
-                        bottomBarItems.forEach { screen ->
-                            NavigationBarItem(
-                                selected = currentRoute == screen.route ||
-                                    (screen == Screen.Today && currentRoute == "home") ||
-                                    (screen == Screen.Balance && currentRoute == "dimensions") ||
-                                    (screen == Screen.Me && currentRoute == "profile"),
-                                onClick = {
-                                    navController.navigate(screen.route) {
-                                        popUpTo(navController.graph.findStartDestination().id) {
-                                            saveState = true
-                                        }
-                                        launchSingleTop = true
-                                        restoreState = true
-                                    }
-                                },
-                                icon = {
-                                    Icon(
-                                        screen.icon,
-                                        contentDescription = screen.title,
-                                        modifier = Modifier.size(20.dp)
-                                    )
-                                },
-                                label = {
-                                    Text(
-                                        text = screen.title,
-                                        fontSize = 11.sp,
-                                        fontWeight = if (currentRoute == screen.route) FontWeight.Bold else FontWeight.Medium,
-                                        maxLines = 1,
-                                        softWrap = false,
-                                        overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis
-                                    )
-                                },
-                                colors = NavigationBarItemDefaults.colors(
-                                    selectedIconColor = MaterialTheme.colorScheme.primary,
-                                    selectedTextColor = MaterialTheme.colorScheme.primary,
-                                    indicatorColor = MaterialTheme.colorScheme.primaryContainer,
-                                    unselectedIconColor = MaterialTheme.colorScheme.onSurfaceVariant,
-                                    unselectedTextColor = MaterialTheme.colorScheme.onSurfaceVariant
-                                )
-                            )
-                        }
+                    val activeRoute = when (currentRoute) {
+                        "home" -> Screen.Today.route
+                        "dimensions" -> Screen.Balance.route
+                        "profile" -> Screen.Me.route
+                        else -> currentRoute ?: Screen.Today.route
                     }
+                    LifeBottomNav(
+                        selectedRoute = activeRoute,
+                        onNavigate = { route ->
+                            navController.navigate(route) {
+                                popUpTo(navController.graph.findStartDestination().id) {
+                                    saveState = true
+                                }
+                                launchSingleTop = true
+                                restoreState = true
+                            }
+                        }
+                    )
                 }
             }
         ) { innerPadding ->

@@ -1,108 +1,241 @@
 package com.lifescore.app.core.designsystem
 
+import androidx.compose.material3.darkColorScheme
+import androidx.compose.material3.lightColorScheme
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 
+// ============================================
+// LIFESCORE — Warm Editorial Palette
+// ============================================
+
+// The 8 Dimensions — each with a signature warm, editorial color
+object DimensionColors {
+    val Health = Color(0xFFE85D5D)          // Warm coral red
+    val Wealth = Color(0xFFD4A24C)          // Muted gold
+    val Relationships = Color(0xFFD97757)   // Soft terracotta
+    val Career = Color(0xFF5B7BA8)          // Dusty navy
+    val Learning = Color(0xFF7B6BA8)        // Muted violet
+    val Fitness = Color(0xFFE08556)         // Warm amber
+    val MentalHealth = Color(0xFF6BA89C)    // Soft teal
+    val SocialLife = Color(0xFF9C8A6B)      // Warm taupe
+
+    fun forDimension(dim: com.lifescore.app.domain.model.DimensionType): Color = when (dim) {
+        com.lifescore.app.domain.model.DimensionType.HEALTH -> Health
+        com.lifescore.app.domain.model.DimensionType.WEALTH -> Wealth
+        com.lifescore.app.domain.model.DimensionType.RELATIONSHIPS -> Relationships
+        com.lifescore.app.domain.model.DimensionType.CAREER -> Career
+        com.lifescore.app.domain.model.DimensionType.LEARNING -> Learning
+        com.lifescore.app.domain.model.DimensionType.FITNESS -> Fitness
+        com.lifescore.app.domain.model.DimensionType.MENTAL_HEALTH -> MentalHealth
+        com.lifescore.app.domain.model.DimensionType.SOCIAL_LIFE -> SocialLife
+    }
+}
+
+// Neutral foundation — warm, intentional, not cold gray
+object Neutrals {
+    val Ink_900 = Color(0xFF0F0E0C)         // Near-black, warm
+    val Ink_800 = Color(0xFF1C1A17)
+    val Ink_700 = Color(0xFF2A2622)
+    val Ink_600 = Color(0xFF3D3733)
+    val Ink_500 = Color(0xFF57504A)
+    val Ink_400 = Color(0xFF7A7269)
+    val Ink_300 = Color(0xFF9E958B)
+    val Ink_200 = Color(0xFFC4BAB0)
+    val Ink_100 = Color(0xFFE5DDD5)
+    val Ink_50  = Color(0xFFF5F0EA)
+    val Paper   = Color(0xFFFBF8F3)         // Off-white, warm cream
+    val White   = Color(0xFFFFFFFF)
+}
+
+// Accent — signature gradient & state accents
+object Accent {
+    val Primary = Color(0xFF3D3A8C)          // Deep indigo
+    val PrimaryLight = Color(0xFF5B57B8)
+    val PrimaryDark = Color(0xFF262466)
+    val Secondary = Color(0xFFD97757)        // Warm terracotta
+    val Tertiary = Color(0xFF6BA89C)         // Calm teal
+    val Success = Color(0xFF6BA86B)
+    val Warning = Color(0xFFD4A24C)
+    val Error = Color(0xFFC9553D)
+}
+
+// Signature Gradients
+object LifeGradients {
+    val HeroDark = Brush.linearGradient(
+        colors = listOf(
+            Color(0xFF2A2750),      // Deep indigo
+            Color(0xFF3D3A8C),      // Primary
+            Color(0xFF6B4B8C)       // Warm violet
+        )
+    )
+
+    val CardMesh = Brush.linearGradient(
+        colors = listOf(
+            Color(0xFF1E1C38),
+            Color(0xFF2D295C),
+            Color(0xFF4A3B69)
+        )
+    )
+
+    val Gold = Brush.linearGradient(
+        colors = listOf(
+            Color(0xFFD4A24C),
+            Color(0xFFE5B869)
+        )
+    )
+
+    val GlassWarm = Brush.verticalGradient(
+        colors = listOf(
+            Neutrals.White.copy(alpha = 0.95f),
+            Neutrals.Paper.copy(alpha = 0.85f)
+        )
+    )
+}
+
+// Light theme — Warm Paper & Deep Indigo
+val LightColorScheme = lightColorScheme(
+    primary = Accent.Primary,
+    onPrimary = Neutrals.White,
+    primaryContainer = Color(0xFFE6E5F5),
+    onPrimaryContainer = Accent.PrimaryDark,
+    
+    secondary = Accent.Secondary,
+    onSecondary = Neutrals.White,
+    secondaryContainer = Color(0xFFF5E5DC),
+    onSecondaryContainer = Color(0xFF4A2618),
+    
+    tertiary = Accent.Tertiary,
+    onTertiary = Neutrals.White,
+    tertiaryContainer = Color(0xFFDCF0EC),
+    onTertiaryContainer = Color(0xFF1A3D37),
+    
+    background = Neutrals.Paper,
+    onBackground = Neutrals.Ink_900,
+    surface = Neutrals.White,
+    onSurface = Neutrals.Ink_900,
+    surfaceVariant = Neutrals.Ink_50,
+    onSurfaceVariant = Neutrals.Ink_500,
+    
+    outline = Neutrals.Ink_200,
+    outlineVariant = Neutrals.Ink_100,
+    
+    error = Accent.Error,
+    onError = Neutrals.White
+)
+
+// Dark theme — Deep warm charcoal (not pure cold black)
+val DarkColorScheme = darkColorScheme(
+    primary = Color(0xFFB8B5E8),             // Softer indigo for dark
+    onPrimary = Color(0xFF1F1D4A),
+    primaryContainer = Color(0xFF353273),
+    onPrimaryContainer = Color(0xFFE6E5F5),
+    
+    secondary = Color(0xFFF0B49C),
+    onSecondary = Color(0xFF4A2618),
+    secondaryContainer = Color(0xFF6B3E28),
+    onSecondaryContainer = Color(0xFFF5E5DC),
+    
+    tertiary = Color(0xFFA8D5CB),
+    onTertiary = Color(0xFF1A3D37),
+    tertiaryContainer = Color(0xFF355E58),
+    onTertiaryContainer = Color(0xFFDCF0EC),
+    
+    background = Color(0xFF0E0D0C),          // Warm near-black
+    onBackground = Color(0xFFEDE7DF),
+    surface = Color(0xFF171614),             // Card surface
+    onSurface = Color(0xFFEDE7DF),
+    surfaceVariant = Color(0xFF262421),
+    onSurfaceVariant = Color(0xFFB8B0A7),
+    
+    outline = Color(0xFF3A3632),
+    outlineVariant = Color(0xFF2A2724),
+    
+    error = Color(0xFFE89B8A),
+    onError = Color(0xFF5A1F12)
+)
+
 // ──────────────────────────────────────────────
-// VIBRANT LIGHT COLORS (DEFAULT)
+// Compatibility Aliases for Existing Design Tokens
 // ──────────────────────────────────────────────
-val md_theme_light_primary = Color(0xFF6750A4)          // Deep Purple
-val md_theme_light_onPrimary = Color(0xFFFFFFFF)
-val md_theme_light_primaryContainer = Color(0xFFF0E6FF)   // Soft purple bg
-val md_theme_light_onPrimaryContainer = Color(0xFF21005D)
+val ColorHealth = DimensionColors.Health
+val ColorWealth = DimensionColors.Wealth
+val ColorRelationships = DimensionColors.Relationships
+val ColorCareer = DimensionColors.Career
+val ColorLearning = DimensionColors.Learning
+val ColorFitness = DimensionColors.Fitness
+val ColorMentalHealth = DimensionColors.MentalHealth
+val ColorSocialLife = DimensionColors.SocialLife
 
-val md_theme_light_secondary = Color(0xFF006A6A)        // Vibrant Teal
-val md_theme_light_onSecondary = Color(0xFFFFFFFF)
-val md_theme_light_secondaryContainer = Color(0xFFE0F7F4) // Soft teal bg
-val md_theme_light_onSecondaryContainer = Color(0xFF004D40)
+val GoldAccent = DimensionColors.Wealth
+val Success = Accent.Success
+val Warning = Accent.Warning
+val Info = DimensionColors.Career
 
-val md_theme_light_tertiary = Color(0xFFD45A2E)         // Warm Orange
-val md_theme_light_onTertiary = Color(0xFFFFFFFF)
-val md_theme_light_tertiaryContainer = Color(0xFFFFE8D6)
-val md_theme_light_onTertiaryContainer = Color(0xFF3E1A00)
-
-val md_theme_light_error = Color(0xFFBA1A1A)
-val md_theme_light_onError = Color(0xFFFFFFFF)
-val md_theme_light_errorContainer = Color(0xFFFFDAD6)
-val md_theme_light_onErrorContainer = Color(0xFF410002)
-
-val md_theme_light_background = Color(0xFFF5F5FA)       // Light lavender-white
-val md_theme_light_onBackground = Color(0xFF1C1B1F)     // Dark text
-val md_theme_light_surface = Color(0xFFFDFDFF)          // Crisp white surface
-val md_theme_light_onSurface = Color(0xFF1C1B1F)
-val md_theme_light_surfaceVariant = Color(0xFFF0EEF5)   // Subtle light gray-purple
-val md_theme_light_onSurfaceVariant = Color(0xFF49454F)
-
-val md_theme_light_outline = Color(0xFFC8C4D0)
-val md_theme_light_outlineVariant = Color(0xFFE2DDE8)
-
-// ──────────────────────────────────────────────
-// SAMSUNG AMOLED TRUE BLACK DARK COLORS
-// ──────────────────────────────────────────────
-val md_theme_dark_primary = Color(0xFFD0BCFF)
-val md_theme_dark_onPrimary = Color(0xFF381E72)
-val md_theme_dark_primaryContainer = Color(0xFF4F378B)
-val md_theme_dark_onPrimaryContainer = Color(0xFFEADDFF)
-
-val md_theme_dark_secondary = Color(0xFFCCC2DC)
-val md_theme_dark_onSecondary = Color(0xFF332D41)
-val md_theme_dark_secondaryContainer = Color(0xFF4A4458)
-val md_theme_dark_onSecondaryContainer = Color(0xFFE8DEF8)
-
-val md_theme_dark_tertiary = Color(0xFFEFB8C8)
-val md_theme_dark_onTertiary = Color(0xFF492532)
-val md_theme_dark_tertiaryContainer = Color(0xFF633B48)
-val md_theme_dark_onTertiaryContainer = Color(0xFFFFD8E4)
-
-val md_theme_dark_error = Color(0xFFFFB4AB)
-val md_theme_dark_onError = Color(0xFF690005)
-val md_theme_dark_errorContainer = Color(0xFF93000A)
-val md_theme_dark_onErrorContainer = Color(0xFFFFDAD6)
-
-// True AMOLED Black
-val md_theme_dark_background = Color(0xFF000000)
-val md_theme_dark_onBackground = Color(0xFFE6E1E5)
-val md_theme_dark_surface = Color(0xFF141218)
-val md_theme_dark_onSurface = Color(0xFFE6E1E5)
-val md_theme_dark_surfaceVariant = Color(0xFF2B2930)
-val md_theme_dark_onSurfaceVariant = Color(0xFFCAC4D0)
-val md_theme_dark_outline = Color(0xFF938F99)
-val md_theme_dark_outlineVariant = Color(0xFF49454F)
-
-// ──────────────────────────────────────────────
-// Dimension Base Colors
-// ──────────────────────────────────────────────
-val ColorHealth = Color(0xFF4CAF50)
-val ColorWealth = Color(0xFFFFA726)
-val ColorRelationships = Color(0xFFEC4899)
-val ColorCareer = Color(0xFF3B82F6)
-val ColorLearning = Color(0xFF8B5CF6)
-val ColorFitness = Color(0xFFF97316)
-val ColorMentalHealth = Color(0xFF06B6D4)
-val ColorSocialLife = Color(0xFF10B981)
-
-val GoldAccent = Color(0xFFFFD700)
-val Success = Color(0xFF10B981)
-val Warning = Color(0xFFF59E0B)
-val Info = Color(0xFF3B82F6)
-
-// ──────────────────────────────────────────────
-// Glassmorphism Brushes
-// ──────────────────────────────────────────────
 val GlassFillLight = Brush.verticalGradient(
     colors = listOf(
-        Color.White.copy(alpha = 0.90f),
-        Color.White.copy(alpha = 0.75f)
+        Neutrals.White.copy(alpha = 0.95f),
+        Neutrals.Paper.copy(alpha = 0.88f)
     )
 )
 
-val GlassBorderLight = Color(0xFFE8E5F0).copy(alpha = 0.8f)
+val GlassBorderLight = Neutrals.Ink_100.copy(alpha = 0.8f)
 
 val GlassFillDark = Brush.verticalGradient(
     colors = listOf(
         Color.White.copy(alpha = 0.08f),
-        Color.White.copy(alpha = 0.02f)
+        Color.White.copy(alpha = 0.03f)
     )
 )
 
 val GlassBorderDark = Color.White.copy(alpha = 0.1f)
+
+val md_theme_light_primary = Accent.Primary
+val md_theme_light_onPrimary = Neutrals.White
+val md_theme_light_primaryContainer = Color(0xFFE6E5F5)
+val md_theme_light_onPrimaryContainer = Accent.PrimaryDark
+val md_theme_light_secondary = Accent.Secondary
+val md_theme_light_onSecondary = Neutrals.White
+val md_theme_light_secondaryContainer = Color(0xFFF5E5DC)
+val md_theme_light_onSecondaryContainer = Color(0xFF4A2618)
+val md_theme_light_tertiary = Accent.Tertiary
+val md_theme_light_onTertiary = Neutrals.White
+val md_theme_light_tertiaryContainer = Color(0xFFDCF0EC)
+val md_theme_light_onTertiaryContainer = Color(0xFF1A3D37)
+val md_theme_light_error = Accent.Error
+val md_theme_light_onError = Neutrals.White
+val md_theme_light_errorContainer = Color(0xFFFFDAD6)
+val md_theme_light_onErrorContainer = Color(0xFF410002)
+val md_theme_light_background = Neutrals.Paper
+val md_theme_light_onBackground = Neutrals.Ink_900
+val md_theme_light_surface = Neutrals.White
+val md_theme_light_onSurface = Neutrals.Ink_900
+val md_theme_light_surfaceVariant = Neutrals.Ink_50
+val md_theme_light_onSurfaceVariant = Neutrals.Ink_500
+val md_theme_light_outline = Neutrals.Ink_200
+val md_theme_light_outlineVariant = Neutrals.Ink_100
+
+val md_theme_dark_primary = Color(0xFFB8B5E8)
+val md_theme_dark_onPrimary = Color(0xFF1F1D4A)
+val md_theme_dark_primaryContainer = Color(0xFF353273)
+val md_theme_dark_onPrimaryContainer = Color(0xFFE6E5F5)
+val md_theme_dark_secondary = Color(0xFFF0B49C)
+val md_theme_dark_onSecondary = Color(0xFF4A2618)
+val md_theme_dark_secondaryContainer = Color(0xFF6B3E28)
+val md_theme_dark_onSecondaryContainer = Color(0xFFF5E5DC)
+val md_theme_dark_tertiary = Color(0xFFA8D5CB)
+val md_theme_dark_onTertiary = Color(0xFF1A3D37)
+val md_theme_dark_tertiaryContainer = Color(0xFF355E58)
+val md_theme_dark_onTertiaryContainer = Color(0xFFDCF0EC)
+val md_theme_dark_error = Color(0xFFE89B8A)
+val md_theme_dark_onError = Color(0xFF5A1F12)
+val md_theme_dark_errorContainer = Color(0xFF93000A)
+val md_theme_dark_onErrorContainer = Color(0xFFFFDAD6)
+val md_theme_dark_background = Color(0xFF0E0D0C)
+val md_theme_dark_onBackground = Color(0xFFEDE7DF)
+val md_theme_dark_surface = Color(0xFF171614)
+val md_theme_dark_onSurface = Color(0xFFEDE7DF)
+val md_theme_dark_surfaceVariant = Color(0xFF262421)
+val md_theme_dark_onSurfaceVariant = Color(0xFFB8B0A7)
+val md_theme_dark_outline = Color(0xFF3A3632)
+val md_theme_dark_outlineVariant = Color(0xFF2A2724)
