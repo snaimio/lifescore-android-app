@@ -18,6 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -33,10 +34,14 @@ fun LifeScoreDrawerContent(
     navController: NavController,
     onCloseDrawer: () -> Unit
 ) {
+    val isDark = MaterialTheme.colorScheme.background.luminance() < 0.5f
+    val drawerBg = if (isDark) Color(0xFF13121C) else Color(0xFFFFFFFF)
+    val textPrimary = if (isDark) Color(0xFFFBF8F3) else Color(0xFF19181F)
+
     ModalDrawerSheet(
         modifier = Modifier.width(320.dp),
-        drawerContainerColor = Color(0xFF13121C),
-        drawerContentColor = Color(0xFFFBF8F3)
+        drawerContainerColor = drawerBg,
+        drawerContentColor = textPrimary
     ) {
         Column(
             modifier = Modifier
@@ -52,7 +57,7 @@ fun LifeScoreDrawerContent(
 
             HorizontalDivider(
                 modifier = Modifier.padding(horizontal = Space.md, vertical = Space.xs),
-                color = Color(0x1AD4A24C)
+                color = if (isDark) Color(0x1AD4A24C) else Color(0x22D4A24C)
             )
 
             // 2. Scrollable Navigation Sections (Non-duplicate Quick Tools, Wellness & Settings)
@@ -139,20 +144,32 @@ fun DrawerUserHeader(
     userProfile: UserProfile?,
     onCloseDrawer: () -> Unit
 ) {
+    val isDark = MaterialTheme.colorScheme.background.luminance() < 0.5f
     val name = userProfile?.name?.ifBlank { "Guest" } ?: "Guest"
     val streak = userProfile?.currentStreakDays ?: 0
     val title = userProfile?.title?.ifBlank { "Member" } ?: "Member"
+    val textPrimary = if (isDark) Color(0xFFFBF8F3) else Color(0xFF19181F)
+    val textSecondary = if (isDark) Color(0xFF9E958B) else Color(0xFF6B6357)
 
     Box(
         modifier = Modifier
             .fillMaxWidth()
             .background(
-                Brush.verticalGradient(
-                    colors = listOf(
-                        Color(0xFF1E1C2E),
-                        Color(0xFF13121C)
+                if (isDark) {
+                    Brush.verticalGradient(
+                        colors = listOf(
+                            Color(0xFF1E1C2E),
+                            Color(0xFF13121C)
+                        )
                     )
-                )
+                } else {
+                    Brush.verticalGradient(
+                        colors = listOf(
+                            Color(0xFFFBF8F3),
+                            Color(0xFFF2ECE1)
+                        )
+                    )
+                }
             )
             .padding(horizontal = Space.md, vertical = Space.md)
     ) {
@@ -186,7 +203,7 @@ fun DrawerUserHeader(
                     Icon(
                         Icons.Default.Close,
                         contentDescription = "Close Menu",
-                        tint = Color(0xFF9E958B)
+                        tint = textSecondary
                     )
                 }
             }
@@ -199,19 +216,19 @@ fun DrawerUserHeader(
                     fontFamily = FontFamily.Serif,
                     fontWeight = FontWeight.Bold
                 ),
-                color = Color(0xFFFBF8F3)
+                color = textPrimary
             )
             Text(
                 text = title,
                 style = MaterialTheme.typography.bodySmall,
-                color = Color(0xFF9E958B)
+                color = textSecondary
             )
 
             Spacer(Modifier.height(Space.xs))
 
             Surface(
                 shape = RoundedCornerShape(8.dp),
-                color = Color(0x1FD4A24C),
+                color = if (isDark) Color(0x1FD4A24C) else Color(0x1AD4A24C),
                 border = BorderStroke(0.5.dp, Color(0x33D4A24C))
             ) {
                 Row(
@@ -239,6 +256,10 @@ fun DrawerUserHeader(
 
 @Composable
 fun DrawerSectionTitle(title: String, count: String) {
+    val isDark = MaterialTheme.colorScheme.background.luminance() < 0.5f
+    val countBg = if (isDark) Color(0x1AFBF8F3) else Color(0x1A000000)
+    val countText = if (isDark) Color(0xFF9E958B) else Color(0xFF6B6357)
+
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -255,13 +276,13 @@ fun DrawerSectionTitle(title: String, count: String) {
         )
         Surface(
             shape = RoundedCornerShape(4.dp),
-            color = Color(0x1AFBF8F3)
+            color = countBg
         ) {
             Text(
                 text = count,
                 fontSize = 10.sp,
                 fontWeight = FontWeight.Bold,
-                color = Color(0xFF9E958B),
+                color = countText,
                 modifier = Modifier.padding(horizontal = 5.dp, vertical = 1.dp)
             )
         }
@@ -274,12 +295,20 @@ fun DrawerNavRow(
     isSelected: Boolean,
     onClick: () -> Unit
 ) {
+    val isDark = MaterialTheme.colorScheme.background.luminance() < 0.5f
+    val iconTint = if (isSelected) Color(0xFFD4A24C) else if (isDark) Color(0xFF9E958B) else Color(0xFF6B6357)
+    val labelColor = if (isSelected) {
+        if (isDark) Color(0xFFFBF8F3) else Color(0xFF19181F)
+    } else {
+        if (isDark) Color(0xFFC4BAB0) else Color(0xFF4A453E)
+    }
+
     NavigationDrawerItem(
         icon = {
             Icon(
                 imageVector = item.icon,
                 contentDescription = item.label,
-                tint = if (isSelected) Color(0xFFD4A24C) else Color(0xFF9E958B),
+                tint = iconTint,
                 modifier = Modifier.size(20.dp)
             )
         },
@@ -288,7 +317,7 @@ fun DrawerNavRow(
                 text = item.label,
                 style = MaterialTheme.typography.bodyMedium,
                 fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Medium,
-                color = if (isSelected) Color(0xFFFBF8F3) else Color(0xFFC4BAB0)
+                color = labelColor
             )
         },
         badge = {
@@ -311,7 +340,7 @@ fun DrawerNavRow(
         onClick = onClick,
         shape = RoundedCornerShape(12.dp),
         colors = NavigationDrawerItemDefaults.colors(
-            selectedContainerColor = Color(0x22D4A24C),
+            selectedContainerColor = if (isDark) Color(0x22D4A24C) else Color(0x1AD4A24C),
             unselectedContainerColor = Color.Transparent
         ),
         modifier = Modifier.padding(vertical = 1.dp)
@@ -320,13 +349,18 @@ fun DrawerNavRow(
 
 @Composable
 fun DrawerCleanFooter() {
+    val isDark = MaterialTheme.colorScheme.background.luminance() < 0.5f
+    val footerBg = if (isDark) Color(0xFF1B1A28) else Color(0xFFF4F0EB)
+    val footerBorder = if (isDark) Color(0x1AFBF8F3) else Color(0x1A000000)
+    val footerText = if (isDark) Color(0xFF7A7269) else Color(0xFF8A8275)
+
     Surface(
         modifier = Modifier
             .fillMaxWidth()
             .padding(Space.sm),
         shape = RoundedCornerShape(12.dp),
-        color = Color(0xFF1B1A28),
-        border = BorderStroke(0.5.dp, Color(0x1AFBF8F3))
+        color = footerBg,
+        border = BorderStroke(0.5.dp, footerBorder)
     ) {
         Column(
             modifier = Modifier.padding(Space.sm),
@@ -337,7 +371,7 @@ fun DrawerCleanFooter() {
                 style = MaterialTheme.typography.labelSmall,
                 fontSize = 10.sp,
                 fontWeight = FontWeight.Medium,
-                color = Color(0xFF7A7269)
+                color = footerText
             )
         }
     }

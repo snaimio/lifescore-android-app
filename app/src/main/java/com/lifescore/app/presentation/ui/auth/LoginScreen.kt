@@ -22,6 +22,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontFamily
@@ -54,8 +55,18 @@ fun LoginScreen(
         }
     }
 
+    val isDark = MaterialTheme.colorScheme.background.luminance() < 0.5f
+    val backgroundColor = if (isDark) Color(0xFF0C0B12) else MaterialTheme.colorScheme.background
+    val textPrimary = if (isDark) Color(0xFFFBF8F3) else Color(0xFF19181F)
+    val textSecondary = if (isDark) Color(0xFF9E958B) else Color(0xFF6B6357)
+    val cardBackground = if (isDark) Color(0xFF181726) else Color(0xFFFFFFFF)
+    val cardBorder = if (isDark) Color(0x1FD4A24C) else Color(0x33D4A24C)
+    val switcherBg = if (isDark) Color(0xFF14131E) else Color(0xFFF2EFE9)
+    val inputBg = if (isDark) Color(0xFF12111D) else Color(0xFFFAFAF7)
+    val inputBorder = if (isDark) Color(0x22FFFFFF) else Color(0x1A000000)
+
     Scaffold(
-        containerColor = Color(0xFF0C0B12),
+        containerColor = backgroundColor,
         topBar = {
             if (onBack != null) {
                 TopAppBar(
@@ -65,7 +76,7 @@ fun LoginScreen(
                             Icon(
                                 Icons.AutoMirrored.Filled.ArrowBack,
                                 contentDescription = "Back",
-                                tint = Color(0xFFFBF8F3)
+                                tint = textPrimary
                             )
                         }
                     },
@@ -78,12 +89,21 @@ fun LoginScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .background(
-                    Brush.verticalGradient(
-                        colors = listOf(
-                            Color(0xFF0C0B12),
-                            Color(0xFF14131E)
+                    if (isDark) {
+                        Brush.verticalGradient(
+                            colors = listOf(
+                                Color(0xFF0C0B12),
+                                Color(0xFF14131E)
+                            )
                         )
-                    )
+                    } else {
+                        Brush.verticalGradient(
+                            colors = listOf(
+                                Color(0xFFF9F8F5),
+                                Color(0xFFF0EDE4)
+                            )
+                        )
+                    }
                 )
                 .padding(padding)
                 .verticalScroll(scrollState),
@@ -124,13 +144,13 @@ fun LoginScreen(
                         fontWeight = FontWeight.Bold,
                         letterSpacing = 1.sp
                     ),
-                    color = Color(0xFFFBF8F3)
+                    color = textPrimary
                 )
 
                 Text(
                     text = if (uiState.isSignUp) "Create your account to sync and secure your life metrics" else "Sign in to access your continuous life metrics",
                     style = MaterialTheme.typography.bodySmall,
-                    color = Color(0xFF9E958B),
+                    color = textSecondary,
                     textAlign = TextAlign.Center,
                     modifier = Modifier
                         .fillMaxWidth(0.85f)
@@ -140,8 +160,8 @@ fun LoginScreen(
                 // Sign In / Create Account Tab Switcher
                 Surface(
                     shape = RoundedCornerShape(14.dp),
-                    color = Color(0xFF14131E),
-                    border = BorderStroke(1.dp, Color(0x22FFFFFF)),
+                    color = switcherBg,
+                    border = BorderStroke(1.dp, cardBorder),
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     Row(
@@ -169,8 +189,8 @@ fun LoginScreen(
                 // Form Container
                 Surface(
                     shape = RoundedCornerShape(18.dp),
-                    color = Color(0xFF181726),
-                    border = BorderStroke(1.dp, Color(0x1FD4A24C)),
+                    color = cardBackground,
+                    border = BorderStroke(1.dp, cardBorder),
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     Column(
@@ -195,7 +215,7 @@ fun LoginScreen(
                                 OutlinedTextField(
                                     value = uiState.displayName,
                                     onValueChange = { viewModel.onDisplayNameChange(it) },
-                                    placeholder = { Text("Enter your full name", color = Color(0xFF6B6578), fontSize = 14.sp) },
+                                    placeholder = { Text("Enter your full name", color = Color(0xFF8A8275), fontSize = 14.sp) },
                                     leadingIcon = {
                                         Icon(Icons.Default.Person, contentDescription = null, tint = Color(0xFFD4A24C))
                                     },
@@ -203,11 +223,11 @@ fun LoginScreen(
                                     shape = RoundedCornerShape(12.dp),
                                     colors = OutlinedTextFieldDefaults.colors(
                                         focusedBorderColor = Color(0xFFD4A24C),
-                                        unfocusedBorderColor = Color(0x22FFFFFF),
-                                        focusedTextColor = Color(0xFFFBF8F3),
-                                        unfocusedTextColor = Color(0xFFFBF8F3),
-                                        focusedContainerColor = Color(0xFF12111D),
-                                        unfocusedContainerColor = Color(0xFF12111D)
+                                        unfocusedBorderColor = inputBorder,
+                                        focusedTextColor = textPrimary,
+                                        unfocusedTextColor = textPrimary,
+                                        focusedContainerColor = inputBg,
+                                        unfocusedContainerColor = inputBg
                                     ),
                                     keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
                                     modifier = Modifier.fillMaxWidth()
@@ -227,7 +247,7 @@ fun LoginScreen(
                         OutlinedTextField(
                             value = uiState.email,
                             onValueChange = { viewModel.onEmailChange(it) },
-                            placeholder = { Text("name@domain.com", color = Color(0xFF6B6578), fontSize = 14.sp) },
+                            placeholder = { Text("name@domain.com", color = Color(0xFF8A8275), fontSize = 14.sp) },
                             leadingIcon = {
                                 Icon(Icons.Default.Email, contentDescription = null, tint = Color(0xFFD4A24C))
                             },
@@ -235,11 +255,11 @@ fun LoginScreen(
                             shape = RoundedCornerShape(12.dp),
                             colors = OutlinedTextFieldDefaults.colors(
                                 focusedBorderColor = Color(0xFFD4A24C),
-                                unfocusedBorderColor = Color(0x22FFFFFF),
-                                focusedTextColor = Color(0xFFFBF8F3),
-                                unfocusedTextColor = Color(0xFFFBF8F3),
-                                focusedContainerColor = Color(0xFF12111D),
-                                unfocusedContainerColor = Color(0xFF12111D)
+                                unfocusedBorderColor = inputBorder,
+                                focusedTextColor = textPrimary,
+                                unfocusedTextColor = textPrimary,
+                                focusedContainerColor = inputBg,
+                                unfocusedContainerColor = inputBg
                             ),
                             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email, imeAction = ImeAction.Next),
                             modifier = Modifier.fillMaxWidth()
@@ -258,7 +278,7 @@ fun LoginScreen(
                         OutlinedTextField(
                             value = uiState.password,
                             onValueChange = { viewModel.onPasswordChange(it) },
-                            placeholder = { Text("••••••••", color = Color(0xFF6B6578), fontSize = 14.sp) },
+                            placeholder = { Text("••••••••", color = Color(0xFF8A8275), fontSize = 14.sp) },
                             leadingIcon = {
                                 Icon(Icons.Default.Lock, contentDescription = null, tint = Color(0xFFD4A24C))
                             },
@@ -267,7 +287,7 @@ fun LoginScreen(
                                     Icon(
                                         if (uiState.isPasswordVisible) Icons.Default.Visibility else Icons.Default.VisibilityOff,
                                         contentDescription = "Toggle password",
-                                        tint = Color(0xFF9E958B)
+                                        tint = textSecondary
                                     )
                                 }
                             },
@@ -276,11 +296,11 @@ fun LoginScreen(
                             shape = RoundedCornerShape(12.dp),
                             colors = OutlinedTextFieldDefaults.colors(
                                 focusedBorderColor = Color(0xFFD4A24C),
-                                unfocusedBorderColor = Color(0x22FFFFFF),
-                                focusedTextColor = Color(0xFFFBF8F3),
-                                unfocusedTextColor = Color(0xFFFBF8F3),
-                                focusedContainerColor = Color(0xFF12111D),
-                                unfocusedContainerColor = Color(0xFF12111D)
+                                unfocusedBorderColor = inputBorder,
+                                focusedTextColor = textPrimary,
+                                unfocusedTextColor = textPrimary,
+                                focusedContainerColor = inputBg,
+                                unfocusedContainerColor = inputBg
                             ),
                             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password, imeAction = ImeAction.Done),
                             keyboardActions = KeyboardActions(onDone = {
@@ -353,8 +373,8 @@ fun LoginScreen(
                         viewModel.continueAsGuest { onNavigateToHome() }
                     },
                     shape = RoundedCornerShape(16.dp),
-                    color = Color(0xFF14131E),
-                    border = BorderStroke(1.dp, Color(0x22D4A24C)),
+                    color = cardBackground,
+                    border = BorderStroke(1.dp, cardBorder),
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     Row(
@@ -387,12 +407,12 @@ fun LoginScreen(
                                     text = "Continue as Guest",
                                     style = MaterialTheme.typography.titleSmall,
                                     fontWeight = FontWeight.Bold,
-                                    color = Color(0xFFFBF8F3)
+                                    color = textPrimary
                                 )
                                 Text(
                                     text = "Explore features without signing in",
                                     style = MaterialTheme.typography.bodySmall,
-                                    color = Color(0xFF9E958B)
+                                    color = textSecondary
                                 )
                             }
                         }
@@ -412,7 +432,7 @@ fun LoginScreen(
                 Text(
                     text = "LifeScore Executive Life Operating System • Local & Cloud Encrypted",
                     style = MaterialTheme.typography.bodySmall.copy(
-                        color = Color(0xFF6B6578),
+                        color = textSecondary,
                         textAlign = TextAlign.Center,
                         fontSize = 11.sp
                     ),

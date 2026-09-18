@@ -25,6 +25,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontFamily
@@ -93,10 +94,17 @@ fun WelcomeScreen(
         )
     }
 
+    val isDark = MaterialTheme.colorScheme.background.luminance() < 0.5f
+    val backgroundColor = if (isDark) Color(0xFF0F0E14) else MaterialTheme.colorScheme.background
+    val textPrimary = if (isDark) Color(0xFFFBF8F3) else Color(0xFF19181F)
+    val textSecondary = if (isDark) Color(0xFF9E958B) else Color(0xFF6B6357)
+    val cardBackground = if (isDark) Color(0xFF161522) else Color(0xFFFFFFFF)
+    val cardBorder = if (isDark) Color(0x1FD4A24C) else Color(0x33D4A24C)
+
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color(0xFF0F0E14))
+            .background(backgroundColor)
     ) {
         Column(
             modifier = Modifier
@@ -139,7 +147,7 @@ fun WelcomeScreen(
                             fontWeight = FontWeight.Bold,
                             letterSpacing = 2.sp
                         ),
-                        color = Color(0xFFFBF8F3)
+                        color = textPrimary
                     )
                 }
 
@@ -215,7 +223,7 @@ fun WelcomeScreen(
                             .width(width)
                             .clip(RoundedCornerShape(3.dp))
                             .background(
-                                if (isSelected) Color(0xFFD4A24C) else Color(0x33FBF8F3)
+                                if (isSelected) Color(0xFFD4A24C) else if (isDark) Color(0x33FBF8F3) else Color(0x2219181F)
                             )
                             .clickable {
                                 coroutineScope.launch {
@@ -231,8 +239,8 @@ fun WelcomeScreen(
             // 1-Tap Quick Setup Card (No boring questionnaire!)
             Surface(
                 shape = RoundedCornerShape(20.dp),
-                color = Color(0xFF161522),
-                border = BorderStroke(1.dp, Color(0x1FD4A24C)),
+                color = cardBackground,
+                border = BorderStroke(1.dp, cardBorder),
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Column(
@@ -245,12 +253,12 @@ fun WelcomeScreen(
                         text = "Tailor Your Experience",
                         style = MaterialTheme.typography.titleMedium,
                         fontWeight = FontWeight.Bold,
-                        color = Color(0xFFFBF8F3)
+                        color = textPrimary
                     )
                     Text(
                         text = "Select your primary focus to personalize your dashboard:",
                         style = MaterialTheme.typography.bodySmall,
-                        color = Color(0xFF9E958B)
+                        color = textSecondary
                     )
 
                     Spacer(Modifier.height(Space.xxs))
@@ -259,13 +267,20 @@ fun WelcomeScreen(
                     Column(verticalArrangement = Arrangement.spacedBy(Space.xs)) {
                         focusOptions.forEachIndexed { index, option ->
                             val isSelected = selectedFocusIndex == index
+                            val optionBg = if (isSelected) {
+                                option.accentColor.copy(alpha = if (isDark) 0.18f else 0.12f)
+                            } else {
+                                if (isDark) Color(0xFF1F1E2E) else Color(0xFFF6F4EF)
+                            }
+                            val optionBorder = if (isSelected) {
+                                option.accentColor
+                            } else {
+                                if (isDark) Color(0x1FFFFFFF) else Color(0x1A000000)
+                            }
                             Surface(
                                 shape = RoundedCornerShape(12.dp),
-                                color = if (isSelected) option.accentColor.copy(alpha = 0.18f) else Color(0xFF1F1E2E),
-                                border = BorderStroke(
-                                    1.dp,
-                                    if (isSelected) option.accentColor else Color(0x1FFFFFFF)
-                                ),
+                                color = optionBg,
+                                border = BorderStroke(1.dp, optionBorder),
                                 modifier = Modifier
                                     .fillMaxWidth()
                                     .clickable { selectedFocusIndex = index }
@@ -277,7 +292,7 @@ fun WelcomeScreen(
                                 ) {
                                     Surface(
                                         shape = CircleShape,
-                                        color = option.accentColor.copy(alpha = 0.22f),
+                                        color = option.accentColor.copy(alpha = if (isDark) 0.22f else 0.16f),
                                         modifier = Modifier.size(34.dp)
                                     ) {
                                         Box(contentAlignment = Alignment.Center) {
@@ -295,12 +310,14 @@ fun WelcomeScreen(
                                             text = option.title,
                                             style = MaterialTheme.typography.titleSmall,
                                             fontWeight = FontWeight.Bold,
-                                            color = if (isSelected) option.accentColor else Color(0xFFFBF8F3)
+                                            color = if (isSelected) option.accentColor else textPrimary
                                         )
                                         Text(
                                             text = option.subtitle,
                                             style = MaterialTheme.typography.bodySmall,
-                                            color = if (isSelected) Color(0xFFFBF8F3).copy(alpha = 0.85f) else Color(0xFF9E958B)
+                                            color = if (isSelected) {
+                                                if (isDark) Color(0xFFFBF8F3).copy(alpha = 0.85f) else Color(0xFF19181F).copy(alpha = 0.85f)
+                                            } else textSecondary
                                         )
                                     }
 
@@ -367,9 +384,9 @@ fun WelcomeScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(50.dp),
-                    border = BorderStroke(1.dp, Color(0x33D4A24C)),
+                    border = BorderStroke(1.dp, if (isDark) Color(0x33D4A24C) else Color(0x66D4A24C)),
                     colors = ButtonDefaults.outlinedButtonColors(
-                        contentColor = Color(0xFFFBF8F3)
+                        contentColor = textPrimary
                     )
                 ) {
                     Text(
@@ -409,10 +426,19 @@ private fun ShowcaseSlide(
     icon: ImageVector,
     tags: List<String>
 ) {
+    val isDark = MaterialTheme.colorScheme.background.luminance() < 0.5f
+    val slideBg = if (isDark) Color(0xFF161522) else Color(0xFFFFFFFF)
+    val slideBorder = if (isDark) Color(0x1FD4A24C) else Color(0x33D4A24C)
+    val textTitle = if (isDark) Color(0xFFFBF8F3) else Color(0xFF19181F)
+    val textDesc = if (isDark) Color(0xFFFBF8F3).copy(alpha = 0.75f) else Color(0xFF4A453E)
+    val tagBg = if (isDark) Color(0x0DFBF8F3) else Color(0xFFF4F0EB)
+    val tagBorder = if (isDark) Color(0x14FBF8F3) else Color(0x1A000000)
+    val tagText = if (isDark) Color(0xFFFBF8F3).copy(alpha = 0.8f) else Color(0xFF575249)
+
     Surface(
         shape = RoundedCornerShape(18.dp),
-        color = Color(0xFF161522),
-        border = BorderStroke(1.dp, Color(0x1FD4A24C)),
+        color = slideBg,
+        border = BorderStroke(1.dp, slideBorder),
         modifier = Modifier
             .fillMaxWidth()
             .padding(vertical = Space.xs)
@@ -430,8 +456,8 @@ private fun ShowcaseSlide(
             ) {
                 Surface(
                     shape = RoundedCornerShape(8.dp),
-                    color = badgeColor.copy(alpha = 0.15f),
-                    border = BorderStroke(1.dp, badgeColor.copy(alpha = 0.3f))
+                    color = badgeColor.copy(alpha = if (isDark) 0.15f else 0.12f),
+                    border = BorderStroke(1.dp, badgeColor.copy(alpha = if (isDark) 0.3f else 0.25f))
                 ) {
                     Text(
                         text = badge,
@@ -444,7 +470,7 @@ private fun ShowcaseSlide(
 
                 Surface(
                     shape = CircleShape,
-                    color = badgeColor.copy(alpha = 0.15f),
+                    color = badgeColor.copy(alpha = if (isDark) 0.15f else 0.12f),
                     modifier = Modifier.size(36.dp)
                 ) {
                     Box(contentAlignment = Alignment.Center) {
@@ -465,12 +491,12 @@ private fun ShowcaseSlide(
                         fontFamily = FontFamily.Serif,
                         fontWeight = FontWeight.Bold
                     ),
-                    color = Color(0xFFFBF8F3)
+                    color = textTitle
                 )
                 Text(
                     text = description,
                     style = MaterialTheme.typography.bodySmall,
-                    color = Color(0xFFFBF8F3).copy(alpha = 0.75f),
+                    color = textDesc,
                     lineHeight = 18.sp
                 )
             }
@@ -483,13 +509,13 @@ private fun ShowcaseSlide(
                 tags.take(4).forEach { tag ->
                     Surface(
                         shape = RoundedCornerShape(6.dp),
-                        color = Color(0x0DFBF8F3),
-                        border = BorderStroke(1.dp, Color(0x14FBF8F3))
+                        color = tagBg,
+                        border = BorderStroke(1.dp, tagBorder)
                     ) {
                         Text(
                             text = tag,
                             style = MaterialTheme.typography.labelSmall,
-                            color = Color(0xFFFBF8F3).copy(alpha = 0.8f),
+                            color = tagText,
                             modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp)
                         )
                     }

@@ -93,35 +93,84 @@ object LifeGradients {
     )
 }
 
-// Light theme — Warm Paper & Deep Indigo
+// Dimension Pastels for Colorful Light Mode Cards
+object DimensionPastels {
+    val Health = Color(0xFFFFF2F2)
+    val HealthBorder = Color(0xFFFDCACA)
+    
+    val Wealth = Color(0xFFFFF9EB)
+    val WealthBorder = Color(0xFFFDE68A)
+    
+    val Relationships = Color(0xFFFFF4EE)
+    val RelationshipsBorder = Color(0xFFFED7AA)
+    
+    val Career = Color(0xFFF1F6FD)
+    val CareerBorder = Color(0xFFBFDBFE)
+    
+    val Learning = Color(0xFFF6F3FA)
+    val LearningBorder = Color(0xFFDDD6FE)
+    
+    val Fitness = Color(0xFFFFF6ED)
+    val FitnessBorder = Color(0xFFFED7AA)
+    
+    val MentalHealth = Color(0xFFF0FAF7)
+    val MentalHealthBorder = Color(0xFFA7F3D0)
+    
+    val SocialLife = Color(0xFFF9F7F2)
+    val SocialLifeBorder = Color(0xFFE5DDD5)
+    
+    fun backgroundFor(dim: com.lifescore.app.domain.model.DimensionType): Color = when (dim) {
+        com.lifescore.app.domain.model.DimensionType.HEALTH -> Health
+        com.lifescore.app.domain.model.DimensionType.WEALTH -> Wealth
+        com.lifescore.app.domain.model.DimensionType.RELATIONSHIPS -> Relationships
+        com.lifescore.app.domain.model.DimensionType.CAREER -> Career
+        com.lifescore.app.domain.model.DimensionType.LEARNING -> Learning
+        com.lifescore.app.domain.model.DimensionType.FITNESS -> Fitness
+        com.lifescore.app.domain.model.DimensionType.MENTAL_HEALTH -> MentalHealth
+        com.lifescore.app.domain.model.DimensionType.SOCIAL_LIFE -> SocialLife
+    }
+    
+    fun borderFor(dim: com.lifescore.app.domain.model.DimensionType): Color = when (dim) {
+        com.lifescore.app.domain.model.DimensionType.HEALTH -> HealthBorder
+        com.lifescore.app.domain.model.DimensionType.WEALTH -> WealthBorder
+        com.lifescore.app.domain.model.DimensionType.RELATIONSHIPS -> RelationshipsBorder
+        com.lifescore.app.domain.model.DimensionType.CAREER -> CareerBorder
+        com.lifescore.app.domain.model.DimensionType.LEARNING -> LearningBorder
+        com.lifescore.app.domain.model.DimensionType.FITNESS -> FitnessBorder
+        com.lifescore.app.domain.model.DimensionType.MENTAL_HEALTH -> MentalHealthBorder
+        com.lifescore.app.domain.model.DimensionType.SOCIAL_LIFE -> SocialLifeBorder
+    }
+}
+
+// Light theme — Vibrant Champagne Gold & Colorful Editorial Cards
 val LightColorScheme = lightColorScheme(
-    primary = Accent.Primary,
-    onPrimary = Neutrals.White,
-    primaryContainer = Color(0xFFE6E5F5),
-    onPrimaryContainer = Accent.PrimaryDark,
+    primary = Color(0xFFD4A24C),
+    onPrimary = Color(0xFF1B1408),
+    primaryContainer = Color(0xFFFFF3DB),
+    onPrimaryContainer = Color(0xFF7A510A),
     
-    secondary = Accent.Secondary,
-    onSecondary = Neutrals.White,
-    secondaryContainer = Color(0xFFF5E5DC),
-    onSecondaryContainer = Color(0xFF4A2618),
+    secondary = Color(0xFFD97757),
+    onSecondary = Color(0xFFFFFFFF),
+    secondaryContainer = Color(0xFFFEECE4),
+    onSecondaryContainer = Color(0xFF7C2D12),
     
-    tertiary = Accent.Tertiary,
-    onTertiary = Neutrals.White,
-    tertiaryContainer = Color(0xFFDCF0EC),
-    onTertiaryContainer = Color(0xFF1A3D37),
+    tertiary = Color(0xFF439386),
+    onTertiary = Color(0xFFFFFFFF),
+    tertiaryContainer = Color(0xFFE2F7F2),
+    onTertiaryContainer = Color(0xFF0D5347),
     
-    background = Neutrals.Paper,
-    onBackground = Neutrals.Ink_900,
-    surface = Neutrals.White,
-    onSurface = Neutrals.Ink_900,
-    surfaceVariant = Neutrals.Ink_50,
-    onSurfaceVariant = Neutrals.Ink_500,
+    background = Color(0xFFF9F8F5),
+    onBackground = Color(0xFF19181F),
+    surface = Color(0xFFFFFFFF),
+    onSurface = Color(0xFF19181F),
+    surfaceVariant = Color(0xFFF2EFE9),
+    onSurfaceVariant = Color(0xFF6B6678),
     
-    outline = Neutrals.Ink_200,
-    outlineVariant = Neutrals.Ink_100,
+    outline = Color(0xFFE2DDD5),
+    outlineVariant = Color(0xFFEBE6DD),
     
-    error = Accent.Error,
-    onError = Neutrals.White
+    error = Color(0xFFE85D5D),
+    onError = Color(0xFFFFFFFF)
 )
 
 // Dark theme — Luxury Obsidian & Champagne Gold

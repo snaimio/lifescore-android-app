@@ -27,6 +27,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -57,6 +58,8 @@ fun LifeScoreHero(
         label = "heroProgressAnimation"
     )
 
+    val isDark = MaterialTheme.colorScheme.background.luminance() < 0.5f
+
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -67,31 +70,45 @@ fun LifeScoreHero(
             ),
         shape = RoundedCornerShape(24.dp),
         colors = CardDefaults.cardColors(
-            containerColor = Color(0xFF13121D)
+            containerColor = if (isDark) Color(0xFF13121D) else Color(0xFFFFFFFF)
         ),
-        border = BorderStroke(
-            1.dp,
-            Brush.linearGradient(
-                colors = listOf(
-                    Color(0xFFD4A24C).copy(alpha = 0.45f),
-                    Color(0xFF2E2B3E).copy(alpha = 0.6f),
-                    Color(0xFFD4A24C).copy(alpha = 0.2f)
+        border = if (isDark) {
+            BorderStroke(
+                1.dp,
+                Brush.linearGradient(
+                    colors = listOf(
+                        Color(0xFFD4A24C).copy(alpha = 0.45f),
+                        Color(0xFF2E2B3E).copy(alpha = 0.6f),
+                        Color(0xFFD4A24C).copy(alpha = 0.2f)
+                    )
                 )
             )
-        )
+        } else {
+            BorderStroke(1.dp, Color(0xFFE8D5B5))
+        }
     ) {
         Box(
             modifier = Modifier
                 .fillMaxWidth()
                 .background(
-                    brush = Brush.radialGradient(
-                        colors = listOf(
-                            Color(0xFF261F13).copy(alpha = 0.7f),
-                            Color(0xFF100F18)
-                        ),
-                        center = Offset(180f, 180f),
-                        radius = 450f
-                    )
+                    brush = if (isDark) {
+                        Brush.radialGradient(
+                            colors = listOf(
+                                Color(0xFF261F13).copy(alpha = 0.7f),
+                                Color(0xFF100F18)
+                            ),
+                            center = Offset(180f, 180f),
+                            radius = 450f
+                        )
+                    } else {
+                        Brush.linearGradient(
+                            colors = listOf(
+                                Color(0xFFFFF9EE),
+                                Color(0xFFFDF1EC),
+                                Color(0xFFF3F1FA)
+                            )
+                        )
+                    }
                 )
                 .padding(horizontal = 18.dp, vertical = 22.dp)
         ) {
@@ -114,7 +131,7 @@ fun LifeScoreHero(
 
                         // Background Arc Track
                         drawArc(
-                            color = Color(0xFF221F2C),
+                            color = if (isDark) Color(0xFF221F2C) else Color(0xFFEADBCE),
                             startAngle = startAngle,
                             sweepAngle = totalSweep,
                             useCenter = false,
@@ -125,11 +142,19 @@ fun LifeScoreHero(
                         // Progress Arc
                         drawArc(
                             brush = Brush.horizontalGradient(
-                                colors = listOf(
-                                    Color(0xFFB38230),
-                                    Color(0xFFD4A24C),
-                                    Color(0xFFFDE68A)
-                                )
+                                colors = if (isDark) {
+                                    listOf(
+                                        Color(0xFFB38230),
+                                        Color(0xFFD4A24C),
+                                        Color(0xFFFDE68A)
+                                    )
+                                } else {
+                                    listOf(
+                                        Color(0xFFE08556),
+                                        Color(0xFFD4A24C),
+                                        Color(0xFF6BA89C)
+                                    )
+                                }
                             ),
                             startAngle = startAngle,
                             sweepAngle = totalSweep * animatedProgress,
@@ -161,13 +186,13 @@ fun LifeScoreHero(
                                 text = animatedScore.toString(),
                                 fontSize = 34.sp,
                                 fontWeight = FontWeight.Black,
-                                color = Color(0xFFFBF8F3)
+                                color = if (isDark) Color(0xFFFBF8F3) else Color(0xFF19181F)
                             )
                             Text(
                                 text = "/1000",
                                 fontSize = 11.sp,
                                 fontWeight = FontWeight.Bold,
-                                color = Color(0xFF9E9AA8),
+                                color = if (isDark) Color(0xFF9E9AA8) else Color(0xFF6B6678),
                                 modifier = Modifier.padding(bottom = 5.dp, start = 2.dp)
                             )
                         }
@@ -175,7 +200,7 @@ fun LifeScoreHero(
                         Text(
                             text = "Daily Index",
                             fontSize = 10.sp,
-                            color = Color(0xFF9E9AA8),
+                            color = if (isDark) Color(0xFF9E9AA8) else Color(0xFF6B6678),
                             textAlign = TextAlign.Center
                         )
                     }
@@ -226,8 +251,8 @@ fun LifeScoreHero(
                     // View Stats Action Button
                     Surface(
                         shape = RoundedCornerShape(16.dp),
-                        color = Color(0xFF1D1B2B),
-                        border = BorderStroke(1.dp, Color(0x35D4A24C)),
+                        color = if (isDark) Color(0xFF1D1B2B) else Color(0xFFFFFFFF),
+                        border = BorderStroke(1.dp, if (isDark) Color(0x35D4A24C) else Color(0x50D4A24C)),
                         modifier = Modifier.clickable { onClick() }
                     ) {
                         Row(
@@ -238,7 +263,7 @@ fun LifeScoreHero(
                                 text = "View Stats",
                                 fontSize = 12.sp,
                                 fontWeight = FontWeight.Bold,
-                                color = Color(0xFFFBF8F3)
+                                color = if (isDark) Color(0xFFFBF8F3) else Color(0xFF19181F)
                             )
                             Spacer(Modifier.width(4.dp))
                             Icon(

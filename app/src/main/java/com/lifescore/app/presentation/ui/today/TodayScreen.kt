@@ -19,6 +19,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -62,6 +63,8 @@ fun TodayScreen(
     val currentHour = remember { Calendar.getInstance().get(Calendar.HOUR_OF_DAY) }
     val isEvening = currentHour >= 18
 
+    val isDark = MaterialTheme.colorScheme.background.luminance() < 0.5f
+
     val maxVisibleQuests = when (uiState.userPhase) {
         UserPhase.NEW_USER -> 4
         UserPhase.EXPLORING -> 6
@@ -100,8 +103,8 @@ fun TodayScreen(
                     ) {
                         Surface(
                             shape = CircleShape,
-                            color = Color(0xFF1D1B2B),
-                            border = BorderStroke(1.dp, Color(0x50D4A24C)),
+                            color = if (isDark) Color(0xFF1D1B2B) else Color(0xFFFFF3DB),
+                            border = BorderStroke(1.dp, if (isDark) Color(0x50D4A24C) else Color(0xFFD4A24C)),
                             modifier = Modifier.size(36.dp)
                         ) {
                             Box(contentAlignment = Alignment.Center) {
@@ -242,16 +245,20 @@ fun TodayScreen(
                                     completedSteps = gettingStartedManager.getCompletedStepCount()
                                 },
                             shape = LifeScoreShapes.card,
-                            color = Color(0xFF14131E),
-                            border = BorderStroke(
-                                1.dp,
-                                androidx.compose.ui.graphics.Brush.linearGradient(
-                                    colors = listOf(
-                                        Color(0xFFD4A24C).copy(alpha = 0.4f),
-                                        Color(0xFF2E2B3E).copy(alpha = 0.5f)
+                            color = if (isDark) Color(0xFF14131E) else DimensionPastels.backgroundFor(topPendingTask.dimension),
+                            border = if (isDark) {
+                                BorderStroke(
+                                    1.dp,
+                                    androidx.compose.ui.graphics.Brush.linearGradient(
+                                        colors = listOf(
+                                            Color(0xFFD4A24C).copy(alpha = 0.4f),
+                                            Color(0xFF2E2B3E).copy(alpha = 0.5f)
+                                        )
                                     )
                                 )
-                            )
+                            } else {
+                                BorderStroke(1.dp, DimensionPastels.borderFor(topPendingTask.dimension))
+                            }
                         ) {
                             Column(modifier = Modifier.padding(Space.cardH)) {
                                 Row(
@@ -295,7 +302,7 @@ fun TodayScreen(
                                     text = topPendingTask.title,
                                     style = MaterialTheme.typography.titleMedium,
                                     fontWeight = FontWeight.Bold,
-                                    color = Color(0xFFFBF8F3)
+                                    color = if (isDark) Color(0xFFFBF8F3) else Color(0xFF19181F)
                                 )
 
                                 Spacer(Modifier.height(Space.xxs))
@@ -317,14 +324,18 @@ fun TodayScreen(
                                     shape = LifeScoreShapes.button,
                                     modifier = Modifier.fillMaxWidth(),
                                     colors = ButtonDefaults.buttonColors(
-                                        containerColor = if (topPendingTask.isCompleted) Color(0xFF1D1B2B) else Color(0xFFD4A24C)
+                                        containerColor = if (topPendingTask.isCompleted) {
+                                            if (isDark) Color(0xFF1D1B2B) else Color(0xFFEBE6DD)
+                                        } else Color(0xFFD4A24C)
                                     )
                                 ) {
                                     Text(
                                         text = if (topPendingTask.isCompleted) "Completed" else "Mark Complete",
                                         fontWeight = FontWeight.Bold,
                                         fontSize = 13.sp,
-                                        color = if (topPendingTask.isCompleted) Color(0xFF9E9AA8) else Color(0xFF1B1408)
+                                        color = if (topPendingTask.isCompleted) {
+                                            if (isDark) Color(0xFF9E9AA8) else Color(0xFF6B6678)
+                                        } else Color(0xFF1B1408)
                                     )
                                 }
                             }
@@ -363,6 +374,17 @@ fun TodayScreen(
                                     rowTasks.forEach { task ->
                                         val isCompleted = task.isCompleted
                                         val dimColor = Color(task.dimension.baseColorHex)
+                                        val cardBg = if (isDark) {
+                                            if (isCompleted) Color(0xFF12111A) else Color(0xFF151422)
+                                        } else {
+                                            if (isCompleted) Color(0xFFF0FDF4) else DimensionPastels.backgroundFor(task.dimension)
+                                        }
+                                        val cardBorder = if (isDark) {
+                                            if (isCompleted) Color(0x3010B981) else Color(0x20D4A24C)
+                                        } else {
+                                            if (isCompleted) Color(0xFFBBF7D0) else DimensionPastels.borderFor(task.dimension)
+                                        }
+
                                         Surface(
                                             modifier = Modifier
                                                 .weight(1f)
@@ -373,10 +395,10 @@ fun TodayScreen(
                                                     completedSteps = gettingStartedManager.getCompletedStepCount()
                                                 },
                                             shape = LifeScoreShapes.card,
-                                            color = if (isCompleted) Color(0xFF12111A) else Color(0xFF151422),
+                                            color = cardBg,
                                             border = BorderStroke(
                                                 width = 1.dp,
-                                                color = if (isCompleted) Color(0x3010B981) else Color(0x20D4A24C)
+                                                color = cardBorder
                                             )
                                         ) {
                                             Column(
@@ -411,7 +433,11 @@ fun TodayScreen(
                                                     style = MaterialTheme.typography.titleSmall,
                                                     fontWeight = FontWeight.Bold,
                                                     maxLines = 2,
-                                                    color = if (isCompleted) MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f) else Color(0xFFFBF8F3)
+                                                    color = if (isCompleted) {
+                                                        if (isDark) MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f) else Color(0xFF8C8696)
+                                                    } else {
+                                                        if (isDark) Color(0xFFFBF8F3) else Color(0xFF19181F)
+                                                    }
                                                 )
 
                                                 Spacer(Modifier.height(Space.xs))
@@ -420,7 +446,11 @@ fun TodayScreen(
                                                 Text(
                                                     text = if (isCompleted) "Completed" else "In Progress",
                                                     style = MaterialTheme.typography.bodySmall.copy(fontSize = 11.sp),
-                                                    color = if (isCompleted) Color(0xFF10B981) else MaterialTheme.colorScheme.onSurfaceVariant
+                                                    color = if (isCompleted) {
+                                                        if (isDark) Color(0xFF10B981) else Color(0xFF16A34A)
+                                                    } else {
+                                                        if (isDark) MaterialTheme.colorScheme.onSurfaceVariant else dimColor
+                                                    }
                                                 )
 
                                                 Spacer(Modifier.height(Space.sm))
@@ -433,8 +463,14 @@ fun TodayScreen(
                                                 ) {
                                                     Surface(
                                                         shape = CircleShape,
-                                                        color = if (isCompleted) Color(0xFF10B981) else Color(0xFF1D1B2B),
-                                                        border = if (!isCompleted) BorderStroke(1.dp, Color(0x30D4A24C)) else null,
+                                                        color = if (isCompleted) {
+                                                            if (isDark) Color(0xFF10B981) else Color(0xFF16A34A)
+                                                        } else {
+                                                            if (isDark) Color(0xFF1D1B2B) else Color(0xFFFFFFFF)
+                                                        },
+                                                        border = if (!isCompleted) {
+                                                            BorderStroke(1.dp, if (isDark) Color(0x30D4A24C) else dimColor.copy(alpha = 0.5f))
+                                                        } else null,
                                                         modifier = Modifier.size(24.dp)
                                                     ) {
                                                         Box(contentAlignment = Alignment.Center) {

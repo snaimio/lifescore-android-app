@@ -16,7 +16,9 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -41,6 +43,8 @@ fun MeScreen(
     navController: NavController
 ) {
     val uiState by viewModel.uiState.collectAsState()
+
+    val isDark = MaterialTheme.colorScheme.background.luminance() < 0.5f
 
     Scaffold(
         modifier = Modifier
@@ -92,70 +96,96 @@ fun MeScreen(
             // ==========================================
             item {
                 StaggeredAppear(index = 0) {
-                    LifeCard(
+                    Surface(
                         modifier = Modifier.fillMaxWidth(),
-                        variant = CardVariant.Primary
+                        shape = LifeScoreShapes.card,
+                        color = if (isDark) MaterialTheme.colorScheme.primaryContainer else Color.Transparent,
+                        border = if (isDark) {
+                            BorderStroke(0.5.dp, MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f))
+                        } else {
+                            BorderStroke(1.dp, Color(0xFFE8D5B5))
+                        }
                     ) {
-                        Column(
-                            modifier = Modifier.fillMaxWidth(),
-                            horizontalAlignment = Alignment.CenterHorizontally
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .then(
+                                    if (!isDark) {
+                                        Modifier.background(
+                                            Brush.linearGradient(
+                                                listOf(
+                                                    Color(0xFFFFF9EE),
+                                                    Color(0xFFFDF1EB),
+                                                    Color(0xFFF4F2FC)
+                                                )
+                                            )
+                                        )
+                                    } else Modifier
+                                )
+                                .padding(horizontal = Space.cardH, vertical = Space.cardV)
                         ) {
-                            Surface(
-                                shape = CircleShape,
-                                color = MaterialTheme.colorScheme.primary,
-                                modifier = Modifier.size(64.dp)
+                            Column(
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalAlignment = Alignment.CenterHorizontally
                             ) {
-                                Box(contentAlignment = Alignment.Center) {
-                                    LifeIcon(
-                                        icon = LifeIcons.Profile,
-                                        size = 32.dp,
-                                        tint = MaterialTheme.colorScheme.onPrimary
+                                Surface(
+                                    shape = CircleShape,
+                                    color = MaterialTheme.colorScheme.primary,
+                                    modifier = Modifier.size(64.dp)
+                                ) {
+                                    Box(contentAlignment = Alignment.Center) {
+                                        LifeIcon(
+                                            icon = LifeIcons.Profile,
+                                            size = 32.dp,
+                                            tint = MaterialTheme.colorScheme.onPrimary
+                                        )
+                                    }
+                                }
+
+                                Spacer(Modifier.height(Space.sm))
+                                Text(
+                                    uiState.user.name.ifBlank { "Guest" },
+                                    style = MaterialTheme.typography.headlineMedium,
+                                    fontWeight = FontWeight.Bold,
+                                    color = if (isDark) MaterialTheme.colorScheme.onPrimaryContainer else Color(0xFF19181F)
+                                )
+                                Text(
+                                    uiState.user.title.ifBlank { "Member" },
+                                    style = MaterialTheme.typography.titleSmall,
+                                    fontWeight = FontWeight.Bold,
+                                    color = MaterialTheme.colorScheme.primary
+                                )
+
+                                Spacer(Modifier.height(Space.md))
+
+                                // Overall Consistency Progress
+                                Row(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    horizontalArrangement = Arrangement.SpaceBetween
+                                ) {
+                                    Text(
+                                        "Weekly Habit Consistency",
+                                        style = MaterialTheme.typography.labelMedium,
+                                        fontWeight = FontWeight.Bold,
+                                        color = if (isDark) MaterialTheme.colorScheme.onSurface else Color(0xFF19181F)
+                                    )
+                                    Text(
+                                        "${uiState.consistencyPercentage}% on track",
+                                        style = MaterialTheme.typography.labelSmall,
+                                        color = MaterialTheme.colorScheme.onSurfaceVariant
                                     )
                                 }
-                            }
-
-                            Spacer(Modifier.height(Space.sm))
-                            Text(
-                                uiState.user.name.ifBlank { "Guest" },
-                                style = MaterialTheme.typography.headlineMedium,
-                                fontWeight = FontWeight.Bold,
-                                color = MaterialTheme.colorScheme.onPrimaryContainer
-                            )
-                            Text(
-                                uiState.user.title.ifBlank { "Member" },
-                                style = MaterialTheme.typography.titleSmall,
-                                fontWeight = FontWeight.Bold,
-                                color = MaterialTheme.colorScheme.primary
-                            )
-
-                            Spacer(Modifier.height(Space.md))
-
-                            // Overall Consistency Progress
-                            Row(
-                                modifier = Modifier.fillMaxWidth(),
-                                horizontalArrangement = Arrangement.SpaceBetween
-                            ) {
-                                Text(
-                                    "Weekly Habit Consistency",
-                                    style = MaterialTheme.typography.labelMedium,
-                                    fontWeight = FontWeight.Bold
-                                )
-                                Text(
-                                    "${uiState.consistencyPercentage}% on track",
-                                    style = MaterialTheme.typography.labelSmall,
-                                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                                Spacer(Modifier.height(Space.xs))
+                                LinearProgressIndicator(
+                                    progress = { uiState.consistencyPercentage / 100f },
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .height(8.dp)
+                                        .clip(CircleShape),
+                                    color = MaterialTheme.colorScheme.primary,
+                                    trackColor = if (isDark) MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f) else Color(0xFFEADBCE)
                                 )
                             }
-                            Spacer(Modifier.height(Space.xs))
-                            LinearProgressIndicator(
-                                progress = { uiState.consistencyPercentage / 100f },
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .height(8.dp)
-                                    .clip(CircleShape),
-                                color = MaterialTheme.colorScheme.primary,
-                                trackColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f)
-                            )
                         }
                     }
                 }
@@ -170,10 +200,11 @@ fun MeScreen(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.spacedBy(Space.sm)
                     ) {
+                        // STREAK
                         Surface(
                             shape = LifeScoreShapes.cardSmall,
-                            color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f),
-                            border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f)),
+                            color = if (isDark) MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f) else Color(0xFFFFF5ED),
+                            border = if (isDark) BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f)) else BorderStroke(1.dp, Color(0xFFFED7AA)),
                             modifier = Modifier.weight(1f)
                         ) {
                             Column(
@@ -188,13 +219,14 @@ fun MeScreen(
                                     Text("STREAK", style = MaterialTheme.typography.labelSmall.copy(fontSize = 9.sp), fontWeight = FontWeight.Bold, color = Color(0xFFFF5722))
                                 }
                                 Spacer(Modifier.height(Space.xxs))
-                                Text("${uiState.user.currentStreakDays} Days", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
+                                Text("${uiState.user.currentStreakDays} Days", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold, color = if (isDark) MaterialTheme.colorScheme.onSurface else Color(0xFF19181F))
                             }
                         }
+                        // COMPLETED
                         Surface(
                             shape = LifeScoreShapes.cardSmall,
-                            color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f),
-                            border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f)),
+                            color = if (isDark) MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f) else Color(0xFFF0FDF4),
+                            border = if (isDark) BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f)) else BorderStroke(1.dp, Color(0xFFBBF7D0)),
                             modifier = Modifier.weight(1f)
                         ) {
                             Column(
@@ -209,13 +241,14 @@ fun MeScreen(
                                     Text("COMPLETED", style = MaterialTheme.typography.labelSmall.copy(fontSize = 9.sp), fontWeight = FontWeight.Bold, color = Color(0xFF10B981))
                                 }
                                 Spacer(Modifier.height(Space.xxs))
-                                Text("${uiState.totalTasksCompleted} Habits", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
+                                Text("${uiState.totalTasksCompleted} Habits", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold, color = if (isDark) MaterialTheme.colorScheme.onSurface else Color(0xFF19181F))
                             }
                         }
+                        // FOCUS
                         Surface(
                             shape = LifeScoreShapes.cardSmall,
-                            color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f),
-                            border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f)),
+                            color = if (isDark) MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f) else Color(0xFFF5F3FF),
+                            border = if (isDark) BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f)) else BorderStroke(1.dp, Color(0xFFDDD6FE)),
                             modifier = Modifier.weight(1f)
                         ) {
                             Column(
@@ -230,13 +263,14 @@ fun MeScreen(
                                     Text("FOCUS", style = MaterialTheme.typography.labelSmall.copy(fontSize = 9.sp), fontWeight = FontWeight.Bold, color = Color(0xFF6366F1))
                                 }
                                 Spacer(Modifier.height(Space.xxs))
-                                Text("${String.format(java.util.Locale.US, "%.1f", uiState.focusHours)} hrs", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
+                                Text("${String.format(java.util.Locale.US, "%.1f", uiState.focusHours)} hrs", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold, color = if (isDark) MaterialTheme.colorScheme.onSurface else Color(0xFF19181F))
                             }
                         }
+                        // RATE
                         Surface(
                             shape = LifeScoreShapes.cardSmall,
-                            color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f),
-                            border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f)),
+                            color = if (isDark) MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f) else Color(0xFFFFFBEB),
+                            border = if (isDark) BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f)) else BorderStroke(1.dp, Color(0xFFFDE68A)),
                             modifier = Modifier.weight(1f)
                         ) {
                             Column(
@@ -251,7 +285,7 @@ fun MeScreen(
                                     Text("RATE", style = MaterialTheme.typography.labelSmall.copy(fontSize = 9.sp), fontWeight = FontWeight.Bold, color = Color(0xFFF59E0B))
                                 }
                                 Spacer(Modifier.height(Space.xxs))
-                                Text("${uiState.consistencyPercentage}%", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
+                                Text("${uiState.consistencyPercentage}%", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold, color = if (isDark) MaterialTheme.colorScheme.onSurface else Color(0xFF19181F))
                             }
                         }
                     }

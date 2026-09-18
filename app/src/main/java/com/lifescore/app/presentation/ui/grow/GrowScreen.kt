@@ -16,7 +16,9 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -293,79 +295,98 @@ private fun GrowthAreaCard(
     onToggle: () -> Unit,
     onOpenTool: (String) -> Unit
 ) {
-    LifeCard(
+    val isDark = MaterialTheme.colorScheme.background.luminance() < 0.5f
+    val cardBg = if (isDark) MaterialTheme.colorScheme.surface else area.color.copy(alpha = 0.08f)
+    val cardBorder = if (isDark) {
+        BorderStroke(0.5.dp, MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f))
+    } else {
+        BorderStroke(1.dp, area.color.copy(alpha = 0.28f))
+    }
+
+    Surface(
         modifier = Modifier
             .fillMaxWidth()
+            .clip(LifeScoreShapes.card)
             .clickable { onToggle() },
-        variant = CardVariant.Default
+        shape = LifeScoreShapes.card,
+        color = cardBg,
+        border = cardBorder
     ) {
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.weight(1f)) {
-                Surface(
-                    shape = LifeScoreShapes.button,
-                    color = area.color.copy(alpha = 0.12f),
-                    modifier = Modifier.size(42.dp)
-                ) {
-                    Box(contentAlignment = Alignment.Center) {
-                        LifeIcon(
-                            icon = area.icon,
-                            size = 20.dp,
-                            tint = area.color
+        Column(modifier = Modifier.padding(horizontal = Space.cardH, vertical = Space.cardV)) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.weight(1f)) {
+                    Surface(
+                        shape = LifeScoreShapes.button,
+                        color = area.color.copy(alpha = if (isDark) 0.12f else 0.18f),
+                        modifier = Modifier.size(42.dp)
+                    ) {
+                        Box(contentAlignment = Alignment.Center) {
+                            LifeIcon(
+                                icon = area.icon,
+                                size = 20.dp,
+                                tint = area.color
+                            )
+                        }
+                    }
+                    Spacer(Modifier.width(Space.sm))
+                    Column {
+                        Text(
+                            area.title,
+                            style = MaterialTheme.typography.titleSmall,
+                            fontWeight = FontWeight.Bold,
+                            color = MaterialTheme.colorScheme.onSurface
+                        )
+                        Text(
+                            area.subtitle,
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            maxLines = 1
                         )
                     }
                 }
-                Spacer(Modifier.width(Space.sm))
-                Column {
+
+                Surface(
+                    shape = LifeScoreShapes.tag,
+                    color = if (isDark) MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.6f) else area.color.copy(alpha = 0.15f)
+                ) {
                     Text(
-                        area.title,
-                        style = MaterialTheme.typography.titleSmall,
-                        fontWeight = FontWeight.Bold
-                    )
-                    Text(
-                        area.subtitle,
-                        style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        maxLines = 1
+                        text = "${area.tools.size} tools",
+                        style = MaterialTheme.typography.labelSmall,
+                        fontWeight = FontWeight.SemiBold,
+                        color = if (isDark) MaterialTheme.colorScheme.onSurfaceVariant else area.color,
+                        modifier = Modifier.padding(horizontal = Space.xs, vertical = Space.xxs)
                     )
                 }
             }
 
-            Surface(
-                shape = LifeScoreShapes.tag,
-                color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.6f)
+            AnimatedVisibility(
+                visible = isExpanded,
+                enter = fadeIn(Motion.Gentle) + expandVertically(),
+                exit = fadeOut(Motion.Snappy) + shrinkVertically()
             ) {
-                Text(
-                    text = "${area.tools.size} tools",
-                    style = MaterialTheme.typography.labelSmall,
-                    fontWeight = FontWeight.SemiBold,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    modifier = Modifier.padding(horizontal = Space.xs, vertical = Space.xxs)
-                )
-            }
-        }
-
-        AnimatedVisibility(
-            visible = isExpanded,
-            enter = fadeIn(Motion.Gentle) + expandVertically(),
-            exit = fadeOut(Motion.Snappy) + shrinkVertically()
-        ) {
-            Column(
-                modifier = Modifier.padding(top = Space.md),
-                verticalArrangement = Arrangement.spacedBy(Space.xs)
-            ) {
-                area.tools.forEach { tool ->
-                    Surface(
-                        shape = LifeScoreShapes.cardSmall,
-                        color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.35f),
-                        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f)),
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .clickable { onOpenTool(tool.route) }
-                    ) {
+                Column(
+                    modifier = Modifier.padding(top = Space.md),
+                    verticalArrangement = Arrangement.spacedBy(Space.xs)
+                ) {
+                    area.tools.forEach { tool ->
+                        val toolBg = if (isDark) MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.35f) else Color.White
+                        val toolBorder = if (isDark) {
+                            BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f))
+                        } else {
+                            BorderStroke(1.dp, area.color.copy(alpha = 0.2f))
+                        }
+                        Surface(
+                            shape = LifeScoreShapes.cardSmall,
+                            color = toolBg,
+                            border = toolBorder,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .clickable { onOpenTool(tool.route) }
+                        ) {
                         Row(
                             modifier = Modifier.padding(horizontal = Space.md, vertical = Space.sm),
                             verticalAlignment = Alignment.CenterVertically
@@ -417,4 +438,5 @@ private fun GrowthAreaCard(
             }
         }
     }
+}
 }

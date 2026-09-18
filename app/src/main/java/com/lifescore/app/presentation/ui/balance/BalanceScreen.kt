@@ -18,12 +18,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.lifescore.app.core.designsystem.components.CardVariant
 import com.lifescore.app.core.designsystem.DimensionColors
+import com.lifescore.app.core.designsystem.DimensionPastels
 import com.lifescore.app.core.designsystem.LifeScoreShapes
 import com.lifescore.app.core.designsystem.Motion
 import com.lifescore.app.core.designsystem.Neutrals
@@ -314,6 +316,14 @@ fun BalanceScreen(
                                         DimensionType.SOCIAL_LIFE -> "+3%"
                                     }
 
+                                    val isDark = MaterialTheme.colorScheme.background.luminance() < 0.5f
+                                    val cardBg = if (isDark) MaterialTheme.colorScheme.surface else DimensionPastels.backgroundFor(dimension)
+                                    val cardBorder = if (isDark) {
+                                        BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f))
+                                    } else {
+                                        BorderStroke(1.dp, DimensionPastels.borderFor(dimension))
+                                    }
+
                                     Surface(
                                         modifier = Modifier
                                             .weight(1f)
@@ -323,8 +333,8 @@ fun BalanceScreen(
                                                 viewModel.selectDimension(dimension)
                                             },
                                         shape = LifeScoreShapes.card,
-                                        color = MaterialTheme.colorScheme.surface,
-                                        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f))
+                                        color = cardBg,
+                                        border = cardBorder
                                     ) {
                                         Column(
                                             modifier = Modifier.padding(Space.md),
