@@ -588,7 +588,8 @@ fun LifeScoreNavGraph(
             composable(Screen.BookLibrary.route) {
                 val bookViewModel = remember {
                     com.lifescore.app.presentation.ui.books.BookSummaryViewModel(
-                        repository = app.bookSummaryRepository
+                        repository = app.bookSummaryRepository,
+                        context = app.applicationContext
                     )
                 }
                 com.lifescore.app.presentation.ui.books.BookSummaryLibraryScreen(
@@ -603,7 +604,8 @@ fun LifeScoreNavGraph(
                 val bookId = backStackEntry.arguments?.getString("bookId") ?: "atomic_habits"
                 val bookViewModel = remember {
                     com.lifescore.app.presentation.ui.books.BookSummaryViewModel(
-                        repository = app.bookSummaryRepository
+                        repository = app.bookSummaryRepository,
+                        context = app.applicationContext
                     )
                 }
                 com.lifescore.app.presentation.ui.books.BookDetailSummaryScreen(

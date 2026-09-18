@@ -1,7 +1,9 @@
 package com.lifescore.app.presentation.ui.books
 
+import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.lifescore.app.core.util.TextToSpeechNarrator
 import com.lifescore.app.data.local.entity.BookSummaryProgressEntity
 import com.lifescore.app.data.repository.BookSummaryRepository
 import com.lifescore.app.domain.model.DimensionType
@@ -35,7 +37,8 @@ data class BookDetailUiState(
 
 class BookSummaryViewModel(
     private val repository: BookSummaryRepository,
-    private val userId: String = "default_user"
+    private val userId: String = "default_user",
+    context: Context? = null
 ) : ViewModel() {
 
     private val _libraryState = MutableStateFlow(BookLibraryUiState())
@@ -45,6 +48,7 @@ class BookSummaryViewModel(
     val detailState: StateFlow<BookDetailUiState> = _detailState.asStateFlow()
 
     private var audioJob: Job? = null
+    private val narrator: TextToSpeechNarrator? = context?.let { TextToSpeechNarrator(it) }
 
     init {
         loadLibrary()
@@ -75,6 +79,8 @@ class BookSummaryViewModel(
     }
 
     fun loadBookDetail(bookId: String) {
+        narrator?.stop()
+        audioJob?.cancel()
         val book = BookSummariesCatalog.books.find { it.id == bookId }
         _detailState.update {
             it.copy(
@@ -100,15 +106,47 @@ class BookSummaryViewModel(
     fun toggleAudioPlayback() {
         val currentlyPlaying = _detailState.value.isPlayingAudio
         if (currentlyPlaying) {
+            narrator?.stop()
             audioJob?.cancel()
             _detailState.update { it.copy(isPlayingAudio = false) }
         } else {
+            val book = _detailState.value.book ?: return
             _detailState.update { it.copy(isPlayingAudio = true) }
-            startAudioSimulation()
+            val speechText = buildNarrationScript(book)
+            narrator?.speak(speechText, _detailState.value.playbackSpeed) {
+                viewModelScope.launch {
+                    _detailState.update { it.copy(isPlayingAudio = false, audioProgressSeconds = it.audioTotalSeconds) }
+                    markBookCompleted(book.id)
+                }
+            }
+            startAudioProgressTimer()
         }
     }
 
-    private fun startAudioSimulation() {
+    private fun buildNarrationScript(book: BookSummary): String {
+        return buildString {
+            append("Audio summary of ").append(book.title).append(", by ").append(book.author).append(". ")
+            append("Core Thesis: ").append(book.coreThesis).append(". ")
+            append("Summary Overview: ").append(book.summaryOverview).append(". ")
+            if (book.keyTakeaways.isNotEmpty()) {
+                append("Key Takeaways. ")
+                book.keyTakeaways.forEach { takeaway ->
+                    append("Takeaway ").append(takeaway.index).append(": ").append(takeaway.title).append(". ")
+                    append(takeaway.summary).append(". ")
+                    append("Action Step: ").append(takeaway.actionStep).append(". ")
+                }
+            }
+            if (book.memorableQuotes.isNotEmpty()) {
+                append("Memorable Quotes: ")
+                book.memorableQuotes.forEach { quote ->
+                    append("\"").append(quote).append("\". ")
+                }
+            }
+            append("LifeScore Applied Quest: ").append(book.actionableLifeScoreQuest).append(".")
+        }
+    }
+
+    private fun startAudioProgressTimer() {
         audioJob?.cancel()
         audioJob = viewModelScope.launch {
             while (_detailState.value.isPlayingAudio) {
@@ -121,10 +159,6 @@ class BookSummaryViewModel(
                 _detailState.update { it.copy(audioProgressSeconds = next) }
 
                 if (next >= total) {
-                    _detailState.update { it.copy(isPlayingAudio = false) }
-                    _detailState.value.book?.let { book ->
-                        markBookCompleted(book.id)
-                    }
                     break
                 }
             }
@@ -133,6 +167,7 @@ class BookSummaryViewModel(
 
     fun setPlaybackSpeed(speed: Float) {
         _detailState.update { it.copy(playbackSpeed = speed) }
+        narrator?.setSpeed(speed)
     }
 
     fun setActiveTab(tab: Int) {
@@ -165,5 +200,6 @@ class BookSummaryViewModel(
     override fun onCleared() {
         super.onCleared()
         audioJob?.cancel()
+        narrator?.shutdown()
     }
 }
