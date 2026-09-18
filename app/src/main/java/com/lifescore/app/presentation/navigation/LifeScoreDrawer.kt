@@ -94,24 +94,7 @@ fun LifeScoreDrawerContent(
                     )
                 }
 
-                // Section 3: Progress & RPG Systems
-                item {
-                    DrawerSectionTitle(title = "PROGRESS & RPG", count = "${DrawerNavigationConfig.progressItems.size}")
-                }
-                items(DrawerNavigationConfig.progressItems, key = { it.route }) { item ->
-                    DrawerNavRow(
-                        item = item,
-                        isSelected = currentRoute == item.route,
-                        onClick = {
-                            navController.navigate(item.route) {
-                                launchSingleTop = true
-                            }
-                            onCloseDrawer()
-                        }
-                    )
-                }
-
-                // Section 4: 15 Trackers
+                // Section 3: Trackers & Wellness
                 item {
                     DrawerSectionTitle(title = "LIFE TRACKERS", count = "${DrawerNavigationConfig.trackerMiniApps.size}")
                 }
@@ -128,43 +111,9 @@ fun LifeScoreDrawerContent(
                     )
                 }
 
-                // Section 5: Community & Social
+                // Section 4: Settings & Info
                 item {
-                    DrawerSectionTitle(title = "COMMUNITY & SOCIAL", count = "${DrawerNavigationConfig.communityItems.size}")
-                }
-                items(DrawerNavigationConfig.communityItems, key = { it.route }) { item ->
-                    DrawerNavRow(
-                        item = item,
-                        isSelected = currentRoute == item.route,
-                        onClick = {
-                            navController.navigate(item.route) {
-                                launchSingleTop = true
-                            }
-                            onCloseDrawer()
-                        }
-                    )
-                }
-
-                // Section 6: Rewards & Store
-                item {
-                    DrawerSectionTitle(title = "STORE & REWARDS", count = "${DrawerNavigationConfig.storeItems.size}")
-                }
-                items(DrawerNavigationConfig.storeItems, key = { it.route }) { item ->
-                    DrawerNavRow(
-                        item = item,
-                        isSelected = currentRoute == item.route,
-                        onClick = {
-                            navController.navigate(item.route) {
-                                launchSingleTop = true
-                            }
-                            onCloseDrawer()
-                        }
-                    )
-                }
-
-                // Section 7: Info & Settings
-                item {
-                    DrawerSectionTitle(title = "SETTINGS & INFO", count = "${DrawerNavigationConfig.infoItems.size}")
+                    DrawerSectionTitle(title = "SETTINGS & DATA", count = "${DrawerNavigationConfig.infoItems.size}")
                 }
                 items(DrawerNavigationConfig.infoItems, key = { it.route }) { item ->
                     DrawerNavRow(

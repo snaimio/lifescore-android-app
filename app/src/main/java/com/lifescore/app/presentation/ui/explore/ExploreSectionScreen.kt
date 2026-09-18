@@ -213,7 +213,7 @@ fun ExploreSectionScreen(
                             onClick = {
                                 selectedCategoryFilter = if (isSelected) null else cat
                             },
-                            label = { Text("${cat.iconEmoji} ${cat.displayName} ($count)") }
+                            label = { Text("${cat.displayName} ($count)") }
                         )
                     }
                 }
@@ -264,7 +264,11 @@ private fun FeatureDirectoryCard(
                 modifier = Modifier.size(46.dp)
             ) {
                 Box(contentAlignment = Alignment.Center) {
-                    Text(feature.iconEmoji, fontSize = 22.sp)
+                    Icon(
+                        Icons.Default.Extension,
+                        contentDescription = null,
+                        tint = if (isUnlocked) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant
+                    )
                 }
             }
 

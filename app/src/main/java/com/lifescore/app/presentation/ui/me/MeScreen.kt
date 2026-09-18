@@ -30,9 +30,8 @@ import com.lifescore.app.core.designsystem.components.SectionHeader
 import com.lifescore.app.core.designsystem.components.StaggeredAppear
 import com.lifescore.app.core.designsystem.components.LifeIcon
 import com.lifescore.app.core.designsystem.components.LifeIcons
-import com.lifescore.app.domain.model.UserProfile
+import com.lifescore.app.domain.model.DimensionType
 import com.lifescore.app.presentation.navigation.Screen
-import com.lifescore.app.presentation.ui.components.CharacterSheetDialog
 import com.lifescore.app.presentation.ui.profile.ProfileViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -42,7 +41,6 @@ fun MeScreen(
     navController: NavController
 ) {
     val uiState by viewModel.uiState.collectAsState()
-    var showCharacterSheet by remember { mutableStateOf(false) }
 
     Scaffold(
         modifier = Modifier
@@ -53,13 +51,13 @@ fun MeScreen(
                 title = {
                     Column {
                         Text(
-                            "Me",
+                            "Profile & Stats",
                             style = MaterialTheme.typography.titleLarge,
                             fontWeight = FontWeight.Bold,
                             color = MaterialTheme.colorScheme.onSurface
                         )
                         Text(
-                            "Identity, Character & Evolution",
+                            "Consistency, Habits & Growth",
                             style = MaterialTheme.typography.labelSmall,
                             color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
@@ -90,7 +88,7 @@ fun MeScreen(
             contentPadding = PaddingValues(top = Space.xs, bottom = Space.xxxl)
         ) {
             // ==========================================
-            // 1. PROFILE & ARCHETYPE CARD
+            // 1. PROFILE & IDENTITY CARD
             // ==========================================
             item {
                 StaggeredAppear(index = 0) {
@@ -105,12 +103,12 @@ fun MeScreen(
                             Surface(
                                 shape = CircleShape,
                                 color = MaterialTheme.colorScheme.primary,
-                                modifier = Modifier.size(68.dp)
+                                modifier = Modifier.size(64.dp)
                             ) {
                                 Box(contentAlignment = Alignment.Center) {
                                     LifeIcon(
                                         icon = LifeIcons.Profile,
-                                        size = 36.dp,
+                                        size = 32.dp,
                                         tint = MaterialTheme.colorScheme.onPrimary
                                     )
                                 }
@@ -118,7 +116,7 @@ fun MeScreen(
 
                             Spacer(Modifier.height(Space.sm))
                             Text(
-                                uiState.user.name.ifBlank { "Hero" },
+                                uiState.user.name.ifBlank { "User Profile" },
                                 style = MaterialTheme.typography.headlineMedium,
                                 fontWeight = FontWeight.Bold,
                                 color = MaterialTheme.colorScheme.onPrimaryContainer
@@ -132,25 +130,25 @@ fun MeScreen(
 
                             Spacer(Modifier.height(Space.md))
 
-                            // Level & XP Bar
+                            // Overall Consistency Progress
                             Row(
                                 modifier = Modifier.fillMaxWidth(),
                                 horizontalArrangement = Arrangement.SpaceBetween
                             ) {
                                 Text(
-                                    "Level ${uiState.user.currentLevel}",
+                                    "Weekly Habit Consistency",
                                     style = MaterialTheme.typography.labelMedium,
                                     fontWeight = FontWeight.Bold
                                 )
                                 Text(
-                                    "${uiState.user.currentXp % 500} / 500 XP to Lvl ${uiState.user.currentLevel + 1}",
+                                    "85% on track",
                                     style = MaterialTheme.typography.labelSmall,
                                     color = MaterialTheme.colorScheme.onSurfaceVariant
                                 )
                             }
                             Spacer(Modifier.height(Space.xs))
                             LinearProgressIndicator(
-                                progress = { ((uiState.user.currentXp % 500) / 500f).coerceIn(0f, 1f) },
+                                progress = { 0.85f },
                                 modifier = Modifier
                                     .fillMaxWidth()
                                     .height(8.dp)
@@ -164,7 +162,7 @@ fun MeScreen(
             }
 
             // ==========================================
-            // 2. HERO STAT COUNTERS
+            // 2. CONSISTENCY & DISCIPLINE METRICS (4 CARDS)
             // ==========================================
             item {
                 StaggeredAppear(index = 1) {
@@ -184,13 +182,13 @@ fun MeScreen(
                             ) {
                                 Row(
                                     verticalAlignment = Alignment.CenterVertically,
-                                    horizontalArrangement = Arrangement.spacedBy(2.dp)
+                                    horizontalArrangement = Arrangement.spacedBy(4.dp)
                                 ) {
-                                    LifeIcon(LifeIcons.Streak, size = 12.dp)
-                                    Text("STREAK", style = MaterialTheme.typography.labelSmall.copy(fontSize = 9.sp), fontWeight = FontWeight.Black, color = Color(0xFFFF5722))
+                                    LifeIcon(LifeIcons.Streak, size = 14.dp)
+                                    Text("STREAK", style = MaterialTheme.typography.labelSmall.copy(fontSize = 9.sp), fontWeight = FontWeight.Bold, color = Color(0xFFFF5722))
                                 }
                                 Spacer(Modifier.height(Space.xxs))
-                                Text("${uiState.user.currentStreakDays}d", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Black)
+                                Text("${uiState.user.currentStreakDays} Days", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
                             }
                         }
                         Surface(
@@ -205,13 +203,13 @@ fun MeScreen(
                             ) {
                                 Row(
                                     verticalAlignment = Alignment.CenterVertically,
-                                    horizontalArrangement = Arrangement.spacedBy(2.dp)
+                                    horizontalArrangement = Arrangement.spacedBy(4.dp)
                                 ) {
-                                    LifeIcon(LifeIcons.Wealth, size = 12.dp)
-                                    Text("GOLD", style = MaterialTheme.typography.labelSmall.copy(fontSize = 9.sp), fontWeight = FontWeight.Black, color = Color(0xFFFFD700))
+                                    LifeIcon(LifeIcons.Check, size = 14.dp)
+                                    Text("COMPLETED", style = MaterialTheme.typography.labelSmall.copy(fontSize = 9.sp), fontWeight = FontWeight.Bold, color = Color(0xFF10B981))
                                 }
                                 Spacer(Modifier.height(Space.xxs))
-                                Text("1,250", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Black)
+                                Text("48 Habits", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
                             }
                         }
                         Surface(
@@ -226,13 +224,13 @@ fun MeScreen(
                             ) {
                                 Row(
                                     verticalAlignment = Alignment.CenterVertically,
-                                    horizontalArrangement = Arrangement.spacedBy(2.dp)
+                                    horizontalArrangement = Arrangement.spacedBy(4.dp)
                                 ) {
-                                    LifeIcon(LifeIcons.Goal, size = 12.dp)
-                                    Text("SHIELDS", style = MaterialTheme.typography.labelSmall.copy(fontSize = 9.sp), fontWeight = FontWeight.Black, color = Color(0xFF6366F1))
+                                    LifeIcon(LifeIcons.Goal, size = 14.dp)
+                                    Text("FOCUS", style = MaterialTheme.typography.labelSmall.copy(fontSize = 9.sp), fontWeight = FontWeight.Bold, color = Color(0xFF6366F1))
                                 }
                                 Spacer(Modifier.height(Space.xxs))
-                                Text("${uiState.streakShieldsAvailable}", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Black)
+                                Text("12.5 hrs", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
                             }
                         }
                         Surface(
@@ -247,13 +245,13 @@ fun MeScreen(
                             ) {
                                 Row(
                                     verticalAlignment = Alignment.CenterVertically,
-                                    horizontalArrangement = Arrangement.spacedBy(2.dp)
+                                    horizontalArrangement = Arrangement.spacedBy(4.dp)
                                 ) {
-                                    LifeIcon(LifeIcons.Trophy, size = 12.dp)
-                                    Text("LEAGUE", style = MaterialTheme.typography.labelSmall.copy(fontSize = 9.sp), fontWeight = FontWeight.Black, color = Color(0xFF10B981))
+                                    LifeIcon(LifeIcons.Analytics, size = 14.dp)
+                                    Text("RATE", style = MaterialTheme.typography.labelSmall.copy(fontSize = 9.sp), fontWeight = FontWeight.Bold, color = Color(0xFFF59E0B))
                                 }
                                 Spacer(Modifier.height(Space.xxs))
-                                Text("Diamond", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Black)
+                                Text("92%", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
                             }
                         }
                     }
@@ -261,33 +259,36 @@ fun MeScreen(
             }
 
             // ==========================================
-            // 3. HERO CHARACTER SHEET CARD
+            // 3. 360° DIMENSIONS BALANCE SUMMARY CARD
             // ==========================================
             item {
                 StaggeredAppear(index = 2) {
                     LifeCard(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .clickable { navController.navigate(Screen.CharacterStats.route) },
+                            .clickable { navController.navigate(Screen.Balance.route) },
                         variant = CardVariant.Default
                     ) {
                         Row(
                             modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceBetween,
                             verticalAlignment = Alignment.CenterVertically
                         ) {
-                            Surface(
-                                shape = LifeScoreShapes.button,
-                                color = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.5f),
-                                modifier = Modifier.size(44.dp)
-                            ) {
-                                Box(contentAlignment = Alignment.Center) {
-                                    LifeIcon(LifeIcons.Star, size = 22.dp, tint = MaterialTheme.colorScheme.primary)
+                            Row(verticalAlignment = Alignment.CenterVertically) {
+                                Surface(
+                                    shape = LifeScoreShapes.button,
+                                    color = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.5f),
+                                    modifier = Modifier.size(40.dp)
+                                ) {
+                                    Box(contentAlignment = Alignment.Center) {
+                                        LifeIcon(LifeIcons.Analytics, size = 20.dp, tint = MaterialTheme.colorScheme.primary)
+                                    }
                                 }
-                            }
-                            Spacer(Modifier.width(Space.md))
-                            Column(modifier = Modifier.weight(1f)) {
-                                Text("Hero Character Sheet", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold)
-                                Text("STR, INT, WIS, STA attribute points & class perks", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                                Spacer(Modifier.width(Space.sm))
+                                Column {
+                                    Text("360° Life Matrix", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold)
+                                    Text("8 dimensions balanced", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                                }
                             }
                             Icon(Icons.AutoMirrored.Filled.ArrowForward, contentDescription = null, tint = MaterialTheme.colorScheme.primary)
                         }
@@ -296,7 +297,7 @@ fun MeScreen(
             }
 
             // ==========================================
-            // 4. IDENTITY-BASED HABITS
+            // 4. IDENTITY & HABIT SYSTEMS CARDS
             // ==========================================
             item {
                 StaggeredAppear(index = 3) {
@@ -313,10 +314,10 @@ fun MeScreen(
                             Surface(
                                 shape = LifeScoreShapes.button,
                                 color = MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.5f),
-                                modifier = Modifier.size(44.dp)
+                                modifier = Modifier.size(40.dp)
                             ) {
                                 Box(contentAlignment = Alignment.Center) {
-                                    LifeIcon(LifeIcons.Reading, size = 22.dp, tint = MaterialTheme.colorScheme.secondary)
+                                    LifeIcon(LifeIcons.Reading, size = 20.dp, tint = MaterialTheme.colorScheme.secondary)
                                 }
                             }
                             Spacer(Modifier.width(Space.md))
@@ -330,116 +331,40 @@ fun MeScreen(
                 }
             }
 
-            // ==========================================
-            // 5. ACHIEVEMENTS & BADGES PREVIEW
-            // ==========================================
             item {
-                SectionHeader(
-                    title = "Badges & Milestones",
-                    subtitle = "Earned accolades from daily discipline",
-                    actionLabel = "View All →",
-                    onActionClick = { navController.navigate(Screen.CharacterStats.route) }
-                )
-
-                val badges = listOf(
-                    Triple(LifeIcons.Streak, "7-Day Flame", true),
-                    Triple(LifeIcons.Energy, "Deep Work", true),
-                    Triple(LifeIcons.Meditation, "Circadian Zen", true),
-                    Triple(LifeIcons.Trophy, "Outlier Legend", false)
-                )
-
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(Space.sm)
-                ) {
-                    badges.forEach { (icon, title, unlocked) ->
-                        Surface(
-                            shape = LifeScoreShapes.cardSmall,
-                            color = if (unlocked) MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f) else MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.2f),
-                            border = if (unlocked) BorderStroke(1.dp, Color(0xFFFFD700).copy(alpha = 0.5f)) else BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.2f)),
-                            modifier = Modifier.weight(1f)
+                StaggeredAppear(index = 4) {
+                    LifeCard(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clickable { navController.navigate(Screen.AtomicHabits.route) },
+                        variant = CardVariant.Default
+                    ) {
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            verticalAlignment = Alignment.CenterVertically
                         ) {
-                            Column(
-                                modifier = Modifier.padding(Space.sm),
-                                horizontalAlignment = Alignment.CenterHorizontally
+                            Surface(
+                                shape = LifeScoreShapes.button,
+                                color = MaterialTheme.colorScheme.tertiaryContainer.copy(alpha = 0.5f),
+                                modifier = Modifier.size(40.dp)
                             ) {
-                                LifeIcon(icon = icon, size = 22.dp)
-                                Spacer(Modifier.height(Space.xxs))
-                                Text(title, style = MaterialTheme.typography.labelSmall.copy(fontSize = 10.sp), fontWeight = FontWeight.Bold, maxLines = 1)
+                                Box(contentAlignment = Alignment.Center) {
+                                    LifeIcon(LifeIcons.Energy, size = 20.dp, tint = MaterialTheme.colorScheme.tertiary)
+                                }
                             }
+                            Spacer(Modifier.width(Space.md))
+                            Column(modifier = Modifier.weight(1f)) {
+                                Text("Atomic Habits OS", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold)
+                                Text("Habit loops, cues, craving, response, and environment design", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                            }
+                            Icon(Icons.AutoMirrored.Filled.ArrowForward, contentDescription = null, tint = MaterialTheme.colorScheme.primary)
                         }
                     }
                 }
             }
 
             // ==========================================
-            // 6. CUSTOM GOLD REWARDS STORE PREVIEW
-            // ==========================================
-            item {
-                LifeCard(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .clickable { navController.navigate(Screen.CustomRewards.route) },
-                    variant = CardVariant.Default
-                ) {
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Surface(
-                            shape = LifeScoreShapes.button,
-                            color = Color(0xFFFFD700).copy(alpha = 0.2f),
-                            modifier = Modifier.size(44.dp)
-                        ) {
-                            Box(contentAlignment = Alignment.Center) {
-                                LifeIcon(LifeIcons.Wealth, size = 22.dp)
-                            }
-                        }
-                        Spacer(Modifier.width(Space.md))
-                        Column(modifier = Modifier.weight(1f)) {
-                            Text("Custom Gold Rewards Store", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold)
-                            Text("Spend earned gold on custom real-life treats & guilt-free rewards", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
-                        }
-                        Icon(Icons.AutoMirrored.Filled.ArrowForward, contentDescription = null, tint = MaterialTheme.colorScheme.primary)
-                    }
-                }
-            }
-
-            // ==========================================
-            // 7. SUPPORTER & SUBSCRIPTION CARD
-            // ==========================================
-            item {
-                LifeCard(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .clickable { navController.navigate(Screen.SupporterSubscription.route) },
-                    variant = CardVariant.Default
-                ) {
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Surface(
-                            shape = LifeScoreShapes.button,
-                            color = Color(0xFF6366F1).copy(alpha = 0.2f),
-                            modifier = Modifier.size(44.dp)
-                        ) {
-                            Box(contentAlignment = Alignment.Center) {
-                                LifeIcon(LifeIcons.Star, size = 22.dp, tint = Color(0xFF6366F1))
-                            }
-                        }
-                        Spacer(Modifier.width(Space.md))
-                        Column(modifier = Modifier.weight(1f)) {
-                            Text("LifeScore Supporter VIP", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold)
-                            Text("Unlock cloud sync, unlimited AI coaching, and supporter badge", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
-                        }
-                        Icon(Icons.AutoMirrored.Filled.ArrowForward, contentDescription = null, tint = MaterialTheme.colorScheme.primary)
-                    }
-                }
-            }
-
-            // ==========================================
-            // 8. SETTINGS & PRIVACY
+            // 5. SETTINGS & PRIVACY
             // ==========================================
             item {
                 Row(
@@ -468,11 +393,5 @@ fun MeScreen(
             }
         }
     }
-
-    if (showCharacterSheet) {
-        CharacterSheetDialog(
-            userProfile = uiState.user,
-            onDismiss = { showCharacterSheet = false }
-        )
-    }
 }
+

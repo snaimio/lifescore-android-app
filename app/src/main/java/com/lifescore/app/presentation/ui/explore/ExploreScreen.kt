@@ -49,7 +49,7 @@ private fun getCategoryIcon(cat: FeatureCategory): LifeIcons = when (cat) {
     FeatureCategory.SELF_IMPROVEMENT -> LifeIcons.Reading
     FeatureCategory.WELLNESS -> LifeIcons.Meditation
     FeatureCategory.RECOVERY -> LifeIcons.Health
-    FeatureCategory.MARKET_LEADERS -> LifeIcons.Rocket
+    FeatureCategory.HABIT_SYSTEMS -> LifeIcons.Rocket
     FeatureCategory.SOCIAL_GROWTH -> LifeIcons.Social
     FeatureCategory.ENTERPRISE -> LifeIcons.Career
 }
@@ -63,17 +63,15 @@ private fun getFeatureIcon(feature: FeatureItem): LifeIcons = when (feature.id) 
     "wealth" -> LifeIcons.Wealth
     "mood" -> LifeIcons.MoodHappy
     "journal" -> LifeIcons.Reading
-    "leaderboards" -> LifeIcons.Trophy
     "screentime", "circadian_energy" -> LifeIcons.Energy
     "profile" -> LifeIcons.Profile
     "challenges" -> LifeIcons.Streak
-    "rewards" -> LifeIcons.Wealth
     "vitals", "recovery", "recovery_sos" -> LifeIcons.Health
     "skill_mastery", "goals_okrs" -> LifeIcons.Goal
-    "relationships", "friends_feed", "social_duels" -> LifeIcons.Social
+    "relationships", "friends_feed" -> LifeIcons.Social
     "enterprise" -> LifeIcons.Career
     "ai_coach", "ai_memory" -> LifeIcons.Star
-    "party", "virtual_pet", "science_journeys" -> LifeIcons.Rocket
+    "science_journeys" -> LifeIcons.Rocket
     else -> getCategoryIcon(feature.category)
 }
 
@@ -233,12 +231,12 @@ fun ExploreScreen(
             }
 
             // ==========================================
-            // 3. HIDDEN GEMS & RPG HIGHLIGHTS
+            // 3. FEATURED HIGHLIGHTS (UTILITY CARDS)
             // ==========================================
             item {
                 SectionHeader(
                     title = "Featured Highlights",
-                    subtitle = "Specialized mini-apps and multiplayer features"
+                    subtitle = "Specialized deep work, mindfulness, and book summaries"
                 )
             }
 
@@ -253,13 +251,13 @@ fun ExploreScreen(
                         border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f)),
                         modifier = Modifier
                             .weight(1f)
-                            .clickable { navController.navigate(Screen.Combat.route) }
+                            .clickable { navController.navigate(Screen.FocusTimer.route) }
                     ) {
                         Column(modifier = Modifier.padding(Space.sm)) {
-                            LifeIcon(LifeIcons.Energy, size = 24.dp)
+                            LifeIcon(LifeIcons.Goal, size = 24.dp)
                             Spacer(Modifier.height(Space.xs))
-                            Text("Boss Raids", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold)
-                            Text("Team up to beat bosses", style = MaterialTheme.typography.bodySmall.copy(fontSize = 10.sp), color = MaterialTheme.colorScheme.onSurfaceVariant)
+                            Text("Focus Timer", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold)
+                            Text("Deep work sessions", style = MaterialTheme.typography.bodySmall.copy(fontSize = 10.sp), color = MaterialTheme.colorScheme.onSurfaceVariant)
                         }
                     }
 
@@ -269,13 +267,13 @@ fun ExploreScreen(
                         border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f)),
                         modifier = Modifier
                             .weight(1f)
-                            .clickable { navController.navigate(Screen.VirtualPet.route) }
+                            .clickable { navController.navigate(Screen.MeditationLibrary.route) }
                     ) {
                         Column(modifier = Modifier.padding(Space.sm)) {
-                            LifeIcon(LifeIcons.MoodHappy, size = 24.dp)
+                            LifeIcon(LifeIcons.Meditation, size = 24.dp)
                             Spacer(Modifier.height(Space.xs))
-                            Text("Virtual Pet", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold)
-                            Text("Evolves with habits", style = MaterialTheme.typography.bodySmall.copy(fontSize = 10.sp), color = MaterialTheme.colorScheme.onSurfaceVariant)
+                            Text("Meditation", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold)
+                            Text("Zen bell & breathwork", style = MaterialTheme.typography.bodySmall.copy(fontSize = 10.sp), color = MaterialTheme.colorScheme.onSurfaceVariant)
                         }
                     }
 
@@ -285,13 +283,13 @@ fun ExploreScreen(
                         border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f)),
                         modifier = Modifier
                             .weight(1f)
-                            .clickable { navController.navigate(Screen.LeagueTiers.route) }
+                            .clickable { navController.navigate(Screen.BookLibrary.route) }
                     ) {
                         Column(modifier = Modifier.padding(Space.sm)) {
-                            LifeIcon(LifeIcons.Trophy, size = 24.dp)
+                            LifeIcon(LifeIcons.Reading, size = 24.dp)
                             Spacer(Modifier.height(Space.xs))
-                            Text("10-Tier Leagues", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold)
-                            Text("Weekly leaderboards", style = MaterialTheme.typography.bodySmall.copy(fontSize = 10.sp), color = MaterialTheme.colorScheme.onSurfaceVariant)
+                            Text("Book Summaries", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold)
+                            Text("15-min key ideas", style = MaterialTheme.typography.bodySmall.copy(fontSize = 10.sp), color = MaterialTheme.colorScheme.onSurfaceVariant)
                         }
                     }
                 }

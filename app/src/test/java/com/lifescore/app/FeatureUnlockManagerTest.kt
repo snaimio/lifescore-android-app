@@ -30,9 +30,9 @@ class FeatureUnlockManagerTest {
     }
 
     @Test
-    fun testExploringUserUnlocks8DimensionsAndLeaderboard() {
+    fun testExploringUserUnlocks8DimensionsAndDailyGrowth() {
         assertTrue(FeatureUnlockManager.isFeatureUnlocked("all_dimensions", UserPhase.EXPLORING))
-        assertTrue(FeatureUnlockManager.isFeatureUnlocked("leaderboards", UserPhase.EXPLORING))
+        assertTrue(FeatureUnlockManager.isFeatureUnlocked("daily_growth", UserPhase.EXPLORING))
         assertTrue(FeatureUnlockManager.isFeatureUnlocked("journal", UserPhase.EXPLORING))
     }
 
@@ -41,7 +41,7 @@ class FeatureUnlockManagerTest {
         assertTrue(FeatureUnlockManager.isFeatureUnlocked("hydration", UserPhase.ADVANCED))
         assertTrue(FeatureUnlockManager.isFeatureUnlocked("sleep", UserPhase.ADVANCED))
         assertTrue(FeatureUnlockManager.isFeatureUnlocked("challenges", UserPhase.ADVANCED))
-        assertTrue(FeatureUnlockManager.isFeatureUnlocked("rewards", UserPhase.ADVANCED))
+        assertTrue(FeatureUnlockManager.isFeatureUnlocked("reading", UserPhase.ADVANCED))
     }
 
     @Test

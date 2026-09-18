@@ -122,20 +122,6 @@ fun GrowScreen(
                 )
             ),
             GrowthArea(
-                id = "rpg",
-                title = "Progress & RPG Systems",
-                subtitle = "Level up your hero, battle raid bosses, and earn badges",
-                icon = LifeIcons.Trophy,
-                color = Color(0xFF6366F1),
-                tools = listOf(
-                    GrowthToolItem("Hero Character Sheet", "Attributes, Level, and XP progression", LifeIcons.Profile, Screen.CharacterStats.route, "Hero"),
-                    GrowthToolItem("Boss Battles & Raids", "Co-op combat powered by real habits", LifeIcons.Trophy, Screen.Combat.route, "Raid"),
-                    GrowthToolItem("Virtual Pet Companion", "Nurture your companion through daily quests", LifeIcons.Star, Screen.VirtualPet.route, "Companion"),
-                    GrowthToolItem("10-Tier Leagues", "Climb from Bronze to Outlier Grandmaster", LifeIcons.Trophy, Screen.LeagueTiers.route, "League"),
-                    GrowthToolItem("Streak Vault & Shields", "Protect your momentum with streak shields", LifeIcons.Streak, Screen.StreakVault.route, "Protection")
-                )
-            ),
-            GrowthArea(
                 id = "energy",
                 title = "Energy & Circadian",
                 subtitle = "Plan deep work according to biological peak hours",
@@ -183,7 +169,7 @@ fun GrowScreen(
                             color = MaterialTheme.colorScheme.onSurface
                         )
                         Text(
-                            "8 Growth Areas • Science, RPG & Habits",
+                            "Self-Improvement, Science & Habits",
                             style = MaterialTheme.typography.labelSmall,
                             color = MaterialTheme.colorScheme.onSurfaceVariant
                         )

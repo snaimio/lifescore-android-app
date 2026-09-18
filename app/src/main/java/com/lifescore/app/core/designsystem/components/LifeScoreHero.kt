@@ -15,15 +15,12 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.TrendingUp
 import androidx.compose.material.icons.filled.ChevronRight
-import androidx.compose.material.icons.filled.Leaderboard
-import androidx.compose.material.icons.filled.Share
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Brush
@@ -34,17 +31,15 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.lifescore.app.core.designsystem.LifeScoreShapes
-import com.lifescore.app.core.designsystem.Space
 
 @Composable
 fun LifeScoreHero(
     score: Int,
-    level: Int,
-    currentXp: Int,
+    level: Int = 1,
+    currentXp: Int = 0,
     xpToNextLevel: Int = 1000,
     streak: Int,
-    userName: String,
+    userName: String = "",
     onClick: () -> Unit = {},
     onShare: (() -> Unit)? = null,
     onLeaderboard: (() -> Unit)? = null
@@ -162,7 +157,7 @@ fun LifeScoreHero(
                         ) {
                             Text(
                                 text = animatedScore.toString(),
-                                fontSize = 30.sp,
+                                fontSize = 32.sp,
                                 fontWeight = FontWeight.Black,
                                 color = Color.White
                             )
@@ -176,38 +171,21 @@ fun LifeScoreHero(
                         }
 
                         Text(
-                            text = "Current Score\n$animatedScore",
-                            fontSize = 9.sp,
+                            text = "Daily Index",
+                            fontSize = 10.sp,
                             color = Color(0xFF94A3B8),
-                            textAlign = TextAlign.Center,
-                            lineHeight = 11.sp
+                            textAlign = TextAlign.Center
                         )
-
-                        Spacer(Modifier.height(4.dp))
-
-                        Surface(
-                            shape = RoundedCornerShape(12.dp),
-                            color = Color(0xFF232838),
-                            border = BorderStroke(0.5.dp, Color(0xFFF59E0B).copy(alpha = 0.4f))
-                        ) {
-                            Text(
-                                text = "Level $level",
-                                fontSize = 9.sp,
-                                fontWeight = FontWeight.Bold,
-                                color = Color(0xFFFCD34D),
-                                modifier = Modifier.padding(horizontal = 8.dp, vertical = 2.dp)
-                            )
-                        }
                     }
                 }
 
-                // Right: Streak Pill & My Stats Action
+                // Right: Streak Pill & View Stats Action
                 Column(
                     horizontalAlignment = Alignment.End,
                     verticalArrangement = Arrangement.spacedBy(14.dp),
                     modifier = Modifier.weight(1f).padding(start = 12.dp)
                 ) {
-                    // Gold 14-Day Streak Pill
+                    // Gold Streak Pill
                     Surface(
                         shape = RoundedCornerShape(20.dp),
                         color = Color.Transparent,
@@ -235,7 +213,7 @@ fun LifeScoreHero(
                             )
                             Spacer(Modifier.width(6.dp))
                             Text(
-                                text = "$streak-Day\nStreak 🔥",
+                                text = "$streak-Day\nStreak",
                                 fontSize = 11.sp,
                                 fontWeight = FontWeight.Black,
                                 color = Color(0xFF1F1206),
@@ -244,7 +222,7 @@ fun LifeScoreHero(
                         }
                     }
 
-                    // My Stats Action Button
+                    // View Stats Action Button
                     Surface(
                         shape = RoundedCornerShape(16.dp),
                         color = Color(0xFF242C3D),
@@ -256,7 +234,7 @@ fun LifeScoreHero(
                             modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
                         ) {
                             Text(
-                                text = "My Stats",
+                                text = "View Stats",
                                 fontSize = 12.sp,
                                 fontWeight = FontWeight.Bold,
                                 color = Color.White
@@ -270,35 +248,9 @@ fun LifeScoreHero(
                             )
                         }
                     }
-
-                    if (onLeaderboard != null) {
-                        Surface(
-                            shape = RoundedCornerShape(12.dp),
-                            color = Color(0xFF1A202C).copy(alpha = 0.8f),
-                            modifier = Modifier.clickable { onLeaderboard() }
-                        ) {
-                            Row(
-                                verticalAlignment = Alignment.CenterVertically,
-                                modifier = Modifier.padding(horizontal = 10.dp, vertical = 4.dp)
-                            ) {
-                                Icon(
-                                    imageVector = Icons.Default.Leaderboard,
-                                    contentDescription = null,
-                                    tint = Color(0xFFD4A24C),
-                                    modifier = Modifier.size(14.dp)
-                                )
-                                Spacer(Modifier.width(4.dp))
-                                Text(
-                                    text = "Leagues",
-                                    fontSize = 10.sp,
-                                    fontWeight = FontWeight.Bold,
-                                    color = Color(0xFFEDE7DF)
-                                )
-                            }
-                        }
-                    }
                 }
             }
         }
     }
 }
+

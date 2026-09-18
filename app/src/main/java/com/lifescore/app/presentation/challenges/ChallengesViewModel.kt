@@ -27,9 +27,8 @@ import kotlinx.coroutines.launch
 
 enum class ChallengeTab(val title: String) {
     ACTIVE("Active Sprints"),
-    DISCOVER("Discover Public"),
-    DUELS("1v1 Duels"),
-    MASTERCLASSES("🎓 Masterclasses (14-Day)")
+    DISCOVER("Discover"),
+    MASTERCLASSES("14-Day Masterclasses")
 }
 
 data class ChallengesUiState(

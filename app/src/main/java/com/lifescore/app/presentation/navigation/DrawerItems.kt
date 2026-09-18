@@ -15,13 +15,13 @@ data class DrawerItem(
 )
 
 object DrawerNavigationConfig {
-    // 1. Core / Main 5 Tabs
+    // 1. Core Navigation
     val mainItems = listOf(
         DrawerItem("Today Hub", Icons.Default.Home, Screen.Today.route, emoji = "🌅"),
         DrawerItem("Life Balance (360°)", Icons.Default.PieChart, Screen.Balance.route, emoji = "🌐"),
         DrawerItem("Growth Hub", Icons.AutoMirrored.Filled.TrendingUp, Screen.Grow.route, emoji = "🌱"),
-        DrawerItem("Me (Profile & Character)", Icons.Default.Person, Screen.Me.route, emoji = "👤"),
-        DrawerItem("Explore Directory", Icons.Default.Explore, Screen.Explore.route, badge = "40+ Tools", emoji = "🌟")
+        DrawerItem("Me (Profile & Stats)", Icons.Default.Person, Screen.Me.route, emoji = "👤"),
+        DrawerItem("Explore Directory", Icons.Default.Explore, Screen.Explore.route, badge = "Tools", emoji = "🌟")
     )
 
     // 2. Growth & Reflection
@@ -34,21 +34,11 @@ object DrawerNavigationConfig {
         DrawerItem("Atomic Habits OS", Icons.Default.Bolt, Screen.AtomicHabits.route, badge = "Systems", emoji = "⚡"),
         DrawerItem("AI Action Plan", Icons.Default.AutoAwesome, Screen.ActionPlan.route, emoji = "🎯"),
         DrawerItem("Goal Starter Stacks", Icons.Default.ContentPaste, Screen.HabitTemplates.route, emoji = "📋"),
-        DrawerItem("Identity-Based Habits", Icons.Default.HowToVote, Screen.IdentityHabits.route, emoji = "🗳️")
+        DrawerItem("Identity-Based Habits", Icons.Default.HowToVote, Screen.IdentityHabits.route, emoji = "🗳️"),
+        DrawerItem("14-Day Masterclasses", Icons.Default.EmojiEvents, Screen.Challenges.route, emoji = "🎓")
     )
 
-    // 3. Progress & RPG Mechanics
-    val progressItems = listOf(
-        DrawerItem("Hero Character Sheet", Icons.Default.Shield, Screen.CharacterStats.route, badge = "Hero", emoji = "🛡️"),
-        DrawerItem("10-Tier Leagues", Icons.Default.EmojiEvents, Screen.LeagueTiers.route, badge = "Ranks", emoji = "🏆"),
-        DrawerItem("Boss Battles & Raids", Icons.Default.FlashOn, Screen.Combat.route, badge = "Raid", emoji = "⚔️"),
-        DrawerItem("Virtual Pet Companion", Icons.Default.Pets, Screen.VirtualPet.route, badge = "Companion", emoji = "🐥"),
-        DrawerItem("Streak Vault & Shield", Icons.Default.Shield, Screen.StreakVault.route, badge = "Vault", emoji = "🛡️"),
-        DrawerItem("10k Skill Mastery", Icons.Default.Timer, Screen.SkillMastery.route, emoji = "⏱️"),
-        DrawerItem("30-Day Challenges", Icons.Default.EmojiEvents, Screen.Challenges.route, emoji = "🏆")
-    )
-
-    // 4. Trackers (15 Modular Trackers)
+    // 3. Trackers & Wellness
     val trackerMiniApps = listOf(
         DrawerItem("15 Life Trackers Hub", Icons.Default.DashboardCustomize, Screen.TrackerHub.route, badge = "Hub", emoji = "📊"),
         DrawerItem("Hydration Tracker", Icons.Default.WaterDrop, Screen.Hydration.route, emoji = "💧"),
@@ -62,27 +52,10 @@ object DrawerNavigationConfig {
         DrawerItem("Nutrition & Macros", Icons.Default.Restaurant, "tracker_detail/nutrition", emoji = "🥗")
     )
 
-    // 5. Community & Social
-    val communityItems = listOf(
-        DrawerItem("Friends Social Feed", Icons.Default.Group, Screen.FriendsFeed.route, badge = "Social", emoji = "🔥"),
-        DrawerItem("Invite Friends (Free Pro)", Icons.Default.CardGiftcard, Screen.ViralReferrals.route, badge = "Gift", emoji = "🎁"),
-        DrawerItem("Seasonal Live Events", Icons.Default.WbSunny, Screen.SeasonalEvents.route, badge = "Live", emoji = "☀️"),
-        DrawerItem("Squads & Group Habits", Icons.Default.Group, Screen.GroupHabits.route, emoji = "👥")
-    )
-
-    // 6. Rewards & Store
-    val storeItems = listOf(
-        DrawerItem("Custom Treats Store", Icons.Default.MonetizationOn, Screen.CustomRewards.route, badge = "Gold", emoji = "💰"),
-        DrawerItem("LifeScore Rewards Vault", Icons.Default.ShoppingBag, Screen.RewardStore.route, emoji = "🎁"),
-        DrawerItem("Gem Store", Icons.Default.Diamond, Screen.GemStore.route, emoji = "💎"),
-        DrawerItem("Cosmetic Vault", Icons.Default.ShoppingBag, Screen.CosmeticStore.route, emoji = "🎨"),
-        DrawerItem("Supporter VIP Program", Icons.Default.MilitaryTech, Screen.SupporterSubscription.route, badge = "VIP", emoji = "👑")
-    )
-
-    // 7. Info & Settings
+    // 4. Info & Settings
     val infoItems = listOf(
         DrawerItem("App Settings", Icons.Default.Settings, Screen.Settings.route, emoji = "⚙️"),
         DrawerItem("Privacy & Data Control", Icons.Default.Lock, Screen.Privacy.route, emoji = "🔒"),
-        DrawerItem("Full Assessment", Icons.Default.Psychology, Screen.FullAssessment.route, emoji = "🎯")
+        DrawerItem("LifeScore Assessment", Icons.Default.Psychology, Screen.FullAssessment.route, emoji = "🎯")
     )
 }

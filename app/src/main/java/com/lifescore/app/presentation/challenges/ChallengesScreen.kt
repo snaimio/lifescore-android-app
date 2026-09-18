@@ -59,7 +59,7 @@ fun ChallengesScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Life Duels & Masterclasses", fontWeight = FontWeight.Black) },
+                title = { Text("Challenges & Masterclasses", fontWeight = FontWeight.Bold) },
                 navigationIcon = {
                     if (onBack != null) {
                         IconButton(onClick = {
@@ -78,8 +78,6 @@ fun ChallengesScreen(
                             modifier = Modifier.padding(end = 16.dp)
                         ) {
                             Row(modifier = Modifier.padding(horizontal = 10.dp, vertical = 5.dp), verticalAlignment = Alignment.CenterVertically) {
-                                Text("🎓", fontSize = 12.sp)
-                                Spacer(Modifier.width(4.dp))
                                 Text("14-Day Tracks", fontSize = 11.sp, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onPrimaryContainer)
                             }
                         }
@@ -91,7 +89,7 @@ fun ChallengesScreen(
                         ) {
                             Icon(Icons.Default.Add, contentDescription = null, modifier = Modifier.size(16.dp))
                             Spacer(Modifier.width(4.dp))
-                            Text("New Duel", fontWeight = FontWeight.Bold, fontSize = 12.sp)
+                            Text("New Sprint", fontWeight = FontWeight.Bold, fontSize = 12.sp)
                         }
                     }
                 }
@@ -528,7 +526,7 @@ fun DuelsAndSprintsView(
             .padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(14.dp)
     ) {
-        // 1. Social Duels Hero Banner
+        // 1. Habit Sprints Hero Banner
         item {
             Card(
                 modifier = Modifier.fillMaxWidth(),
@@ -550,13 +548,13 @@ fun DuelsAndSprintsView(
                                 modifier = Modifier.size(42.dp)
                             ) {
                                 Box(contentAlignment = Alignment.Center) {
-                                    Text("⚔️", fontSize = 20.sp)
+                                    Icon(Icons.Default.Bolt, contentDescription = null, tint = MaterialTheme.colorScheme.onPrimary)
                                 }
                             }
                             Spacer(Modifier.width(12.dp))
                             Column {
-                                Text("7-Day Head-to-Head Duels", fontWeight = FontWeight.Black, fontSize = 16.sp)
-                                Text("Challenge friends • Daily check-ins • Winner takes XP", fontSize = 11.sp, color = MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.8f))
+                                Text("Habit Transformation Sprints", fontWeight = FontWeight.Bold, fontSize = 16.sp)
+                                Text("Join community sprints • Daily check-ins • Build consistency", fontSize = 11.sp, color = MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.8f))
                             }
                         }
                     }
@@ -572,9 +570,9 @@ fun DuelsAndSprintsView(
                             color = MaterialTheme.colorScheme.surface.copy(alpha = 0.6f)
                         ) {
                             Row(modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp), verticalAlignment = Alignment.CenterVertically) {
-                                Text("⚡ Active Sprints:", fontSize = 11.sp, fontWeight = FontWeight.Medium)
+                                Text("Active Sprints:", fontSize = 11.sp, fontWeight = FontWeight.Medium)
                                 Spacer(Modifier.width(4.dp))
-                                Text("${uiState.activeCount}", fontSize = 12.sp, fontWeight = FontWeight.Black, color = MaterialTheme.colorScheme.primary)
+                                Text("${uiState.activeCount}", fontSize = 12.sp, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.primary)
                             }
                         }
 
@@ -583,9 +581,9 @@ fun DuelsAndSprintsView(
                             color = MaterialTheme.colorScheme.surface.copy(alpha = 0.6f)
                         ) {
                             Row(modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp), verticalAlignment = Alignment.CenterVertically) {
-                                Text("🏆 XP Pool Won:", fontSize = 11.sp, fontWeight = FontWeight.Medium)
+                                Text("Points Earned:", fontSize = 11.sp, fontWeight = FontWeight.Medium)
                                 Spacer(Modifier.width(4.dp))
-                                Text("+${uiState.totalXpEarned} XP", fontSize = 12.sp, fontWeight = FontWeight.Black, color = MaterialTheme.colorScheme.primary)
+                                Text("+${uiState.totalXpEarned}", fontSize = 12.sp, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.primary)
                             }
                         }
                     }

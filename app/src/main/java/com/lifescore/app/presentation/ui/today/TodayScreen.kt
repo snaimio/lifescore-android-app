@@ -31,20 +31,11 @@ import com.lifescore.app.core.util.GettingStartedManager
 import com.lifescore.app.core.util.ShareCardData
 import com.lifescore.app.domain.model.DimensionType
 import com.lifescore.app.domain.model.LifeTask
-import com.lifescore.app.domain.model.UserProfile
 import com.lifescore.app.presentation.navigation.Screen
-import com.lifescore.app.presentation.ui.components.CharacterSheetDialog
 import com.lifescore.app.presentation.ui.home.HomeViewModel
 import com.lifescore.app.presentation.ui.home.components.GettingStartedCard
 import com.lifescore.app.presentation.ui.share.ShareScoreCardDialog
 import java.util.Calendar
-
-enum class EnergyLevel(val title: String, val icon: LifeIcons, val tip: String) {
-    LOW("Low", LifeIcons.Sleep, "Prioritize light, low-friction habits today. Consistency beats intensity."),
-    STEADY("Steady", LifeIcons.Energy, "Great steady energy. Aim for 2-3 focused habit completions."),
-    HIGH("High", LifeIcons.Rocket, "High momentum! Perfect time to tackle your primary focus task."),
-    PEAK("Peak Flow", LifeIcons.Star, "You're at peak performance! Great for deep work and breakthroughs.")
-}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -57,13 +48,11 @@ fun TodayScreen(
     val context = LocalContext.current
     val uiState by viewModel.uiState.collectAsState()
 
-    var showCharacterSheet by remember { mutableStateOf(false) }
     var showShareCardDialog by remember { mutableStateOf(false) }
     var showAddHabitDialog by remember { mutableStateOf(false) }
     var newHabitTitle by remember { mutableStateOf("") }
     var newHabitDimension by remember { mutableStateOf(DimensionType.HEALTH) }
 
-    var selectedEnergy by remember { mutableStateOf(EnergyLevel.HIGH) }
     var eveningReflectionText by remember { mutableStateOf("") }
     var isReflectionSaved by remember { mutableStateOf(false) }
 
@@ -74,12 +63,12 @@ fun TodayScreen(
     val isEvening = currentHour >= 18
 
     val maxVisibleQuests = when (uiState.userPhase) {
-        UserPhase.NEW_USER -> 3
-        UserPhase.EXPLORING -> 5
-        UserPhase.ADVANCED, UserPhase.EXPERT -> 8
+        UserPhase.NEW_USER -> 4
+        UserPhase.EXPLORING -> 6
+        UserPhase.ADVANCED, UserPhase.EXPERT -> 10
     }
 
-    val visibleQuests = remember(uiState.todayTasks, maxVisibleQuests) {
+    val visibleTasks = remember(uiState.todayTasks, maxVisibleQuests) {
         uiState.todayTasks.take(maxVisibleQuests)
     }
 
@@ -107,7 +96,7 @@ fun TodayScreen(
                         verticalAlignment = Alignment.CenterVertically,
                         modifier = Modifier
                             .fillMaxWidth()
-                            .clickable { showCharacterSheet = true }
+                            .clickable { navController.navigate(Screen.Me.route) }
                     ) {
                         Surface(
                             shape = CircleShape,
@@ -131,7 +120,7 @@ fun TodayScreen(
                                 color = MaterialTheme.colorScheme.onSurface
                             )
                             Text(
-                                "${uiState.userTitle} • Lvl ${uiState.level}",
+                                uiState.userTitle.ifBlank { "Daily Habits & Life Index" },
                                 style = MaterialTheme.typography.labelSmall,
                                 color = MaterialTheme.colorScheme.onSurfaceVariant
                             )
@@ -221,7 +210,7 @@ fun TodayScreen(
                 }
 
                 // ==========================================
-                // 1. SIGNATURE LIFESCORE HERO CARD
+                // 1. LIFESCORE INDEX HERO CARD
                 // ==========================================
                 item {
                     LifeScoreHero(
@@ -231,14 +220,13 @@ fun TodayScreen(
                         xpToNextLevel = 1000,
                         streak = uiState.streak,
                         userName = uiState.userName,
-                        onClick = { showCharacterSheet = true },
-                        onLeaderboard = { navController.navigate(Screen.LeagueTiers.route) },
+                        onClick = { navController.navigate(Screen.Me.route) },
                         onShare = { showShareCardDialog = true }
                     )
                 }
 
                 // ==========================================
-                // 2. AI TODAY'S FOCUS CARD
+                // 2. TODAY'S PRIMARY FOCUS CARD
                 // ==========================================
                 val topPendingTask = uiState.todayTasks.firstOrNull { !it.isCompleted } ?: uiState.todayTasks.firstOrNull()
                 if (topPendingTask != null) {
@@ -295,7 +283,7 @@ fun TodayScreen(
                             Spacer(Modifier.height(Space.xxs))
 
                             Text(
-                                text = "${uiState.userTitle.ifBlank { "Architect" }}, focusing on ${topPendingTask.dimension.displayName} builds compounding momentum today (+${topPendingTask.pointsReward} XP).",
+                                text = "Focusing on ${topPendingTask.dimension.displayName} builds compounding consistency today.",
                                 style = MaterialTheme.typography.bodySmall,
                                 color = MaterialTheme.colorScheme.onSurfaceVariant
                             )
@@ -315,7 +303,7 @@ fun TodayScreen(
                                 )
                             ) {
                                 Text(
-                                    text = if (topPendingTask.isCompleted) "Completed" else "Mark Complete (+${topPendingTask.pointsReward} XP)",
+                                    text = if (topPendingTask.isCompleted) "Completed" else "Mark Complete",
                                     fontWeight = FontWeight.Bold,
                                     fontSize = 13.sp,
                                     color = if (topPendingTask.isCompleted) MaterialTheme.colorScheme.onSurfaceVariant else MaterialTheme.colorScheme.onPrimary
@@ -326,94 +314,12 @@ fun TodayScreen(
                 }
 
                 // ==========================================
-                // 3. ENERGY CHECK-IN (1-TAP SELECTOR)
-                // ==========================================
-                item {
-                    LifeCard(variant = CardVariant.Default) {
-                        Row(
-                            modifier = Modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.SpaceBetween,
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            Row(verticalAlignment = Alignment.CenterVertically) {
-                                LifeIcon(
-                                    icon = LifeIcons.Energy,
-                                    size = 16.dp
-                                )
-                                Spacer(Modifier.width(Space.xs))
-                                Text(
-                                    "Energy Check-In",
-                                    style = MaterialTheme.typography.titleMedium,
-                                    fontWeight = FontWeight.Medium
-                                )
-                            }
-                            Row(verticalAlignment = Alignment.CenterVertically) {
-                                LifeIcon(
-                                    icon = selectedEnergy.icon,
-                                    size = 14.dp
-                                )
-                                Spacer(Modifier.width(4.dp))
-                                Text(
-                                    text = selectedEnergy.title,
-                                    style = MaterialTheme.typography.labelSmall,
-                                    fontWeight = FontWeight.Bold,
-                                    color = MaterialTheme.colorScheme.primary
-                                )
-                            }
-                        }
-
-                        Spacer(Modifier.height(Space.xs))
-                        Text(
-                            text = selectedEnergy.tip,
-                            style = MaterialTheme.typography.bodySmall,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant
-                        )
-
-                        Spacer(Modifier.height(Space.md))
-
-                        Row(
-                            modifier = Modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.spacedBy(Space.xs)
-                        ) {
-                            EnergyLevel.values().forEach { level ->
-                                val isSelected = selectedEnergy == level
-                                Surface(
-                                    shape = LifeScoreShapes.small,
-                                    color = if (isSelected) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f),
-                                    border = if (isSelected) BorderStroke(1.5.dp, MaterialTheme.colorScheme.primary) else null,
-                                    modifier = Modifier
-                                        .weight(1f)
-                                        .clickable { selectedEnergy = level }
-                                ) {
-                                    Column(
-                                        modifier = Modifier.padding(vertical = Space.sm),
-                                        horizontalAlignment = Alignment.CenterHorizontally
-                                    ) {
-                                        LifeIcon(
-                                            icon = level.icon,
-                                            size = 18.dp
-                                        )
-                                        Spacer(Modifier.height(4.dp))
-                                        Text(
-                                            level.title,
-                                            fontSize = 10.sp,
-                                            fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Medium,
-                                            color = if (isSelected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface
-                                        )
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-
-                // ==========================================
-                // 4. TODAY'S HABIT QUESTS (2x2 GRID)
+                // 4. DAILY HABITS (CLEAN 2x2 CARD SHOWCASE)
                 // ==========================================
                 item {
                     SectionHeader(
-                        title = "Daily Habit Quests",
-                        subtitle = if (pendingCount > 0) "$pendingCount quests remaining today" else "All daily quests completed!",
+                        title = "Daily Habits",
+                        subtitle = if (pendingCount > 0) "$pendingCount habits remaining today" else "All daily habits completed!",
                         action = {
                             TextButton(onClick = { showAddHabitDialog = true }) {
                                 Text("+ Add Habit", fontWeight = FontWeight.Bold, fontSize = 12.sp)
@@ -422,15 +328,15 @@ fun TodayScreen(
                     )
                 }
 
-                if (visibleQuests.isEmpty()) {
+                if (visibleTasks.isEmpty()) {
                     item {
                         EmptyHabits(onAddHabit = { showAddHabitDialog = true })
                     }
                 } else {
                     item {
-                        val chunkedQuests = visibleQuests.chunked(2)
+                        val chunkedTasks = visibleTasks.chunked(2)
                         Column(verticalArrangement = Arrangement.spacedBy(Space.sm)) {
-                            chunkedQuests.forEach { rowTasks ->
+                            chunkedTasks.forEach { rowTasks ->
                                 Row(
                                     modifier = Modifier.fillMaxWidth(),
                                     horizontalArrangement = Arrangement.spacedBy(Space.sm)
@@ -500,7 +406,7 @@ fun TodayScreen(
 
                                                 Spacer(Modifier.height(Space.sm))
 
-                                                // Bottom Row: Checkmark & XP Badge
+                                                // Bottom Row: Checkmark
                                                 Row(
                                                     modifier = Modifier.fillMaxWidth(),
                                                     horizontalArrangement = Arrangement.SpaceBetween,
@@ -521,19 +427,6 @@ fun TodayScreen(
                                                                 )
                                                             }
                                                         }
-                                                    }
-
-                                                    Surface(
-                                                        shape = LifeScoreShapes.pill,
-                                                        color = Color(0xFFF59E0B).copy(alpha = 0.15f)
-                                                    ) {
-                                                        Text(
-                                                            text = "+${task.pointsReward} XP",
-                                                            fontSize = 10.sp,
-                                                            fontWeight = FontWeight.Bold,
-                                                            color = Color(0xFFF59E0B),
-                                                            modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp)
-                                                        )
                                                     }
                                                 }
                                             }
@@ -587,17 +480,17 @@ fun TodayScreen(
                         item {
                             FilterChip(
                                 selected = false,
-                                onClick = { navController.navigate(Screen.EnergySchedule.route) },
-                                leadingIcon = { LifeIcon(LifeIcons.Energy, size = 16.dp) },
-                                label = { Text("Energy Curve") }
+                                onClick = { navController.navigate(Screen.MeditationLibrary.route) },
+                                leadingIcon = { LifeIcon(LifeIcons.Meditation, size = 16.dp) },
+                                label = { Text("Meditation") }
                             )
                         }
                         item {
                             FilterChip(
                                 selected = false,
-                                onClick = { navController.navigate(Screen.MoodTracker.route) },
-                                leadingIcon = { LifeIcon(LifeIcons.MoodHappy, size = 16.dp) },
-                                label = { Text("Log Mood") }
+                                onClick = { navController.navigate(Screen.DailyGrowth.route) },
+                                leadingIcon = { LifeIcon(LifeIcons.Energy, size = 16.dp) },
+                                label = { Text("Daily Growth") }
                             )
                         }
                     }
@@ -663,13 +556,13 @@ fun TodayScreen(
                                     onClick = {
                                         if (eveningReflectionText.isNotBlank()) {
                                             isReflectionSaved = true
-                                            Toast.makeText(context, "Daily reflection saved (+25 XP)", Toast.LENGTH_SHORT).show()
+                                            Toast.makeText(context, "Daily reflection saved", Toast.LENGTH_SHORT).show()
                                         }
                                     },
                                     modifier = Modifier.fillMaxWidth(),
                                     shape = LifeScoreShapes.button
                                 ) {
-                                    Text("Save Reflection (+25 XP)", fontWeight = FontWeight.Bold, fontSize = 12.sp)
+                                    Text("Save Reflection", fontWeight = FontWeight.Bold, fontSize = 12.sp)
                                 }
                             }
                         }
@@ -762,19 +655,6 @@ fun TodayScreen(
         ShareScoreCardDialog(
             data = shareData,
             onDismiss = { showShareCardDialog = false }
-        )
-    }
-
-    if (showCharacterSheet) {
-        CharacterSheetDialog(
-            userProfile = UserProfile(
-                name = uiState.userName,
-                currentLevel = uiState.level,
-                currentXp = uiState.currentXp,
-                currentStreakDays = uiState.streak,
-                title = uiState.userTitle
-            ),
-            onDismiss = { showCharacterSheet = false }
         )
     }
 }
