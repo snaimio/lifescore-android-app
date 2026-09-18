@@ -68,55 +68,29 @@ fun FocusTimerScreen(
     Box(modifier = Modifier.fillMaxSize()) {
         Scaffold(
             topBar = {
-            TopAppBar(
-                title = {
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        Text("🌲", fontSize = 22.sp)
-                        Spacer(Modifier.width(8.dp))
-                        Column {
-                            Text(
-                                "Mindful Forest Focus",
-                                style = MaterialTheme.typography.titleMedium,
-                                fontWeight = FontWeight.Bold
-                            )
-                            Text(
-                                "Gamified Deep Work (Forest Style)",
-                                style = MaterialTheme.typography.labelSmall,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant
-                            )
-                        }
-                    }
-                },
-                navigationIcon = {
-                    IconButton(onClick = onBack) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
-                    }
-                },
-                actions = {
-                    Surface(
-                        shape = RoundedCornerShape(12.dp),
-                        color = Color(0xFF10B981).copy(alpha = 0.15f),
-                        modifier = Modifier.padding(end = Spacing.sm)
-                    ) {
-                        Row(
-                            modifier = Modifier.padding(horizontal = 10.dp, vertical = 6.dp),
-                            verticalAlignment = Alignment.CenterVertically
+                com.lifescore.app.core.designsystem.components.LifeTopBar(
+                    title = "Mindful Focus",
+                    subtitle = "Deep Work & Habit Trees",
+                    onBack = onBack,
+                    actions = {
+                        Surface(
+                            shape = RoundedCornerShape(12.dp),
+                            color = Color(0xFF10B981).copy(alpha = 0.15f),
+                            modifier = Modifier.padding(end = Spacing.sm)
                         ) {
-                            Text("🌳", fontSize = 12.sp)
-                            Spacer(Modifier.width(4.dp))
                             Text(
                                 text = "${state.stats.totalTreesPlanted} Planted",
                                 fontSize = 11.sp,
                                 fontWeight = FontWeight.Bold,
-                                color = Color(0xFF10B981)
+                                color = Color(0xFF10B981),
+                                modifier = Modifier.padding(horizontal = 10.dp, vertical = 6.dp)
                             )
                         }
                     }
-                }
-            )
-        },
-        snackbarHost = { SnackbarHost(snackbarHostState) }
-    ) { paddingValues ->
+                )
+            },
+            snackbarHost = { SnackbarHost(snackbarHostState) }
+        ) { paddingValues ->
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()

@@ -228,7 +228,10 @@ fun LifeScoreNavGraph(
                 )
             }
             composable(Screen.AICoach.route) {
-                AiCoachScreen(viewModel = coachViewModel)
+                AiCoachScreen(
+                    viewModel = coachViewModel,
+                    onBack = { navController.popBackStack() }
+                )
             }
             composable(Screen.Leaderboard.route) {
                 LeaderboardScreen(

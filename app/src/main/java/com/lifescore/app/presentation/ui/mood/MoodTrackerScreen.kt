@@ -49,47 +49,27 @@ fun MoodTrackerScreen(
     Box(modifier = Modifier.fillMaxSize()) {
         Scaffold(
             topBar = {
-            TopAppBar(
-                title = {
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        Text("🎭", fontSize = 22.sp)
-                        Spacer(Modifier.width(8.dp))
-                        Column {
+                com.lifescore.app.core.designsystem.components.LifeTopBar(
+                    title = "Mood Tracker",
+                    subtitle = "Emotional Telemetry & Well-Being",
+                    onBack = onBack,
+                    actions = {
+                        Surface(
+                            shape = RoundedCornerShape(12.dp),
+                            color = Color(0xFF6366F1).copy(alpha = 0.15f),
+                            modifier = Modifier.padding(end = Spacing.sm)
+                        ) {
                             Text(
-                                "Mood & Well-Being Tracker",
-                                style = MaterialTheme.typography.titleMedium,
-                                fontWeight = FontWeight.Bold
-                            )
-                            Text(
-                                "Emotional Telemetry & LifeScore Analytics",
-                                style = MaterialTheme.typography.labelSmall,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                                text = "${state.analytics.totalCheckIns} Check-ins",
+                                fontSize = 11.sp,
+                                fontWeight = FontWeight.Bold,
+                                color = MaterialTheme.colorScheme.primary,
+                                modifier = Modifier.padding(horizontal = 10.dp, vertical = 6.dp)
                             )
                         }
                     }
-                },
-                navigationIcon = {
-                    IconButton(onClick = onBack) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
-                    }
-                },
-                actions = {
-                    Surface(
-                        shape = RoundedCornerShape(12.dp),
-                        color = Color(0xFF6366F1).copy(alpha = 0.15f),
-                        modifier = Modifier.padding(end = Spacing.sm)
-                    ) {
-                        Text(
-                            text = "${state.analytics.totalCheckIns} Check-ins",
-                            fontSize = 11.sp,
-                            fontWeight = FontWeight.Bold,
-                            color = MaterialTheme.colorScheme.primary,
-                            modifier = Modifier.padding(horizontal = 10.dp, vertical = 6.dp)
-                        )
-                    }
-                }
-            )
-        },
+                )
+            },
         snackbarHost = { SnackbarHost(snackbarHostState) }
     ) { paddingValues ->
         LazyColumn(

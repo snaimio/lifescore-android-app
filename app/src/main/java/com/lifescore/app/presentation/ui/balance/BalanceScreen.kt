@@ -293,21 +293,21 @@ fun BalanceScreen(
                     val score = uiState.dimensionScores[dimension] ?: 0
                     val isExpanded = expandedDimension == dimension
                     val dimTasks = uiState.allTasks.filter { it.dimension == dimension }
-                    val mockTrend = remember(dimension) {
-                        when (dimension) {
-                            DimensionType.HEALTH -> "+4% this week"
-                            DimensionType.FITNESS -> "+6% this week"
-                            DimensionType.CAREER -> "+2% this week"
-                            DimensionType.LEARNING -> "+8% this week"
-                            DimensionType.MENTAL_HEALTH -> "+5% this week"
-                            else -> "Stable"
+                    val realTrend = remember(dimension, score, dimTasks) {
+                        val completed = dimTasks.count { it.isCompleted }
+                        val total = dimTasks.size
+                        when {
+                            total == 0 -> "No active quests"
+                            completed == total && total > 0 -> "100% completed today"
+                            completed > 0 -> "$completed/$total completed ($score%)"
+                            else -> "Baseline ($score%)"
                         }
                     }
 
                     DimensionDetailCard(
                         dimension = dimension,
                         score = score,
-                        trendText = mockTrend,
+                        trendText = realTrend,
                         isExpanded = isExpanded,
                         tasks = dimTasks,
                         onToggleExpand = {

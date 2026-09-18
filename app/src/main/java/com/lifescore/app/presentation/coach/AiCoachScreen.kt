@@ -60,6 +60,8 @@ data class CoachUiState(
     val lowestScore: Int = 45,
     val highestDimension: DimensionType = DimensionType.CAREER,
     val highestScore: Int = 88,
+    val dimensionScores: Map<DimensionType, Int> = DimensionType.values().associateWith { 50 },
+    val completedTasksCount: Int = 0,
     val diagnosticGuidance: String = "",
     val weeklyAudit: WeeklyAuditResult? = null,
     val chatMessages: List<ChatMessage> = emptyList(),
@@ -102,6 +104,7 @@ class AiCoachViewModel(
                         val completed = dimTasks.count { it.isCompleted }
                         ScoreEngine.calculateDimensionScore(completed, dimTasks.size)
                     }
+                    val totalCompleted = tasks.count { it.isCompleted }
                     val overall = ScoreEngine.calculateOverallLifeScore(scores)
                     val sorted = scores.entries.sortedBy { it.value }
                     val lowest = sorted.firstOrNull()?.key ?: DimensionType.HEALTH
@@ -113,6 +116,8 @@ class AiCoachViewModel(
                         totalScore = overall,
                         streak = user.currentStreakDays,
                         userArchetype = user.title.ifBlank { "The Architect" },
+                        dimensionScores = scores,
+                        completedTasksCount = totalCompleted,
                         lowestDimension = lowest,
                         lowestScore = scores[lowest] ?: 45,
                         highestDimension = highest,
@@ -187,10 +192,9 @@ class AiCoachViewModel(
     private fun generateWeeklyAudit() {
         viewModelScope.launch {
             _uiState.value = _uiState.value.copy(isGenerating = true)
-            val mockScores = DimensionType.values().associateWith { 75 }
             val audit = coachRepository.generateWeeklyAudit(
-                scores = mockScores,
-                tasksCompleted = 24,
+                scores = _uiState.value.dimensionScores,
+                tasksCompleted = _uiState.value.completedTasksCount,
                 totalScore = _uiState.value.totalScore,
                 streak = _uiState.value.streak
             )

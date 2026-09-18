@@ -50,51 +50,31 @@ fun SleepStoriesScreen(
     Box(modifier = Modifier.fillMaxSize()) {
         Scaffold(
             topBar = {
-            TopAppBar(
-                title = {
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        Text("🌙", fontSize = 22.sp)
-                        Spacer(Modifier.width(8.dp))
-                        Column {
-                            Text(
-                                "Sleep Stories & Soundscapes",
-                                style = MaterialTheme.typography.titleMedium,
-                                fontWeight = FontWeight.Bold
-                            )
-                            Text(
-                                "Restorative Sleep & Calming Ambiance",
-                                style = MaterialTheme.typography.labelSmall,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant
-                            )
+                com.lifescore.app.core.designsystem.components.LifeTopBar(
+                    title = "Sleep & Soundscapes",
+                    subtitle = "Restorative Rest & Calming Ambiance",
+                    onBack = onBack,
+                    actions = {
+                        if (state.isTimerActive) {
+                            Surface(
+                                shape = RoundedCornerShape(12.dp),
+                                color = Color(0xFF6366F1).copy(alpha = 0.15f),
+                                modifier = Modifier.padding(end = Spacing.sm)
+                            ) {
+                                val min = state.timerRemainingSeconds / 60
+                                val sec = state.timerRemainingSeconds % 60
+                                Text(
+                                    text = String.format("⏳ %02d:%02d", min, sec),
+                                    fontSize = 11.sp,
+                                    fontWeight = FontWeight.Bold,
+                                    color = MaterialTheme.colorScheme.primary,
+                                    modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp)
+                                )
+                            }
                         }
                     }
-                },
-                navigationIcon = {
-                    IconButton(onClick = onBack) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
-                    }
-                },
-                actions = {
-                    if (state.isTimerActive) {
-                        Surface(
-                            shape = RoundedCornerShape(12.dp),
-                            color = Color(0xFF6366F1).copy(alpha = 0.15f),
-                            modifier = Modifier.padding(end = Spacing.sm)
-                        ) {
-                            val min = state.timerRemainingSeconds / 60
-                            val sec = state.timerRemainingSeconds % 60
-                            Text(
-                                text = String.format("⏳ %02d:%02d", min, sec),
-                                fontSize = 11.sp,
-                                fontWeight = FontWeight.Bold,
-                                color = MaterialTheme.colorScheme.primary,
-                                modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp)
-                            )
-                        }
-                    }
-                }
-            )
-        },
+                )
+            },
         snackbarHost = { SnackbarHost(snackbarHostState) }
     ) { paddingValues ->
         LazyColumn(
