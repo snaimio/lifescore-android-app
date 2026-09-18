@@ -280,7 +280,11 @@ fun TasksScreen(
                         onToggleSubTask = { task, stId -> viewModel.toggleSubTask(task, stId) },
                         onDeleteTask = { viewModel.deleteTask(it) },
                         onFilter = { viewModel.setFilter(it) },
-                        onAddSmartHabit = { viewModel.addSmartSuggestedHabit(it) }
+                        onAddSmartHabit = { viewModel.addSmartSuggestedHabit(it) },
+                        onOpenHydration = { navController.navigate(com.lifescore.app.presentation.navigation.Screen.Hydration.route) },
+                        onOpenSleep = { navController.navigate(com.lifescore.app.presentation.navigation.Screen.SleepSoundscapes.route) },
+                        onOpenMeditation = { navController.navigate(com.lifescore.app.presentation.navigation.Screen.MeditationLibrary.route) },
+                        onOpenSteps = { navController.navigate("tracker_detail/steps") }
                     )
                 }
                 HabitTab.CHAIN -> {
@@ -317,7 +321,11 @@ fun HabitsListView(
     onToggleSubTask: (LifeTask, String) -> Unit,
     onDeleteTask: (LifeTask) -> Unit,
     onFilter: (DimensionType?) -> Unit,
-    onAddSmartHabit: (LifeTask) -> Unit
+    onAddSmartHabit: (LifeTask) -> Unit,
+    onOpenHydration: () -> Unit = {},
+    onOpenSleep: () -> Unit = {},
+    onOpenMeditation: () -> Unit = {},
+    onOpenSteps: () -> Unit = {}
 ) {
     val haptic = LocalHapticFeedback.current
     val filtered = if (uiState.filterDimension == null) {
@@ -344,7 +352,9 @@ fun HabitsListView(
                 ) {
                     // 1. Hydration Card
                     Surface(
-                        modifier = Modifier.weight(1f),
+                        modifier = Modifier
+                            .weight(1f)
+                            .clickable { onOpenHydration() },
                         shape = RoundedCornerShape(16.dp),
                         color = MaterialTheme.colorScheme.surfaceVariant,
                         border = BorderStroke(1.dp, Color(0xFF3B82F6).copy(alpha = 0.3f))
@@ -381,7 +391,7 @@ fun HabitsListView(
                             Text("Goal: 3.0L", fontSize = 10.sp, color = MaterialTheme.colorScheme.outline)
                             Spacer(Modifier.height(6.dp))
                             Button(
-                                onClick = { /* log water */ },
+                                onClick = onOpenHydration,
                                 shape = RoundedCornerShape(8.dp),
                                 contentPadding = PaddingValues(horizontal = 8.dp, vertical = 2.dp),
                                 modifier = Modifier.fillMaxWidth().height(28.dp),
@@ -394,7 +404,9 @@ fun HabitsListView(
 
                     // 2. Sleep Card
                     Surface(
-                        modifier = Modifier.weight(1f),
+                        modifier = Modifier
+                            .weight(1f)
+                            .clickable { onOpenSleep() },
                         shape = RoundedCornerShape(16.dp),
                         color = MaterialTheme.colorScheme.surfaceVariant,
                         border = BorderStroke(1.dp, Color(0xFF6366F1).copy(alpha = 0.3f))
@@ -450,7 +462,9 @@ fun HabitsListView(
                 ) {
                     // 3. Meditation Card
                     Surface(
-                        modifier = Modifier.weight(1f),
+                        modifier = Modifier
+                            .weight(1f)
+                            .clickable { onOpenMeditation() },
                         shape = RoundedCornerShape(16.dp),
                         color = MaterialTheme.colorScheme.surfaceVariant,
                         border = BorderStroke(1.dp, Color(0xFF10B981).copy(alpha = 0.3f))
@@ -487,7 +501,7 @@ fun HabitsListView(
                             Text("Goal: 20 min", fontSize = 10.sp, color = MaterialTheme.colorScheme.outline)
                             Spacer(Modifier.height(6.dp))
                             Button(
-                                onClick = { /* start session */ },
+                                onClick = onOpenMeditation,
                                 shape = RoundedCornerShape(8.dp),
                                 contentPadding = PaddingValues(horizontal = 8.dp, vertical = 2.dp),
                                 modifier = Modifier.fillMaxWidth().height(28.dp),
@@ -500,7 +514,9 @@ fun HabitsListView(
 
                     // 4. Step Counter Card
                     Surface(
-                        modifier = Modifier.weight(1f),
+                        modifier = Modifier
+                            .weight(1f)
+                            .clickable { onOpenSteps() },
                         shape = RoundedCornerShape(16.dp),
                         color = MaterialTheme.colorScheme.surfaceVariant,
                         border = BorderStroke(1.dp, Color(0xFFF97316).copy(alpha = 0.3f))
@@ -537,7 +553,7 @@ fun HabitsListView(
                             Text("Goal: 10,000", fontSize = 10.sp, color = MaterialTheme.colorScheme.outline)
                             Spacer(Modifier.height(6.dp))
                             Button(
-                                onClick = { /* add steps */ },
+                                onClick = onOpenSteps,
                                 shape = RoundedCornerShape(8.dp),
                                 contentPadding = PaddingValues(horizontal = 8.dp, vertical = 2.dp),
                                 modifier = Modifier.fillMaxWidth().height(28.dp),

@@ -11,10 +11,10 @@ interface HydrationDao {
     @Query("SELECT * FROM hydration_entries WHERE userId = :userId ORDER BY timestamp DESC")
     fun getHydrationEntries(userId: String): Flow<List<HydrationEntity>>
 
-    @Query("SELECT * FROM hydration_entries WHERE userId = :userId AND date(timestamp / 1000, 'unixepoch') = date('now', 'localtime') ORDER BY timestamp DESC")
+    @Query("SELECT * FROM hydration_entries WHERE userId = :userId AND date(timestamp / 1000, 'unixepoch', 'localtime') = date('now', 'localtime') ORDER BY timestamp DESC")
     fun getTodayEntries(userId: String): Flow<List<HydrationEntity>>
 
-    @Query("SELECT SUM(volumeMl) FROM hydration_entries WHERE userId = :userId AND date(timestamp / 1000, 'unixepoch') = date('now', 'localtime')")
+    @Query("SELECT SUM(volumeMl) FROM hydration_entries WHERE userId = :userId AND date(timestamp / 1000, 'unixepoch', 'localtime') = date('now', 'localtime')")
     fun getTodayTotal(userId: String): Flow<Int?>
 
     @Query("SELECT * FROM hydration_entries WHERE userId = :userId ORDER BY timestamp DESC LIMIT 1")
