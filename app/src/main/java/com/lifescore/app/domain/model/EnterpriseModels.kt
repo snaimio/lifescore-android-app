@@ -28,19 +28,19 @@ enum class B2BPlanTier(
 }
 
 data class EnterpriseOrg(
-    val id: String = "org_acme_01",
-    val companyName: String = "Acme Technologies Inc.",
-    val domain: String = "acme.com",
+    val id: String = "org_workspace_01",
+    val companyName: String = "Global Workspace",
+    val domain: String = "workspace.internal",
     val planTier: B2BPlanTier = B2BPlanTier.GROWTH,
     val totalSeats: Int = 100,
-    val adminEmail: String = "tanjin@acme.com",
+    val adminEmail: String = "",
     val createdAt: Long = System.currentTimeMillis() - 86400000L * 60
 )
 
 data class EnterpriseMember(
     val uid: String = UUID.randomUUID().toString(),
     val displayName: String,
-    val email: String,
+    val email: String = "",
     val role: EnterpriseRole = EnterpriseRole.MEMBER,
     val department: DepartmentType,
     val lifeScore: Int,

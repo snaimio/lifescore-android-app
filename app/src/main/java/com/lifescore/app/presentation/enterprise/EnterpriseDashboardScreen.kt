@@ -199,7 +199,7 @@ fun EnterpriseDashboardScreen(
                     OutlinedTextField(
                         value = email,
                         onValueChange = { email = it },
-                        label = { Text("Work Email (@acme.com)") },
+                        label = { Text("Work Email / Username") },
                         singleLine = true,
                         modifier = Modifier.fillMaxWidth()
                     )

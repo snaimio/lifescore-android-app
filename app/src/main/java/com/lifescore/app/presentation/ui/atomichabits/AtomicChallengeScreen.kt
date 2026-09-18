@@ -115,7 +115,7 @@ fun AtomicChallengeContent(
                     Spacer(Modifier.height(Spacing.md))
 
                     GradientButton(
-                        text = if (challenge?.isCompleted == true) "🎉 30-Day Challenge Mastered!" else "⚡ Complete Day $currentDay (+30 XP)",
+                        text = if (challenge?.isCompleted == true) "30-Day Challenge Mastered" else "Complete Day $currentDay",
                         onClick = onLogDay,
                         modifier = Modifier.fillMaxWidth()
                     )

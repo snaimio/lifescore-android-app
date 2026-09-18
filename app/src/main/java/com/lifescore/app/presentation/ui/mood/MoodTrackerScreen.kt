@@ -213,7 +213,7 @@ fun MoodTrackerScreen(
                             modifier = Modifier.fillMaxWidth(),
                             shape = RoundedCornerShape(12.dp)
                         ) {
-                            Text("Save Mood Check-in (+20 XP)", fontWeight = FontWeight.Bold)
+                            Text("Save Mood Check-in", fontWeight = FontWeight.Bold)
                         }
                     }
                 }

@@ -303,8 +303,8 @@ fun FocusTimerScreen(
                                 Text("${state.stats.totalTreesPlanted}", fontSize = 16.sp, fontWeight = FontWeight.Bold, color = Color(0xFF10B981))
                             }
                             Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                                Text("⚡ XP Claimed", fontSize = 11.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
-                                Text("${(state.stats.totalFocusMinutes * 1.5).toInt()} XP", fontSize = 16.sp, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.primary)
+                                Text("Focus Score", fontSize = 11.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                                Text("${state.stats.totalFocusMinutes} min", fontSize = 16.sp, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.primary)
                             }
                         }
 
@@ -379,7 +379,7 @@ fun FocusTimerScreen(
         com.lifescore.app.core.designsystem.components.CoachMarkOverlay(
             emoji = "🌲",
             title = "Mindful Forest Focus",
-            description = "Plant virtual trees during deep work sessions. If you stay focused, your tree grows to maturity and earns Gold and XP!",
+            description = "Plant virtual trees during deep work sessions. Stay focused to grow your tree to full maturity.",
             onDismiss = {
                 coachMarkManager.markSeen("focus")
                 showCoachMark = false

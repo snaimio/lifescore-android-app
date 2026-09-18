@@ -231,8 +231,8 @@ fun SettingsScreen(
                         HorizontalDivider(modifier = Modifier.padding(horizontal = 8.dp))
                         SettingsSwitchItem(
                             icon = Icons.AutoMirrored.Filled.VolumeUp,
-                            title = "XP Sound Effects & Haptics",
-                            subtitle = "Feel rewards upon habit completion",
+                            title = "Sound Effects & Haptics",
+                            subtitle = "Feel feedback upon habit completion",
                             checked = soundEffectsEnabled,
                             onCheckedChange = { soundEffectsEnabled = it }
                         )

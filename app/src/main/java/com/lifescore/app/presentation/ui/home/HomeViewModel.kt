@@ -91,13 +91,11 @@ class HomeViewModel(
                     isPremium = false
                 )
                 val phase = com.lifescore.app.core.engine.UserProgressTracker.determinePhase(userProg)
-                val questLimit = com.lifescore.app.core.engine.UserProgressTracker.getDailyQuestLimit(phase)
-                val visibleTasks = tasks.take(questLimit)
 
                 HomeUiState(
                     isLoading = false,
                     isSyncing = false,
-                    userName = user.name.ifBlank { "Achiever" },
+                    userName = user.name.ifBlank { "Member" },
                     totalScore = overall,
                     level = level,
                     levelProgress = progress,
@@ -106,10 +104,10 @@ class HomeViewModel(
                     userTitle = LevelCalculator.getTitleForLevel(level),
                     dailyProgress = taskProgress,
                     tasksCompleted = completedCount,
-                    totalTasks = visibleTasks.size,
+                    totalTasks = tasks.size,
                     dimensions = DimensionType.values().toList(),
                     dimensionScores = scores,
-                    todayTasks = visibleTasks,
+                    todayTasks = tasks,
                     userPhase = phase,
                     unlockedFeatures = com.lifescore.app.core.engine.UserProgressTracker.getUnlockedFeatures(phase),
                     milestoneMessage = com.lifescore.app.core.engine.FeatureUnlockNotification.getUnlockMessage(phase),

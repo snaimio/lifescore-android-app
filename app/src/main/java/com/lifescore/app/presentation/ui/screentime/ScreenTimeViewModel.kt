@@ -11,22 +11,23 @@ import kotlinx.coroutines.launch
 
 data class ScreenTimeUiState(
     val isLoading: Boolean = false,
-    val todayMinutes: Int = 85,
+    val todayMinutes: Int = 0,
     val dailyLimitMinutes: Int = 120,
-    val earnedBonusMinutes: Int = 15,
-    val effectiveLimitMinutes: Int = 135,
-    val progress: Float = 85f / 135f,
-    val pickups: Int = 34,
+    val earnedBonusMinutes: Int = 0,
+    val effectiveLimitMinutes: Int = 120,
+    val progress: Float = 0f,
+    val pickups: Int = 0,
     val isFocusModeEnabled: Boolean = false,
     val intentionalDelaySeconds: Int = 10,
     val topApps: List<AppUsageItemModel> = emptyList(),
     val activeChallenges: List<ScreenTimeChallenge> = emptyList(),
     val thoughtLogs: List<ThoughtBreakLog> = emptyList(),
     val showFrictionDialog: Boolean = false,
-    val targetAppOpening: String = "Instagram",
+    val targetAppOpening: String = "App",
     val frictionSecondsRemaining: Int = 10,
     val movementBonusAwarded: Int = 0,
     val selectedTab: Int = 0, // 0 = Dashboard, 1 = SweatPass Movement, 2 = Minimalist Mode, 3 = Thought Break
+    val hasUsagePermission: Boolean = true,
     val userMessage: String? = null
 )
 
@@ -39,6 +40,10 @@ class ScreenTimeViewModel(
     val uiState = _uiState.asStateFlow()
 
     init {
+        loadData()
+    }
+
+    fun refreshUsage() {
         loadData()
     }
 
@@ -65,7 +70,8 @@ class ScreenTimeViewModel(
                     intentionalDelaySeconds = goal.intentionalDelaySeconds,
                     topApps = usage.topApps,
                     activeChallenges = challenges,
-                    thoughtLogs = logs
+                    thoughtLogs = logs,
+                    hasUsagePermission = usage.hasUsagePermission
                 )
             }.collect { state ->
                 _uiState.value = state
@@ -86,7 +92,7 @@ class ScreenTimeViewModel(
             _uiState.update {
                 it.copy(
                     isFocusModeEnabled = enabled,
-                    userMessage = if (enabled) "🔒 Deep Focus Active — Distracting apps locked" else "Focus mode turned off"
+                    userMessage = if (enabled) "Deep Focus Active - Distracting apps shielded" else "Focus mode turned off"
                 )
             }
         }
@@ -98,7 +104,7 @@ class ScreenTimeViewModel(
             _uiState.update {
                 it.copy(
                     movementBonusAwarded = bonusMins,
-                    userMessage = "💪 Awesome! +$bonusMins mins screen time unlocked (+${bonusMins * 15} XP)"
+                    userMessage = "Completed! +$bonusMins mins screen time unlocked"
                 )
             }
         }
@@ -118,7 +124,7 @@ class ScreenTimeViewModel(
         _uiState.update {
             it.copy(
                 showFrictionDialog = false,
-                userMessage = if (proceed) "Opening ${it.targetAppOpening} mindfully" else "🎉 Saved 15+ mins of mindless scrolling! (+20 XP)"
+                userMessage = if (proceed) "Opening ${it.targetAppOpening} mindfully" else "Mindful pause complete"
             )
         }
     }
@@ -130,7 +136,7 @@ class ScreenTimeViewModel(
     fun advanceChallenge(challenge: ScreenTimeChallenge) {
         viewModelScope.launch {
             repository.advanceChallengeProgress(challenge)
-            _uiState.update { it.copy(userMessage = "Day ${challenge.currentDay + 1} completed! Keep going!") }
+            _uiState.update { it.copy(userMessage = "Day ${challenge.currentDay + 1} completed!") }
         }
     }
 
@@ -143,7 +149,7 @@ class ScreenTimeViewModel(
     ) {
         viewModelScope.launch {
             repository.saveThoughtBreak(userId, automaticThought, distortion, evidence, reframed, relief)
-            _uiState.update { it.copy(userMessage = "🧠 Thought reframed! +40 XP Mental Health boost") }
+            _uiState.update { it.copy(userMessage = "Thought reframed successfully") }
         }
     }
 

@@ -337,7 +337,7 @@ fun DailyGrowthScreen(
                                 color = Color(0xFF10B981).copy(alpha = 0.2f)
                             ) {
                                 Text(
-                                    text = "+50 XP",
+                                    text = "Daily Action",
                                     fontSize = 12.sp,
                                     fontWeight = FontWeight.Bold,
                                     color = Color(0xFF10B981),
@@ -364,7 +364,7 @@ fun DailyGrowthScreen(
                             )
                         ) {
                             Text(
-                                text = if (isChallengeDone) "✅ Action Challenge Completed (+50 XP)" else "Complete Action Challenge (+50 XP)",
+                                text = if (isChallengeDone) "Action Challenge Completed" else "Complete Action Challenge",
                                 fontWeight = FontWeight.Bold
                             )
                         }
@@ -377,7 +377,7 @@ fun DailyGrowthScreen(
                 GlassCard(modifier = Modifier.fillMaxWidth()) {
                     Column(modifier = Modifier.padding(Spacing.md)) {
                         Text(
-                            text = "✍️ Daily Growth Reflection Prompt",
+                            text = "Daily Growth Reflection Prompt",
                             style = MaterialTheme.typography.titleMedium,
                             fontWeight = FontWeight.Bold
                         )
@@ -409,7 +409,7 @@ fun DailyGrowthScreen(
                             shape = RoundedCornerShape(12.dp)
                         ) {
                             Text(
-                                text = if (isSessionDone) "💾 Update Reflection" else "Complete 15-Min Session (+50 XP)",
+                                text = if (isSessionDone) "Update Reflection" else "Complete 15-Min Session",
                                 fontWeight = FontWeight.Bold
                             )
                         }

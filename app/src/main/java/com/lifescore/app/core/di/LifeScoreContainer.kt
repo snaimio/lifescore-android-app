@@ -147,7 +147,8 @@ class LifeScoreContainer(private val context: Context) {
     val screenTimeRepository: ScreenTimeRepository by lazy {
         ScreenTimeRepositoryImpl(
             screenTimeDao = database.screenTimeDao(),
-            lifeScoreRepository = lifeScoreRepository
+            lifeScoreRepository = lifeScoreRepository,
+            context = context
         )
     }
 

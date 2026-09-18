@@ -19,11 +19,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
+import com.lifescore.app.core.util.RealUsageStatsHelper
 import com.lifescore.app.data.local.entity.ScreenTimeChallenge
 import com.lifescore.app.data.repository.AppUsageItemModel
 import kotlinx.coroutines.delay
@@ -36,8 +41,23 @@ fun ScreenTimeDashboardScreen(
     onNavigateToMinimalist: () -> Unit = {},
     onNavigateToFocusTimer: () -> Unit = {}
 ) {
+    val context = LocalContext.current
+    val lifecycleOwner = LocalLifecycleOwner.current
     val state by viewModel.uiState.collectAsState()
     val snackbarHostState = remember { SnackbarHostState() }
+
+    // Auto-refresh when user returns from Settings
+    DisposableEffect(lifecycleOwner) {
+        val observer = LifecycleEventObserver { _, event ->
+            if (event == Lifecycle.Event.ON_RESUME) {
+                viewModel.refreshUsage()
+            }
+        }
+        lifecycleOwner.lifecycle.addObserver(observer)
+        onDispose {
+            lifecycleOwner.lifecycle.removeObserver(observer)
+        }
+    }
 
     LaunchedEffect(state.userMessage) {
         state.userMessage?.let { msg ->
@@ -62,12 +82,12 @@ fun ScreenTimeDashboardScreen(
                 title = {
                     Column {
                         Text(
-                            "📱 Screen Time & Digital Wellness",
+                            "Screen Time & Wellness",
                             fontWeight = FontWeight.Bold,
                             style = MaterialTheme.typography.titleMedium
                         )
                         Text(
-                            "Reclaim focus • Opal & SweatPass OS",
+                            "Real device telemetry & focus shield",
                             style = MaterialTheme.typography.bodySmall,
                             color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
@@ -80,7 +100,7 @@ fun ScreenTimeDashboardScreen(
                 },
                 actions = {
                     IconButton(onClick = onNavigateToMinimalist) {
-                        Text("🔲", fontSize = 20.sp)
+                        Icon(Icons.Default.Apps, contentDescription = "Minimalist Mode")
                     }
                 }
             )
@@ -93,6 +113,55 @@ fun ScreenTimeDashboardScreen(
                 .padding(horizontal = 16.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
+            // Permission Grant Banner (if not yet granted)
+            if (!state.hasUsagePermission) {
+                item {
+                    Card(
+                        shape = RoundedCornerShape(16.dp),
+                        colors = CardDefaults.cardColors(
+                            containerColor = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.85f)
+                        ),
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Column(modifier = Modifier.padding(16.dp)) {
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.spacedBy(8.dp)
+                            ) {
+                                Icon(
+                                    Icons.Default.Security,
+                                    contentDescription = null,
+                                    tint = MaterialTheme.colorScheme.primary
+                                )
+                                Text(
+                                    "Real Usage Access Required",
+                                    fontWeight = FontWeight.Bold,
+                                    style = MaterialTheme.typography.titleSmall,
+                                    color = MaterialTheme.colorScheme.onPrimaryContainer
+                                )
+                            }
+                            Spacer(Modifier.height(6.dp))
+                            Text(
+                                "To display your real device screen time, top apps, and pickups, please grant LifeScore Usage Access in Android Settings.",
+                                style = MaterialTheme.typography.bodySmall,
+                                color = MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.85f)
+                            )
+                            Spacer(Modifier.height(12.dp))
+                            Button(
+                                onClick = {
+                                    try {
+                                        context.startActivity(RealUsageStatsHelper.createUsageAccessIntent())
+                                    } catch (_: Exception) {}
+                                },
+                                colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)
+                            ) {
+                                Text("Grant Permission in Settings")
+                            }
+                        }
+                    }
+                }
+            }
+
             // 1. Hero Card: Today's Usage & Effective Limit
             item {
                 ScreenTimeHeroCard(
@@ -186,17 +255,19 @@ fun ScreenTimeDashboardScreen(
                             horizontalArrangement = Arrangement.spacedBy(8.dp),
                             modifier = Modifier.fillMaxWidth()
                         ) {
+                            val firstApp = state.topApps.firstOrNull()?.appName ?: "App"
+                            val secondApp = state.topApps.getOrNull(1)?.appName ?: "Browser"
                             OutlinedButton(
-                                onClick = { viewModel.triggerIntentionalAppOpening("Instagram") },
+                                onClick = { viewModel.triggerIntentionalAppOpening(firstApp) },
                                 modifier = Modifier.weight(1f)
                             ) {
-                                Text("📸 Test Instagram")
+                                Text("Test $firstApp")
                             }
                             OutlinedButton(
-                                onClick = { viewModel.triggerIntentionalAppOpening("TikTok") },
+                                onClick = { viewModel.triggerIntentionalAppOpening(secondApp) },
                                 modifier = Modifier.weight(1f)
                             ) {
-                                Text("🎵 Test TikTok")
+                                Text("Test $secondApp")
                             }
                         }
                     }
@@ -206,17 +277,40 @@ fun ScreenTimeDashboardScreen(
             // 6. Top App Usage Breakdown
             item {
                 Text(
-                    "📊 Top App Usage",
+                    "Top App Usage",
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.Bold
                 )
             }
 
-            items(state.topApps) { app ->
-                AppUsageListItem(
-                    app = app,
-                    onAppClick = { viewModel.triggerIntentionalAppOpening(app.appName) }
-                )
+            if (state.topApps.isEmpty()) {
+                item {
+                    Card(
+                        shape = RoundedCornerShape(12.dp),
+                        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.4f)),
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Box(
+                            modifier = Modifier
+                                .padding(20.dp)
+                                .fillMaxWidth(),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Text(
+                                if (state.hasUsagePermission) "No foreground apps recorded yet today." else "Grant Usage Access above to view your real top apps.",
+                                style = MaterialTheme.typography.bodyMedium,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                            )
+                        }
+                    }
+                }
+            } else {
+                items(state.topApps) { app ->
+                    AppUsageListItem(
+                        app = app,
+                        onAppClick = { viewModel.triggerIntentionalAppOpening(app.appName) }
+                    )
+                }
             }
 
             // 7. Minimalist Phone Launcher Mode Banner
@@ -441,7 +535,7 @@ fun OpalDeepFocusCard(
             ) {
                 Icon(Icons.Default.PlayArrow, contentDescription = null)
                 Spacer(Modifier.width(6.dp))
-                Text("Start 25-Min Forest Focus Block (+50 XP)")
+                Text("Start 25-Min Focus Session")
             }
         }
     }
@@ -478,7 +572,7 @@ fun SweatPassMovementCard(
                     }
                 }
                 Badge(containerColor = MaterialTheme.colorScheme.primary) {
-                    Text("+XP Loop", color = Color.White)
+                    Text("Active", color = Color.White)
                 }
             }
 
@@ -650,7 +744,7 @@ fun ChallengeProgressCard(
                     style = MaterialTheme.typography.titleSmall
                 )
                 Badge(containerColor = MaterialTheme.colorScheme.primaryContainer) {
-                    Text("+${challenge.xpReward} XP", fontWeight = FontWeight.Bold)
+                    Text("Detox Challenge", fontWeight = FontWeight.Bold)
                 }
             }
 

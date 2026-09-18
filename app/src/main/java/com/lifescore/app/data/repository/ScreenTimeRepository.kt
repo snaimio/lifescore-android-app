@@ -28,7 +28,8 @@ data class ScreenTimeUsageSummary(
     val gamingMinutes: Int,
     val videoMinutes: Int,
     val shoppingMinutes: Int,
-    val topApps: List<AppUsageItemModel>
+    val topApps: List<AppUsageItemModel>,
+    val hasUsagePermission: Boolean = true
 )
 
 interface ScreenTimeRepository {
@@ -60,20 +61,12 @@ interface ScreenTimeRepository {
 
 class ScreenTimeRepositoryImpl(
     private val screenTimeDao: ScreenTimeDao,
-    private val lifeScoreRepository: LifeScoreRepository
+    private val lifeScoreRepository: LifeScoreRepository,
+    private val context: android.content.Context? = null
 ) : ScreenTimeRepository {
 
     private val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
     private fun getTodayDate(): String = dateFormat.format(Date())
-
-    private suspend fun awardXp(amount: Int) {
-        try {
-            val user = lifeScoreRepository.getUserProfile().firstOrNull()
-            if (user != null) {
-                lifeScoreRepository.updateUserProfile(user.copy(currentXp = user.currentXp + amount))
-            }
-        } catch (_: Exception) {}
-    }
 
     override fun getGoal(userId: String): Flow<ScreenTimeGoalEntity> {
         return screenTimeDao.getGoal(userId).map { goal ->
@@ -89,43 +82,65 @@ class ScreenTimeRepositoryImpl(
 
     override fun getTodayUsage(userId: String): Flow<ScreenTimeUsageSummary> {
         val today = getTodayDate()
-        return screenTimeDao.getEntryForDate(userId, today).map { entry ->
-            val todayEntry = entry ?: ScreenTimeEntry(
-                userId = userId,
-                date = today,
-                totalMinutes = 85,
-                socialMediaMinutes = 45,
-                gamingMinutes = 20,
-                videoMinutes = 15,
-                shoppingMinutes = 5,
-                pickups = 34,
-                firstPickup = System.currentTimeMillis() - 8 * 3600 * 1000L,
-                lastPickup = System.currentTimeMillis(),
-                screenTimeGoalMet = true
-            )
+        return combine(
+            screenTimeDao.getGoal(userId),
+            screenTimeDao.getEntryForDate(userId, today)
+        ) { goal, entry ->
+            val dailyLimit = goal?.dailyLimitMinutes ?: 120
+            val bonusMinutes = goal?.earnedBonusMinutes ?: 0
+            val effectiveLimit = dailyLimit + bonusMinutes
 
-            val sampleTopApps = listOf(
-                AppUsageItemModel("Instagram", todayEntry.socialMediaMinutes.coerceAtLeast(30), ScreenTimeActionType.SOCIAL_MEDIA, "📸"),
-                AppUsageItemModel("YouTube", todayEntry.videoMinutes.coerceAtLeast(25), ScreenTimeActionType.VIDEO_STREAMING, "▶️"),
-                AppUsageItemModel("TikTok", 15, ScreenTimeActionType.SOCIAL_MEDIA, "🎵"),
-                AppUsageItemModel("Clash Royale", todayEntry.gamingMinutes.coerceAtLeast(10), ScreenTimeActionType.GAMING, "⚔️"),
-                AppUsageItemModel("Amazon", todayEntry.shoppingMinutes.coerceAtLeast(5), ScreenTimeActionType.SHOPPING, "🛒")
-            )
+            val realReport = context?.let { com.lifescore.app.core.util.RealUsageStatsHelper.getTodayUsageReport(it) }
 
-            ScreenTimeUsageSummary(
-                date = today,
-                totalMinutes = todayEntry.totalMinutes,
-                dailyLimitMinutes = 120,
-                bonusMinutesEarned = 15,
-                effectiveLimitMinutes = 135,
-                pickups = todayEntry.pickups,
-                isGoalMet = todayEntry.totalMinutes <= 135,
-                socialMinutes = todayEntry.socialMediaMinutes,
-                gamingMinutes = todayEntry.gamingMinutes,
-                videoMinutes = todayEntry.videoMinutes,
-                shoppingMinutes = todayEntry.shoppingMinutes,
-                topApps = sampleTopApps
-            )
+            if (realReport != null && realReport.hasPermission) {
+                ScreenTimeUsageSummary(
+                    date = today,
+                    totalMinutes = realReport.totalMinutes,
+                    dailyLimitMinutes = dailyLimit,
+                    bonusMinutesEarned = bonusMinutes,
+                    effectiveLimitMinutes = effectiveLimit,
+                    pickups = realReport.pickups,
+                    isGoalMet = realReport.totalMinutes <= effectiveLimit,
+                    socialMinutes = realReport.socialMinutes,
+                    gamingMinutes = realReport.gamingMinutes,
+                    videoMinutes = realReport.videoMinutes,
+                    shoppingMinutes = realReport.shoppingMinutes,
+                    topApps = realReport.topApps,
+                    hasUsagePermission = true
+                )
+            } else if (entry != null) {
+                ScreenTimeUsageSummary(
+                    date = today,
+                    totalMinutes = entry.totalMinutes,
+                    dailyLimitMinutes = dailyLimit,
+                    bonusMinutesEarned = bonusMinutes,
+                    effectiveLimitMinutes = effectiveLimit,
+                    pickups = entry.pickups,
+                    isGoalMet = entry.totalMinutes <= effectiveLimit,
+                    socialMinutes = entry.socialMediaMinutes,
+                    gamingMinutes = entry.gamingMinutes,
+                    videoMinutes = entry.videoMinutes,
+                    shoppingMinutes = entry.shoppingMinutes,
+                    topApps = emptyList(),
+                    hasUsagePermission = false
+                )
+            } else {
+                ScreenTimeUsageSummary(
+                    date = today,
+                    totalMinutes = 0,
+                    dailyLimitMinutes = dailyLimit,
+                    bonusMinutesEarned = bonusMinutes,
+                    effectiveLimitMinutes = effectiveLimit,
+                    pickups = 0,
+                    isGoalMet = true,
+                    socialMinutes = 0,
+                    gamingMinutes = 0,
+                    videoMinutes = 0,
+                    shoppingMinutes = 0,
+                    topApps = emptyList(),
+                    hasUsagePermission = false
+                )
+            }
         }
     }
 
@@ -194,11 +209,16 @@ class ScreenTimeRepositoryImpl(
 
     override suspend fun recordPickup(userId: String) {
         val today = getTodayDate()
-        val entry = ScreenTimeEntry(
+        val existing = screenTimeDao.getEntryForDate(userId, today).firstOrNull()
+        val entry = existing?.copy(
+            pickups = existing.pickups + 1,
+            lastPickup = System.currentTimeMillis()
+        ) ?: ScreenTimeEntry(
             userId = userId,
             date = today,
-            totalMinutes = 90,
-            pickups = 35,
+            totalMinutes = 0,
+            pickups = 1,
+            firstPickup = System.currentTimeMillis(),
             lastPickup = System.currentTimeMillis()
         )
         screenTimeDao.insertOrUpdateEntry(entry)
@@ -206,11 +226,21 @@ class ScreenTimeRepositoryImpl(
 
     override suspend fun logAppUsage(userId: String, category: ScreenTimeActionType, minutes: Int) {
         val today = getTodayDate()
-        val entry = ScreenTimeEntry(
+        val existing = screenTimeDao.getEntryForDate(userId, today).firstOrNull()
+        val entry = existing?.copy(
+            totalMinutes = existing.totalMinutes + minutes,
+            socialMediaMinutes = if (category == ScreenTimeActionType.SOCIAL_MEDIA) existing.socialMediaMinutes + minutes else existing.socialMediaMinutes,
+            gamingMinutes = if (category == ScreenTimeActionType.GAMING) existing.gamingMinutes + minutes else existing.gamingMinutes,
+            videoMinutes = if (category == ScreenTimeActionType.VIDEO_STREAMING) existing.videoMinutes + minutes else existing.videoMinutes,
+            shoppingMinutes = if (category == ScreenTimeActionType.SHOPPING) existing.shoppingMinutes + minutes else existing.shoppingMinutes
+        ) ?: ScreenTimeEntry(
             userId = userId,
             date = today,
             totalMinutes = minutes,
-            socialMediaMinutes = if (category == ScreenTimeActionType.SOCIAL_MEDIA) minutes else 0
+            socialMediaMinutes = if (category == ScreenTimeActionType.SOCIAL_MEDIA) minutes else 0,
+            gamingMinutes = if (category == ScreenTimeActionType.GAMING) minutes else 0,
+            videoMinutes = if (category == ScreenTimeActionType.VIDEO_STREAMING) minutes else 0,
+            shoppingMinutes = if (category == ScreenTimeActionType.SHOPPING) minutes else 0
         )
         screenTimeDao.insertOrUpdateEntry(entry)
     }
@@ -219,11 +249,6 @@ class ScreenTimeRepositoryImpl(
         // SweatPass rule: 1 bonus minute per 5 reps / 15 seconds plank
         val earnedMinutes = (reps / 5).coerceAtLeast(1)
         screenTimeDao.addBonusMinutes(userId, earnedMinutes)
-
-        // Award Fitness & Mental Health XP
-        val xpBonus = earnedMinutes * 15
-        awardXp(xpBonus)
-
         return earnedMinutes
     }
 
@@ -248,11 +273,6 @@ class ScreenTimeRepositoryImpl(
             wasSuccessful = wasSuccessful
         )
         screenTimeDao.updateSession(session)
-
-        if (wasSuccessful) {
-            val xpEarned = durationMinutes * 2 // e.g. 25 min focus = 50 XP
-            awardXp(xpEarned)
-        }
     }
 
     override suspend fun joinChallenge(
@@ -283,10 +303,6 @@ class ScreenTimeRepositoryImpl(
             completedAt = if (isCompleted) System.currentTimeMillis() else null
         )
         screenTimeDao.updateChallenge(updated)
-
-        if (isCompleted) {
-            awardXp(challenge.xpReward)
-        }
     }
 
     override suspend fun saveThoughtBreak(
@@ -306,7 +322,5 @@ class ScreenTimeRepositoryImpl(
             emotionalReliefRating = reliefRating
         )
         screenTimeDao.insertThoughtBreakLog(log)
-        // Award Mental Health XP
-        awardXp(40)
     }
 }

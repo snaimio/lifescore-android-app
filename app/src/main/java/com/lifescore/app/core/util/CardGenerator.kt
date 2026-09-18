@@ -15,42 +15,63 @@ enum class CardTheme(
     val topColor: Int,
     val bottomColor: Int,
     val accentColor: Int,
-    val cardBgColor: Int
+    val cardBgColor: Int,
+    val isLightTheme: Boolean = false
 ) {
-    COSMIC_NIGHT(
-        "Cosmic Night",
-        0xFF0F172A.toInt(), // Deep Slate Navy
-        0xFF1E1B4B.toInt(), // Midnight Indigo
-        0xFF818CF8.toInt(), // Vibrant Violet Accent
-        0x26FFFFFF          // 15% White overlay
-    ),
-    CYBER_NEON(
-        "Cyber Neon",
-        0xFF091E24.toInt(), // Dark Cyan Slate
-        0xFF041318.toInt(), // Obsidian Teal
-        0xFF2DD4BF.toInt(), // Electric Emerald
-        0x26FFFFFF
+    LIGHT_HARMONY(
+        "Light Harmony",
+        0xFFFDFBF7.toInt(), // Warm cream
+        0xFFF5EFEB.toInt(), // Soft linen
+        0xFFD4A24C.toInt(), // Executive Gold
+        0xFFFFFFFF.toInt(), // Crisp White Card
+        true
     ),
     ROYAL_GOLD(
         "Royal Gold",
         0xFF1C1917.toInt(), // Obsidian
         0xFF2A1B05.toInt(), // Dark Bronze Amber
         0xFFFBBF24.toInt(), // Golden Amber
-        0x26FFFFFF
+        0x26FFFFFF,
+        false
     ),
     EMERALD_ZEN(
         "Emerald Zen",
         0xFF06281E.toInt(), // Deep Pine
         0xFF021610.toInt(), // Midnight Emerald
         0xFF34D399.toInt(), // Mint Green
-        0x26FFFFFF
+        0x26FFFFFF,
+        false
+    ),
+    COSMIC_NIGHT(
+        "Cosmic Night",
+        0xFF0F172A.toInt(), // Deep Slate Navy
+        0xFF1E1B4B.toInt(), // Midnight Indigo
+        0xFF818CF8.toInt(), // Vibrant Violet Accent
+        0x26FFFFFF,
+        false
+    ),
+    SUNSET_ROSE(
+        "Warm Sunset",
+        0xFF2D1520.toInt(), // Deep Rosewood
+        0xFF1A0A10.toInt(), // Midnight Plum
+        0xFFF472B6.toInt(), // Vibrant Coral Rose
+        0x26FFFFFF,
+        false
+    ),
+    MINIMAL_CLEAN(
+        "Minimalist",
+        0xFF18181B.toInt(), // Zinc Obsidian
+        0xFF09090B.toInt(), // Pure Dark Charcoal
+        0xFFE4E4E7.toInt(), // Silver Platinum
+        0x26FFFFFF,
+        false
     )
 }
 
 data class ShareCardData(
     val userName: String,
     val score: Int,
-    val level: Int,
+    val level: Int = 1,
     val streak: Int,
     val title: String,
     val dimensionScores: Map<DimensionType, Int>,
@@ -62,9 +83,12 @@ object CardGenerator {
     private const val WIDTH = 1080
     private const val HEIGHT = 1920
 
-    fun generateCardBitmap(data: ShareCardData, theme: CardTheme = CardTheme.COSMIC_NIGHT): Bitmap {
+    fun generateCardBitmap(data: ShareCardData, theme: CardTheme = CardTheme.LIGHT_HARMONY): Bitmap {
         val bitmap = Bitmap.createBitmap(WIDTH, HEIGHT, Bitmap.Config.ARGB_8888)
         val canvas = Canvas(bitmap)
+
+        val textColor = if (theme.isLightTheme) 0xFF19181F.toInt() else Color.WHITE
+        val textSecondaryColor = if (theme.isLightTheme) 0xFF6B6678.toInt() else 0xCCFFFFFF.toInt()
 
         // 1. Background Gradient
         val bgPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
@@ -81,7 +105,7 @@ object CardGenerator {
         val orbPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
             shader = RadialGradient(
                 WIDTH * 0.8f, HEIGHT * 0.2f, 450f,
-                intArrayOf(theme.accentColor and 0x44FFFFFF, Color.TRANSPARENT),
+                intArrayOf(theme.accentColor and if (theme.isLightTheme) 0x22FFFFFF else 0x44FFFFFF, Color.TRANSPARENT),
                 null,
                 Shader.TileMode.CLAMP
             )
@@ -91,7 +115,7 @@ object CardGenerator {
         val bottomOrbPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
             shader = RadialGradient(
                 WIDTH * 0.2f, HEIGHT * 0.85f, 400f,
-                intArrayOf(theme.accentColor and 0x33FFFFFF, Color.TRANSPARENT),
+                intArrayOf(theme.accentColor and if (theme.isLightTheme) 0x18FFFFFF else 0x33FFFFFF, Color.TRANSPARENT),
                 null,
                 Shader.TileMode.CLAMP
             )
@@ -100,7 +124,7 @@ object CardGenerator {
 
         // 2. Header App Branding
         val headerPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-            color = Color.WHITE
+            color = textColor
             textSize = 34f
             typeface = Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
             letterSpacing = 0.15f
@@ -115,7 +139,7 @@ object CardGenerator {
             typeface = Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
             textAlign = Paint.Align.CENTER
         }
-        canvas.drawText("${data.userName}  •  Level ${data.level} ${data.title}", (WIDTH / 2).toFloat(), 200f, userPaint)
+        canvas.drawText("${data.userName}  •  ${data.title}", (WIDTH / 2).toFloat(), 200f, userPaint)
 
         // 3. Central Hero Score Dial
         val centerX = (WIDTH / 2).toFloat()
@@ -129,7 +153,7 @@ object CardGenerator {
             style = Paint.Style.FILL
         }
         val cardStrokePaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-            color = 0x33FFFFFF
+            color = if (theme.isLightTheme) 0x1A000000 else 0x33FFFFFF
             style = Paint.Style.STROKE
             strokeWidth = 3f
         }
@@ -138,7 +162,7 @@ object CardGenerator {
 
         // Dial Track
         val trackPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-            color = 0x22FFFFFF
+            color = if (theme.isLightTheme) 0x1A000000 else 0x22FFFFFF
             style = Paint.Style.STROKE
             strokeWidth = 24f
             strokeCap = Paint.Cap.ROUND
@@ -151,7 +175,7 @@ object CardGenerator {
         val progressPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
             shader = LinearGradient(
                 centerX - radius, centerY, centerX + radius, centerY,
-                intArrayOf(theme.accentColor, Color.WHITE),
+                intArrayOf(theme.accentColor, if (theme.isLightTheme) 0xFFD4A24C.toInt() else Color.WHITE),
                 null,
                 Shader.TileMode.CLAMP
             )
@@ -163,7 +187,7 @@ object CardGenerator {
 
         // Inside Dial Score Number
         val scoreNumberPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-            color = Color.WHITE
+            color = textColor
             textSize = 120f
             typeface = Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
             textAlign = Paint.Align.CENTER
@@ -171,7 +195,7 @@ object CardGenerator {
         canvas.drawText("${data.score}", centerX, centerY + 35f, scoreNumberPaint)
 
         val scoreLabelPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-            color = 0xCCFFFFFF.toInt()
+            color = textSecondaryColor
             textSize = 28f
             letterSpacing = 0.12f
             textAlign = Paint.Align.CENTER

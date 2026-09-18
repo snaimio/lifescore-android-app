@@ -10,8 +10,8 @@ class EnterpriseEngineTest {
     @Test
     fun testDefaultOrganizationDataIntegrity() {
         val org = EnterpriseManager.getDefaultOrg()
-        assertEquals("Acme Technologies Inc.", org.companyName)
-        assertEquals("acme.com", org.domain)
+        assertEquals("Global Workspace", org.companyName)
+        assertEquals("workspace.internal", org.domain)
         assertEquals(B2BPlanTier.GROWTH, org.planTier)
         assertEquals(100, org.totalSeats)
     }

@@ -6,12 +6,12 @@ object EnterpriseManager {
 
     fun getDefaultOrg(): EnterpriseOrg {
         return EnterpriseOrg(
-            id = "org_acme_01",
-            companyName = "Acme Technologies Inc.",
-            domain = "acme.com",
+            id = "org_workspace_01",
+            companyName = "Global Workspace",
+            domain = "workspace.internal",
             planTier = B2BPlanTier.GROWTH,
             totalSeats = 100,
-            adminEmail = "tanjin@acme.com"
+            adminEmail = ""
         )
     }
 
@@ -19,7 +19,6 @@ object EnterpriseManager {
         return listOf(
             EnterpriseMember(
                 displayName = "Alex Rivera",
-                email = "alex@acme.com",
                 role = EnterpriseRole.TEAM_LEAD,
                 department = DepartmentType.ENGINEERING,
                 lifeScore = 890,
@@ -29,7 +28,6 @@ object EnterpriseManager {
             ),
             EnterpriseMember(
                 displayName = "Sophia Moreau",
-                email = "sophia@acme.com",
                 role = EnterpriseRole.ADMIN,
                 department = DepartmentType.OPERATIONS_HR,
                 lifeScore = 910,
@@ -39,7 +37,6 @@ object EnterpriseManager {
             ),
             EnterpriseMember(
                 displayName = "Elena Rostova",
-                email = "elena@acme.com",
                 role = EnterpriseRole.TEAM_LEAD,
                 department = DepartmentType.PRODUCT_DESIGN,
                 lifeScore = 860,
@@ -49,7 +46,6 @@ object EnterpriseManager {
             ),
             EnterpriseMember(
                 displayName = "Marcus Sterling",
-                email = "marcus@acme.com",
                 role = EnterpriseRole.TEAM_LEAD,
                 department = DepartmentType.SALES_GROWTH,
                 lifeScore = 780,
@@ -59,7 +55,6 @@ object EnterpriseManager {
             ),
             EnterpriseMember(
                 displayName = "Priya Sharma",
-                email = "priya@acme.com",
                 role = EnterpriseRole.MEMBER,
                 department = DepartmentType.ENGINEERING,
                 lifeScore = 820,
@@ -69,7 +64,6 @@ object EnterpriseManager {
             ),
             EnterpriseMember(
                 displayName = "Jordan Hayes",
-                email = "jordan@acme.com",
                 role = EnterpriseRole.MEMBER,
                 department = DepartmentType.PRODUCT_DESIGN,
                 lifeScore = 790,
@@ -79,7 +73,6 @@ object EnterpriseManager {
             ),
             EnterpriseMember(
                 displayName = "Samira Khan",
-                email = "samira@acme.com",
                 role = EnterpriseRole.MEMBER,
                 department = DepartmentType.ENGINEERING,
                 lifeScore = 730,
@@ -89,7 +82,6 @@ object EnterpriseManager {
             ),
             EnterpriseMember(
                 displayName = "David Kim",
-                email = "david@acme.com",
                 role = EnterpriseRole.MEMBER,
                 department = DepartmentType.SALES_GROWTH,
                 lifeScore = 680,

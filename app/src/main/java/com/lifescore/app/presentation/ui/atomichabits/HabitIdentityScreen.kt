@@ -74,7 +74,7 @@ fun HabitIdentityContent(
                     )
                     Spacer(Modifier.height(Spacing.md))
                     GradientButton(
-                        text = "✨ Establish Identity (+25 XP)",
+                        text = "Establish Identity",
                         onClick = {
                             if (statementText.isNotBlank()) {
                                 onSaveIdentity(statementText.trim())

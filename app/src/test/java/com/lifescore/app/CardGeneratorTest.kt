@@ -31,7 +31,7 @@ class CardGeneratorTest {
     @Test
     fun testCardThemesCompleteness() {
         val themes = CardTheme.values()
-        assertEquals(4, themes.size)
+        assertEquals(6, themes.size)
 
         themes.forEach { theme ->
             assertNotNull(theme.displayName)

@@ -65,19 +65,8 @@ fun TodayScreen(
 
     val isDark = MaterialTheme.colorScheme.background.luminance() < 0.5f
 
-    val maxVisibleQuests = when (uiState.userPhase) {
-        UserPhase.NEW_USER -> 4
-        UserPhase.EXPLORING -> 6
-        UserPhase.ADVANCED, UserPhase.EXPERT -> 10
-    }
-
-    val visibleTasks = remember(uiState.todayTasks, maxVisibleQuests) {
-        uiState.todayTasks.take(maxVisibleQuests)
-    }
-
-    val pendingCount = remember(uiState.todayTasks) {
-        uiState.todayTasks.count { !it.isCompleted }
-    }
+    val visibleTasks = uiState.todayTasks
+    val pendingCount = uiState.todayTasks.count { !it.isCompleted }
 
     Scaffold(
         modifier = Modifier

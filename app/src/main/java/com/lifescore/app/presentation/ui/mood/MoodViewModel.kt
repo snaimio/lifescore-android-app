@@ -95,7 +95,7 @@ class MoodViewModel(
                 it.copy(
                     isLoggedToday = true,
                     note = "",
-                    snackbarMessage = "🎭 Mood Check-in Saved! (+20 XP)"
+                    snackbarMessage = "Mood Check-in Saved!"
                 )
             }
         }
