@@ -9,7 +9,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowForward
 import androidx.compose.material.icons.filled.*
@@ -17,7 +16,6 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -28,6 +26,10 @@ import com.lifescore.app.core.designsystem.LifeScoreShapes
 import com.lifescore.app.core.designsystem.Motion
 import com.lifescore.app.core.designsystem.Space
 import com.lifescore.app.core.designsystem.components.LifeCard
+import com.lifescore.app.core.designsystem.components.LifeIcon
+import com.lifescore.app.core.designsystem.components.LifeIcons
+import com.lifescore.app.core.designsystem.components.LifeIllustration
+import com.lifescore.app.core.designsystem.components.LifeIllustrations
 import com.lifescore.app.core.designsystem.components.SectionHeader
 import com.lifescore.app.core.designsystem.components.StaggeredAppear
 import com.lifescore.app.presentation.navigation.Screen
@@ -35,7 +37,7 @@ import com.lifescore.app.presentation.navigation.Screen
 data class GrowthToolItem(
     val title: String,
     val subtitle: String,
-    val emoji: String,
+    val icon: LifeIcons,
     val route: String,
     val badge: String? = null
 )
@@ -44,7 +46,7 @@ data class GrowthArea(
     val id: String,
     val title: String,
     val subtitle: String,
-    val emoji: String,
+    val icon: LifeIcons,
     val color: Color,
     val tools: List<GrowthToolItem>
 )
@@ -63,99 +65,99 @@ fun GrowScreen(
                 id = "movement",
                 title = "Movement & Physicality",
                 subtitle = "Active workouts, step counts, and physical vitality",
-                emoji = "🏃",
+                icon = LifeIcons.Run,
                 color = Color(0xFFEF4444),
                 tools = listOf(
-                    GrowthToolItem("Mindful Focus Timer", "Pomodoro & deep work sessions", "⏱️", Screen.FocusTimer.route, "Focus"),
-                    GrowthToolItem("Daily Steps Tracker", "10,000 steps daily target", "👟", "tracker_detail/steps", "Tracker"),
-                    GrowthToolItem("Workout & Cardio", "Log resistance & endurance training", "💪", "tracker_detail/workouts")
+                    GrowthToolItem("Mindful Focus Timer", "Pomodoro & deep work sessions", LifeIcons.Goal, Screen.FocusTimer.route, "Focus"),
+                    GrowthToolItem("Daily Steps Tracker", "10,000 steps daily target", LifeIcons.Run, "tracker_detail/steps", "Tracker"),
+                    GrowthToolItem("Workout & Cardio", "Log resistance & endurance training", LifeIcons.Health, "tracker_detail/workouts")
                 )
             ),
             GrowthArea(
                 id = "hydration",
                 title = "Hydration & Body",
                 subtitle = "Optimal daily water intake and cellular energy",
-                emoji = "💧",
+                icon = LifeIcons.Hydration,
                 color = Color(0xFF3B82F6),
                 tools = listOf(
-                    GrowthToolItem("Hydration Tracker", "Log water and electrolytes", "💧", Screen.Hydration.route, "Daily"),
-                    GrowthToolItem("Nutrition & Macros", "Fuel balance and calorie tracking", "🥗", "tracker_detail/nutrition"),
-                    GrowthToolItem("Vitals & Recovery", "Blood glucose, HR & HRV tracking", "🩸", "tracker_detail/vitals")
+                    GrowthToolItem("Hydration Tracker", "Log water and electrolytes", LifeIcons.Hydration, Screen.Hydration.route, "Daily"),
+                    GrowthToolItem("Nutrition & Macros", "Fuel balance and calorie tracking", LifeIcons.Health, "tracker_detail/nutrition"),
+                    GrowthToolItem("Vitals & Recovery", "Blood glucose, HR & HRV tracking", LifeIcons.Analytics, "tracker_detail/vitals")
                 )
             ),
             GrowthArea(
                 id = "rest",
                 title = "Rest & Recovery",
                 subtitle = "Deep REM sleep, circadian restoration, and soundscapes",
-                emoji = "🌙",
+                icon = LifeIcons.Sleep,
                 color = Color(0xFF8B5CF6),
                 tools = listOf(
-                    GrowthToolItem("Sleep Stories & Soundscapes", "Ambient soundscapes and bedtime wind-downs", "🌙", Screen.SleepSoundscapes.route, "Calm"),
-                    GrowthToolItem("Sleep Telemetry", "Track duration and sleep quality", "🛌", "tracker_detail/sleep")
+                    GrowthToolItem("Sleep Stories & Soundscapes", "Ambient soundscapes and bedtime wind-downs", LifeIcons.Sleep, Screen.SleepSoundscapes.route, "Calm"),
+                    GrowthToolItem("Sleep Telemetry", "Track duration and sleep quality", LifeIcons.Analytics, "tracker_detail/sleep")
                 )
             ),
             GrowthArea(
                 id = "calm",
                 title = "Calm & Mindfulness",
                 subtitle = "Emotional regulation, breathing exercises, and mood",
-                emoji = "🧘",
+                icon = LifeIcons.Meditation,
                 color = Color(0xFF10B981),
                 tools = listOf(
-                    GrowthToolItem("Insight Meditation", "Guided breathwork and zen timers", "🧘", Screen.MeditationLibrary.route, "Insight"),
-                    GrowthToolItem("Mood & Telemetry", "Log emotions and friction triggers", "🎭", Screen.MoodTracker.route, "Daily"),
-                    GrowthToolItem("Thought Break (CBT)", "Cognitive reframing for stress & anxiety", "🧠", Screen.ThoughtBreak.route, "CBT")
+                    GrowthToolItem("Insight Meditation", "Guided breathwork and zen timers", LifeIcons.Meditation, Screen.MeditationLibrary.route, "Insight"),
+                    GrowthToolItem("Mood & Telemetry", "Log emotions and friction triggers", LifeIcons.MoodHappy, Screen.MoodTracker.route, "Daily"),
+                    GrowthToolItem("Thought Break (CBT)", "Cognitive reframing for stress & anxiety", LifeIcons.Mental, Screen.ThoughtBreak.route, "CBT")
                 )
             ),
             GrowthArea(
                 id = "learning",
                 title = "Learning & Intellect",
                 subtitle = "15-minute book summaries, mental models, and lessons",
-                emoji = "📚",
+                icon = LifeIcons.Reading,
                 color = Color(0xFFF59E0B),
                 tools = listOf(
-                    GrowthToolItem("Book Summaries Library", "Key ideas from bestsellers in 15 mins", "📚", Screen.BookLibrary.route, "Headway"),
-                    GrowthToolItem("15-Min Daily Growth", "Curated daily micro-lessons", "⚡", Screen.DailyGrowth.route, "Daily"),
-                    GrowthToolItem("Science Journeys", "Step-by-step habit science tracks", "🧬", Screen.ScienceJourneys.route, "Science"),
-                    GrowthToolItem("Book Flashcards & Action Plans", "Retain key takeaways with spaced repetition", "📇", Screen.BookFlashcards.route)
+                    GrowthToolItem("Book Summaries Library", "Key ideas from bestsellers in 15 mins", LifeIcons.Reading, Screen.BookLibrary.route, "Headway"),
+                    GrowthToolItem("15-Min Daily Growth", "Curated daily micro-lessons", LifeIcons.Energy, Screen.DailyGrowth.route, "Daily"),
+                    GrowthToolItem("Science Journeys", "Step-by-step habit science tracks", LifeIcons.Analytics, Screen.ScienceJourneys.route, "Science"),
+                    GrowthToolItem("Book Flashcards & Action Plans", "Retain key takeaways with spaced repetition", LifeIcons.Reading, Screen.BookFlashcards.route)
                 )
             ),
             GrowthArea(
                 id = "rpg",
                 title = "Progress & RPG Systems",
                 subtitle = "Level up your hero, battle raid bosses, and earn badges",
-                emoji = "🎮",
+                icon = LifeIcons.Trophy,
                 color = Color(0xFF6366F1),
                 tools = listOf(
-                    GrowthToolItem("Hero Character Sheet", "Attributes, Level, and XP progression", "🛡️", Screen.CharacterStats.route, "Hero"),
-                    GrowthToolItem("Boss Battles & Raids", "Co-op combat powered by real habits", "⚔️", Screen.Combat.route, "Raid"),
-                    GrowthToolItem("Virtual Pet Companion", "Nurture your companion through daily quests", "🐥", Screen.VirtualPet.route, "Companion"),
-                    GrowthToolItem("10-Tier Leagues", "Climb from Bronze to Outlier Grandmaster", "🏆", Screen.LeagueTiers.route, "League"),
-                    GrowthToolItem("Streak Vault & Shields", "Protect your momentum with streak shields", "🛡️", Screen.StreakVault.route, "Protection")
+                    GrowthToolItem("Hero Character Sheet", "Attributes, Level, and XP progression", LifeIcons.Profile, Screen.CharacterStats.route, "Hero"),
+                    GrowthToolItem("Boss Battles & Raids", "Co-op combat powered by real habits", LifeIcons.Trophy, Screen.Combat.route, "Raid"),
+                    GrowthToolItem("Virtual Pet Companion", "Nurture your companion through daily quests", LifeIcons.Star, Screen.VirtualPet.route, "Companion"),
+                    GrowthToolItem("10-Tier Leagues", "Climb from Bronze to Outlier Grandmaster", LifeIcons.Trophy, Screen.LeagueTiers.route, "League"),
+                    GrowthToolItem("Streak Vault & Shields", "Protect your momentum with streak shields", LifeIcons.Streak, Screen.StreakVault.route, "Protection")
                 )
             ),
             GrowthArea(
                 id = "energy",
                 title = "Energy & Circadian",
                 subtitle = "Plan deep work according to biological peak hours",
-                emoji = "⚡",
+                icon = LifeIcons.Energy,
                 color = Color(0xFFEC4899),
                 tools = listOf(
-                    GrowthToolItem("Circadian Energy Schedule", "Track ultradian rhythms and peak focus windows", "⚡", Screen.EnergySchedule.route, "Productivity"),
-                    GrowthToolItem("Task Breakthrough", "AI guided breakdown of intimidating tasks", "🎯", Screen.TaskBreakthrough.route, "AI Focus")
+                    GrowthToolItem("Circadian Energy Schedule", "Track ultradian rhythms and peak focus windows", LifeIcons.Energy, Screen.EnergySchedule.route, "Productivity"),
+                    GrowthToolItem("Task Breakthrough", "AI guided breakdown of intimidating tasks", LifeIcons.Goal, Screen.TaskBreakthrough.route, "AI Focus")
                 )
             ),
             GrowthArea(
                 id = "reflection",
                 title = "Reflection & Mastery",
                 subtitle = "Deliberate practice, system design, and journaling",
-                emoji = "🧠",
+                icon = LifeIcons.Mental,
                 color = Color(0xFF14B8A6),
                 tools = listOf(
-                    GrowthToolItem("Cognitive Journal", "Daily reflections, wins, and gratitude", "📝", Screen.Journal.route, "Journal"),
-                    GrowthToolItem("10,000-Hour Skill Mastery", "Deliberate practice tracker for mastery", "⏱️", Screen.SkillMastery.route, "10k Hours"),
-                    GrowthToolItem("AI Action Plan", "Generate tailored life goals and strategy", "🎯", Screen.ActionPlan.route, "AI"),
-                    GrowthToolItem("Atomic Habits OS", "Habit scorecards and environment design", "⚡", Screen.AtomicHabits.route, "System"),
-                    GrowthToolItem("Goal Starter Stacks", "1-tap habit stacks for common goals", "📋", Screen.HabitTemplates.route, "Templates")
+                    GrowthToolItem("Cognitive Journal", "Daily reflections, wins, and gratitude", LifeIcons.Reading, Screen.Journal.route, "Journal"),
+                    GrowthToolItem("10,000-Hour Skill Mastery", "Deliberate practice tracker for mastery", LifeIcons.Goal, Screen.SkillMastery.route, "10k Hours"),
+                    GrowthToolItem("AI Action Plan", "Generate tailored life goals and strategy", LifeIcons.Goal, Screen.ActionPlan.route, "AI"),
+                    GrowthToolItem("Atomic Habits OS", "Habit scorecards and environment design", LifeIcons.Energy, Screen.AtomicHabits.route, "System"),
+                    GrowthToolItem("Goal Starter Stacks", "1-tap habit stacks for common goals", LifeIcons.Check, Screen.HabitTemplates.route, "Templates")
                 )
             )
         )
@@ -228,7 +230,11 @@ fun GrowScreen(
                                 modifier = Modifier.size(46.dp)
                             ) {
                                 Box(contentAlignment = Alignment.Center) {
-                                    Text("🌱", fontSize = 24.sp)
+                                    LifeIcon(
+                                        icon = LifeIcons.Rocket,
+                                        size = 24.dp,
+                                        tint = MaterialTheme.colorScheme.primary
+                                    )
                                 }
                             }
                             Spacer(Modifier.width(Space.md))
@@ -268,7 +274,10 @@ fun GrowScreen(
                         FilterChip(
                             selected = isSelected,
                             onClick = { selectedFilter = if (isSelected) null else area.id },
-                            label = { Text("${area.emoji} ${area.title.split(" ").first()}") },
+                            leadingIcon = {
+                                LifeIcon(icon = area.icon, size = 16.dp, tint = if (isSelected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant)
+                            },
+                            label = { Text(area.title.split(" ").first()) },
                             shape = LifeScoreShapes.chip
                         )
                     }
@@ -316,7 +325,11 @@ private fun GrowthAreaCard(
                     modifier = Modifier.size(42.dp)
                 ) {
                     Box(contentAlignment = Alignment.Center) {
-                        Text(area.emoji, fontSize = 20.sp)
+                        LifeIcon(
+                            icon = area.icon,
+                            size = 20.dp,
+                            tint = area.color
+                        )
                     }
                 }
                 Spacer(Modifier.width(Space.sm))
@@ -371,7 +384,11 @@ private fun GrowthAreaCard(
                             modifier = Modifier.padding(horizontal = Space.md, vertical = Space.sm),
                             verticalAlignment = Alignment.CenterVertically
                         ) {
-                            Text(tool.emoji, fontSize = 18.sp)
+                            LifeIcon(
+                                icon = tool.icon,
+                                size = 18.dp,
+                                tint = area.color
+                            )
                             Spacer(Modifier.width(Space.sm))
                             Column(modifier = Modifier.weight(1f)) {
                                 Row(verticalAlignment = Alignment.CenterVertically) {

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="120dp"
+    android:height="120dp"
+    android:viewportWidth="120"
+    android:viewportHeight="120">
+    <!-- Soft circular aura -->
+    <path
+        android:pathData="M60,20 A40,40 0 1,0 60,100 A40,40 0 1,0 60,20"
+        android:fillColor="#F5F0EA" />
+    <!-- Lotus Center Petal -->
+    <path
+        android:pathData="M60,40 C54,54 54,68 60,78 C66,68 66,54 60,40 Z"
+        android:fillColor="#6BA89C" />
+    <!-- Left Inner Petal -->
+    <path
+        android:pathData="M60,78 C48,74 38,62 44,50 C50,60 56,70 60,78 Z"
+        android:fillColor="#10B981"
+        android:fillAlpha="0.75" />
+    <!-- Right Inner Petal -->
+    <path
+        android:pathData="M60,78 C72,74 82,62 76,50 C70,60 64,70 60,78 Z"
+        android:fillColor="#10B981"
+        android:fillAlpha="0.75" />
+    <!-- Left Outer Petal -->
+    <path
+        android:pathData="M60,82 C44,82 32,70 34,60 C42,68 52,76 60,82 Z"
+        android:fillColor="#6BA86B"
+        android:fillAlpha="0.5" />
+    <!-- Right Outer Petal -->
+    <path
+        android:pathData="M60,82 C76,82 88,70 86,60 C78,68 68,76 60,82 Z"
+        android:fillColor="#6BA86B"
+        android:fillAlpha="0.5" />
+    <!-- Water ripples -->
+    <path
+        android:pathData="M38,88 Q60,92 82,88 M46,94 Q60,97 74,94"
+        android:strokeColor="#6BA89C"
+        android:strokeWidth="2"
+        android:strokeLineCap="round" />
+</vector>

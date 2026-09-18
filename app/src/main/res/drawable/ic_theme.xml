@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+    <!-- Palette Outline -->
+    <path
+        android:pathData="M12,3 C6.5,3 2,7.5 2,13 C2,17.5 5.5,21 10,21 C11.5,21 12,19.5 12,18.5 C12,17.5 12.5,17 13.5,17 L15,17 C18.5,17 22,13.5 22,9 C22,5.5 17.5,3 12,3 Z"
+        android:strokeColor="#7B6BA8"
+        android:strokeWidth="1.5"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round"
+        android:fillColor="@android:color/transparent" />
+    <path
+        android:pathData="M7,10 m-1,0 a1,1 0 1,0 2,0 a1,1 0 1,0 -2,0 M10,7 m-1,0 a1,1 0 1,0 2,0 a1,1 0 1,0 -2,0 M14,7 m-1,0 a1,1 0 1,0 2,0 a1,1 0 1,0 -2,0 M17,10 m-1,0 a1,1 0 1,0 2,0 a1,1 0 1,0 -2,0"
+        android:fillColor="#7B6BA8" />
+</vector>

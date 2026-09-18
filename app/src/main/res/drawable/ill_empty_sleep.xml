@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="120dp"
+    android:height="120dp"
+    android:viewportWidth="120"
+    android:viewportHeight="120">
+    <!-- Soft circular aura -->
+    <path
+        android:pathData="M60,20 A40,40 0 1,0 60,100 A40,40 0 1,0 60,20"
+        android:fillColor="#F5F0EA" />
+    <!-- Crescent Moon -->
+    <path
+        android:pathData="M54,32 C50,38 48,45 48,54 C48,70 60,82 76,82 C83,82 89,80 94,76 C88,88 74,96 58,96 C38,96 22,80 22,60 C22,43 36,29 54,32 Z"
+        android:fillColor="#8B5CF6" />
+    <!-- Sleeping Face Line on Moon -->
+    <path
+        android:pathData="M38,62 Q44,66 50,62"
+        android:strokeColor="#FFFFFF"
+        android:strokeWidth="2"
+        android:strokeLineCap="round" />
+    <!-- Stars -->
+    <path
+        android:pathData="M78,36 L80,42 L86,44 L80,46 L78,52 L76,46 L70,44 L76,42 Z"
+        android:fillColor="#FBBF24" />
+    <path
+        android:pathData="M92,54 L93,58 L97,59 L93,60 L92,64 L91,60 L87,59 L91,58 Z"
+        android:fillColor="#FBBF24"
+        android:fillAlpha="0.8" />
+    <path
+        android:pathData="M64,24 L65,27 L68,28 L65,29 L64,32 L63,29 L60,28 L63,27 Z"
+        android:fillColor="#FBBF24"
+        android:fillAlpha="0.8" />
+</vector>

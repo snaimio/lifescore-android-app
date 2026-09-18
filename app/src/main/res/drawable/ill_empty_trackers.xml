@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="120dp"
+    android:height="120dp"
+    android:viewportWidth="120"
+    android:viewportHeight="120">
+    <!-- Soft circular aura -->
+    <path
+        android:pathData="M60,20 A40,40 0 1,0 60,100 A40,40 0 1,0 60,20"
+        android:fillColor="#F5F0EA" />
+    <!-- Outer Compass Ring -->
+    <path
+        android:pathData="M60,30 A30,30 0 1,0 60,90 A30,30 0 1,0 60,30"
+        android:strokeColor="#3D3A8C"
+        android:strokeWidth="3"
+        android:strokeLineCap="round"
+        android:fillColor="@android:color/transparent" />
+    <!-- Cardinal ticks -->
+    <path
+        android:pathData="M60,25 L60,32 M60,88 L60,95 M25,60 L32,60 M88,60 L95,60"
+        android:strokeColor="#3D3A8C"
+        android:strokeWidth="2.5"
+        android:strokeLineCap="round" />
+    <!-- Compass Rose / Needle (North) -->
+    <path
+        android:pathData="M60,36 L66,60 L60,56 L54,60 Z"
+        android:fillColor="#E07A5F" />
+    <!-- Compass Needle (South) -->
+    <path
+        android:pathData="M60,84 L66,60 L60,64 L54,60 Z"
+        android:fillColor="#5B7BA8" />
+    <!-- Center Pivot Pin -->
+    <path
+        android:pathData="M60,60 m-3,0 a3,3 0 1,0 6,0 a3,3 0 1,0 -6,0"
+        android:fillColor="#3D3A8C" />
+</vector>

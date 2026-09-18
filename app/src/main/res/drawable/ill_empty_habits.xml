@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="120dp"
+    android:height="120dp"
+    android:viewportWidth="120"
+    android:viewportHeight="120">
+    <!-- Soft circular background aura -->
+    <path
+        android:pathData="M60,20 A40,40 0 1,0 60,100 A40,40 0 1,0 60,20"
+        android:fillColor="#F5F0EA" />
+    <!-- Terracotta Pot -->
+    <path
+        android:pathData="M44,70 L76,70 L72,96 C72,98 70,100 68,100 L52,100 C50,100 48,98 48,96 Z"
+        android:fillColor="#D97757" />
+    <path
+        android:pathData="M40,64 C40,62.5 41.5,61 43,61 L77,61 C78.5,61 80,62.5 80,64 L80,68 C80,69.5 78.5,71 77,71 L43,71 C41.5,71 40,69.5 40,68 Z"
+        android:fillColor="#E08556" />
+    <!-- Rich soil -->
+    <path
+        android:pathData="M45,63 Q60,67 75,63"
+        android:strokeColor="#3D3733"
+        android:strokeWidth="3"
+        android:strokeLineCap="round" />
+    <!-- Stem -->
+    <path
+        android:pathData="M60,63 C60,52 61,44 60,35"
+        android:strokeColor="#6BA86B"
+        android:strokeWidth="3"
+        android:strokeLineCap="round" />
+    <!-- Left Sprout Leaf -->
+    <path
+        android:pathData="M60,48 C50,48 44,40 48,34 C55,34 59,42 60,48 Z"
+        android:fillColor="#6BA86B" />
+    <!-- Right Sprout Leaf -->
+    <path
+        android:pathData="M60,42 C70,42 76,34 72,28 C65,28 61,36 60,42 Z"
+        android:fillColor="#6BA89C" />
+    <!-- Sparkle dot -->
+    <path
+        android:pathData="M78,25 m-2,0 a2,2 0 1,0 4,0 a2,2 0 1,0 -4,0"
+        android:fillColor="#D4A24C" />
+</vector>

@@ -39,11 +39,11 @@ import com.lifescore.app.presentation.ui.home.components.GettingStartedCard
 import com.lifescore.app.presentation.ui.share.ShareScoreCardDialog
 import java.util.Calendar
 
-enum class EnergyLevel(val title: String, val emoji: String, val tip: String) {
-    LOW("Low", "🔋", "Prioritize light, low-friction habits today. Consistency beats intensity."),
-    STEADY("Steady", "⚡", "Great steady energy. Aim for 2-3 focused habit completions."),
-    HIGH("High", "🚀", "High momentum! Perfect time to tackle your primary focus task."),
-    PEAK("Peak Flow", "🌟", "You're at peak performance! Great for deep work and breakthroughs.")
+enum class EnergyLevel(val title: String, val icon: LifeIcons, val tip: String) {
+    LOW("Low", LifeIcons.Sleep, "Prioritize light, low-friction habits today. Consistency beats intensity."),
+    STEADY("Steady", LifeIcons.Energy, "Great steady energy. Aim for 2-3 focused habit completions."),
+    HIGH("High", LifeIcons.Rocket, "High momentum! Perfect time to tackle your primary focus task."),
+    PEAK("Peak Flow", LifeIcons.Star, "You're at peak performance! Great for deep work and breakthroughs.")
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -115,7 +115,11 @@ fun TodayScreen(
                             modifier = Modifier.size(34.dp)
                         ) {
                             Box(contentAlignment = Alignment.Center) {
-                                Text("⚔️", fontSize = 16.sp)
+                                LifeIcon(
+                                    icon = LifeIcons.Profile,
+                                    size = 18.dp,
+                                    tint = MaterialTheme.colorScheme.primary
+                                )
                             }
                         }
                         Spacer(Modifier.width(Space.sm))
@@ -253,7 +257,10 @@ fun TodayScreen(
                                 verticalAlignment = Alignment.CenterVertically
                             ) {
                                 Row(verticalAlignment = Alignment.CenterVertically) {
-                                    Text("🎯", fontSize = 16.sp)
+                                    LifeIcon(
+                                        icon = LifeIcons.Goal,
+                                        size = 16.dp
+                                    )
                                     Spacer(Modifier.width(Space.xs))
                                     Text(
                                         "Today's Primary Focus",
@@ -308,7 +315,7 @@ fun TodayScreen(
                                 )
                             ) {
                                 Text(
-                                    text = if (topPendingTask.isCompleted) "Completed ✓" else "Mark Complete (+${topPendingTask.pointsReward} XP)",
+                                    text = if (topPendingTask.isCompleted) "Completed" else "Mark Complete (+${topPendingTask.pointsReward} XP)",
                                     fontWeight = FontWeight.Bold,
                                     fontSize = 13.sp,
                                     color = if (topPendingTask.isCompleted) MaterialTheme.colorScheme.onSurfaceVariant else MaterialTheme.colorScheme.onPrimary
@@ -329,7 +336,10 @@ fun TodayScreen(
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             Row(verticalAlignment = Alignment.CenterVertically) {
-                                Text("⚡", fontSize = 16.sp)
+                                LifeIcon(
+                                    icon = LifeIcons.Energy,
+                                    size = 16.dp
+                                )
                                 Spacer(Modifier.width(Space.xs))
                                 Text(
                                     "Energy Check-In",
@@ -337,12 +347,19 @@ fun TodayScreen(
                                     fontWeight = FontWeight.Medium
                                 )
                             }
-                            Text(
-                                text = "${selectedEnergy.emoji} ${selectedEnergy.title}",
-                                style = MaterialTheme.typography.labelSmall,
-                                fontWeight = FontWeight.Bold,
-                                color = MaterialTheme.colorScheme.primary
-                            )
+                            Row(verticalAlignment = Alignment.CenterVertically) {
+                                LifeIcon(
+                                    icon = selectedEnergy.icon,
+                                    size = 14.dp
+                                )
+                                Spacer(Modifier.width(4.dp))
+                                Text(
+                                    text = selectedEnergy.title,
+                                    style = MaterialTheme.typography.labelSmall,
+                                    fontWeight = FontWeight.Bold,
+                                    color = MaterialTheme.colorScheme.primary
+                                )
+                            }
                         }
 
                         Spacer(Modifier.height(Space.xs))
@@ -372,8 +389,11 @@ fun TodayScreen(
                                         modifier = Modifier.padding(vertical = Space.sm),
                                         horizontalAlignment = Alignment.CenterHorizontally
                                     ) {
-                                        Text(level.emoji, fontSize = 16.sp)
-                                        Spacer(Modifier.height(2.dp))
+                                        LifeIcon(
+                                            icon = level.icon,
+                                            size = 18.dp
+                                        )
+                                        Spacer(Modifier.height(4.dp))
                                         Text(
                                             level.title,
                                             fontSize = 10.sp,
@@ -437,7 +457,7 @@ fun TodayScreen(
                             FilterChip(
                                 selected = false,
                                 onClick = { navController.navigate(Screen.AICoach.route) },
-                                leadingIcon = { Text("🤖") },
+                                leadingIcon = { LifeIcon(LifeIcons.Reading, size = 16.dp) },
                                 label = { Text("Ask Coach") }
                             )
                         }
@@ -445,7 +465,7 @@ fun TodayScreen(
                             FilterChip(
                                 selected = false,
                                 onClick = { navController.navigate(Screen.Hydration.route) },
-                                leadingIcon = { Text("💧") },
+                                leadingIcon = { LifeIcon(LifeIcons.Hydration, size = 16.dp) },
                                 label = { Text("Log Water") }
                             )
                         }
@@ -453,7 +473,7 @@ fun TodayScreen(
                             FilterChip(
                                 selected = false,
                                 onClick = { navController.navigate(Screen.FocusTimer.route) },
-                                leadingIcon = { Text("⏱️") },
+                                leadingIcon = { LifeIcon(LifeIcons.Goal, size = 16.dp) },
                                 label = { Text("Focus Timer") }
                             )
                         }
@@ -461,7 +481,7 @@ fun TodayScreen(
                             FilterChip(
                                 selected = false,
                                 onClick = { navController.navigate(Screen.EnergySchedule.route) },
-                                leadingIcon = { Text("⚡") },
+                                leadingIcon = { LifeIcon(LifeIcons.Energy, size = 16.dp) },
                                 label = { Text("Energy Curve") }
                             )
                         }
@@ -469,7 +489,7 @@ fun TodayScreen(
                             FilterChip(
                                 selected = false,
                                 onClick = { navController.navigate(Screen.MoodTracker.route) },
-                                leadingIcon = { Text("🎭") },
+                                leadingIcon = { LifeIcon(LifeIcons.MoodHappy, size = 16.dp) },
                                 label = { Text("Log Mood") }
                             )
                         }
@@ -494,7 +514,10 @@ fun TodayScreen(
                                     modifier = Modifier.padding(Space.sm),
                                     verticalAlignment = Alignment.CenterVertically
                                 ) {
-                                    Text("✨", fontSize = 24.sp)
+                                    LifeIcon(
+                                        icon = LifeIcons.Star,
+                                        size = 24.dp
+                                    )
                                     Spacer(Modifier.width(Space.sm))
                                     Column {
                                         Text(

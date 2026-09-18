@@ -30,6 +30,8 @@ import com.lifescore.app.core.designsystem.components.CardVariant
 import com.lifescore.app.core.designsystem.LifeScoreShapes
 import com.lifescore.app.core.designsystem.Space
 import com.lifescore.app.core.designsystem.components.LifeCard
+import com.lifescore.app.core.designsystem.components.LifeIcon
+import com.lifescore.app.core.designsystem.components.LifeIcons
 import com.lifescore.app.core.designsystem.components.SectionHeader
 import com.lifescore.app.core.designsystem.components.StaggeredAppear
 import com.lifescore.app.core.engine.FeatureCategory
@@ -40,6 +42,40 @@ import com.lifescore.app.core.util.ShareCardData
 import com.lifescore.app.domain.model.DimensionType
 import com.lifescore.app.presentation.navigation.Screen
 import com.lifescore.app.presentation.ui.share.ShareScoreCardDialog
+
+private fun getCategoryIcon(cat: FeatureCategory): LifeIcons = when (cat) {
+    FeatureCategory.CORE -> LifeIcons.Star
+    FeatureCategory.TRACKERS -> LifeIcons.Analytics
+    FeatureCategory.SELF_IMPROVEMENT -> LifeIcons.Reading
+    FeatureCategory.WELLNESS -> LifeIcons.Meditation
+    FeatureCategory.RECOVERY -> LifeIcons.Health
+    FeatureCategory.MARKET_LEADERS -> LifeIcons.Rocket
+    FeatureCategory.SOCIAL_GROWTH -> LifeIcons.Social
+    FeatureCategory.ENTERPRISE -> LifeIcons.Career
+}
+
+private fun getFeatureIcon(feature: FeatureItem): LifeIcons = when (feature.id) {
+    "hydration" -> LifeIcons.Hydration
+    "sleep" -> LifeIcons.Sleep
+    "reading" -> LifeIcons.Reading
+    "mindfulness" -> LifeIcons.Meditation
+    "workouts", "steps" -> LifeIcons.Run
+    "wealth" -> LifeIcons.Wealth
+    "mood" -> LifeIcons.MoodHappy
+    "journal" -> LifeIcons.Reading
+    "leaderboards" -> LifeIcons.Trophy
+    "screentime", "circadian_energy" -> LifeIcons.Energy
+    "profile" -> LifeIcons.Profile
+    "challenges" -> LifeIcons.Streak
+    "rewards" -> LifeIcons.Wealth
+    "vitals", "recovery", "recovery_sos" -> LifeIcons.Health
+    "skill_mastery", "goals_okrs" -> LifeIcons.Goal
+    "relationships", "friends_feed", "social_duels" -> LifeIcons.Social
+    "enterprise" -> LifeIcons.Career
+    "ai_coach", "ai_memory" -> LifeIcons.Star
+    "party", "virtual_pet", "science_journeys" -> LifeIcons.Rocket
+    else -> getCategoryIcon(feature.category)
+}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -129,7 +165,7 @@ fun ExploreScreen(
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             Row(verticalAlignment = Alignment.CenterVertically) {
-                                Text("🔥", fontSize = 20.sp)
+                                LifeIcon(LifeIcons.Streak, size = 20.dp)
                                 Spacer(Modifier.width(Space.sm))
                                 Text(
                                     "Friends & Social Feed",
@@ -182,7 +218,7 @@ fun ExploreScreen(
                                 modifier = Modifier.size(44.dp)
                             ) {
                                 Box(contentAlignment = Alignment.Center) {
-                                    Text("🎁", fontSize = 22.sp)
+                                    LifeIcon(LifeIcons.Rocket, size = 22.dp, tint = MaterialTheme.colorScheme.onSecondary)
                                 }
                             }
                             Spacer(Modifier.width(Space.md))
@@ -201,7 +237,7 @@ fun ExploreScreen(
             // ==========================================
             item {
                 SectionHeader(
-                    title = "🌟 Featured Highlights",
+                    title = "Featured Highlights",
                     subtitle = "Specialized mini-apps and multiplayer features"
                 )
             }
@@ -220,7 +256,7 @@ fun ExploreScreen(
                             .clickable { navController.navigate(Screen.Combat.route) }
                     ) {
                         Column(modifier = Modifier.padding(Space.sm)) {
-                            Text("⚔️", fontSize = 24.sp)
+                            LifeIcon(LifeIcons.Energy, size = 24.dp)
                             Spacer(Modifier.height(Space.xs))
                             Text("Boss Raids", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold)
                             Text("Team up to beat bosses", style = MaterialTheme.typography.bodySmall.copy(fontSize = 10.sp), color = MaterialTheme.colorScheme.onSurfaceVariant)
@@ -236,7 +272,7 @@ fun ExploreScreen(
                             .clickable { navController.navigate(Screen.VirtualPet.route) }
                     ) {
                         Column(modifier = Modifier.padding(Space.sm)) {
-                            Text("🐥", fontSize = 24.sp)
+                            LifeIcon(LifeIcons.MoodHappy, size = 24.dp)
                             Spacer(Modifier.height(Space.xs))
                             Text("Virtual Pet", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold)
                             Text("Evolves with habits", style = MaterialTheme.typography.bodySmall.copy(fontSize = 10.sp), color = MaterialTheme.colorScheme.onSurfaceVariant)
@@ -252,7 +288,7 @@ fun ExploreScreen(
                             .clickable { navController.navigate(Screen.LeagueTiers.route) }
                     ) {
                         Column(modifier = Modifier.padding(Space.sm)) {
-                            Text("🏆", fontSize = 24.sp)
+                            LifeIcon(LifeIcons.Trophy, size = 24.dp)
                             Spacer(Modifier.height(Space.xs))
                             Text("10-Tier Leagues", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold)
                             Text("Weekly leaderboards", style = MaterialTheme.typography.bodySmall.copy(fontSize = 10.sp), color = MaterialTheme.colorScheme.onSurfaceVariant)
@@ -281,7 +317,7 @@ fun ExploreScreen(
                             modifier = Modifier.size(44.dp)
                         ) {
                             Box(contentAlignment = Alignment.Center) {
-                                Text("✨", fontSize = 22.sp)
+                                LifeIcon(LifeIcons.Star, size = 22.dp, tint = Color(0xFF6366F1))
                             }
                         }
                         Spacer(Modifier.width(Space.md))
@@ -300,7 +336,7 @@ fun ExploreScreen(
             item {
                 Column(verticalArrangement = Arrangement.spacedBy(Space.xs)) {
                     SectionHeader(
-                        title = "🔍 All Features Directory",
+                        title = "All Features Directory",
                         subtitle = "Access every specialized module and tracker"
                     )
                     OutlinedTextField(
@@ -341,7 +377,10 @@ fun ExploreScreen(
                         FilterChip(
                             selected = isSelected,
                             onClick = { selectedCategoryFilter = if (isSelected) null else cat },
-                            label = { Text("${cat.iconEmoji} ${cat.displayName} ($count)") },
+                            leadingIcon = {
+                                LifeIcon(getCategoryIcon(cat), size = 16.dp)
+                            },
+                            label = { Text("${cat.displayName} ($count)") },
                             shape = LifeScoreShapes.chip
                         )
                     }
@@ -366,7 +405,7 @@ fun ExploreScreen(
                             modifier = Modifier.size(42.dp)
                         ) {
                             Box(contentAlignment = Alignment.Center) {
-                                Text(feature.iconEmoji, fontSize = 20.sp)
+                                LifeIcon(getFeatureIcon(feature), size = 22.dp)
                             }
                         }
                         Spacer(Modifier.width(Space.md))

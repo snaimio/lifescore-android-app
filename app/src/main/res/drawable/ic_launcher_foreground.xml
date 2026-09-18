@@ -5,65 +5,38 @@
     android:height="108dp"
     android:viewportWidth="108"
     android:viewportHeight="108">
-    
-    <!-- Outer Shield Contour (Gold & Indigo Trim) -->
+    <!-- Sunrise Arc -->
     <path
-        android:pathData="M54,22 L76,32 C76,56 66,74 54,84 C42,74 32,56 32,32 Z"
-        android:strokeWidth="2.5"
-        android:strokeColor="#FFFFD700">
-        <aapt:attr name="android:fillColor">
+        android:pathData="M 30,58 A 24,24 0 0 1 78,58"
+        android:strokeWidth="4"
+        android:strokeLineCap="round">
+        <aapt:attr name="android:strokeColor">
             <gradient
-                android:startX="54"
-                android:startY="22"
-                android:endX="54"
-                android:endY="84"
-                android:type="linear">
-                <item android:offset="0.0" android:color="#FF3730A3" />
-                <item android:offset="0.6" android:color="#FF1E1B4B" />
-                <item android:offset="1.0" android:color="#FF0F172A" />
-            </gradient>
+                android:type="linear"
+                android:startX="30"
+                android:startY="58"
+                android:endX="78"
+                android:endY="34"
+                android:startColor="#FFF3E0"
+                android:endColor="#E07A5F" />
         </aapt:attr>
     </path>
-
-    <!-- Inner Shield Accent Line -->
+    <!-- Horizon line -->
     <path
-        android:pathData="M54,27 L71,35 C71,54 62,69 54,77 C46,69 37,54 37,35 Z"
-        android:strokeWidth="1.2"
-        android:strokeColor="#66818CF8" />
-
-    <!-- Central Hero Sword Blade -->
+        android:pathData="M 26,62 L 82,62"
+        android:strokeColor="#FFF3E0"
+        android:strokeWidth="2"
+        android:strokeLineCap="round"
+        android:strokeAlpha="0.7" />
+    <!-- Three ascending dots (journey markers) -->
     <path
-        android:pathData="M54,24 L56.5,58 L54,64 L51.5,58 Z"
-        android:fillColor="#FFFFFFFF" />
-        
+        android:pathData="M 42,52 m -1.5,0 a 1.5,1.5 0 1,0 3,0 a 1.5,1.5 0 1,0 -3,0"
+        android:fillColor="#FFF3E0"
+        android:fillAlpha="0.85" />
     <path
-        android:pathData="M54,24 L54,64"
-        android:strokeWidth="1"
-        android:strokeColor="#FFC7D2FE" />
-
-    <!-- Sword Guard Crossbar -->
+        android:pathData="M 54,44 m -2,0 a 2,2 0 1,0 4,0 a 2,2 0 1,0 -4,0"
+        android:fillColor="#FFF3E0" />
     <path
-        android:pathData="M46,58 L62,58"
-        android:strokeWidth="2.5"
-        android:strokeColor="#FFFFD700"
-        android:strokeLineCap="round" />
-
-    <!-- Sword Pommel & Grip -->
-    <path
-        android:pathData="M54,58 L54,70"
-        android:strokeWidth="2.2"
-        android:strokeColor="#FFFFD700" />
-    <path
-        android:pathData="M54,71m-2.2,0a2.2,2.2 0,1 1,4.4 0a2.2,2.2 0,1 1,-4.4 0"
-        android:fillColor="#FFFFD700" />
-
-    <!-- Central 8-Dimension Glowing Diamond Nexus -->
-    <path
-        android:pathData="M54,42 L60,48 L54,54 L48,48 Z"
-        android:fillColor="#FF10B981" />
-        
-    <!-- Glowing Star Sparks -->
-    <path
-        android:pathData="M54,39 L54.8,41.2 L57,42 L54.8,42.8 L54,45 L53.2,42.8 L51,42 L53.2,41.2 Z"
-        android:fillColor="#FFFFFFFF" />
+        android:pathData="M 66,34 m -2.5,0 a 2.5,2.5 0 1,0 5,0 a 2.5,2.5 0 1,0 -5,0"
+        android:fillColor="#E07A5F" />
 </vector>

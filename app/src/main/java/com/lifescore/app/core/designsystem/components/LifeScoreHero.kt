@@ -164,7 +164,10 @@ fun LifeScoreHero(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
-                    Text("🔥", fontSize = 14.sp)
+                    LifeIcon(
+                        icon = LifeIcons.Streak,
+                        size = 16.dp
+                    )
                     Spacer(Modifier.width(Space.xs))
                     Text(
                         text = "$streak day streak",

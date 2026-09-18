@@ -26,7 +26,10 @@ fun EmptyHabits(
             .padding(Space.xl),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text("🌱", fontSize = 52.sp)
+        LifeIllustration(
+            illustration = LifeIllustrations.EmptyHabits,
+            size = 110.dp
+        )
         Spacer(Modifier.height(Space.md))
         Text(
             "Start with one habit",

@@ -35,6 +35,8 @@ import com.lifescore.app.core.designsystem.components.StaggeredAppear
 import com.lifescore.app.core.designsystem.components.TaskItem
 import com.lifescore.app.domain.model.DimensionType
 import com.lifescore.app.domain.model.LifeTask
+import com.lifescore.app.core.designsystem.components.LifeIcon
+import com.lifescore.app.core.designsystem.components.LifeIcons
 import com.lifescore.app.presentation.navigation.Screen
 import com.lifescore.app.presentation.ui.dimensions.DimensionLegend
 import com.lifescore.app.presentation.ui.dimensions.DimensionsViewModel
@@ -205,7 +207,10 @@ fun BalanceScreen(
                             variant = CardVariant.Cream
                         ) {
                             Row(verticalAlignment = Alignment.CenterVertically) {
-                                Text("💡", fontSize = 18.sp)
+                                LifeIcon(
+                                    icon = LifeIcons.Analytics,
+                                    size = 18.dp
+                                )
                                 Spacer(Modifier.width(Space.sm))
                                 Text(
                                     "Cross-Dimension Insight",

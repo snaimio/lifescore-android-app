@@ -28,6 +28,8 @@ import com.lifescore.app.core.designsystem.components.AnimatedNumber
 import com.lifescore.app.core.designsystem.components.LifeCard
 import com.lifescore.app.core.designsystem.components.SectionHeader
 import com.lifescore.app.core.designsystem.components.StaggeredAppear
+import com.lifescore.app.core.designsystem.components.LifeIcon
+import com.lifescore.app.core.designsystem.components.LifeIcons
 import com.lifescore.app.domain.model.UserProfile
 import com.lifescore.app.presentation.navigation.Screen
 import com.lifescore.app.presentation.ui.components.CharacterSheetDialog
@@ -106,7 +108,11 @@ fun MeScreen(
                                 modifier = Modifier.size(68.dp)
                             ) {
                                 Box(contentAlignment = Alignment.Center) {
-                                    Text("⚔️", fontSize = 32.sp)
+                                    LifeIcon(
+                                        icon = LifeIcons.Profile,
+                                        size = 36.dp,
+                                        tint = MaterialTheme.colorScheme.onPrimary
+                                    )
                                 }
                             }
 
@@ -176,7 +182,13 @@ fun MeScreen(
                                 modifier = Modifier.padding(Space.sm),
                                 horizontalAlignment = Alignment.CenterHorizontally
                             ) {
-                                Text("🔥 STREAK", style = MaterialTheme.typography.labelSmall.copy(fontSize = 9.sp), fontWeight = FontWeight.Black, color = Color(0xFFFF5722))
+                                Row(
+                                    verticalAlignment = Alignment.CenterVertically,
+                                    horizontalArrangement = Arrangement.spacedBy(2.dp)
+                                ) {
+                                    LifeIcon(LifeIcons.Streak, size = 12.dp)
+                                    Text("STREAK", style = MaterialTheme.typography.labelSmall.copy(fontSize = 9.sp), fontWeight = FontWeight.Black, color = Color(0xFFFF5722))
+                                }
                                 Spacer(Modifier.height(Space.xxs))
                                 Text("${uiState.user.currentStreakDays}d", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Black)
                             }
@@ -191,7 +203,13 @@ fun MeScreen(
                                 modifier = Modifier.padding(Space.sm),
                                 horizontalAlignment = Alignment.CenterHorizontally
                             ) {
-                                Text("🪙 GOLD", style = MaterialTheme.typography.labelSmall.copy(fontSize = 9.sp), fontWeight = FontWeight.Black, color = Color(0xFFFFD700))
+                                Row(
+                                    verticalAlignment = Alignment.CenterVertically,
+                                    horizontalArrangement = Arrangement.spacedBy(2.dp)
+                                ) {
+                                    LifeIcon(LifeIcons.Wealth, size = 12.dp)
+                                    Text("GOLD", style = MaterialTheme.typography.labelSmall.copy(fontSize = 9.sp), fontWeight = FontWeight.Black, color = Color(0xFFFFD700))
+                                }
                                 Spacer(Modifier.height(Space.xxs))
                                 Text("1,250", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Black)
                             }
@@ -206,7 +224,13 @@ fun MeScreen(
                                 modifier = Modifier.padding(Space.sm),
                                 horizontalAlignment = Alignment.CenterHorizontally
                             ) {
-                                Text("🛡️ SHIELDS", style = MaterialTheme.typography.labelSmall.copy(fontSize = 9.sp), fontWeight = FontWeight.Black, color = Color(0xFF6366F1))
+                                Row(
+                                    verticalAlignment = Alignment.CenterVertically,
+                                    horizontalArrangement = Arrangement.spacedBy(2.dp)
+                                ) {
+                                    LifeIcon(LifeIcons.Goal, size = 12.dp)
+                                    Text("SHIELDS", style = MaterialTheme.typography.labelSmall.copy(fontSize = 9.sp), fontWeight = FontWeight.Black, color = Color(0xFF6366F1))
+                                }
                                 Spacer(Modifier.height(Space.xxs))
                                 Text("${uiState.streakShieldsAvailable}", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Black)
                             }
@@ -221,7 +245,13 @@ fun MeScreen(
                                 modifier = Modifier.padding(Space.sm),
                                 horizontalAlignment = Alignment.CenterHorizontally
                             ) {
-                                Text("🏆 LEAGUE", style = MaterialTheme.typography.labelSmall.copy(fontSize = 9.sp), fontWeight = FontWeight.Black, color = Color(0xFF10B981))
+                                Row(
+                                    verticalAlignment = Alignment.CenterVertically,
+                                    horizontalArrangement = Arrangement.spacedBy(2.dp)
+                                ) {
+                                    LifeIcon(LifeIcons.Trophy, size = 12.dp)
+                                    Text("LEAGUE", style = MaterialTheme.typography.labelSmall.copy(fontSize = 9.sp), fontWeight = FontWeight.Black, color = Color(0xFF10B981))
+                                }
                                 Spacer(Modifier.height(Space.xxs))
                                 Text("Diamond", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Black)
                             }
@@ -251,7 +281,7 @@ fun MeScreen(
                                 modifier = Modifier.size(44.dp)
                             ) {
                                 Box(contentAlignment = Alignment.Center) {
-                                    Text("🛡️", fontSize = 22.sp)
+                                    LifeIcon(LifeIcons.Star, size = 22.dp, tint = MaterialTheme.colorScheme.primary)
                                 }
                             }
                             Spacer(Modifier.width(Space.md))
@@ -286,7 +316,7 @@ fun MeScreen(
                                 modifier = Modifier.size(44.dp)
                             ) {
                                 Box(contentAlignment = Alignment.Center) {
-                                    Text("🗳️", fontSize = 22.sp)
+                                    LifeIcon(LifeIcons.Reading, size = 22.dp, tint = MaterialTheme.colorScheme.secondary)
                                 }
                             }
                             Spacer(Modifier.width(Space.md))
@@ -305,24 +335,24 @@ fun MeScreen(
             // ==========================================
             item {
                 SectionHeader(
-                    title = "🎖️ Badges & Milestones",
+                    title = "Badges & Milestones",
                     subtitle = "Earned accolades from daily discipline",
                     actionLabel = "View All →",
                     onActionClick = { navController.navigate(Screen.CharacterStats.route) }
                 )
 
                 val badges = listOf(
-                    Triple("🔥 7-Day Flame", "Maintained 7d streak", true),
-                    Triple("⚔️ Deep Work Knight", "50+ focus hours", true),
-                    Triple("🧘 Circadian Zen", "14d sleep routine", true),
-                    Triple("👑 Outlier Legend", "Reached 900 LifeScore", false)
+                    Triple(LifeIcons.Streak, "7-Day Flame", true),
+                    Triple(LifeIcons.Energy, "Deep Work", true),
+                    Triple(LifeIcons.Meditation, "Circadian Zen", true),
+                    Triple(LifeIcons.Trophy, "Outlier Legend", false)
                 )
 
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.spacedBy(Space.sm)
                 ) {
-                    badges.forEach { (title, _, unlocked) ->
+                    badges.forEach { (icon, title, unlocked) ->
                         Surface(
                             shape = LifeScoreShapes.cardSmall,
                             color = if (unlocked) MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f) else MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.2f),
@@ -333,9 +363,9 @@ fun MeScreen(
                                 modifier = Modifier.padding(Space.sm),
                                 horizontalAlignment = Alignment.CenterHorizontally
                             ) {
-                                Text(title.take(2), fontSize = 20.sp)
+                                LifeIcon(icon = icon, size = 22.dp)
                                 Spacer(Modifier.height(Space.xxs))
-                                Text(title.drop(3), style = MaterialTheme.typography.labelSmall.copy(fontSize = 10.sp), fontWeight = FontWeight.Bold, maxLines = 1)
+                                Text(title, style = MaterialTheme.typography.labelSmall.copy(fontSize = 10.sp), fontWeight = FontWeight.Bold, maxLines = 1)
                             }
                         }
                     }
@@ -362,7 +392,7 @@ fun MeScreen(
                             modifier = Modifier.size(44.dp)
                         ) {
                             Box(contentAlignment = Alignment.Center) {
-                                Text("🎁", fontSize = 22.sp)
+                                LifeIcon(LifeIcons.Wealth, size = 22.dp)
                             }
                         }
                         Spacer(Modifier.width(Space.md))
@@ -395,7 +425,7 @@ fun MeScreen(
                             modifier = Modifier.size(44.dp)
                         ) {
                             Box(contentAlignment = Alignment.Center) {
-                                Text("👑", fontSize = 22.sp)
+                                LifeIcon(LifeIcons.Star, size = 22.dp, tint = Color(0xFF6366F1))
                             }
                         }
                         Spacer(Modifier.width(Space.md))

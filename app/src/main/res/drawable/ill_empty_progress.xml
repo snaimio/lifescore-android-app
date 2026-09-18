@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="120dp"
+    android:height="120dp"
+    android:viewportWidth="120"
+    android:viewportHeight="120">
+    <!-- Soft circular aura -->
+    <path
+        android:pathData="M60,20 A40,40 0 1,0 60,100 A40,40 0 1,0 60,20"
+        android:fillColor="#F5F0EA" />
+    <!-- Rising Sun -->
+    <path
+        android:pathData="M60,40 m-12,0 a12,12 0 1,0 24,0 a12,12 0 1,0 -24,0"
+        android:fillColor="#FBBF24"
+        android:fillAlpha="0.7" />
+    <!-- Background Mountain Ridge -->
+    <path
+        android:pathData="M24,92 L50,56 L72,92 Z"
+        android:fillColor="#9E958B"
+        android:fillAlpha="0.4" />
+    <!-- Foreground Main Mountain Peak -->
+    <path
+        android:pathData="M40,92 L68,44 L96,92 Z"
+        android:fillColor="#5B7BA8" />
+    <!-- Snowcap on Main Peak -->
+    <path
+        android:pathData="M68,44 L78,60 L73,58 L68,64 L63,58 L58,60 Z"
+        android:fillColor="#FFFFFF" />
+    <!-- Flagpole & Flag at Summit -->
+    <path
+        android:pathData="M68,44 L68,30"
+        android:strokeColor="#3D3A8C"
+        android:strokeWidth="2"
+        android:strokeLineCap="round" />
+    <path
+        android:pathData="M68,30 L80,35 L68,40 Z"
+        android:fillColor="#E07A5F" />
+</vector>

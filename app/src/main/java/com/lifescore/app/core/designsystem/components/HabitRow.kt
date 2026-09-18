@@ -128,7 +128,17 @@ fun HabitRow(
                     )
                     if (task.streakDays > 0) {
                         Text(
-                            text = " • 🔥 ${task.streakDays}d",
+                            text = " • ",
+                            style = MaterialTheme.typography.labelSmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f)
+                        )
+                        LifeIcon(
+                            icon = LifeIcons.Streak,
+                            size = 12.dp
+                        )
+                        Spacer(Modifier.width(2.dp))
+                        Text(
+                            text = "${task.streakDays}d",
                             style = MaterialTheme.typography.labelSmall,
                             color = Color(0xFFD97757),
                             fontWeight = FontWeight.Bold
