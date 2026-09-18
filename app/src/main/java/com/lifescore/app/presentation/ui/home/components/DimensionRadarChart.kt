@@ -18,7 +18,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.lifescore.app.core.designsystem.*
 import com.lifescore.app.domain.model.DimensionType
 import kotlin.math.cos
 import kotlin.math.sin
@@ -28,7 +27,19 @@ fun DimensionRadarChart(
     dimensionScores: Map<DimensionType, Int>,
     modifier: Modifier = Modifier
 ) {
-    val dimensions = remember { DimensionType.values().toList() }
+    // Exact 8-Dimension Ordering matching Screenshot 2
+    val dimensions = remember {
+        listOf(
+            DimensionType.HEALTH,
+            DimensionType.WEALTH,
+            DimensionType.RELATIONSHIPS,
+            DimensionType.CAREER,
+            DimensionType.LEARNING,
+            DimensionType.FITNESS,
+            DimensionType.MENTAL_HEALTH,
+            DimensionType.SOCIAL_LIFE
+        )
+    }
 
     val animatedProgress by animateFloatAsState(
         targetValue = 1f,
@@ -39,35 +50,9 @@ fun DimensionRadarChart(
         label = "radarAnimation"
     )
 
-    val primaryColor = MaterialTheme.colorScheme.primary
-    val gridColor = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.35f)
-    val labelColor = MaterialTheme.colorScheme.onSurfaceVariant
-
-    val dimensionColors = remember {
-        mapOf(
-            DimensionType.HEALTH to ColorHealth,
-            DimensionType.WEALTH to ColorWealth,
-            DimensionType.RELATIONSHIPS to ColorRelationships,
-            DimensionType.CAREER to ColorCareer,
-            DimensionType.LEARNING to ColorLearning,
-            DimensionType.FITNESS to ColorFitness,
-            DimensionType.MENTAL_HEALTH to ColorMentalHealth,
-            DimensionType.SOCIAL_LIFE to ColorSocialLife
-        )
-    }
-
-    val dimensionShortNames = remember {
-        mapOf(
-            DimensionType.HEALTH to "Health",
-            DimensionType.WEALTH to "Wealth",
-            DimensionType.RELATIONSHIPS to "Bonds",
-            DimensionType.CAREER to "Career",
-            DimensionType.LEARNING to "Learn",
-            DimensionType.FITNESS to "Fitness",
-            DimensionType.MENTAL_HEALTH to "Mind",
-            DimensionType.SOCIAL_LIFE to "Social"
-        )
-    }
+    val radarPurple = Color(0xFFA855F7)
+    val radarGlowPurple = Color(0xFFC084FC)
+    val gridLineColor = Color(0xFF475569).copy(alpha = 0.4f)
 
     Column(
         modifier = modifier.fillMaxWidth(),
@@ -76,19 +61,19 @@ fun DimensionRadarChart(
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .aspectRatio(1.05f)
+                .aspectRatio(1.02f)
                 .padding(4.dp),
             contentAlignment = Alignment.Center
         ) {
             Canvas(modifier = Modifier.fillMaxSize()) {
                 val center = Offset(size.width / 2, size.height / 2)
-                val radius = (size.minDimension / 2) * 0.65f
+                val radius = (size.minDimension / 2) * 0.62f
                 val numAxes = dimensions.size
                 val angleStep = (2 * Math.PI / numAxes).toFloat()
 
-                // 1. Draw concentric web rings (25%, 50%, 75%, 100%)
-                for (step in 1..4) {
-                    val stepRadius = radius * (step / 4f)
+                // 1. Draw 5 concentric web rings (20%, 40%, 60%, 80%, 100%)
+                for (step in 1..5) {
+                    val stepRadius = radius * (step / 5f)
                     val gridPath = Path()
                     for (i in 0 until numAxes) {
                         val angle = (i * angleStep - Math.PI / 2).toFloat()
@@ -99,22 +84,22 @@ fun DimensionRadarChart(
                     gridPath.close()
                     drawPath(
                         path = gridPath,
-                        color = gridColor.copy(alpha = 0.15f + (step * 0.08f)),
+                        color = if (step == 5) gridLineColor.copy(alpha = 0.6f) else gridLineColor.copy(alpha = 0.25f),
                         style = Stroke(
-                            width = if (step == 4) 1.5.dp.toPx() else 0.8.dp.toPx(),
+                            width = if (step == 5) 1.2.dp.toPx() else 0.8.dp.toPx(),
                             cap = StrokeCap.Round,
                             join = StrokeJoin.Round
                         )
                     )
                 }
 
-                // 2. Draw radial axes
+                // 2. Draw 8 radial spokes
                 for (i in 0 until numAxes) {
                     val angle = (i * angleStep - Math.PI / 2).toFloat()
                     val endX = center.x + radius * cos(angle)
                     val endY = center.y + radius * sin(angle)
                     drawLine(
-                        color = gridColor.copy(alpha = 0.25f),
+                        color = gridLineColor.copy(alpha = 0.35f),
                         start = center,
                         end = Offset(endX, endY),
                         strokeWidth = 0.8.dp.toPx(),
@@ -122,12 +107,12 @@ fun DimensionRadarChart(
                     )
                 }
 
-                // 3. Draw user score polygon
+                // 3. Draw User Score Radar Polygon with glowing purple gradient
                 val scorePath = Path()
                 val points = mutableListOf<Offset>()
                 for (i in 0 until numAxes) {
                     val dim = dimensions[i]
-                    val score = (dimensionScores[dim] ?: 50) / 100f
+                    val score = (dimensionScores[dim] ?: 80).coerceIn(10, 100) / 100f
                     val animatedScore = score * animatedProgress
                     val angle = (i * angleStep - Math.PI / 2).toFloat()
                     val pointRadius = radius * animatedScore
@@ -138,12 +123,14 @@ fun DimensionRadarChart(
                 }
                 scorePath.close()
 
+                // Radial Fill
                 drawPath(
                     path = scorePath,
                     brush = Brush.radialGradient(
                         colors = listOf(
-                            primaryColor.copy(alpha = 0.35f),
-                            primaryColor.copy(alpha = 0.08f)
+                            radarGlowPurple.copy(alpha = 0.45f),
+                            radarPurple.copy(alpha = 0.25f),
+                            Color(0xFF581C87).copy(alpha = 0.08f)
                         ),
                         center = center,
                         radius = radius
@@ -151,41 +138,41 @@ fun DimensionRadarChart(
                     style = Fill
                 )
 
+                // Neon Stroke Outline
                 drawPath(
                     path = scorePath,
-                    color = primaryColor.copy(alpha = 0.90f),
+                    color = Color(0xFFE9D5FF),
                     style = Stroke(
-                        width = 2.dp.toPx(),
+                        width = 2.2.dp.toPx(),
                         cap = StrokeCap.Round,
                         join = StrokeJoin.Round
                     )
                 )
 
-                // 4. Draw vertex dots
-                points.forEachIndexed { index, point ->
-                    val dimColor = dimensionColors[dimensions[index]] ?: primaryColor
+                // 4. Draw glowing vertex dots
+                points.forEach { point ->
+                    // Outer glow halo
                     drawCircle(
-                        color = dimColor.copy(alpha = 0.25f),
-                        radius = 6.dp.toPx(),
+                        color = radarGlowPurple.copy(alpha = 0.4f),
+                        radius = 6.5.dp.toPx(),
                         center = point
                     )
+                    // Inner bright core
                     drawCircle(
-                        color = dimColor,
+                        color = Color.White,
                         radius = 3.5.dp.toPx(),
                         center = point
                     )
                 }
             }
 
-            // Dimension labels positioned around chart
+            // Dimension labels & percentages positioned around chart
             dimensions.forEachIndexed { index, dimension ->
                 val numAxes = dimensions.size
                 val angleStep = (2 * Math.PI / numAxes).toFloat()
                 val angle = (index * angleStep - Math.PI / 2).toFloat()
-                val labelRadius = 0.85f
-                val score = dimensionScores[dimension] ?: 50
-                val dimColor = dimensionColors[dimension] ?: primaryColor
-                val labelName = dimensionShortNames[dimension] ?: dimension.displayName
+                val labelRadius = 0.88f
+                val score = dimensionScores[dimension] ?: 80
 
                 Box(
                     modifier = Modifier
@@ -201,16 +188,16 @@ fun DimensionRadarChart(
                             .fillMaxSize()
                             .wrapContentSize(align = Alignment.Center)
                             .offset(
-                                x = (offsetX * 105).dp,
-                                y = (offsetY * 105).dp
+                                x = (offsetX * 115).dp,
+                                y = (offsetY * 115).dp
                             ),
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
                         Text(
-                            text = labelName,
+                            text = dimension.displayName,
                             fontSize = 10.sp,
                             fontWeight = FontWeight.Bold,
-                            color = dimColor,
+                            color = Color(0xFFF1F5F9),
                             textAlign = TextAlign.Center,
                             maxLines = 1
                         )
@@ -218,7 +205,7 @@ fun DimensionRadarChart(
                             text = "${score}%",
                             fontSize = 9.sp,
                             fontWeight = FontWeight.SemiBold,
-                            color = labelColor,
+                            color = Color(0xFFCBD5E1),
                             textAlign = TextAlign.Center
                         )
                     }

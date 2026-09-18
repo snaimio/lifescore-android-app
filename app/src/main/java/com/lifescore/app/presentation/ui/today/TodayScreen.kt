@@ -408,12 +408,12 @@ fun TodayScreen(
                 }
 
                 // ==========================================
-                // 4. TODAY'S HABITS LIST
+                // 4. TODAY'S HABIT QUESTS (2x2 GRID)
                 // ==========================================
                 item {
                     SectionHeader(
-                        title = "Today's habits",
-                        subtitle = if (pendingCount > 0) "$pendingCount left. Then you're done." else "You showed up. All habits complete for today.",
+                        title = "Daily Habit Quests",
+                        subtitle = if (pendingCount > 0) "$pendingCount quests remaining today" else "All daily quests completed!",
                         action = {
                             TextButton(onClick = { showAddHabitDialog = true }) {
                                 Text("+ Add Habit", fontWeight = FontWeight.Bold, fontSize = 12.sp)
@@ -427,16 +427,123 @@ fun TodayScreen(
                         EmptyHabits(onAddHabit = { showAddHabitDialog = true })
                     }
                 } else {
-                    itemsIndexed(visibleQuests, key = { _, task -> task.id }) { index, task ->
-                        StaggeredAppear(index = index) {
-                            HabitRow(
-                                task = task,
-                                onComplete = {
-                                    viewModel.onToggleTask(task)
-                                    gettingStartedManager.markStepCompleted(GettingStartedManager.STEP_FIRST_HABIT)
-                                    completedSteps = gettingStartedManager.getCompletedStepCount()
+                    item {
+                        val chunkedQuests = visibleQuests.chunked(2)
+                        Column(verticalArrangement = Arrangement.spacedBy(Space.sm)) {
+                            chunkedQuests.forEach { rowTasks ->
+                                Row(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    horizontalArrangement = Arrangement.spacedBy(Space.sm)
+                                ) {
+                                    rowTasks.forEach { task ->
+                                        val isCompleted = task.isCompleted
+                                        val dimColor = Color(task.dimension.baseColorHex)
+                                        Surface(
+                                            modifier = Modifier
+                                                .weight(1f)
+                                                .clip(LifeScoreShapes.card)
+                                                .clickable {
+                                                    viewModel.onToggleTask(task)
+                                                    gettingStartedManager.markStepCompleted(GettingStartedManager.STEP_FIRST_HABIT)
+                                                    completedSteps = gettingStartedManager.getCompletedStepCount()
+                                                },
+                                            shape = LifeScoreShapes.card,
+                                            color = if (isCompleted) MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.45f) else MaterialTheme.colorScheme.surface,
+                                            border = BorderStroke(
+                                                width = 1.dp,
+                                                color = if (isCompleted) dimColor.copy(alpha = 0.3f) else MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.6f)
+                                            )
+                                        ) {
+                                            Column(
+                                                modifier = Modifier.padding(Space.md),
+                                                verticalArrangement = Arrangement.SpaceBetween
+                                            ) {
+                                                // Category Tag
+                                                Row(
+                                                    modifier = Modifier.fillMaxWidth(),
+                                                    horizontalArrangement = Arrangement.SpaceBetween,
+                                                    verticalAlignment = Alignment.CenterVertically
+                                                ) {
+                                                    Surface(
+                                                        shape = LifeScoreShapes.pill,
+                                                        color = dimColor.copy(alpha = 0.15f)
+                                                    ) {
+                                                        Text(
+                                                            text = task.dimension.displayName,
+                                                            style = MaterialTheme.typography.labelSmall.copy(fontSize = 10.sp),
+                                                            fontWeight = FontWeight.Bold,
+                                                            color = dimColor,
+                                                            modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp)
+                                                        )
+                                                    }
+                                                }
+
+                                                Spacer(Modifier.height(Space.sm))
+
+                                                // Task Title
+                                                Text(
+                                                    text = task.title,
+                                                    style = MaterialTheme.typography.titleSmall,
+                                                    fontWeight = FontWeight.Bold,
+                                                    maxLines = 2,
+                                                    color = if (isCompleted) MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f) else MaterialTheme.colorScheme.onSurface
+                                                )
+
+                                                Spacer(Modifier.height(Space.xs))
+
+                                                // Subtitle status
+                                                Text(
+                                                    text = if (isCompleted) "Completed" else "In Progress",
+                                                    style = MaterialTheme.typography.bodySmall.copy(fontSize = 11.sp),
+                                                    color = if (isCompleted) Color(0xFF10B981) else MaterialTheme.colorScheme.onSurfaceVariant
+                                                )
+
+                                                Spacer(Modifier.height(Space.sm))
+
+                                                // Bottom Row: Checkmark & XP Badge
+                                                Row(
+                                                    modifier = Modifier.fillMaxWidth(),
+                                                    horizontalArrangement = Arrangement.SpaceBetween,
+                                                    verticalAlignment = Alignment.CenterVertically
+                                                ) {
+                                                    Surface(
+                                                        shape = CircleShape,
+                                                        color = if (isCompleted) Color(0xFF10B981) else MaterialTheme.colorScheme.surfaceVariant,
+                                                        modifier = Modifier.size(24.dp)
+                                                    ) {
+                                                        Box(contentAlignment = Alignment.Center) {
+                                                            if (isCompleted) {
+                                                                Icon(
+                                                                    Icons.Default.Check,
+                                                                    contentDescription = null,
+                                                                    tint = Color.White,
+                                                                    modifier = Modifier.size(14.dp)
+                                                                )
+                                                            }
+                                                        }
+                                                    }
+
+                                                    Surface(
+                                                        shape = LifeScoreShapes.pill,
+                                                        color = Color(0xFFF59E0B).copy(alpha = 0.15f)
+                                                    ) {
+                                                        Text(
+                                                            text = "+${task.pointsReward} XP",
+                                                            fontSize = 10.sp,
+                                                            fontWeight = FontWeight.Bold,
+                                                            color = Color(0xFFF59E0B),
+                                                            modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp)
+                                                        )
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                    if (rowTasks.size == 1) {
+                                        Spacer(modifier = Modifier.weight(1f))
+                                    }
                                 }
-                            )
+                            }
                         }
                     }
                 }

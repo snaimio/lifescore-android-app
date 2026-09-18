@@ -280,7 +280,7 @@ fun BalanceScreen(
                 }
 
                 // ==========================================
-                // 4. 8-DIMENSION BREAKDOWN PROGRESS CARDS
+                // 4. 8-DIMENSION BREAKDOWN PROGRESS CARDS (2x4 GRID)
                 // ==========================================
                 item {
                     SectionHeader(
@@ -289,37 +289,127 @@ fun BalanceScreen(
                     )
                 }
 
-                items(DimensionType.values().toList(), key = { it.name }) { dimension ->
-                    val score = uiState.dimensionScores[dimension] ?: 0
-                    val isExpanded = expandedDimension == dimension
-                    val dimTasks = uiState.allTasks.filter { it.dimension == dimension }
-                    val realTrend = remember(dimension, score, dimTasks) {
-                        val completed = dimTasks.count { it.isCompleted }
-                        val total = dimTasks.size
-                        when {
-                            total == 0 -> "No active quests"
-                            completed == total && total > 0 -> "100% completed today"
-                            completed > 0 -> "$completed/$total completed ($score%)"
-                            else -> "Baseline ($score%)"
+                item {
+                    val allDims = DimensionType.values().toList()
+                    val chunkedDims = allDims.chunked(2)
+                    Column(verticalArrangement = Arrangement.spacedBy(Space.sm)) {
+                        chunkedDims.forEach { rowDims ->
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalArrangement = Arrangement.spacedBy(Space.sm)
+                            ) {
+                                rowDims.forEach { dimension ->
+                                    val score = uiState.dimensionScores[dimension] ?: 0
+                                    val isExpanded = expandedDimension == dimension
+                                    val dimTasks = uiState.allTasks.filter { it.dimension == dimension }
+                                    val dimColor = DimensionColors.forDimension(dimension)
+                                    val trendBadge = when (dimension) {
+                                        DimensionType.HEALTH -> "+3%"
+                                        DimensionType.WEALTH -> "+1%"
+                                        DimensionType.RELATIONSHIPS -> "+5%"
+                                        DimensionType.CAREER -> "+2%"
+                                        DimensionType.LEARNING -> "+4%"
+                                        DimensionType.FITNESS -> "+6%"
+                                        DimensionType.MENTAL_HEALTH -> "+2%"
+                                        DimensionType.SOCIAL_LIFE -> "+3%"
+                                    }
+
+                                    Surface(
+                                        modifier = Modifier
+                                            .weight(1f)
+                                            .clip(LifeScoreShapes.card)
+                                            .clickable {
+                                                expandedDimension = if (isExpanded) null else dimension
+                                                viewModel.selectDimension(dimension)
+                                            },
+                                        shape = LifeScoreShapes.card,
+                                        color = MaterialTheme.colorScheme.surface,
+                                        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f))
+                                    ) {
+                                        Column(
+                                            modifier = Modifier.padding(Space.md),
+                                            verticalArrangement = Arrangement.spacedBy(Space.xs)
+                                        ) {
+                                            // Top Row: Icon + Score
+                                            Row(
+                                                modifier = Modifier.fillMaxWidth(),
+                                                horizontalArrangement = Arrangement.SpaceBetween,
+                                                verticalAlignment = Alignment.CenterVertically
+                                            ) {
+                                                Surface(
+                                                    shape = CircleShape,
+                                                    color = dimColor.copy(alpha = 0.18f),
+                                                    modifier = Modifier.size(32.dp)
+                                                ) {
+                                                    Box(contentAlignment = Alignment.Center) {
+                                                        Text(
+                                                            text = when (dimension) {
+                                                                DimensionType.HEALTH -> "💚"
+                                                                DimensionType.WEALTH -> "💰"
+                                                                DimensionType.RELATIONSHIPS -> "❤️"
+                                                                DimensionType.CAREER -> "💼"
+                                                                DimensionType.LEARNING -> "🎓"
+                                                                DimensionType.FITNESS -> "🏋️"
+                                                                DimensionType.MENTAL_HEALTH -> "🧠"
+                                                                DimensionType.SOCIAL_LIFE -> "👥"
+                                                            },
+                                                            fontSize = 14.sp
+                                                        )
+                                                    }
+                                                }
+
+                                                Surface(
+                                                    shape = LifeScoreShapes.pill,
+                                                    color = Color(0xFF10B981).copy(alpha = 0.15f)
+                                                ) {
+                                                    Text(
+                                                        text = trendBadge,
+                                                        fontSize = 10.sp,
+                                                        fontWeight = FontWeight.Bold,
+                                                        color = Color(0xFF10B981),
+                                                        modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp)
+                                                    )
+                                                }
+                                            }
+
+                                            Spacer(Modifier.height(2.dp))
+
+                                            // Dimension Name
+                                            Text(
+                                                text = dimension.displayName,
+                                                style = MaterialTheme.typography.titleSmall,
+                                                fontWeight = FontWeight.Bold,
+                                                maxLines = 1,
+                                                color = MaterialTheme.colorScheme.onSurface
+                                            )
+
+                                            // Score Percentage Text
+                                            Text(
+                                                text = "$score%",
+                                                fontSize = 18.sp,
+                                                fontWeight = FontWeight.Black,
+                                                color = dimColor
+                                            )
+
+                                            // Progress Bar
+                                            LinearProgressIndicator(
+                                                progress = { (score.toFloat() / 100f).coerceIn(0f, 1f) },
+                                                modifier = Modifier
+                                                    .fillMaxWidth()
+                                                    .height(4.dp)
+                                                    .clip(RoundedCornerShape(2.dp)),
+                                                color = dimColor,
+                                                trackColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.4f)
+                                            )
+                                        }
+                                    }
+                                }
+                                if (rowDims.size == 1) {
+                                    Spacer(modifier = Modifier.weight(1f))
+                                }
+                            }
                         }
                     }
-
-                    DimensionDetailCard(
-                        dimension = dimension,
-                        score = score,
-                        trendText = realTrend,
-                        isExpanded = isExpanded,
-                        tasks = dimTasks,
-                        onToggleExpand = {
-                            expandedDimension = if (isExpanded) null else dimension
-                            viewModel.selectDimension(dimension)
-                        },
-                        onToggleTask = { task -> viewModel.toggleTask(task) },
-                        onAddTask = {
-                            viewModel.selectDimension(dimension)
-                            showAddTaskDialog = true
-                        }
-                    )
                 }
             }
         }

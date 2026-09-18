@@ -332,42 +332,233 @@ fun HabitsListView(
             .padding(horizontal = 16.dp, vertical = 12.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
-        // Smart Auto-Suggestion Hero Banner
+        // ==========================================
+        // 2x2 HABIT TRACKERS TELEMETRY GRID
+        // ==========================================
         item {
-            Card(
-                shape = RoundedCornerShape(18.dp),
-                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer),
-                modifier = Modifier.fillMaxWidth()
-            ) {
+            Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
+                // Row 1: Hydration & Sleep
                 Row(
-                    modifier = Modifier.padding(14.dp),
-                    verticalAlignment = Alignment.CenterVertically
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(10.dp)
                 ) {
+                    // 1. Hydration Card
                     Surface(
-                        shape = CircleShape,
-                        color = MaterialTheme.colorScheme.primary,
-                        modifier = Modifier.size(38.dp)
+                        modifier = Modifier.weight(1f),
+                        shape = RoundedCornerShape(16.dp),
+                        color = MaterialTheme.colorScheme.surfaceVariant,
+                        border = BorderStroke(1.dp, Color(0xFF3B82F6).copy(alpha = 0.3f))
                     ) {
-                        Box(contentAlignment = Alignment.Center) {
-                            Text("✨", fontSize = 18.sp)
+                        Column(
+                            modifier = Modifier.padding(12.dp),
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalArrangement = Arrangement.SpaceBetween,
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                Text("💧 Hydration", fontWeight = FontWeight.Bold, fontSize = 12.sp)
+                                Text("83%", fontWeight = FontWeight.Black, fontSize = 11.sp, color = Color(0xFF3B82F6))
+                            }
+                            Spacer(Modifier.height(8.dp))
+                            Box(contentAlignment = Alignment.Center, modifier = Modifier.size(54.dp)) {
+                                CircularProgressIndicator(
+                                    progress = { 1f },
+                                    modifier = Modifier.fillMaxSize(),
+                                    color = MaterialTheme.colorScheme.surface.copy(alpha = 0.5f),
+                                    strokeWidth = 6.dp
+                                )
+                                CircularProgressIndicator(
+                                    progress = { 0.83f },
+                                    modifier = Modifier.fillMaxSize(),
+                                    color = Color(0xFF3B82F6),
+                                    strokeWidth = 6.dp
+                                )
+                                Text("2.5L", fontWeight = FontWeight.Bold, fontSize = 11.sp)
+                            }
+                            Spacer(Modifier.height(6.dp))
+                            Text("Goal: 3.0L", fontSize = 10.sp, color = MaterialTheme.colorScheme.outline)
+                            Spacer(Modifier.height(6.dp))
+                            Button(
+                                onClick = { /* log water */ },
+                                shape = RoundedCornerShape(8.dp),
+                                contentPadding = PaddingValues(horizontal = 8.dp, vertical = 2.dp),
+                                modifier = Modifier.fillMaxWidth().height(28.dp),
+                                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF3B82F6))
+                            ) {
+                                Text("+ Log 500ml", fontSize = 10.sp, fontWeight = FontWeight.Bold)
+                            }
                         }
                     }
-                    Spacer(Modifier.width(12.dp))
-                    Column(modifier = Modifier.weight(1f)) {
-                        Text("SMART HABIT RECOMMENDATION", fontSize = 10.sp, fontWeight = FontWeight.Black, color = MaterialTheme.colorScheme.primary)
-                        Text(uiState.smartSuggestedHabit.title, fontSize = 13.sp, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onPrimaryContainer)
-                        Text("+${uiState.smartSuggestedHabit.pointsReward} XP • ${uiState.smartSuggestedHabit.dimension.displayName}", fontSize = 11.sp, color = MaterialTheme.colorScheme.outline)
-                    }
-                    Spacer(Modifier.width(8.dp))
-                    Button(
-                        onClick = { onAddSmartHabit(uiState.smartSuggestedHabit) },
-                        shape = RoundedCornerShape(10.dp),
-                        contentPadding = PaddingValues(horizontal = 10.dp, vertical = 4.dp)
+
+                    // 2. Sleep Card
+                    Surface(
+                        modifier = Modifier.weight(1f),
+                        shape = RoundedCornerShape(16.dp),
+                        color = MaterialTheme.colorScheme.surfaceVariant,
+                        border = BorderStroke(1.dp, Color(0xFF6366F1).copy(alpha = 0.3f))
                     ) {
-                        Text("Add +", fontSize = 11.sp, fontWeight = FontWeight.Bold)
+                        Column(
+                            modifier = Modifier.padding(12.dp),
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalArrangement = Arrangement.SpaceBetween,
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                Text("🌙 Sleep", fontWeight = FontWeight.Bold, fontSize = 12.sp)
+                                Text("97%", fontWeight = FontWeight.Black, fontSize = 11.sp, color = Color(0xFF6366F1))
+                            }
+                            Spacer(Modifier.height(8.dp))
+                            Box(contentAlignment = Alignment.Center, modifier = Modifier.size(54.dp)) {
+                                CircularProgressIndicator(
+                                    progress = { 1f },
+                                    modifier = Modifier.fillMaxSize(),
+                                    color = MaterialTheme.colorScheme.surface.copy(alpha = 0.5f),
+                                    strokeWidth = 6.dp
+                                )
+                                CircularProgressIndicator(
+                                    progress = { 0.97f },
+                                    modifier = Modifier.fillMaxSize(),
+                                    color = Color(0xFF6366F1),
+                                    strokeWidth = 6.dp
+                                )
+                                Text("7h 45m", fontWeight = FontWeight.Bold, fontSize = 10.sp)
+                            }
+                            Spacer(Modifier.height(6.dp))
+                            Text("Goal: 8h 00m", fontSize = 10.sp, color = MaterialTheme.colorScheme.outline)
+                            Spacer(Modifier.height(6.dp))
+                            Surface(
+                                shape = RoundedCornerShape(6.dp),
+                                color = Color(0xFF6366F1).copy(alpha = 0.2f),
+                                modifier = Modifier.height(28.dp).fillMaxWidth()
+                            ) {
+                                Box(contentAlignment = Alignment.Center) {
+                                    Text("✓ Optimal REM", fontSize = 10.sp, fontWeight = FontWeight.Bold, color = Color(0xFF6366F1))
+                                }
+                            }
+                        }
+                    }
+                }
+
+                // Row 2: Meditation & Steps
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(10.dp)
+                ) {
+                    // 3. Meditation Card
+                    Surface(
+                        modifier = Modifier.weight(1f),
+                        shape = RoundedCornerShape(16.dp),
+                        color = MaterialTheme.colorScheme.surfaceVariant,
+                        border = BorderStroke(1.dp, Color(0xFF10B981).copy(alpha = 0.3f))
+                    ) {
+                        Column(
+                            modifier = Modifier.padding(12.dp),
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalArrangement = Arrangement.SpaceBetween,
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                Text("🧘 Meditation", fontWeight = FontWeight.Bold, fontSize = 12.sp)
+                                Text("75%", fontWeight = FontWeight.Black, fontSize = 11.sp, color = Color(0xFF10B981))
+                            }
+                            Spacer(Modifier.height(8.dp))
+                            Box(contentAlignment = Alignment.Center, modifier = Modifier.size(54.dp)) {
+                                CircularProgressIndicator(
+                                    progress = { 1f },
+                                    modifier = Modifier.fillMaxSize(),
+                                    color = MaterialTheme.colorScheme.surface.copy(alpha = 0.5f),
+                                    strokeWidth = 6.dp
+                                )
+                                CircularProgressIndicator(
+                                    progress = { 0.75f },
+                                    modifier = Modifier.fillMaxSize(),
+                                    color = Color(0xFF10B981),
+                                    strokeWidth = 6.dp
+                                )
+                                Text("15m", fontWeight = FontWeight.Bold, fontSize = 11.sp)
+                            }
+                            Spacer(Modifier.height(6.dp))
+                            Text("Goal: 20 min", fontSize = 10.sp, color = MaterialTheme.colorScheme.outline)
+                            Spacer(Modifier.height(6.dp))
+                            Button(
+                                onClick = { /* start session */ },
+                                shape = RoundedCornerShape(8.dp),
+                                contentPadding = PaddingValues(horizontal = 8.dp, vertical = 2.dp),
+                                modifier = Modifier.fillMaxWidth().height(28.dp),
+                                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF10B981))
+                            ) {
+                                Text("Start Session", fontSize = 10.sp, fontWeight = FontWeight.Bold)
+                            }
+                        }
+                    }
+
+                    // 4. Step Counter Card
+                    Surface(
+                        modifier = Modifier.weight(1f),
+                        shape = RoundedCornerShape(16.dp),
+                        color = MaterialTheme.colorScheme.surfaceVariant,
+                        border = BorderStroke(1.dp, Color(0xFFF97316).copy(alpha = 0.3f))
+                    ) {
+                        Column(
+                            modifier = Modifier.padding(12.dp),
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalArrangement = Arrangement.SpaceBetween,
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                Text("👟 Steps", fontWeight = FontWeight.Bold, fontSize = 12.sp)
+                                Text("84%", fontWeight = FontWeight.Black, fontSize = 11.sp, color = Color(0xFFF97316))
+                            }
+                            Spacer(Modifier.height(8.dp))
+                            Box(contentAlignment = Alignment.Center, modifier = Modifier.size(54.dp)) {
+                                CircularProgressIndicator(
+                                    progress = { 1f },
+                                    modifier = Modifier.fillMaxSize(),
+                                    color = MaterialTheme.colorScheme.surface.copy(alpha = 0.5f),
+                                    strokeWidth = 6.dp
+                                )
+                                CircularProgressIndicator(
+                                    progress = { 0.84f },
+                                    modifier = Modifier.fillMaxSize(),
+                                    color = Color(0xFFF97316),
+                                    strokeWidth = 6.dp
+                                )
+                                Text("8.4k", fontWeight = FontWeight.Bold, fontSize = 11.sp)
+                            }
+                            Spacer(Modifier.height(6.dp))
+                            Text("Goal: 10,000", fontSize = 10.sp, color = MaterialTheme.colorScheme.outline)
+                            Spacer(Modifier.height(6.dp))
+                            Button(
+                                onClick = { /* add steps */ },
+                                shape = RoundedCornerShape(8.dp),
+                                contentPadding = PaddingValues(horizontal = 8.dp, vertical = 2.dp),
+                                modifier = Modifier.fillMaxWidth().height(28.dp),
+                                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFF97316))
+                            ) {
+                                Text("+ Add Steps", fontSize = 10.sp, fontWeight = FontWeight.Bold)
+                            }
+                        }
                     }
                 }
             }
+        }
+
+        // Section Title: Recent Quests
+        item {
+            Text(
+                "Daily Quests & Habits",
+                fontWeight = FontWeight.Black,
+                fontSize = 15.sp,
+                modifier = Modifier.padding(top = 6.dp)
+            )
         }
 
         // Dimension Filter Chips

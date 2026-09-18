@@ -274,7 +274,7 @@ fun AiCoachScreen(
                             .fillMaxSize()
                             .padding(16.dp)
                     ) {
-                        // Diagnostic Banner
+                        // Diagnostic Banner / Frontier Pill
                         Card(
                             shape = RoundedCornerShape(16.dp),
                             colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant),
@@ -341,7 +341,7 @@ fun AiCoachScreen(
                             modifier = Modifier
                                 .weight(1f)
                                 .fillMaxWidth(),
-                            verticalArrangement = Arrangement.spacedBy(10.dp)
+                            verticalArrangement = Arrangement.spacedBy(12.dp)
                         ) {
                             items(uiState.chatMessages) { chat ->
                                 val isAi = chat.sender == "AI"
@@ -350,32 +350,94 @@ fun AiCoachScreen(
                                     horizontalArrangement = if (isAi) Arrangement.Start else Arrangement.End
                                 ) {
                                     Card(
-                                        shape = RoundedCornerShape(
-                                            topStart = 16.dp,
-                                            topEnd = 16.dp,
-                                            bottomStart = if (isAi) 2.dp else 16.dp,
-                                            bottomEnd = if (isAi) 16.dp else 2.dp
-                                        ),
+                                        shape = RoundedCornerShape(18.dp),
                                         colors = CardDefaults.cardColors(
-                                            containerColor = if (isAi) MaterialTheme.colorScheme.surfaceVariant else MaterialTheme.colorScheme.primary
+                                            containerColor = if (isAi) MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.8f) else MaterialTheme.colorScheme.primary
                                         ),
-                                        modifier = Modifier.widthIn(max = 300.dp)
+                                        border = if (isAi) BorderStroke(1.5.dp, Color(0xFF3B82F6).copy(alpha = 0.6f)) else null,
+                                        modifier = Modifier.fillMaxWidth()
                                     ) {
-                                        Column(modifier = Modifier.padding(12.dp)) {
+                                        Column(modifier = Modifier.padding(16.dp)) {
                                             if (isAi) {
-                                                Row(verticalAlignment = Alignment.CenterVertically) {
-                                                    Text("🧠", fontSize = 12.sp)
-                                                    Spacer(Modifier.width(4.dp))
-                                                    Text("AI Coach (Memory-Aware)", fontSize = 10.sp, fontWeight = FontWeight.Black, color = MaterialTheme.colorScheme.primary)
+                                                Row(
+                                                    modifier = Modifier.fillMaxWidth(),
+                                                    horizontalArrangement = Arrangement.SpaceBetween,
+                                                    verticalAlignment = Alignment.CenterVertically
+                                                ) {
+                                                    Surface(
+                                                        shape = RoundedCornerShape(6.dp),
+                                                        color = Color(0xFF3B82F6).copy(alpha = 0.2f)
+                                                    ) {
+                                                        Text(
+                                                            text = "✦ GEMINI AI",
+                                                            fontSize = 10.sp,
+                                                            fontWeight = FontWeight.Black,
+                                                            color = Color(0xFF3B82F6),
+                                                            modifier = Modifier.padding(horizontal = 8.dp, vertical = 3.dp)
+                                                        )
+                                                    }
+                                                    Text(
+                                                        "✦ Gemini Coach",
+                                                        fontSize = 11.sp,
+                                                        fontWeight = FontWeight.Bold,
+                                                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                                                    )
                                                 }
-                                                Spacer(Modifier.height(4.dp))
+                                                Spacer(Modifier.height(10.dp))
                                             }
                                             Text(
                                                 text = chat.message,
                                                 fontSize = 13.sp,
-                                                lineHeight = 19.sp,
-                                                color = if (isAi) MaterialTheme.colorScheme.onSurfaceVariant else MaterialTheme.colorScheme.onPrimary
+                                                lineHeight = 20.sp,
+                                                color = if (isAi) MaterialTheme.colorScheme.onSurface else MaterialTheme.colorScheme.onPrimary
                                             )
+
+                                            if (isAi) {
+                                                Spacer(Modifier.height(14.dp))
+                                                Text(
+                                                    "RECOMMENDED FOCUS",
+                                                    fontSize = 10.sp,
+                                                    fontWeight = FontWeight.Black,
+                                                    color = Color(0xFF3B82F6)
+                                                )
+                                                Spacer(Modifier.height(8.dp))
+                                                Row(
+                                                    modifier = Modifier.fillMaxWidth(),
+                                                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                                                ) {
+                                                    Surface(
+                                                        onClick = { viewModel.sendMessage("Give me a 25-minute deep focus task.") },
+                                                        shape = RoundedCornerShape(10.dp),
+                                                        color = Color(0xFF3B82F6).copy(alpha = 0.15f),
+                                                        border = BorderStroke(1.dp, Color(0xFF3B82F6).copy(alpha = 0.3f)),
+                                                        modifier = Modifier.weight(1f)
+                                                    ) {
+                                                        Text(
+                                                            text = "⏱ Start 25m Focus Session",
+                                                            fontSize = 11.sp,
+                                                            fontWeight = FontWeight.Bold,
+                                                            color = Color(0xFF3B82F6),
+                                                            modifier = Modifier.padding(horizontal = 10.dp, vertical = 8.dp)
+                                                        )
+                                                    }
+
+                                                    Surface(
+                                                        onClick = { viewModel.selectTab(CoachTab.AUDIT) },
+                                                        shape = RoundedCornerShape(10.dp),
+                                                        color = MaterialTheme.colorScheme.surfaceVariant,
+                                                        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline.copy(alpha = 0.2f)),
+                                                        modifier = Modifier.weight(1f)
+                                                    ) {
+                                                        Text(
+                                                            text = "📊 Review Weekly Audit",
+                                                            fontSize = 11.sp,
+                                                            fontWeight = FontWeight.Bold,
+                                                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                                            modifier = Modifier.padding(horizontal = 10.dp, vertical = 8.dp)
+                                                        )
+                                                    }
+                                                }
+                                            }
                                         }
                                     }
                                 }
@@ -402,7 +464,7 @@ fun AiCoachScreen(
                             OutlinedTextField(
                                 value = inputQuery,
                                 onValueChange = { inputQuery = it },
-                                placeholder = { Text("Ask your AI coach anything...", fontSize = 12.sp) },
+                                placeholder = { Text("Ask Gemini anything about your habits...", fontSize = 12.sp) },
                                 modifier = Modifier.weight(1f),
                                 shape = RoundedCornerShape(24.dp),
                                 maxLines = 3
@@ -414,10 +476,10 @@ fun AiCoachScreen(
                                     inputQuery = ""
                                 },
                                 modifier = Modifier
-                                    .background(MaterialTheme.colorScheme.primary, CircleShape)
+                                    .background(Color(0xFF3B82F6), CircleShape)
                                     .size(46.dp)
                             ) {
-                                Icon(Icons.AutoMirrored.Filled.Send, contentDescription = "Send", tint = MaterialTheme.colorScheme.onPrimary)
+                                Icon(Icons.AutoMirrored.Filled.Send, contentDescription = "Send", tint = Color.White)
                             }
                         }
                     }
