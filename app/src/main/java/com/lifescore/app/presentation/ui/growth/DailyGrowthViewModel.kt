@@ -1,7 +1,9 @@
 package com.lifescore.app.presentation.ui.growth
 
+import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.lifescore.app.core.util.TextToSpeechNarrator
 import com.lifescore.app.data.local.entity.DailyGrowthProgressEntity
 import com.lifescore.app.data.repository.DailyGrowthRepository
 import com.lifescore.app.domain.model.selfimprovement.DailyGrowthCurriculum
@@ -28,13 +30,15 @@ data class DailyGrowthUiState(
 
 class DailyGrowthViewModel(
     private val repository: DailyGrowthRepository,
-    private val userId: String = "default_user"
+    private val userId: String = "default_user",
+    context: Context? = null
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(DailyGrowthUiState())
     val uiState: StateFlow<DailyGrowthUiState> = _uiState.asStateFlow()
 
     private var audioJob: Job? = null
+    private val narrator: TextToSpeechNarrator? = context?.let { TextToSpeechNarrator(it) }
 
     init {
         selectDay(1)
@@ -42,6 +46,7 @@ class DailyGrowthViewModel(
     }
 
     fun selectDay(dayNumber: Int) {
+        stopAudio()
         val session = DailyGrowthCurriculum.getSessionForDay(dayNumber)
         _uiState.update {
             it.copy(
@@ -52,7 +57,6 @@ class DailyGrowthViewModel(
                 audioTotalSeconds = session.durationMinutes * 60
             )
         }
-        audioJob?.cancel()
 
         viewModelScope.launch {
             repository.getSessionForDay(dayNumber, userId).collectLatest { pair ->
@@ -82,20 +86,47 @@ class DailyGrowthViewModel(
 
     fun toggleAudio() {
         if (_uiState.value.isAudioPlaying) {
-            audioJob?.cancel()
-            _uiState.update { it.copy(isAudioPlaying = false) }
+            pauseAudio()
         } else {
+            val session = _uiState.value.session
             _uiState.update { it.copy(isAudioPlaying = true) }
-            audioJob?.cancel()
-            audioJob = viewModelScope.launch {
-                while (_uiState.value.isAudioPlaying) {
-                    delay(1000L)
-                    val next = _uiState.value.audioSeconds + 1
-                    _uiState.update { it.copy(audioSeconds = next) }
-                    if (next >= _uiState.value.audioTotalSeconds) {
-                        _uiState.update { it.copy(isAudioPlaying = false) }
-                        break
-                    }
+            val script = buildString {
+                append("Daily Growth Lesson. Day ").append(session.dayNumber).append(": ").append(session.title).append(". ")
+                append(session.subtitle).append(". ")
+                append("Core Concept: ").append(session.coreConcept).append(". ")
+                append("Micro Lesson: ").append(session.lessonBody).append(". ")
+                append("Key Takeaways: ").append(session.keyTakeaways.joinToString(". ")).append(". ")
+                append("Daily Action Protocol: ").append(session.dailyActionChallenge).append(".")
+            }
+            narrator?.speak(script) {
+                _uiState.update { it.copy(isAudioPlaying = false, audioSeconds = it.audioTotalSeconds) }
+            }
+            startAudioTimer()
+        }
+    }
+
+    fun pauseAudio() {
+        audioJob?.cancel()
+        narrator?.stop()
+        _uiState.update { it.copy(isAudioPlaying = false) }
+    }
+
+    fun stopAudio() {
+        audioJob?.cancel()
+        narrator?.stop()
+        _uiState.update { it.copy(isAudioPlaying = false, audioSeconds = 0) }
+    }
+
+    private fun startAudioTimer() {
+        audioJob?.cancel()
+        audioJob = viewModelScope.launch {
+            while (_uiState.value.isAudioPlaying) {
+                delay(1000L)
+                val next = _uiState.value.audioSeconds + 1
+                _uiState.update { it.copy(audioSeconds = next) }
+                if (next >= _uiState.value.audioTotalSeconds) {
+                    _uiState.update { it.copy(isAudioPlaying = false) }
+                    break
                 }
             }
         }
@@ -129,6 +160,7 @@ class DailyGrowthViewModel(
 
     override fun onCleared() {
         super.onCleared()
-        audioJob?.cancel()
+        stopAudio()
+        narrator?.shutdown()
     }
 }

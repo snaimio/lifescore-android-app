@@ -89,7 +89,8 @@ fun LifeScoreNavGraph(
         ChallengesViewModel(
             repository = app.lifeScoreRepository,
             firebaseRepository = app.firebaseRepository,
-            authRepository = app.authRepository
+            authRepository = app.authRepository,
+            context = app.applicationContext
         )
     }
     val leaderboardViewModel = remember {
@@ -617,7 +618,8 @@ fun LifeScoreNavGraph(
             composable(Screen.DailyGrowth.route) {
                 val dailyGrowthViewModel = remember {
                     com.lifescore.app.presentation.ui.growth.DailyGrowthViewModel(
-                        repository = app.dailyGrowthRepository
+                        repository = app.dailyGrowthRepository,
+                        context = app.applicationContext
                     )
                 }
                 com.lifescore.app.presentation.ui.growth.DailyGrowthScreen(
@@ -732,7 +734,8 @@ fun LifeScoreNavGraph(
             composable(Screen.MeditationLibrary.route) {
                 val meditationViewModel = remember {
                     com.lifescore.app.presentation.ui.meditation.MeditationViewModel(
-                        repository = app.meditationLibraryRepository
+                        repository = app.meditationLibraryRepository,
+                        context = app.applicationContext
                     )
                 }
                 com.lifescore.app.presentation.ui.meditation.MeditationLibraryScreen(

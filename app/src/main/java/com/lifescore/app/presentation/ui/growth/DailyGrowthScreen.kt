@@ -34,6 +34,12 @@ fun DailyGrowthScreen(
     val state by viewModel.uiState.collectAsState()
     val snackbarHostState = remember { SnackbarHostState() }
 
+    DisposableEffect(Unit) {
+        onDispose {
+            viewModel.stopAudio()
+        }
+    }
+
     LaunchedEffect(state.snackbarMessage) {
         state.snackbarMessage?.let { msg ->
             snackbarHostState.showSnackbar(msg)
@@ -67,7 +73,10 @@ fun DailyGrowthScreen(
                     }
                 },
                 navigationIcon = {
-                    IconButton(onClick = onBack) {
+                    IconButton(onClick = {
+                        viewModel.stopAudio()
+                        onBack()
+                    }) {
                         Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
                     }
                 },
@@ -206,15 +215,32 @@ fun DailyGrowthScreen(
                                     ) {
                                         Icon(
                                             if (state.isAudioPlaying) Icons.Default.Pause else Icons.Default.PlayArrow,
-                                            contentDescription = "Play/Pause Lesson"
+                                            contentDescription = if (state.isAudioPlaying) "Pause Lesson" else "Play Lesson"
                                         )
+                                    }
+
+                                    if (state.isAudioPlaying || state.audioSeconds > 0) {
+                                        Spacer(Modifier.width(4.dp))
+                                        IconButton(
+                                            onClick = { viewModel.stopAudio() }
+                                        ) {
+                                            Icon(
+                                                Icons.Default.Stop,
+                                                contentDescription = "Stop Lesson Audio",
+                                                tint = MaterialTheme.colorScheme.error
+                                            )
+                                        }
                                     }
 
                                     Spacer(Modifier.width(Spacing.sm))
 
                                     Column(modifier = Modifier.weight(1f)) {
                                         Text(
-                                            text = if (state.isAudioPlaying) "Playing 15-Min Audio Lesson..." else "15-Min Audio Narration",
+                                            text = when {
+                                                state.isAudioPlaying -> "Playing 15-Min Audio Lesson..."
+                                                state.audioSeconds > 0 -> "Paused"
+                                                else -> "15-Min Audio Narration"
+                                            },
                                             fontSize = 12.sp,
                                             fontWeight = FontWeight.Bold
                                         )

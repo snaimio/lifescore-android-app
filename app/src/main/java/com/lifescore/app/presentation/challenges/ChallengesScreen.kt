@@ -42,6 +42,12 @@ fun ChallengesScreen(
     val uiState by viewModel.uiState.collectAsState()
     val context = LocalContext.current
 
+    DisposableEffect(Unit) {
+        onDispose {
+            viewModel.stopAudio()
+        }
+    }
+
     // Show toast for success messages
     LaunchedEffect(uiState.recentSuccessMessage) {
         uiState.recentSuccessMessage?.let { msg ->
@@ -56,7 +62,10 @@ fun ChallengesScreen(
                 title = { Text("Life Duels & Masterclasses", fontWeight = FontWeight.Black) },
                 navigationIcon = {
                     if (onBack != null) {
-                        IconButton(onClick = onBack) {
+                        IconButton(onClick = {
+                            viewModel.stopAudio()
+                            onBack()
+                        }) {
                             Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
                         }
                     }
@@ -116,6 +125,7 @@ fun ChallengesScreen(
                         onSelectMasterclass = { viewModel.selectMasterclass(it) },
                         onSelectDay = { viewModel.selectMasterclassDay(it) },
                         onToggleAudio = { viewModel.toggleAudioPlayback() },
+                        onStopAudio = { viewModel.stopAudio() },
                         onCheckInDay = { mcId, day -> viewModel.checkInMasterclassDay(mcId, day) },
                         onUnlock = { mcId -> viewModel.unlockMasterclass(mcId) },
                         onOpenPaywall = onOpenPaywall
@@ -209,6 +219,7 @@ fun MasterclassesView(
     onSelectMasterclass: (ExpertMasterclass) -> Unit,
     onSelectDay: (MasterclassDayModule) -> Unit,
     onToggleAudio: () -> Unit,
+    onStopAudio: () -> Unit,
     onCheckInDay: (String, Int) -> Unit,
     onUnlock: (String) -> Unit,
     onOpenPaywall: () -> Unit
@@ -380,22 +391,53 @@ fun MasterclassesView(
                                         modifier = Modifier.background(MaterialTheme.colorScheme.primary, CircleShape).size(36.dp)
                                     ) {
                                         Icon(
-                                            if (uiState.isPlayingAudio) Icons.Default.Close else Icons.Default.PlayArrow,
-                                            contentDescription = "Play",
+                                            if (uiState.isPlayingAudio) Icons.Default.Pause else Icons.Default.PlayArrow,
+                                            contentDescription = if (uiState.isPlayingAudio) "Pause Audio" else "Play Audio",
                                             tint = MaterialTheme.colorScheme.onPrimary,
                                             modifier = Modifier.size(18.dp)
                                         )
                                     }
+
+                                    if (uiState.isPlayingAudio || uiState.audioProgress > 0f) {
+                                        Spacer(Modifier.width(6.dp))
+                                        IconButton(
+                                            onClick = onStopAudio,
+                                            modifier = Modifier.size(36.dp)
+                                        ) {
+                                            Icon(
+                                                Icons.Default.Stop,
+                                                contentDescription = "Stop Audio",
+                                                tint = MaterialTheme.colorScheme.error,
+                                                modifier = Modifier.size(20.dp)
+                                            )
+                                        }
+                                    }
+
                                     Spacer(Modifier.width(10.dp))
                                     Column(modifier = Modifier.weight(1f)) {
                                         LinearProgressIndicator(
-                                            progress = { if (uiState.isPlayingAudio) 0.65f else uiState.audioProgress },
+                                            progress = { uiState.audioProgress.coerceIn(0f, 1f) },
                                             modifier = Modifier.fillMaxWidth().height(4.dp).clip(CircleShape)
                                         )
                                         Spacer(Modifier.height(4.dp))
                                         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-                                            Text(if (uiState.isPlayingAudio) "Playing lesson..." else "Paused", fontSize = 10.sp, color = MaterialTheme.colorScheme.outline)
-                                            Text("05:00", fontSize = 10.sp, color = MaterialTheme.colorScheme.outline)
+                                            Text(
+                                                text = when {
+                                                    uiState.isPlayingAudio -> "Playing Audio Lesson..."
+                                                    uiState.audioProgress > 0f -> "Paused"
+                                                    else -> "5:00 Audio Lesson"
+                                                },
+                                                fontSize = 10.sp,
+                                                color = MaterialTheme.colorScheme.outline
+                                            )
+                                            val elapsedSeconds = (uiState.audioProgress * 300).toInt()
+                                            val min = elapsedSeconds / 60
+                                            val sec = elapsedSeconds % 60
+                                            Text(
+                                                text = String.format("%02d:%02d / 05:00", min, sec),
+                                                fontSize = 10.sp,
+                                                color = MaterialTheme.colorScheme.outline
+                                            )
                                         }
                                     }
                                 }

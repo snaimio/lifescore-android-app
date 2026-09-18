@@ -48,7 +48,9 @@ class TextToSpeechNarrator(context: Context) : TextToSpeech.OnInitListener {
                 }
             })
             queuedText?.let {
-                speak(it, currentSpeed, onCompletionCallback)
+                if (!isManuallyStopped) {
+                    speak(it, currentSpeed, onCompletionCallback)
+                }
                 queuedText = null
             }
         }
@@ -67,7 +69,15 @@ class TextToSpeechNarrator(context: Context) : TextToSpeech.OnInitListener {
             return
         }
         tts?.setSpeechRate(speed)
-        tts?.speak(text, TextToSpeech.QUEUE_FLUSH, null, "TTS_BOOK_SUMMARY_UTTERANCE")
+        tts?.speak(text, TextToSpeech.QUEUE_FLUSH, null, "TTS_AUDIO_NARRATION_${System.currentTimeMillis()}")
+    }
+
+    fun isSpeaking(): Boolean {
+        return try {
+            tts?.isSpeaking == true
+        } catch (_: Exception) {
+            false
+        }
     }
 
     fun setSpeed(speed: Float) {
@@ -84,6 +94,7 @@ class TextToSpeechNarrator(context: Context) : TextToSpeech.OnInitListener {
         try {
             if (isReady) {
                 tts?.stop()
+                tts?.playSilentUtterance(1, TextToSpeech.QUEUE_FLUSH, null)
             }
         } catch (_: Exception) {}
         if (activeNarrator == this) {

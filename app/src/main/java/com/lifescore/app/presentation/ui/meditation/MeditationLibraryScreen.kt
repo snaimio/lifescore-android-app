@@ -35,6 +35,12 @@ fun MeditationLibraryScreen(
     val uiState by viewModel.uiState.collectAsState()
     val context = LocalContext.current
 
+    DisposableEffect(Unit) {
+        onDispose {
+            viewModel.stopAudio()
+        }
+    }
+
     LaunchedEffect(uiState.toastMessage) {
         uiState.toastMessage?.let {
             Toast.makeText(context, it, Toast.LENGTH_SHORT).show()
@@ -52,7 +58,10 @@ fun MeditationLibraryScreen(
                     }
                 },
                 navigationIcon = {
-                    IconButton(onClick = onNavigateBack) {
+                    IconButton(onClick = {
+                        viewModel.stopAudio()
+                        onNavigateBack()
+                    }) {
                         Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
                     }
                 },
@@ -143,14 +152,20 @@ fun MeditationLibraryScreen(
                             Spacer(modifier = Modifier.height(16.dp))
 
                             Button(
-                                onClick = { viewModel.completeSession(uiState.customTimerMinutes) },
+                                onClick = { viewModel.startTimerWithBell(uiState.customTimerMinutes) },
                                 modifier = Modifier.fillMaxWidth(),
                                 shape = RoundedCornerShape(12.dp),
-                                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF80CBC4), contentColor = Color(0xFF004D40))
+                                colors = ButtonDefaults.buttonColors(
+                                    containerColor = if (uiState.isTimerActive) MaterialTheme.colorScheme.error else Color(0xFF80CBC4),
+                                    contentColor = if (uiState.isTimerActive) Color.White else Color(0xFF004D40)
+                                )
                             ) {
-                                Icon(Icons.Default.PlayArrow, contentDescription = null)
+                                Icon(if (uiState.isTimerActive) Icons.Default.Stop else Icons.Default.PlayArrow, contentDescription = null)
                                 Spacer(modifier = Modifier.width(8.dp))
-                                Text("Begin Meditation (${uiState.customTimerMinutes * 2} XP)", fontWeight = FontWeight.Bold)
+                                Text(
+                                    if (uiState.isTimerActive) "Stop Meditation Audio & Timer" else "Begin Guided Meditation (${uiState.customTimerMinutes * 2} XP)",
+                                    fontWeight = FontWeight.Bold
+                                )
                             }
                         }
                     }
@@ -182,9 +197,11 @@ fun MeditationLibraryScreen(
             }
 
             items(filtered) { track ->
+                val isPlaying = uiState.isPlayingAudio && uiState.activeTrackId == track.trackId
                 MeditationTrackCard(
                     track = track,
-                    onPlay = { viewModel.completeSession(track.durationMinutes) },
+                    isPlaying = isPlaying,
+                    onPlay = { viewModel.playTrackAudio(track) },
                     onBookmark = { viewModel.toggleBookmark(track.trackId, track.isBookmarked) }
                 )
             }
@@ -232,6 +249,7 @@ fun MeditationLibraryScreen(
 @Composable
 fun MeditationTrackCard(
     track: MeditationTrackEntity,
+    isPlaying: Boolean = false,
     onPlay: () -> Unit,
     onBookmark: () -> Unit
 ) {
@@ -250,18 +268,27 @@ fun MeditationTrackCard(
                 modifier = Modifier
                     .size(48.dp)
                     .clip(CircleShape)
-                    .background(MaterialTheme.colorScheme.primaryContainer)
+                    .background(if (isPlaying) MaterialTheme.colorScheme.errorContainer else MaterialTheme.colorScheme.primaryContainer)
                     .clickable { onPlay() },
                 contentAlignment = Alignment.Center
             ) {
-                Icon(Icons.Default.PlayArrow, contentDescription = null, tint = MaterialTheme.colorScheme.primary)
+                Icon(
+                    if (isPlaying) Icons.Default.Stop else Icons.Default.PlayArrow,
+                    contentDescription = if (isPlaying) "Stop Meditation" else "Play Meditation",
+                    tint = if (isPlaying) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.primary
+                )
             }
 
             Spacer(modifier = Modifier.width(12.dp))
 
             Column(modifier = Modifier.weight(1f)) {
                 Text(track.title, fontWeight = FontWeight.Bold, fontSize = 14.sp, maxLines = 1)
-                Text("${track.teacherName} • ${track.durationMinutes} mins", fontSize = 12.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                Text(
+                    if (isPlaying) "🔊 Playing guided audio..." else "${track.teacherName} • ${track.durationMinutes} mins",
+                    fontSize = 12.sp,
+                    color = if (isPlaying) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant,
+                    fontWeight = if (isPlaying) FontWeight.Bold else FontWeight.Normal
+                )
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Text("⭐ ${track.rating} (${track.playsCount / 1000}k listens)", fontSize = 11.sp, color = Color(0xFFFFA000), fontWeight = FontWeight.SemiBold)
                     Spacer(modifier = Modifier.width(8.dp))

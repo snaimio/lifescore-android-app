@@ -17,6 +17,9 @@ import com.lifescore.app.domain.model.ExpertMasterclass
 import com.lifescore.app.domain.model.MasterclassCertificate
 import com.lifescore.app.domain.model.MasterclassDayModule
 import com.lifescore.app.domain.model.UserProfile
+import com.lifescore.app.core.util.TextToSpeechNarrator
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -51,13 +54,16 @@ data class ChallengesUiState(
 class ChallengesViewModel(
     private val repository: LifeScoreRepository,
     private val firebaseRepository: FirebaseRepository? = null,
-    private val authRepository: AuthRepository? = null
+    private val authRepository: AuthRepository? = null,
+    context: Context? = null
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(ChallengesUiState())
     val uiState: StateFlow<ChallengesUiState> = _uiState.asStateFlow()
 
     private var localUser: UserProfile = UserProfile()
+    private val narrator: TextToSpeechNarrator? = context?.let { TextToSpeechNarrator(it) }
+    private var audioJob: Job? = null
 
     init {
         loadData()
@@ -80,6 +86,7 @@ class ChallengesViewModel(
     }
 
     fun selectMasterclass(masterclass: ExpertMasterclass) {
+        stopAudio()
         _uiState.value = _uiState.value.copy(
             selectedMasterclass = masterclass,
             selectedMasterclassDay = masterclass.days.getOrNull(masterclass.currentDay - 1) ?: masterclass.days.firstOrNull()
@@ -87,11 +94,57 @@ class ChallengesViewModel(
     }
 
     fun selectMasterclassDay(day: MasterclassDayModule) {
+        stopAudio()
         _uiState.value = _uiState.value.copy(selectedMasterclassDay = day)
     }
 
     fun toggleAudioPlayback() {
-        _uiState.value = _uiState.value.copy(isPlayingAudio = !_uiState.value.isPlayingAudio)
+        if (_uiState.value.isPlayingAudio) {
+            pauseAudio()
+        } else {
+            val activeDay = _uiState.value.selectedMasterclassDay ?: return
+            _uiState.value = _uiState.value.copy(isPlayingAudio = true)
+            val script = buildString {
+                append("Masterclass Day ").append(activeDay.dayNumber).append(": ").append(activeDay.title).append(". ")
+                append("Lesson Overview: ").append(activeDay.summary).append(". ")
+                append("Scientific Takeaways: ").append(activeDay.transcriptSummary).append(". ")
+                append("Daily Action Protocol: ").append(activeDay.dailyTaskTitle).append(".")
+            }
+            narrator?.speak(script) {
+                _uiState.value = _uiState.value.copy(isPlayingAudio = false, audioProgress = 1.0f)
+            }
+            startAudioTimer()
+        }
+    }
+
+    fun pauseAudio() {
+        audioJob?.cancel()
+        narrator?.stop()
+        _uiState.value = _uiState.value.copy(isPlayingAudio = false)
+    }
+
+    fun stopAudio() {
+        audioJob?.cancel()
+        narrator?.stop()
+        _uiState.value = _uiState.value.copy(isPlayingAudio = false, audioProgress = 0f)
+    }
+
+    private fun startAudioTimer() {
+        audioJob?.cancel()
+        audioJob = viewModelScope.launch {
+            val totalSeconds = 300
+            var elapsed = (_uiState.value.audioProgress * totalSeconds).toInt()
+            while (_uiState.value.isPlayingAudio) {
+                delay(1000L)
+                elapsed++
+                val nextProgress = (elapsed.toFloat() / totalSeconds.toFloat()).coerceIn(0f, 1f)
+                _uiState.value = _uiState.value.copy(audioProgress = nextProgress)
+                if (elapsed >= totalSeconds) {
+                    _uiState.value = _uiState.value.copy(isPlayingAudio = false)
+                    break
+                }
+            }
+        }
     }
 
     fun unlockMasterclass(masterclassId: String) {
@@ -404,5 +457,11 @@ class ChallengesViewModel(
                 participantsCount = 67
             )
         )
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        stopAudio()
+        narrator?.shutdown()
     }
 }
