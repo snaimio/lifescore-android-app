@@ -1,3 +1,6 @@
+import java.util.Properties
+import java.io.FileInputStream
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -29,7 +32,14 @@ android {
         }
 
         // API Key Configurations
-        val geminiKey = project.findProperty("GEMINI_API_KEY") as? String 
+        val localProperties = Properties().apply {
+            val localFile = rootProject.file("local.properties")
+            if (localFile.exists()) {
+                load(FileInputStream(localFile))
+            }
+        }
+        val geminiKey = localProperties.getProperty("GEMINI_API_KEY")
+            ?: (project.findProperty("GEMINI_API_KEY") as? String)
             ?: System.getenv("GEMINI_API_KEY") 
             ?: "DEMO_KEY"
         buildConfigField("String", "GEMINI_API_KEY", "\"$geminiKey\"")
