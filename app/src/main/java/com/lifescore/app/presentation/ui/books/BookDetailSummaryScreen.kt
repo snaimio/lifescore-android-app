@@ -35,6 +35,12 @@ fun BookDetailSummaryScreen(
     val state by viewModel.detailState.collectAsState()
     val snackbarHostState = remember { SnackbarHostState() }
 
+    DisposableEffect(Unit) {
+        onDispose {
+            viewModel.stopAudio()
+        }
+    }
+
     LaunchedEffect(bookId) {
         viewModel.loadBookDetail(bookId)
     }
@@ -53,7 +59,10 @@ fun BookDetailSummaryScreen(
             TopAppBar(
                 title = { Text(book?.title ?: "Book Summary", maxLines = 1) },
                 navigationIcon = {
-                    IconButton(onClick = onBack) {
+                    IconButton(onClick = {
+                        viewModel.stopAudio()
+                        onBack()
+                    }) {
                         Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
                     }
                 },
@@ -150,13 +159,31 @@ fun BookDetailSummaryScreen(
                                             ) {
                                                 Icon(
                                                     if (state.isPlayingAudio) Icons.Default.Pause else Icons.Default.PlayArrow,
-                                                    contentDescription = "Play/Pause Audio"
+                                                    contentDescription = if (state.isPlayingAudio) "Pause Audio" else "Play Audio"
                                                 )
                                             }
+
+                                            if (state.isPlayingAudio || state.audioProgressSeconds > 0) {
+                                                Spacer(Modifier.width(4.dp))
+                                                IconButton(
+                                                    onClick = { viewModel.stopAudio() }
+                                                ) {
+                                                    Icon(
+                                                        Icons.Default.Stop,
+                                                        contentDescription = "Stop Audio",
+                                                        tint = MaterialTheme.colorScheme.error
+                                                    )
+                                                }
+                                            }
+
                                             Spacer(Modifier.width(8.dp))
                                             Column {
                                                 Text(
-                                                    text = if (state.isPlayingAudio) "Playing Audio Summary..." else "Listen (Audio Mode)",
+                                                    text = when {
+                                                        state.isPlayingAudio -> "Playing Audio Summary..."
+                                                        state.audioProgressSeconds > 0 -> "Paused"
+                                                        else -> "Listen (Audio Mode)"
+                                                    },
                                                     fontSize = 12.sp,
                                                     fontWeight = FontWeight.Bold
                                                 )

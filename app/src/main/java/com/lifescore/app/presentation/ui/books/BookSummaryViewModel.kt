@@ -106,9 +106,7 @@ class BookSummaryViewModel(
     fun toggleAudioPlayback() {
         val currentlyPlaying = _detailState.value.isPlayingAudio
         if (currentlyPlaying) {
-            narrator?.stop()
-            audioJob?.cancel()
-            _detailState.update { it.copy(isPlayingAudio = false) }
+            pauseAudio()
         } else {
             val book = _detailState.value.book ?: return
             _detailState.update { it.copy(isPlayingAudio = true) }
@@ -121,6 +119,18 @@ class BookSummaryViewModel(
             }
             startAudioProgressTimer()
         }
+    }
+
+    fun pauseAudio() {
+        audioJob?.cancel()
+        narrator?.stop()
+        _detailState.update { it.copy(isPlayingAudio = false) }
+    }
+
+    fun stopAudio() {
+        audioJob?.cancel()
+        narrator?.stop()
+        _detailState.update { it.copy(isPlayingAudio = false, audioProgressSeconds = 0) }
     }
 
     private fun buildNarrationScript(book: BookSummary): String {

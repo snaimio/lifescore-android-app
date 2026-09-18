@@ -11,6 +11,17 @@ class TextToSpeechNarrator(context: Context) : TextToSpeech.OnInitListener {
     private var queuedText: String? = null
     private var currentSpeed: Float = 1.0f
     private var onCompletionCallback: (() -> Unit)? = null
+    private var isManuallyStopped = false
+
+    companion object {
+        @Volatile
+        private var activeNarrator: TextToSpeechNarrator? = null
+
+        fun stopActive() {
+            activeNarrator?.stop()
+            activeNarrator = null
+        }
+    }
 
     override fun onInit(status: Int) {
         if (status == TextToSpeech.SUCCESS) {
@@ -20,12 +31,20 @@ class TextToSpeechNarrator(context: Context) : TextToSpeech.OnInitListener {
             tts?.setOnUtteranceProgressListener(object : UtteranceProgressListener() {
                 override fun onStart(utteranceId: String?) {}
                 override fun onDone(utteranceId: String?) {
-                    onCompletionCallback?.invoke()
+                    if (!isManuallyStopped) {
+                        onCompletionCallback?.invoke()
+                    }
                 }
                 @Deprecated("Deprecated in Java")
-                override fun onError(utteranceId: String?) {}
+                override fun onError(utteranceId: String?) {
+                    if (!isManuallyStopped) {
+                        onCompletionCallback?.invoke()
+                    }
+                }
                 override fun onError(utteranceId: String?, errorCode: Int) {
-                    onCompletionCallback?.invoke()
+                    if (!isManuallyStopped) {
+                        onCompletionCallback?.invoke()
+                    }
                 }
             })
             queuedText?.let {
@@ -36,6 +55,11 @@ class TextToSpeechNarrator(context: Context) : TextToSpeech.OnInitListener {
     }
 
     fun speak(text: String, speed: Float = 1.0f, onComplete: (() -> Unit)? = null) {
+        if (activeNarrator != null && activeNarrator != this) {
+            activeNarrator?.stop()
+        }
+        activeNarrator = this
+        isManuallyStopped = false
         currentSpeed = speed
         onCompletionCallback = onComplete
         if (!isReady) {
@@ -54,15 +78,22 @@ class TextToSpeechNarrator(context: Context) : TextToSpeech.OnInitListener {
     }
 
     fun stop() {
+        isManuallyStopped = true
         queuedText = null
-        if (isReady) {
-            tts?.stop()
+        onCompletionCallback = null
+        try {
+            if (isReady) {
+                tts?.stop()
+            }
+        } catch (_: Exception) {}
+        if (activeNarrator == this) {
+            activeNarrator = null
         }
     }
 
     fun shutdown() {
+        stop()
         try {
-            tts?.stop()
             tts?.shutdown()
         } catch (_: Exception) {}
         tts = null
