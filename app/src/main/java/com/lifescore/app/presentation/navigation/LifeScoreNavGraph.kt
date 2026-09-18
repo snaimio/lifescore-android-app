@@ -21,6 +21,11 @@ import com.lifescore.app.presentation.challenges.ChallengesViewModel
 import com.lifescore.app.presentation.coach.AiCoachScreen
 import com.lifescore.app.presentation.coach.AiCoachViewModel
 import com.lifescore.app.presentation.paywall.PaywallBottomSheet
+import com.lifescore.app.presentation.ui.today.TodayScreen
+import com.lifescore.app.presentation.ui.balance.BalanceScreen
+import com.lifescore.app.presentation.ui.grow.GrowScreen
+import com.lifescore.app.presentation.ui.me.MeScreen
+import com.lifescore.app.presentation.ui.explore.ExploreScreen
 import com.lifescore.app.presentation.ui.dimensions.DimensionsScreen
 import com.lifescore.app.presentation.ui.dimensions.DimensionsViewModel
 import com.lifescore.app.presentation.ui.home.HomeScreen
@@ -62,14 +67,16 @@ fun LifeScoreNavGraph(
 
     val bottomBarItems: List<Screen> = remember {
         listOf(
-            Screen.Home,
-            Screen.Tasks,
-            Screen.Dimensions,
-            Screen.Profile
+            Screen.Today,
+            Screen.Balance,
+            Screen.Grow,
+            Screen.Me,
+            Screen.Explore
         )
     }
 
-    val showBottomBar = bottomBarItems.any { it.route == currentRoute }
+    val showBottomBar = bottomBarItems.any { it.route == currentRoute } ||
+        currentRoute in listOf(Screen.Home.route, Screen.Dimensions.route, Screen.Profile.route)
     val dimensionsViewModel = remember { DimensionsViewModel(app.lifeScoreRepository) }
     val tasksViewModel = remember { TasksViewModel(app.lifeScoreRepository) }
     val coachViewModel = remember {
@@ -144,7 +151,10 @@ fun LifeScoreNavGraph(
                     ) {
                         bottomBarItems.forEach { screen ->
                             NavigationBarItem(
-                                selected = currentRoute == screen.route,
+                                selected = currentRoute == screen.route ||
+                                    (screen == Screen.Today && currentRoute == "home") ||
+                                    (screen == Screen.Balance && currentRoute == "dimensions") ||
+                                    (screen == Screen.Me && currentRoute == "profile"),
                                 onClick = {
                                     navController.navigate(screen.route) {
                                         popUpTo(navController.graph.findStartDestination().id) {
@@ -163,12 +173,7 @@ fun LifeScoreNavGraph(
                                 },
                                 label = {
                                     Text(
-                                        text = when (screen) {
-                                            Screen.Tasks -> "Quests"
-                                            Screen.Dimensions -> "Stats"
-                                            Screen.Profile -> "Me"
-                                            else -> screen.title
-                                        },
+                                        text = screen.title,
                                         fontSize = 11.sp,
                                         fontWeight = if (currentRoute == screen.route) FontWeight.Bold else FontWeight.Medium,
                                         maxLines = 1,
@@ -198,18 +203,44 @@ fun LifeScoreNavGraph(
                 popEnterTransition = { popEnterTransition() },
                 popExitTransition = { popExitTransition() }
             ) {
-                composable(Screen.Home.route) {
-                    HomeScreen(
-                        navController = navController,
-                        viewModel = homeViewModel,
-                        onOpenPaywall = { showPaywall = true },
-                        onOpenDrawer = { scope.launch { drawerState.open() } }
-                    )
-                }
-            composable(Screen.Dimensions.route) {
-                DimensionsScreen(
+            composable(Screen.Today.route) {
+                TodayScreen(
+                    navController = navController,
+                    viewModel = homeViewModel,
+                    onOpenPaywall = { showPaywall = true },
+                    onOpenDrawer = { scope.launch { drawerState.open() } }
+                )
+            }
+            composable(Screen.Home.route) {
+                TodayScreen(
+                    navController = navController,
+                    viewModel = homeViewModel,
+                    onOpenPaywall = { showPaywall = true },
+                    onOpenDrawer = { scope.launch { drawerState.open() } }
+                )
+            }
+            composable(Screen.Balance.route) {
+                BalanceScreen(
                     navController = navController,
                     viewModel = dimensionsViewModel
+                )
+            }
+            composable(Screen.Dimensions.route) {
+                BalanceScreen(
+                    navController = navController,
+                    viewModel = dimensionsViewModel
+                )
+            }
+            composable(Screen.Grow.route) {
+                GrowScreen(
+                    navController = navController
+                )
+            }
+            composable(Screen.Me.route) {
+                val profileViewModel = remember { com.lifescore.app.presentation.ui.profile.ProfileViewModel(app.lifeScoreRepository) }
+                MeScreen(
+                    viewModel = profileViewModel,
+                    navController = navController
                 )
             }
             composable(Screen.Tasks.route) {
@@ -268,7 +299,7 @@ fun LifeScoreNavGraph(
             }
             composable(Screen.Profile.route) {
                 val profileViewModel = remember { com.lifescore.app.presentation.ui.profile.ProfileViewModel(app.lifeScoreRepository) }
-                com.lifescore.app.presentation.ui.profile.ProfileScreen(
+                MeScreen(
                     viewModel = profileViewModel,
                     navController = navController
                 )
@@ -413,10 +444,9 @@ fun LifeScoreNavGraph(
                 )
             }
             composable(Screen.Explore.route) {
-                com.lifescore.app.presentation.ui.explore.ExploreSectionScreen(
+                ExploreScreen(
                     currentPhase = userPhase,
-                    onNavigateToRoute = { route -> navController.navigate(route) },
-                    onNavigateBack = { navController.popBackStack() }
+                    navController = navController
                 )
             }
             composable(Screen.Login.route) {

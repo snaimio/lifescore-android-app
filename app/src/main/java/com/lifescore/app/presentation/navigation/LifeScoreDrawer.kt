@@ -60,7 +60,7 @@ fun LifeScoreDrawerContent(
                     .padding(horizontal = Spacing.sm),
                 verticalArrangement = Arrangement.spacedBy(2.dp)
             ) {
-                // Section 1: Main Core
+                // Section 1: Main (5 Tabs)
                 item {
                     DrawerSectionTitle(title = "CORE LIFE OS", count = "${DrawerNavigationConfig.mainItems.size}")
                 }
@@ -77,26 +77,9 @@ fun LifeScoreDrawerContent(
                     )
                 }
 
-                // Section 2: 15 Modular Tracker Mini-Apps
+                // Section 2: Growth & Reflection
                 item {
-                    DrawerSectionTitle(title = "15 TRACKER MINI-APPS", count = "15")
-                }
-                items(DrawerNavigationConfig.trackerMiniApps, key = { it.route }) { item ->
-                    DrawerNavRow(
-                        item = item,
-                        isSelected = currentRoute == item.route,
-                        onClick = {
-                            navController.navigate(item.route) {
-                                launchSingleTop = true
-                            }
-                            onCloseDrawer()
-                        }
-                    )
-                }
-
-                // Section 3: Growth & Science Systems
-                item {
-                    DrawerSectionTitle(title = "GROWTH & SCIENCE", count = "${DrawerNavigationConfig.growthItems.size}")
+                    DrawerSectionTitle(title = "GROWTH & REFLECTION", count = "${DrawerNavigationConfig.growthItems.size}")
                 }
                 items(DrawerNavigationConfig.growthItems, key = { it.route }) { item ->
                     DrawerNavRow(
@@ -111,11 +94,79 @@ fun LifeScoreDrawerContent(
                     )
                 }
 
-                // Section 4: Community & Settings
+                // Section 3: Progress & RPG Systems
                 item {
-                    DrawerSectionTitle(title = "COMMUNITY & SETTINGS", count = "${DrawerNavigationConfig.communityItems.size}")
+                    DrawerSectionTitle(title = "PROGRESS & RPG", count = "${DrawerNavigationConfig.progressItems.size}")
+                }
+                items(DrawerNavigationConfig.progressItems, key = { it.route }) { item ->
+                    DrawerNavRow(
+                        item = item,
+                        isSelected = currentRoute == item.route,
+                        onClick = {
+                            navController.navigate(item.route) {
+                                launchSingleTop = true
+                            }
+                            onCloseDrawer()
+                        }
+                    )
+                }
+
+                // Section 4: 15 Trackers
+                item {
+                    DrawerSectionTitle(title = "LIFE TRACKERS", count = "${DrawerNavigationConfig.trackerMiniApps.size}")
+                }
+                items(DrawerNavigationConfig.trackerMiniApps, key = { it.route }) { item ->
+                    DrawerNavRow(
+                        item = item,
+                        isSelected = currentRoute == item.route,
+                        onClick = {
+                            navController.navigate(item.route) {
+                                launchSingleTop = true
+                            }
+                            onCloseDrawer()
+                        }
+                    )
+                }
+
+                // Section 5: Community & Social
+                item {
+                    DrawerSectionTitle(title = "COMMUNITY & SOCIAL", count = "${DrawerNavigationConfig.communityItems.size}")
                 }
                 items(DrawerNavigationConfig.communityItems, key = { it.route }) { item ->
+                    DrawerNavRow(
+                        item = item,
+                        isSelected = currentRoute == item.route,
+                        onClick = {
+                            navController.navigate(item.route) {
+                                launchSingleTop = true
+                            }
+                            onCloseDrawer()
+                        }
+                    )
+                }
+
+                // Section 6: Rewards & Store
+                item {
+                    DrawerSectionTitle(title = "STORE & REWARDS", count = "${DrawerNavigationConfig.storeItems.size}")
+                }
+                items(DrawerNavigationConfig.storeItems, key = { it.route }) { item ->
+                    DrawerNavRow(
+                        item = item,
+                        isSelected = currentRoute == item.route,
+                        onClick = {
+                            navController.navigate(item.route) {
+                                launchSingleTop = true
+                            }
+                            onCloseDrawer()
+                        }
+                    )
+                }
+
+                // Section 7: Info & Settings
+                item {
+                    DrawerSectionTitle(title = "SETTINGS & INFO", count = "${DrawerNavigationConfig.infoItems.size}")
+                }
+                items(DrawerNavigationConfig.infoItems, key = { it.route }) { item ->
                     DrawerNavRow(
                         item = item,
                         isSelected = currentRoute == item.route,

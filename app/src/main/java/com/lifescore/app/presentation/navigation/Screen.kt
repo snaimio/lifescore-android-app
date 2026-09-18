@@ -2,12 +2,17 @@ package com.lifescore.app.presentation.navigation
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.MenuBook
+import androidx.compose.material.icons.automirrored.filled.TrendingUp
 import androidx.compose.material.icons.filled.*
 import androidx.compose.ui.graphics.vector.ImageVector
 
 sealed class Screen(val route: String, val title: String, val icon: ImageVector) {
-    object Home : Screen("home", "Home", Icons.Default.Home)
-    object Dimensions : Screen("dimensions", "Dimensions", Icons.Default.PieChart)
+    object Today : Screen("today", "Today", Icons.Default.Home)
+    object Balance : Screen("balance", "Balance", Icons.Default.PieChart)
+    object Grow : Screen("grow", "Grow", Icons.AutoMirrored.Filled.TrendingUp)
+    object Me : Screen("me", "Me", Icons.Default.Person)
+    object Home : Screen("home", "Today", Icons.Default.Home)
+    object Dimensions : Screen("dimensions", "Balance", Icons.Default.PieChart)
     object Tasks : Screen("tasks", "Quests", Icons.Default.Checklist)
     object Challenges : Screen("challenges", "Challenges", Icons.Default.EmojiEvents)
     object AICoach : Screen("ai_coach", "AI Coach", Icons.Default.Psychology)
