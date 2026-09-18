@@ -47,18 +47,18 @@ data class DailyScore(
 
 data class UserProfile(
     val id: Long = 1,
-    val name: String = "Achiever",
-    val currentXp: Int = 1450,
-    val currentLevel: Int = 5,
-    val currentStreakDays: Int = 7,
+    val name: String = "Guest",
+    val currentXp: Int = 0,
+    val currentLevel: Int = 1,
+    val currentStreakDays: Int = 0,
     val isPremium: Boolean = false,
-    val title: String = "Ascendant Practitioner",
-    val shieldsRemaining: Int = 1,
+    val title: String = "Member",
+    val shieldsRemaining: Int = 0,
     val guardianId: String? = null,
     val isSponsored: Boolean = false,
     val sponsorName: String? = null,
-    val coinBalance: Int = 1250,
-    val lifetimeCoinsEarned: Int = 3400
+    val coinBalance: Int = 0,
+    val lifetimeCoinsEarned: Int = 0
 )
 
 data class GuardianSponsor(

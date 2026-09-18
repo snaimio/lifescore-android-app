@@ -116,13 +116,13 @@ fun MeScreen(
 
                             Spacer(Modifier.height(Space.sm))
                             Text(
-                                uiState.user.name.ifBlank { "User Profile" },
+                                uiState.user.name.ifBlank { "Guest" },
                                 style = MaterialTheme.typography.headlineMedium,
                                 fontWeight = FontWeight.Bold,
                                 color = MaterialTheme.colorScheme.onPrimaryContainer
                             )
                             Text(
-                                uiState.user.title.ifBlank { "The Architect" },
+                                uiState.user.title.ifBlank { "Member" },
                                 style = MaterialTheme.typography.titleSmall,
                                 fontWeight = FontWeight.Bold,
                                 color = MaterialTheme.colorScheme.primary
@@ -141,14 +141,14 @@ fun MeScreen(
                                     fontWeight = FontWeight.Bold
                                 )
                                 Text(
-                                    "85% on track",
+                                    "${uiState.consistencyPercentage}% on track",
                                     style = MaterialTheme.typography.labelSmall,
                                     color = MaterialTheme.colorScheme.onSurfaceVariant
                                 )
                             }
                             Spacer(Modifier.height(Space.xs))
                             LinearProgressIndicator(
-                                progress = { 0.85f },
+                                progress = { uiState.consistencyPercentage / 100f },
                                 modifier = Modifier
                                     .fillMaxWidth()
                                     .height(8.dp)
@@ -209,7 +209,7 @@ fun MeScreen(
                                     Text("COMPLETED", style = MaterialTheme.typography.labelSmall.copy(fontSize = 9.sp), fontWeight = FontWeight.Bold, color = Color(0xFF10B981))
                                 }
                                 Spacer(Modifier.height(Space.xxs))
-                                Text("48 Habits", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
+                                Text("${uiState.totalTasksCompleted} Habits", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
                             }
                         }
                         Surface(
@@ -230,7 +230,7 @@ fun MeScreen(
                                     Text("FOCUS", style = MaterialTheme.typography.labelSmall.copy(fontSize = 9.sp), fontWeight = FontWeight.Bold, color = Color(0xFF6366F1))
                                 }
                                 Spacer(Modifier.height(Space.xxs))
-                                Text("12.5 hrs", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
+                                Text("${String.format(java.util.Locale.US, "%.1f", uiState.focusHours)} hrs", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
                             }
                         }
                         Surface(
@@ -251,8 +251,51 @@ fun MeScreen(
                                     Text("RATE", style = MaterialTheme.typography.labelSmall.copy(fontSize = 9.sp), fontWeight = FontWeight.Bold, color = Color(0xFFF59E0B))
                                 }
                                 Spacer(Modifier.height(Space.xxs))
-                                Text("92%", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
+                                Text("${uiState.consistencyPercentage}%", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
                             }
+                        }
+                    }
+                }
+            }
+
+            // ==========================================
+            // 3. ACCOUNT STATUS & AUTH ACTION CARD
+            // ==========================================
+            item {
+                StaggeredAppear(index = 2) {
+                    LifeCard(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clickable { navController.navigate(Screen.Login.route) },
+                        variant = CardVariant.Default
+                    ) {
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Row(verticalAlignment = Alignment.CenterVertically) {
+                                Surface(
+                                    shape = LifeScoreShapes.button,
+                                    color = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.5f),
+                                    modifier = Modifier.size(40.dp)
+                                ) {
+                                    Box(contentAlignment = Alignment.Center) {
+                                        Icon(
+                                            Icons.Default.AccountCircle,
+                                            contentDescription = null,
+                                            tint = MaterialTheme.colorScheme.primary,
+                                            modifier = Modifier.size(22.dp)
+                                        )
+                                    }
+                                }
+                                Spacer(Modifier.width(Space.sm))
+                                Column {
+                                    Text("Account & Cloud Backup", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold)
+                                    Text("Sign In or Create Account to sync data", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                                }
+                            }
+                            Icon(Icons.AutoMirrored.Filled.ArrowForward, contentDescription = null, tint = MaterialTheme.colorScheme.primary)
                         }
                     }
                 }

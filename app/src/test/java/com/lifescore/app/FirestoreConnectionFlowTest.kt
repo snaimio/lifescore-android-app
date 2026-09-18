@@ -10,13 +10,13 @@ class FirestoreConnectionFlowTest {
     @Test
     fun testUserDocumentSerializationRoundTrip() {
         // 1. Simulated Anonymous User UID
-        val testUid = "guest_hero_abc123"
+        val testUid = "guest_user_abc123"
 
         // 2. Build User Document to Save
         val userDocToSave = UserDocument(
             uid = testUid,
-            email = "guest@lifescore.app",
-            displayName = "Guest Hero",
+            email = "",
+            displayName = "Guest User",
             totalScore = 500,
             level = 1,
             currentXp = 0,
@@ -37,7 +37,7 @@ class FirestoreConnectionFlowTest {
         )
 
         // 4. Assert all fields match perfectly
-        assertEquals("Guest Hero", retrievedProfile.name)
+        assertEquals("Guest User", retrievedProfile.name)
         assertEquals(1, retrievedProfile.currentLevel)
         assertEquals(0, retrievedProfile.currentXp)
         assertEquals(0, retrievedProfile.currentStreakDays)

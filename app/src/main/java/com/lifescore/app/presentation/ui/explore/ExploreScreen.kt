@@ -187,7 +187,7 @@ fun ExploreScreen(
 
                         Spacer(Modifier.height(Space.xs))
                         Text(
-                            text = "Alex just completed a 14-day meditation streak! Send a high-five or nudge your squad.",
+                            text = "Connect with peers, share high-performance protocols, and build accountability.",
                             style = MaterialTheme.typography.bodySmall,
                             color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
@@ -449,7 +449,7 @@ fun ExploreScreen(
     if (showShareCardDialog) {
         ShareScoreCardDialog(
             data = ShareCardData(
-                userName = "Alex",
+                userName = "Member",
                 score = 824,
                 level = 12,
                 streak = 14,

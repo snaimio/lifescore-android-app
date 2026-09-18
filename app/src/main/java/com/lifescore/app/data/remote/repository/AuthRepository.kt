@@ -62,12 +62,12 @@ class AuthRepositoryImpl(
             val user = result.user ?: throw Exception("Anonymous login failed")
             val profile = UserProfile(
                 id = user.uid.hashCode().toLong(),
-                name = "Guest Hero",
+                name = "Guest",
                 currentXp = 0,
                 currentLevel = 1,
                 currentStreakDays = 0,
                 isPremium = false,
-                title = "Novice Seeker"
+                title = "Member"
             )
             try {
                 firebaseRepository.saveUser(profile, email = "", uid = user.uid)
@@ -78,15 +78,15 @@ class AuthRepositoryImpl(
             Result.success(profile)
         } catch (_: Exception) {
             // Offline-first fallback
-            val fallbackProfile = localAuthRepository?.createProfile("guest@lifescore.local", "Guest Hero")
+            val fallbackProfile = localAuthRepository?.createProfile("", "Guest")
                 ?: UserProfile(
                     id = 1L,
-                    name = "Guest Hero",
+                    name = "Guest",
                     currentXp = 0,
                     currentLevel = 1,
                     currentStreakDays = 0,
                     isPremium = false,
-                    title = "Novice Seeker"
+                    title = "Member"
                 )
             lifeScoreRepository?.updateUserProfile(fallbackProfile)
             localAuthenticatedUser = fallbackProfile
@@ -103,12 +103,12 @@ class AuthRepositoryImpl(
             val existing = try { firebaseRepository.getUser(user.uid) } catch (_: Exception) { null }
             val profile = existing ?: UserProfile(
                 id = user.uid.hashCode().toLong(),
-                name = user.displayName ?: "Hero",
+                name = user.displayName ?: "User",
                 currentXp = 0,
                 currentLevel = 1,
                 currentStreakDays = 0,
                 isPremium = false,
-                title = "Novice Seeker"
+                title = "Member"
             )
             try {
                 firebaseRepository.saveUser(profile, email = user.email ?: "", uid = user.uid)
@@ -119,15 +119,15 @@ class AuthRepositoryImpl(
             Result.success(profile)
         } catch (_: Exception) {
             // Offline-first fallback
-            val fallbackProfile = localAuthRepository?.createProfile("google_user@lifescore.local", "Hero")
+            val fallbackProfile = localAuthRepository?.createProfile("google_user@lifescore.local", "User")
                 ?: UserProfile(
                     id = 1L,
-                    name = "Hero",
+                    name = "User",
                     currentXp = 0,
                     currentLevel = 1,
                     currentStreakDays = 0,
                     isPremium = false,
-                    title = "Novice Seeker"
+                    title = "Member"
                 )
             lifeScoreRepository?.updateUserProfile(fallbackProfile)
             localAuthenticatedUser = fallbackProfile
@@ -151,7 +151,7 @@ class AuthRepositoryImpl(
                 currentLevel = 1,
                 currentStreakDays = 0,
                 isPremium = false,
-                title = "Novice Seeker"
+                title = "Member"
             )
             try {
                 firebaseRepository.saveUser(profile, email = email, uid = user.uid)
@@ -170,7 +170,7 @@ class AuthRepositoryImpl(
                     currentLevel = 1,
                     currentStreakDays = 0,
                     isPremium = false,
-                    title = "Novice Seeker"
+                    title = "Member"
                 )
             lifeScoreRepository?.updateUserProfile(fallbackProfile)
             localAuthenticatedUser = fallbackProfile
@@ -187,7 +187,8 @@ class AuthRepositoryImpl(
                 name = user.displayName ?: email.substringBefore("@"),
                 currentXp = 0,
                 currentLevel = 1,
-                currentStreakDays = 0
+                currentStreakDays = 0,
+                title = "Member"
             )
             localAuthRepository?.updateUserProfile(profile)
             lifeScoreRepository?.updateUserProfile(profile)
@@ -202,7 +203,8 @@ class AuthRepositoryImpl(
                     name = email.substringBefore("@"),
                     currentXp = 0,
                     currentLevel = 1,
-                    currentStreakDays = 0
+                    currentStreakDays = 0,
+                    title = "Member"
                 )
             lifeScoreRepository?.updateUserProfile(fallbackProfile)
             localAuthenticatedUser = fallbackProfile
@@ -222,10 +224,11 @@ class AuthRepositoryImpl(
         if (user != null) {
             return UserProfile(
                 id = user.uid.hashCode().toLong(),
-                name = user.displayName ?: "Hero",
+                name = user.displayName ?: "User",
                 currentXp = 0,
                 currentLevel = 1,
-                currentStreakDays = 0
+                currentStreakDays = 0,
+                title = "Member"
             )
         }
         return localAuthenticatedUser

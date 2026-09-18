@@ -139,9 +139,9 @@ fun DrawerUserHeader(
     userProfile: UserProfile?,
     onCloseDrawer: () -> Unit
 ) {
-    val name = userProfile?.name?.ifBlank { "Alex" } ?: "Alex"
-    val streak = userProfile?.currentStreakDays ?: 1
-    val title = userProfile?.title?.ifBlank { "High Performance" } ?: "High Performance"
+    val name = userProfile?.name?.ifBlank { "Guest" } ?: "Guest"
+    val streak = userProfile?.currentStreakDays ?: 0
+    val title = userProfile?.title?.ifBlank { "Member" } ?: "Member"
 
     Box(
         modifier = Modifier

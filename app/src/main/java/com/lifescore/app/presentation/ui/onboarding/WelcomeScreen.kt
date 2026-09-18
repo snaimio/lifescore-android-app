@@ -52,12 +52,12 @@ data class OnboardingFocusOption(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun WelcomeScreen(
-    onGetStarted: (name: String, focusArea: String) -> Unit,
-    onSignIn: () -> Unit
+    onCreateAccount: (focusArea: String) -> Unit,
+    onSignIn: () -> Unit,
+    onContinueAsGuest: (focusArea: String) -> Unit
 ) {
     val pagerState = rememberPagerState(pageCount = { 3 })
     val coroutineScope = rememberCoroutineScope()
-    var userName by remember { mutableStateOf("") }
     var selectedFocusIndex by remember { mutableIntStateOf(0) }
 
     val focusOptions = remember {
@@ -109,7 +109,7 @@ fun WelcomeScreen(
         ) {
             Spacer(Modifier.height(Space.sm))
 
-            // Top Header: Brand Mark + Fast-track Skip Button
+            // Top Header: Brand Mark + Guest Skip
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
@@ -146,11 +146,11 @@ fun WelcomeScreen(
                 TextButton(
                     onClick = {
                         val chosenFocus = focusOptions[selectedFocusIndex].title
-                        onGetStarted(userName.ifBlank { "Alex" }, chosenFocus)
+                        onContinueAsGuest(chosenFocus)
                     }
                 ) {
                     Text(
-                        text = "Skip to App →",
+                        text = "Guest Access →",
                         style = MaterialTheme.typography.labelMedium,
                         color = Color(0xFFD4A24C),
                         fontWeight = FontWeight.SemiBold
@@ -317,48 +317,30 @@ fun WelcomeScreen(
                         }
                     }
 
-                    Spacer(Modifier.height(Space.xs))
-
-                    // Optional Name Input
-                    OutlinedTextField(
-                        value = userName,
-                        onValueChange = { userName = it },
-                        placeholder = { Text("Your name (optional, e.g. Alex)", fontSize = 13.sp, color = Color(0xFF7A7269)) },
-                        singleLine = true,
-                        shape = RoundedCornerShape(12.dp),
-                        modifier = Modifier.fillMaxWidth(),
-                        colors = OutlinedTextFieldDefaults.colors(
-                            focusedBorderColor = Color(0xFFD4A24C),
-                            unfocusedBorderColor = Color(0x22FBF8F3),
-                            focusedTextColor = Color(0xFFFBF8F3),
-                            unfocusedTextColor = Color(0xFFFBF8F3),
-                            focusedContainerColor = Color(0xFF1F1E2E),
-                            unfocusedContainerColor = Color(0xFF1F1E2E)
-                        )
-                    )
                 }
             }
 
             Spacer(Modifier.height(Space.lg))
 
-            // Bottom Actions: Primary Button & Sign In
+            // Bottom Actions: Create Account, Sign In & Guest Mode
             Column(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.spacedBy(Space.xs)
+                verticalArrangement = Arrangement.spacedBy(Space.sm)
             ) {
+                // Primary: Create Account
                 Button(
                     onClick = {
                         val chosenFocus = focusOptions[selectedFocusIndex].title
-                        onGetStarted(userName.ifBlank { "Alex" }, chosenFocus)
+                        onCreateAccount(chosenFocus)
                     },
-                    shape = LifeScoreShapes.button,
+                    shape = RoundedCornerShape(14.dp),
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(54.dp),
+                        .height(52.dp),
                     colors = ButtonDefaults.buttonColors(
                         containerColor = Color(0xFFD4A24C),
-                        contentColor = Color(0xFF0F0E14)
+                        contentColor = Color(0xFF0C0B12)
                     )
                 ) {
                     Row(
@@ -366,7 +348,7 @@ fun WelcomeScreen(
                         horizontalArrangement = Arrangement.spacedBy(Space.xs)
                     ) {
                         Text(
-                            "Enter LifeScore",
+                            "Create Account",
                             style = MaterialTheme.typography.titleMedium,
                             fontWeight = FontWeight.Bold
                         )
@@ -378,18 +360,41 @@ fun WelcomeScreen(
                     }
                 }
 
-                TextButton(
+                // Secondary: Sign In
+                OutlinedButton(
                     onClick = onSignIn,
-                    modifier = Modifier.fillMaxWidth()
+                    shape = RoundedCornerShape(14.dp),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(50.dp),
+                    border = BorderStroke(1.dp, Color(0x33D4A24C)),
+                    colors = ButtonDefaults.outlinedButtonColors(
+                        contentColor = Color(0xFFFBF8F3)
+                    )
                 ) {
                     Text(
-                        "Already have an account? Sign In",
-                        style = MaterialTheme.typography.labelMedium,
-                        color = Color(0xFFFBF8F3).copy(alpha = 0.7f)
+                        "Sign In with Existing Account",
+                        style = MaterialTheme.typography.titleSmall,
+                        fontWeight = FontWeight.SemiBold
                     )
                 }
 
-                Spacer(Modifier.height(Space.sm))
+                // Tertiary: Continue as Guest
+                TextButton(
+                    onClick = {
+                        val chosenFocus = focusOptions[selectedFocusIndex].title
+                        onContinueAsGuest(chosenFocus)
+                    },
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Text(
+                        "Continue as Guest",
+                        style = MaterialTheme.typography.labelLarge,
+                        color = Color(0xFF9E958B)
+                    )
+                }
+
+                Spacer(Modifier.height(Space.xs))
             }
         }
     }

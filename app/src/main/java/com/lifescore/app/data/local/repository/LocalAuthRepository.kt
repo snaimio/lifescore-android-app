@@ -34,7 +34,7 @@ class LocalAuthRepository(
             currentLevel = 1,
             currentStreakDays = 0,
             isPremium = false,
-            title = "Novice Seeker",
+            title = "Member",
             lastActive = System.currentTimeMillis(),
             isLocal = true
         )

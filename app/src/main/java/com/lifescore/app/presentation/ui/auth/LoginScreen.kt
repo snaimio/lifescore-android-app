@@ -1,14 +1,10 @@
 package com.lifescore.app.presentation.ui.auth
 
-import android.content.Intent
-import android.net.Uri
 import androidx.compose.animation.*
-import androidx.compose.animation.core.EaseOutBack
 import androidx.compose.animation.animateColorAsState
-import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.animation.core.tween
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
@@ -18,6 +14,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.ArrowForward
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -25,69 +22,51 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.graphicsLayer
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.lifescore.app.core.designsystem.Spacing
-import com.lifescore.app.core.designsystem.components.*
-import com.lifescore.app.domain.model.UserProfile
-import kotlinx.coroutines.delay
+import com.lifescore.app.R
+import com.lifescore.app.core.designsystem.Space
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LoginScreen(
     viewModel: LoginViewModel,
     onNavigateToHome: () -> Unit,
-    onBack: (() -> Unit)? = null
+    onBack: (() -> Unit)? = null,
+    initialIsSignUp: Boolean = false
 ) {
     val uiState by viewModel.uiState.collectAsState()
     val focusManager = LocalFocusManager.current
     val scrollState = rememberScrollState()
-    val context = LocalContext.current
 
-    var logoVisible by remember { mutableStateOf(false) }
-    var titleVisible by remember { mutableStateOf(false) }
-    var tabsVisible by remember { mutableStateOf(false) }
-    var formsVisible by remember { mutableStateOf(false) }
-    var buttonsVisible by remember { mutableStateOf(false) }
-
-    var logoScale by remember { mutableFloatStateOf(0.95f) }
-    val animatedScale by animateFloatAsState(
-        targetValue = logoScale,
-        animationSpec = tween(800, easing = EaseOutBack),
-        label = "LogoScale"
-    )
-
-    LaunchedEffect(Unit) {
-        logoVisible = true
-        logoScale = 1.05f
-        delay(200)
-        titleVisible = true
-        delay(200)
-        tabsVisible = true
-        delay(200)
-        formsVisible = true
-        delay(200)
-        buttonsVisible = true
+    LaunchedEffect(initialIsSignUp) {
+        if (initialIsSignUp && !uiState.isSignUp) {
+            viewModel.toggleAuthMode()
+        }
     }
 
     Scaffold(
+        containerColor = Color(0xFF0C0B12),
         topBar = {
             if (onBack != null) {
                 TopAppBar(
                     title = {},
                     navigationIcon = {
                         IconButton(onClick = onBack) {
-                            Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
+                            Icon(
+                                Icons.AutoMirrored.Filled.ArrowBack,
+                                contentDescription = "Back",
+                                tint = Color(0xFFFBF8F3)
+                            )
                         }
                     },
                     colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Transparent)
@@ -101,189 +80,207 @@ fun LoginScreen(
                 .background(
                     Brush.verticalGradient(
                         colors = listOf(
-                            MaterialTheme.colorScheme.background,
-                            MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.08f)
+                            Color(0xFF0C0B12),
+                            Color(0xFF14131E)
                         )
                     )
                 )
                 .padding(padding)
                 .verticalScroll(scrollState),
-            contentAlignment = Alignment.Center
+            contentAlignment = Alignment.TopCenter
         ) {
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = com.lifescore.app.core.designsystem.Spacing.responsiveHorizontalPadding(), vertical = 12.dp),
+                    .padding(horizontal = Space.screenH)
+                    .padding(bottom = Space.xxxl),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Spacer(Modifier.height(16.dp))
+                Spacer(Modifier.height(Space.md))
 
-                // Hero Logo Badge
-                AnimatedVisibility(
-                    visible = logoVisible,
-                    enter = fadeIn() + slideInVertically(initialOffsetY = { 20 })
+                // Brand Emblem
+                Surface(
+                    shape = CircleShape,
+                    color = Color(0x22D4A24C),
+                    border = BorderStroke(1.dp, Color(0x44D4A24C)),
+                    modifier = Modifier.size(72.dp)
                 ) {
-                    Surface(
-                        shape = CircleShape,
-                        color = MaterialTheme.colorScheme.primaryContainer,
+                    Box(contentAlignment = Alignment.Center) {
+                        Image(
+                            painter = painterResource(R.drawable.ic_launcher_foreground),
+                            contentDescription = "LifeScore Brand Mark",
+                            modifier = Modifier.size(54.dp)
+                        )
+                    }
+                }
+
+                Spacer(Modifier.height(Space.md))
+
+                // Title & Subtitle
+                Text(
+                    text = "LifeScore",
+                    style = MaterialTheme.typography.headlineMedium.copy(
+                        fontFamily = FontFamily.Serif,
+                        fontWeight = FontWeight.Bold,
+                        letterSpacing = 1.sp
+                    ),
+                    color = Color(0xFFFBF8F3)
+                )
+
+                Text(
+                    text = if (uiState.isSignUp) "Create your account to sync and secure your life metrics" else "Sign in to access your continuous life metrics",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = Color(0xFF9E958B),
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier
+                        .fillMaxWidth(0.85f)
+                        .padding(top = 4.dp, bottom = Space.lg)
+                )
+
+                // Sign In / Create Account Tab Switcher
+                Surface(
+                    shape = RoundedCornerShape(14.dp),
+                    color = Color(0xFF14131E),
+                    border = BorderStroke(1.dp, Color(0x22FFFFFF)),
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Row(
                         modifier = Modifier
-                            .size(96.dp)
-                            .graphicsLayer {
-                                scaleX = animatedScale
-                                scaleY = animatedScale
-                            }
+                            .fillMaxWidth()
+                            .padding(4.dp)
                     ) {
-                        Box(contentAlignment = Alignment.Center) {
-                            Text("✨", fontSize = 48.sp)
-                        }
-                    }
-                }
-
-                Spacer(Modifier.height(16.dp))
-
-                // App Title & Tagline
-                AnimatedVisibility(
-                    visible = titleVisible,
-                    enter = fadeIn() + slideInVertically(initialOffsetY = { 20 })
-                ) {
-                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                        Text(
-                            text = "LifeScore",
-                            style = MaterialTheme.typography.headlineLarge,
-                            fontWeight = FontWeight.Black,
-                            color = MaterialTheme.colorScheme.onBackground,
-                            letterSpacing = 0.5.sp
+                        TabButton(
+                            text = "Sign In",
+                            isSelected = !uiState.isSignUp,
+                            onClick = { if (uiState.isSignUp) viewModel.toggleAuthMode() },
+                            modifier = Modifier.weight(1f)
                         )
-
-                        Text(
-                            text = "Gamify your life across 8 dimensions",
-                            style = MaterialTheme.typography.bodyMedium,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant,
-                            textAlign = TextAlign.Center,
-                            modifier = Modifier.padding(top = 4.dp, bottom = 8.dp)
+                        TabButton(
+                            text = "Create Account",
+                            isSelected = uiState.isSignUp,
+                            onClick = { if (!uiState.isSignUp) viewModel.toggleAuthMode() },
+                            modifier = Modifier.weight(1f)
                         )
                     }
                 }
 
-                if (uiState.isOffline) {
-                    Surface(
-                        shape = RoundedCornerShape(8.dp),
-                        color = MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.6f),
-                        modifier = Modifier.padding(bottom = 16.dp)
-                    ) {
-                        Text(
-                            text = "⚡ Offline-First Mode",
-                            color = MaterialTheme.colorScheme.onSecondaryContainer,
-                            style = MaterialTheme.typography.labelSmall,
-                            modifier = Modifier.padding(horizontal = 10.dp, vertical = 4.dp)
-                        )
-                    }
-                } else {
-                    Spacer(Modifier.height(16.dp))
-                }
+                Spacer(Modifier.height(Space.lg))
 
-                // Sign In / Sign Up Mode Switcher
-                AnimatedVisibility(
-                    visible = tabsVisible,
-                    enter = fadeIn() + slideInVertically(initialOffsetY = { 20 })
+                // Form Container
+                Surface(
+                    shape = RoundedCornerShape(18.dp),
+                    color = Color(0xFF181726),
+                    border = BorderStroke(1.dp, Color(0x1FD4A24C)),
+                    modifier = Modifier.fillMaxWidth()
                 ) {
-                    Card(
-                        shape = RoundedCornerShape(16.dp),
-                        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant),
-                        modifier = Modifier.fillMaxWidth()
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(Space.lg)
                     ) {
-                        Row(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(4.dp)
-                        ) {
-                            TabButton(
-                                text = "Sign In",
-                                isSelected = !uiState.isSignUp,
-                                onClick = { if (uiState.isSignUp) viewModel.toggleAuthMode() },
-                                modifier = Modifier.weight(1f)
-                            )
-                            TabButton(
-                                text = "Create Account",
-                                isSelected = uiState.isSignUp,
-                                onClick = { if (!uiState.isSignUp) viewModel.toggleAuthMode() },
-                                modifier = Modifier.weight(1f)
-                            )
-                        }
-                    }
-                }
-
-                Spacer(Modifier.height(20.dp))
-
-                // Form Fields
-                AnimatedVisibility(
-                    visible = formsVisible,
-                    enter = fadeIn() + slideInVertically(initialOffsetY = { 20 })
-                ) {
-                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                        // Display Name Field (Sign Up only)
+                        // Display Name (for Sign Up only)
                         AnimatedVisibility(
                             visible = uiState.isSignUp,
                             enter = fadeIn() + expandVertically(),
                             exit = fadeOut() + shrinkVertically()
                         ) {
                             Column {
+                                Text(
+                                    text = "Full Name",
+                                    style = MaterialTheme.typography.labelSmall,
+                                    fontWeight = FontWeight.SemiBold,
+                                    color = Color(0xFFD4A24C)
+                                )
+                                Spacer(Modifier.height(4.dp))
                                 OutlinedTextField(
                                     value = uiState.displayName,
                                     onValueChange = { viewModel.onDisplayNameChange(it) },
-                                    label = { Text("Display Name / Hero Alias") },
-                                    leadingIcon = { Icon(Icons.Default.Person, contentDescription = null) },
+                                    placeholder = { Text("Enter your full name", color = Color(0xFF6B6578), fontSize = 14.sp) },
+                                    leadingIcon = {
+                                        Icon(Icons.Default.Person, contentDescription = null, tint = Color(0xFFD4A24C))
+                                    },
                                     singleLine = true,
-                                    shape = MaterialTheme.shapes.medium,
+                                    shape = RoundedCornerShape(12.dp),
                                     colors = OutlinedTextFieldDefaults.colors(
-                                        focusedBorderColor = MaterialTheme.colorScheme.primary,
-                                        unfocusedBorderColor = MaterialTheme.colorScheme.outlineVariant
+                                        focusedBorderColor = Color(0xFFD4A24C),
+                                        unfocusedBorderColor = Color(0x22FFFFFF),
+                                        focusedTextColor = Color(0xFFFBF8F3),
+                                        unfocusedTextColor = Color(0xFFFBF8F3),
+                                        focusedContainerColor = Color(0xFF12111D),
+                                        unfocusedContainerColor = Color(0xFF12111D)
                                     ),
                                     keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
                                     modifier = Modifier.fillMaxWidth()
                                 )
-                                Spacer(Modifier.height(12.dp))
+                                Spacer(Modifier.height(Space.md))
                             }
                         }
 
                         // Email Field
+                        Text(
+                            text = "Email Address",
+                            style = MaterialTheme.typography.labelSmall,
+                            fontWeight = FontWeight.SemiBold,
+                            color = Color(0xFFD4A24C)
+                        )
+                        Spacer(Modifier.height(4.dp))
                         OutlinedTextField(
                             value = uiState.email,
                             onValueChange = { viewModel.onEmailChange(it) },
-                            label = { Text("Email Address") },
-                            leadingIcon = { Icon(Icons.Default.Email, contentDescription = null) },
+                            placeholder = { Text("name@domain.com", color = Color(0xFF6B6578), fontSize = 14.sp) },
+                            leadingIcon = {
+                                Icon(Icons.Default.Email, contentDescription = null, tint = Color(0xFFD4A24C))
+                            },
                             singleLine = true,
-                            shape = MaterialTheme.shapes.medium,
+                            shape = RoundedCornerShape(12.dp),
                             colors = OutlinedTextFieldDefaults.colors(
-                                focusedBorderColor = MaterialTheme.colorScheme.primary,
-                                unfocusedBorderColor = MaterialTheme.colorScheme.outlineVariant
+                                focusedBorderColor = Color(0xFFD4A24C),
+                                unfocusedBorderColor = Color(0x22FFFFFF),
+                                focusedTextColor = Color(0xFFFBF8F3),
+                                unfocusedTextColor = Color(0xFFFBF8F3),
+                                focusedContainerColor = Color(0xFF12111D),
+                                unfocusedContainerColor = Color(0xFF12111D)
                             ),
                             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email, imeAction = ImeAction.Next),
                             modifier = Modifier.fillMaxWidth()
                         )
 
-                        Spacer(Modifier.height(12.dp))
+                        Spacer(Modifier.height(Space.md))
 
-                        // Password Field with Visibility Toggle
+                        // Password Field
+                        Text(
+                            text = "Password",
+                            style = MaterialTheme.typography.labelSmall,
+                            fontWeight = FontWeight.SemiBold,
+                            color = Color(0xFFD4A24C)
+                        )
+                        Spacer(Modifier.height(4.dp))
                         OutlinedTextField(
                             value = uiState.password,
                             onValueChange = { viewModel.onPasswordChange(it) },
-                            label = { Text("Password") },
-                            leadingIcon = { Icon(Icons.Default.Lock, contentDescription = null) },
+                            placeholder = { Text("••••••••", color = Color(0xFF6B6578), fontSize = 14.sp) },
+                            leadingIcon = {
+                                Icon(Icons.Default.Lock, contentDescription = null, tint = Color(0xFFD4A24C))
+                            },
                             trailingIcon = {
                                 IconButton(onClick = { viewModel.togglePasswordVisibility() }) {
                                     Icon(
                                         if (uiState.isPasswordVisible) Icons.Default.Visibility else Icons.Default.VisibilityOff,
-                                        contentDescription = "Toggle password"
+                                        contentDescription = "Toggle password",
+                                        tint = Color(0xFF9E958B)
                                     )
                                 }
                             },
                             visualTransformation = if (uiState.isPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
                             singleLine = true,
-                            shape = MaterialTheme.shapes.medium,
+                            shape = RoundedCornerShape(12.dp),
                             colors = OutlinedTextFieldDefaults.colors(
-                                focusedBorderColor = MaterialTheme.colorScheme.primary,
-                                unfocusedBorderColor = MaterialTheme.colorScheme.outlineVariant
+                                focusedBorderColor = Color(0xFFD4A24C),
+                                unfocusedBorderColor = Color(0x22FFFFFF),
+                                focusedTextColor = Color(0xFFFBF8F3),
+                                unfocusedTextColor = Color(0xFFFBF8F3),
+                                focusedContainerColor = Color(0xFF12111D),
+                                unfocusedContainerColor = Color(0xFF12111D)
                             ),
                             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password, imeAction = ImeAction.Done),
                             keyboardActions = KeyboardActions(onDone = {
@@ -292,40 +289,33 @@ fun LoginScreen(
                             }),
                             modifier = Modifier.fillMaxWidth()
                         )
-                    }
-                }
 
-                // Error Message Display
-                AnimatedVisibility(
-                    visible = uiState.errorMessage != null,
-                    enter = fadeIn() + expandVertically(),
-                    exit = fadeOut() + shrinkVertically()
-                ) {
-                    Card(
-                        shape = RoundedCornerShape(12.dp),
-                        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.errorContainer),
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(top = 12.dp)
-                    ) {
-                        Text(
-                            text = uiState.errorMessage ?: "",
-                            color = MaterialTheme.colorScheme.onErrorContainer,
-                            fontSize = 12.sp,
-                            modifier = Modifier.padding(12.dp)
-                        )
-                    }
-                }
+                        // Error Banner
+                        AnimatedVisibility(
+                            visible = uiState.errorMessage != null,
+                            enter = fadeIn() + expandVertically(),
+                            exit = fadeOut() + shrinkVertically()
+                        ) {
+                            Surface(
+                                shape = RoundedCornerShape(10.dp),
+                                color = MaterialTheme.colorScheme.errorContainer.copy(alpha = 0.3f),
+                                border = BorderStroke(1.dp, MaterialTheme.colorScheme.error.copy(alpha = 0.5f)),
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(top = Space.sm)
+                            ) {
+                                Text(
+                                    text = uiState.errorMessage ?: "",
+                                    color = MaterialTheme.colorScheme.error,
+                                    fontSize = 12.sp,
+                                    modifier = Modifier.padding(10.dp)
+                                )
+                            }
+                        }
 
-                Spacer(Modifier.height(20.dp))
+                        Spacer(Modifier.height(Space.lg))
 
-                // Buttons Group
-                AnimatedVisibility(
-                    visible = buttonsVisible,
-                    enter = fadeIn() + slideInVertically(initialOffsetY = { 20 })
-                ) {
-                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                        // Primary Submit Button (Email / Password)
+                        // Submit Button
                         Button(
                             onClick = {
                                 focusManager.clearFocus()
@@ -333,140 +323,101 @@ fun LoginScreen(
                             },
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .height(56.dp),
-                            shape = MaterialTheme.shapes.medium,
-                            elevation = ButtonDefaults.buttonElevation(defaultElevation = 2.dp, pressedElevation = 0.dp),
+                                .height(52.dp),
+                            shape = RoundedCornerShape(12.dp),
+                            colors = ButtonDefaults.buttonColors(
+                                containerColor = Color(0xFFD4A24C),
+                                contentColor = Color(0xFF0C0B12)
+                            ),
                             enabled = !uiState.isLoading
                         ) {
                             if (uiState.isLoading) {
-                                CircularProgressIndicator(modifier = Modifier.size(20.dp), color = Color.White, strokeWidth = 2.dp)
+                                CircularProgressIndicator(modifier = Modifier.size(20.dp), color = Color(0xFF0C0B12), strokeWidth = 2.dp)
                             } else {
                                 Text(
-                                    text = if (uiState.isSignUp) "Create My Account" else "Sign In with Email",
+                                    text = if (uiState.isSignUp) "Create Account" else "Sign In",
                                     fontWeight = FontWeight.Bold,
                                     fontSize = 15.sp
                                 )
                             }
                         }
-
-                        Spacer(Modifier.height(16.dp))
-
-                        // Divider OR
-                        Row(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(vertical = 8.dp),
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            HorizontalDivider(modifier = Modifier.weight(1f))
-                            Text(
-                                text = "  OR CONNECT WITH  ",
-                                fontSize = 11.sp,
-                                fontWeight = FontWeight.Bold,
-                                color = MaterialTheme.colorScheme.outline
-                            )
-                            HorizontalDivider(modifier = Modifier.weight(1f))
-                        }
-
-                        Spacer(Modifier.height(10.dp))
-
-                        // Option 2: Google Sign-In Button
-                        OutlinedButton(
-                            onClick = {
-                                focusManager.clearFocus()
-                                // Demonstrates 1-tap Google Authentication via token or web fallback
-                                viewModel.signInWithGoogleToken("sample_google_auth_token_mock") { onNavigateToHome() }
-                            },
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .height(56.dp),
-                            shape = MaterialTheme.shapes.medium,
-                            colors = ButtonDefaults.outlinedButtonColors(
-                                contentColor = MaterialTheme.colorScheme.onSurface
-                            ),
-                            border = androidx.compose.foundation.BorderStroke(
-                                1.dp,
-                                MaterialTheme.colorScheme.outlineVariant
-                            ),
-                            enabled = !uiState.isLoading
-                        ) {
-                            Text("🌐", fontSize = 18.sp)
-                            Spacer(Modifier.width(10.dp))
-                            Text("Continue with Google", fontWeight = FontWeight.SemiBold, fontSize = 14.sp)
-                        }
-
-                        Spacer(Modifier.height(10.dp))
-
-                        // Option 3: 1-Tap Guest Mode Button (Anonymous Login)
-                        FilledTonalButton(
-                            onClick = {
-                                focusManager.clearFocus()
-                                viewModel.continueAsGuest { onNavigateToHome() }
-                            },
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .height(56.dp),
-                            shape = MaterialTheme.shapes.medium,
-                            enabled = !uiState.isLoading
-                        ) {
-                            Icon(Icons.Default.RocketLaunch, contentDescription = null, modifier = Modifier.size(18.dp))
-                            Spacer(Modifier.width(10.dp))
-                            Text("1-Tap Guest Onboarding", fontWeight = FontWeight.SemiBold, fontSize = 14.sp)
-                        }
-
-                        Spacer(Modifier.height(18.dp))
-
-                        // Legal Footer with proper wrapping
-                        val annotatedLegalText = androidx.compose.ui.text.buildAnnotatedString {
-                            append("By continuing, you agree to our ")
-                            pushStringAnnotation(tag = "TERMS", annotation = "https://lifescore-app.web.app/terms")
-                            withStyle(
-                                style = androidx.compose.ui.text.SpanStyle(
-                                    color = MaterialTheme.colorScheme.primary,
-                                    fontWeight = FontWeight.Bold
-                                )
-                            ) {
-                                append("Terms")
-                            }
-                            pop()
-                            append(" & ")
-                            pushStringAnnotation(tag = "PRIVACY", annotation = "https://lifescore-app.web.app/privacy")
-                            withStyle(
-                                style = androidx.compose.ui.text.SpanStyle(
-                                    color = MaterialTheme.colorScheme.primary,
-                                    fontWeight = FontWeight.Bold
-                                )
-                            ) {
-                                append("Privacy Policy")
-                            }
-                            pop()
-                        }
-
-                        androidx.compose.foundation.text.ClickableText(
-                            text = annotatedLegalText,
-                            style = MaterialTheme.typography.bodySmall.copy(
-                                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                                textAlign = TextAlign.Center,
-                                fontSize = 11.sp
-                            ),
-                            modifier = Modifier.fillMaxWidth().padding(horizontal = 8.dp),
-                            onClick = { offset ->
-                                annotatedLegalText.getStringAnnotations(tag = "TERMS", start = offset, end = offset)
-                                    .firstOrNull()?.let { annotation ->
-                                        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(annotation.item))
-                                        try { context.startActivity(intent) } catch (e: Exception) {}
-                                    }
-                                annotatedLegalText.getStringAnnotations(tag = "PRIVACY", start = offset, end = offset)
-                                    .firstOrNull()?.let { annotation ->
-                                        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(annotation.item))
-                                        try { context.startActivity(intent) } catch (e: Exception) {}
-                                    }
-                            }
-                        )
-
-                        Spacer(Modifier.height(24.dp))
                     }
                 }
+
+                Spacer(Modifier.height(Space.md))
+
+                // Guest Mode Card / Button
+                Surface(
+                    onClick = {
+                        focusManager.clearFocus()
+                        viewModel.continueAsGuest { onNavigateToHome() }
+                    },
+                    shape = RoundedCornerShape(16.dp),
+                    color = Color(0xFF14131E),
+                    border = BorderStroke(1.dp, Color(0x22D4A24C)),
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = Space.md, vertical = 14.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(Space.sm)
+                        ) {
+                            Surface(
+                                shape = CircleShape,
+                                color = Color(0x22D4A24C),
+                                modifier = Modifier.size(36.dp)
+                            ) {
+                                Box(contentAlignment = Alignment.Center) {
+                                    Icon(
+                                        Icons.Default.AccountCircle,
+                                        contentDescription = null,
+                                        tint = Color(0xFFD4A24C),
+                                        modifier = Modifier.size(20.dp)
+                                    )
+                                }
+                            }
+                            Column {
+                                Text(
+                                    text = "Continue as Guest",
+                                    style = MaterialTheme.typography.titleSmall,
+                                    fontWeight = FontWeight.Bold,
+                                    color = Color(0xFFFBF8F3)
+                                )
+                                Text(
+                                    text = "Explore features without signing in",
+                                    style = MaterialTheme.typography.bodySmall,
+                                    color = Color(0xFF9E958B)
+                                )
+                            }
+                        }
+
+                        Icon(
+                            Icons.AutoMirrored.Filled.ArrowForward,
+                            contentDescription = null,
+                            tint = Color(0xFFD4A24C),
+                            modifier = Modifier.size(18.dp)
+                        )
+                    }
+                }
+
+                Spacer(Modifier.height(Space.lg))
+
+                // Encrypted notice footer
+                Text(
+                    text = "LifeScore Executive Life Operating System • Local & Cloud Encrypted",
+                    style = MaterialTheme.typography.bodySmall.copy(
+                        color = Color(0xFF6B6578),
+                        textAlign = TextAlign.Center,
+                        fontSize = 11.sp
+                    ),
+                    modifier = Modifier.fillMaxWidth()
+                )
             }
         }
     }
@@ -480,17 +431,17 @@ private fun TabButton(
     modifier: Modifier = Modifier
 ) {
     val backgroundColor by animateColorAsState(
-        targetValue = if (isSelected) MaterialTheme.colorScheme.primary else Color.Transparent,
+        targetValue = if (isSelected) Color(0xFFD4A24C) else Color.Transparent,
         label = "TabBackground"
     )
-    val contentColor = if (isSelected) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onSurfaceVariant
+    val contentColor = if (isSelected) Color(0xFF0C0B12) else Color(0xFF9E958B)
     val fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Medium
 
     Surface(
         onClick = onClick,
-        shape = RoundedCornerShape(12.dp),
+        shape = RoundedCornerShape(10.dp),
         color = backgroundColor,
-        modifier = modifier.height(42.dp)
+        modifier = modifier.height(40.dp)
     ) {
         Box(contentAlignment = Alignment.Center) {
             Text(

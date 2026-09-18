@@ -17,23 +17,23 @@ import kotlinx.coroutines.launch
 data class HomeUiState(
     val isLoading: Boolean = true,
     val isSyncing: Boolean = false,
-    val userName: String = "Achiever",
-    val totalScore: Int = 500,
+    val userName: String = "Guest",
+    val totalScore: Int = 0,
     val level: Int = 1,
     val levelProgress: Float = 0.0f,
     val currentXp: Int = 0,
     val streak: Int = 0,
-    val userTitle: String = "Novice Seeker",
+    val userTitle: String = "Member",
     val dailyProgress: Float = 0.0f,
     val tasksCompleted: Int = 0,
     val totalTasks: Int = 0,
     val dimensions: List<DimensionType> = DimensionType.values().toList(),
-    val dimensionScores: Map<DimensionType, Int> = DimensionType.values().associateWith { 50 },
+    val dimensionScores: Map<DimensionType, Int> = DimensionType.values().associateWith { 0 },
     val todayTasks: List<LifeTask> = emptyList(),
     val userPhase: com.lifescore.app.core.engine.UserPhase = com.lifescore.app.core.engine.UserPhase.NEW_USER,
     val unlockedFeatures: List<String> = emptyList(),
     val milestoneMessage: String? = null,
-    val cloudSyncStatus: String = "Synced with Firestore"
+    val cloudSyncStatus: String = "Ready"
 )
 
 class HomeViewModel(

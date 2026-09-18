@@ -321,47 +321,53 @@ fun LifeScoreNavGraph(
             }
             composable(Screen.Welcome.route) {
                 com.lifescore.app.presentation.ui.onboarding.WelcomeScreen(
-                    onGetStarted = { name, focusArea ->
+                    onCreateAccount = { focusArea ->
                         scope.launch {
                             app.lifeScoreRepository.updateUserProfile(
                                 com.lifescore.app.domain.model.UserProfile(
-                                    name = name.ifBlank { "Alex" },
-                                    title = focusArea.ifBlank { "High Performance" },
+                                    name = "Guest",
+                                    title = focusArea.ifBlank { "Member" },
                                     currentLevel = 1,
-                                    currentXp = 50,
-                                    currentStreakDays = 1
+                                    currentXp = 0,
+                                    currentStreakDays = 0
+                                )
+                            )
+                        }
+                        navController.navigate(Screen.Login.route)
+                    },
+                    onSignIn = {
+                        navController.navigate(Screen.Login.route)
+                    },
+                    onContinueAsGuest = { focusArea ->
+                        scope.launch {
+                            app.lifeScoreRepository.updateUserProfile(
+                                com.lifescore.app.domain.model.UserProfile(
+                                    name = "Guest",
+                                    title = focusArea.ifBlank { "Member" },
+                                    currentLevel = 1,
+                                    currentXp = 0,
+                                    currentStreakDays = 0
                                 )
                             )
                         }
                         navController.navigate(Screen.Home.route) {
                             popUpTo(Screen.Welcome.route) { inclusive = true }
                         }
-                    },
-                    onSignIn = {
-                        navController.navigate(Screen.Login.route)
                     }
                 )
             }
             composable(Screen.QuickAssessment.route) {
                 com.lifescore.app.presentation.ui.onboarding.WelcomeScreen(
-                    onGetStarted = { name, focusArea ->
-                        scope.launch {
-                            app.lifeScoreRepository.updateUserProfile(
-                                com.lifescore.app.domain.model.UserProfile(
-                                    name = name.ifBlank { "Alex" },
-                                    title = focusArea.ifBlank { "High Performance" },
-                                    currentLevel = 1,
-                                    currentXp = 50,
-                                    currentStreakDays = 1
-                                )
-                            )
-                        }
-                        navController.navigate(Screen.Home.route) {
-                            popUpTo(Screen.QuickAssessment.route) { inclusive = true }
-                        }
+                    onCreateAccount = { focusArea ->
+                        navController.navigate(Screen.Login.route)
                     },
                     onSignIn = {
                         navController.navigate(Screen.Login.route)
+                    },
+                    onContinueAsGuest = { focusArea ->
+                        navController.navigate(Screen.Home.route) {
+                            popUpTo(Screen.QuickAssessment.route) { inclusive = true }
+                        }
                     }
                 )
             }
@@ -381,24 +387,27 @@ fun LifeScoreNavGraph(
             }
             composable(Screen.Onboarding.route) {
                 com.lifescore.app.presentation.ui.onboarding.WelcomeScreen(
-                    onGetStarted = { name, focusArea ->
+                    onCreateAccount = { focusArea ->
+                        navController.navigate(Screen.Login.route)
+                    },
+                    onSignIn = {
+                        navController.navigate(Screen.Login.route)
+                    },
+                    onContinueAsGuest = { focusArea ->
                         scope.launch {
                             app.lifeScoreRepository.updateUserProfile(
                                 com.lifescore.app.domain.model.UserProfile(
-                                    name = name.ifBlank { "Alex" },
-                                    title = focusArea.ifBlank { "High Performance" },
+                                    name = "Guest",
+                                    title = focusArea.ifBlank { "Member" },
                                     currentLevel = 1,
-                                    currentXp = 50,
-                                    currentStreakDays = 1
+                                    currentXp = 0,
+                                    currentStreakDays = 0
                                 )
                             )
                         }
                         navController.navigate(Screen.Home.route) {
                             popUpTo(Screen.Onboarding.route) { inclusive = true }
                         }
-                    },
-                    onSignIn = {
-                        navController.navigate(Screen.Login.route)
                     }
                 )
             }
