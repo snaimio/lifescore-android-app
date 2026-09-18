@@ -67,7 +67,8 @@ data class CoachUiState(
     val journalEntries: List<JournalEntry> = AiMemoryEngine.getDefaultJournalEntries(),
     val behavioralReflections: List<BehavioralReflection> = AiMemoryEngine.getBehavioralReflections(),
     val isAddMemoryDialogOpen: Boolean = false,
-    val isGenerating: Boolean = false
+    val isGenerating: Boolean = false,
+    val userArchetype: String = "The Architect"
 )
 
 class AiCoachViewModel(
@@ -111,6 +112,7 @@ class AiCoachViewModel(
                     _uiState.value = _uiState.value.copy(
                         totalScore = overall,
                         streak = user.currentStreakDays,
+                        userArchetype = user.title.ifBlank { "The Architect" },
                         lowestDimension = lowest,
                         lowestScore = scores[lowest] ?: 45,
                         highestDimension = highest,
@@ -137,7 +139,7 @@ class AiCoachViewModel(
                 chatMessages = listOf(
                     ChatMessage(
                         sender = "AI",
-                        message = "👋 **Welcome back, Achiever!** I've synchronized your persistent memory & 8 dimensions.\n\n$brief"
+                        message = "👋 **Welcome back!** I've synchronized your persistent memory & 8 dimensions.\n\n$brief"
                     )
                 )
             )
@@ -153,7 +155,7 @@ class AiCoachViewModel(
         viewModelScope.launch {
             val memoryContext = AiMemoryEngine.buildSystemContextPrompt(
                 memories = _uiState.value.memories,
-                archetypeName = "The Architect",
+                archetypeName = _uiState.value.userArchetype,
                 lifeScore = _uiState.value.totalScore,
                 streak = _uiState.value.streak
             )
@@ -203,39 +205,39 @@ class AiCoachViewModel(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AiCoachScreen(
-    viewModel: AiCoachViewModel
+    viewModel: AiCoachViewModel,
+    onBack: (() -> Unit)? = null
 ) {
     val uiState by viewModel.uiState.collectAsState()
     val context = LocalContext.current
     var inputQuery by remember { mutableStateOf("") }
 
     val quickPrompts = listOf(
-        "What challenge should I do next after completing my 30-day fitness quest?",
+        "How do I boost my ${uiState.lowestDimension.displayName} score?",
         "How do I overcome my morning task friction?",
-        "Why am I most consistent on Tuesdays?",
-        "How do I boost my ${uiState.lowestDimension.displayName} score?"
+        "What is the best way to maintain my current habit streak?",
+        "How do I eliminate distractions during deep work?"
     )
 
     Scaffold(
         topBar = {
-            TopAppBar(
-                title = { Text("LifeScore AI Coach", fontWeight = FontWeight.Black) },
+            LifeTopBar(
+                title = "LifeScore AI Coach",
+                subtitle = "Gemini AI • Persistent Memory",
+                onBack = onBack,
                 actions = {
                     Surface(
                         shape = CircleShape,
                         color = MaterialTheme.colorScheme.primaryContainer,
                         modifier = Modifier.padding(end = 16.dp)
                     ) {
-                        Row(modifier = Modifier.padding(horizontal = 10.dp, vertical = 5.dp), verticalAlignment = Alignment.CenterVertically) {
-                            Text("🧠", fontSize = 12.sp)
-                            Spacer(Modifier.width(4.dp))
-                            Text(
-                                text = "Gemini 1.5 + Memory",
-                                fontSize = 11.sp,
-                                fontWeight = FontWeight.Bold,
-                                color = MaterialTheme.colorScheme.onPrimaryContainer
-                            )
-                        }
+                        Text(
+                            text = uiState.userArchetype,
+                            style = MaterialTheme.typography.labelSmall,
+                            fontWeight = FontWeight.Bold,
+                            color = MaterialTheme.colorScheme.onPrimaryContainer,
+                            modifier = Modifier.padding(horizontal = 10.dp, vertical = 5.dp)
+                        )
                     }
                 }
             )

@@ -58,33 +58,17 @@ fun HydrationScreen(
         Box(modifier = Modifier.fillMaxSize()) {
             Scaffold(
                 topBar = {
-                    TopAppBar(
-                        title = {
-                            Column {
-                                Text(
-                                "💧 Hydration Tracker",
-                                style = MaterialTheme.typography.titleLarge,
-                                fontWeight = FontWeight.Black
-                            )
-                            Text(
-                                "Health Dimension • Biological Vitality",
-                                style = MaterialTheme.typography.labelSmall,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant
-                            )
+                    com.lifescore.app.core.designsystem.components.LifeTopBar(
+                        title = "Hydration Tracker",
+                        subtitle = "Health Dimension • Biological Vitality",
+                        onBack = { navController.popBackStack() },
+                        actions = {
+                            IconButton(onClick = { showGoalDialog = true }) {
+                                Icon(Icons.Default.Tune, contentDescription = "Adjust Goal")
+                            }
                         }
-                    },
-                    navigationIcon = {
-                        IconButton(onClick = { navController.navigateUp() }) {
-                            Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
-                        }
-                    },
-                    actions = {
-                        IconButton(onClick = { showGoalDialog = true }) {
-                            Icon(Icons.Default.Tune, contentDescription = "Adjust Goal")
-                        }
-                    }
-                )
-            }
+                    )
+                }
         ) { paddingValues ->
             LazyColumn(
                 modifier = Modifier
