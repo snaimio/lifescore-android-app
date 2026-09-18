@@ -224,7 +224,8 @@ fun LifeScoreNavGraph(
             composable(Screen.Challenges.route) {
                 ChallengesScreen(
                     viewModel = challengesViewModel,
-                    onOpenPaywall = { showPaywall = true }
+                    onOpenPaywall = { showPaywall = true },
+                    onBack = { navController.popBackStack() }
                 )
             }
             composable(Screen.AICoach.route) {
@@ -355,7 +356,8 @@ fun LifeScoreNavGraph(
                     result = quickAssessmentResult ?: fallbackRes,
                     onContinue = {
                         navController.navigate(Screen.FirstQuest.route)
-                    }
+                    },
+                    onBack = { navController.popBackStack() }
                 )
             }
             composable(Screen.FirstQuest.route) {
@@ -387,7 +389,8 @@ fun LifeScoreNavGraph(
                         navController.navigate(Screen.Home.route) {
                             popUpTo(Screen.Welcome.route) { inclusive = true }
                         }
-                    }
+                    },
+                    onBack = { navController.popBackStack() }
                 )
             }
             composable(Screen.Onboarding.route) {
@@ -415,7 +418,8 @@ fun LifeScoreNavGraph(
                         navController.navigate(Screen.Home.route) {
                             popUpTo(Screen.FullAssessment.route) { inclusive = true }
                         }
-                    }
+                    },
+                    onBack = { navController.popBackStack() }
                 )
             }
             composable(Screen.Explore.route) {
@@ -432,7 +436,8 @@ fun LifeScoreNavGraph(
                         navController.navigate(Screen.Home.route) {
                             popUpTo(Screen.Login.route) { inclusive = true }
                         }
-                    }
+                    },
+                    onBack = { navController.popBackStack() }
                 )
             }
             composable(Screen.AiQuests.route) {

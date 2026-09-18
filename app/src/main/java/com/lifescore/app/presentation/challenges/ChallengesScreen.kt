@@ -13,6 +13,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -35,7 +36,8 @@ import com.lifescore.app.domain.model.*
 @Composable
 fun ChallengesScreen(
     viewModel: ChallengesViewModel,
-    onOpenPaywall: () -> Unit
+    onOpenPaywall: () -> Unit,
+    onBack: (() -> Unit)? = null
 ) {
     val uiState by viewModel.uiState.collectAsState()
     val context = LocalContext.current
@@ -52,6 +54,13 @@ fun ChallengesScreen(
         topBar = {
             TopAppBar(
                 title = { Text("Life Duels & Masterclasses", fontWeight = FontWeight.Black) },
+                navigationIcon = {
+                    if (onBack != null) {
+                        IconButton(onClick = onBack) {
+                            Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
+                        }
+                    }
+                },
                 actions = {
                     if (uiState.selectedTab == ChallengeTab.MASTERCLASSES) {
                         Surface(

@@ -28,6 +28,8 @@ import androidx.compose.ui.unit.sp
 import com.lifescore.app.core.util.*
 import com.lifescore.app.domain.model.DimensionType
 import com.lifescore.app.domain.model.HeroArchetype
+import androidx.activity.compose.BackHandler
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 
 enum class AssessmentStep {
     MODE_SELECT,
@@ -39,7 +41,8 @@ enum class AssessmentStep {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun OnboardingAssessmentScreen(
-    onCompleteOnboarding: (HeroArchetype, Map<DimensionType, Float>) -> Unit
+    onCompleteOnboarding: (HeroArchetype, Map<DimensionType, Float>) -> Unit,
+    onBack: (() -> Unit)? = null
 ) {
     var currentStep by remember { mutableStateOf(AssessmentStep.MODE_SELECT) }
     var isExpressMode by remember { mutableStateOf(false) }
@@ -66,6 +69,20 @@ fun OnboardingAssessmentScreen(
         } else null
     }
 
+    val handleBackNavigation: () -> Unit = {
+        when {
+            currentStep == AssessmentStep.CAREERS_EXPLORER -> currentStep = AssessmentStep.ARCHETYPE_REVEAL
+            currentStep == AssessmentStep.ARCHETYPE_REVEAL -> currentStep = AssessmentStep.QUESTIONS
+            currentStep == AssessmentStep.QUESTIONS && currentQuestionIndex > 0 -> currentQuestionIndex--
+            currentStep == AssessmentStep.QUESTIONS && currentQuestionIndex == 0 -> currentStep = AssessmentStep.MODE_SELECT
+            else -> onBack?.invoke()
+        }
+    }
+
+    BackHandler(enabled = true) {
+        handleBackNavigation()
+    }
+
     Scaffold(
         topBar = {
             TopAppBar(
@@ -79,6 +96,11 @@ fun OnboardingAssessmentScreen(
                         },
                         fontWeight = FontWeight.Black
                     )
+                },
+                navigationIcon = {
+                    IconButton(onClick = handleBackNavigation) {
+                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
+                    }
                 },
                 actions = {
                     if (currentStep == AssessmentStep.QUESTIONS) {

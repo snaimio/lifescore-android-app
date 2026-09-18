@@ -8,6 +8,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Share
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -34,17 +35,32 @@ import com.lifescore.app.presentation.ui.share.ShareStoryCardDialog
 import com.lifescore.app.presentation.ui.share.StoryCardData
 import com.lifescore.app.presentation.ui.share.StoryCardType
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun QuickResultsScreen(
     result: QuickAssessmentResult,
-    onContinue: () -> Unit
+    onContinue: () -> Unit,
+    onBack: (() -> Unit)? = null
 ) {
     var showStoryDialog by remember { mutableStateOf(false) }
 
     Scaffold(
         modifier = Modifier
             .fillMaxSize()
-            .background(MaterialTheme.colorScheme.background)
+            .background(MaterialTheme.colorScheme.background),
+        topBar = {
+            if (onBack != null) {
+                TopAppBar(
+                    title = {},
+                    navigationIcon = {
+                        IconButton(onClick = onBack) {
+                            Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
+                        }
+                    },
+                    colors = TopAppBarDefaults.topAppBarColors(containerColor = MaterialTheme.colorScheme.background)
+                )
+            }
+        }
     ) { padding ->
         Column(
             modifier = Modifier
