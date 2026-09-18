@@ -188,7 +188,7 @@ class BookSummaryViewModel(
         viewModelScope.launch {
             val xp = repository.markBookCompleted(bookId, userId)
             if (xp > 0) {
-                _detailState.update { it.copy(snackbarMessage = "🎉 Summary Completed! (+75 XP)") }
+                _detailState.update { it.copy(snackbarMessage = "🎉 Summary Completed!") }
             }
         }
     }
@@ -197,7 +197,7 @@ class BookSummaryViewModel(
         viewModelScope.launch {
             val xp = repository.completeAppliedQuest(bookId, userId)
             if (xp > 0) {
-                _detailState.update { it.copy(snackbarMessage = "⚔️ LifeScore Quest Completed! (+75 XP)") }
+                _detailState.update { it.copy(snackbarMessage = "✓ Key Takeaways Applied!") }
             }
         }
     }

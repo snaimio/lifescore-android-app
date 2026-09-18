@@ -53,7 +53,7 @@ class PartyViewModel(
             val defeated = repository.dealQuestDamage(damage = damage)
             _uiState.update {
                 it.copy(
-                    toastMessage = if (defeated) "🏆 BOSS DEFEATED! Party earned +200 bonus XP!" else "⚔️ Struck boss for $damage DMG! +${damage * 2} XP"
+                    toastMessage = if (defeated) "🏆 BOSS DEFEATED! Party milestone accomplished!" else "⚔️ Contributed $damage Focus to team challenge!"
                 )
             }
         }

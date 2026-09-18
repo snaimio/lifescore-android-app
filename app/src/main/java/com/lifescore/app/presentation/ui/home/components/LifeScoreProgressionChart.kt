@@ -62,7 +62,7 @@ fun LifeScoreProgressionCard(
                     color = Color(0xFF10B981).copy(alpha = 0.15f)
                 ) {
                     Text(
-                        text = "+260 pts (+50%)",
+                        text = "+260 (+50%)",
                         fontSize = 11.sp,
                         fontWeight = FontWeight.Bold,
                         color = Color(0xFF10B981),

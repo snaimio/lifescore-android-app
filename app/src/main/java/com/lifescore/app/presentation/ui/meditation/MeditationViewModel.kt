@@ -98,7 +98,7 @@ class MeditationViewModel(
     fun completeSession(mins: Int) {
         viewModelScope.launch {
             val xp = repository.recordMeditationCompleted(mins)
-            _uiState.update { it.copy(toastMessage = "$mins-minute meditation completed! +$xp XP Mind/Spirit") }
+            _uiState.update { it.copy(toastMessage = "$mins-minute meditation completed!") }
         }
     }
 

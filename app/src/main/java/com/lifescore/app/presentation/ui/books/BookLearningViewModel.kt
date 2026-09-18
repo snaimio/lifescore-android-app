@@ -71,7 +71,7 @@ class BookLearningViewModel(
                 it.copy(
                     currentCardIndex = nextIndex,
                     isAnswerRevealed = false,
-                    toastMessage = "Card reviewed! +$xp XP awarded"
+                    toastMessage = "Card reviewed!"
                 )
             }
         }
@@ -80,14 +80,14 @@ class BookLearningViewModel(
     fun generateLearningPlan(dimension: DimensionType) {
         viewModelScope.launch {
             repository.generate30DayPlan(dimension)
-            _uiState.update { it.copy(toastMessage = "30-Day ${dimension.name} Plan Generated! +50 XP") }
+            _uiState.update { it.copy(toastMessage = "30-Day ${dimension.displayName} Plan Generated!") }
         }
     }
 
     fun advancePlan(planId: String) {
         viewModelScope.launch {
             repository.advancePlanDay(planId)
-            _uiState.update { it.copy(toastMessage = "Day completed! +25 XP") }
+            _uiState.update { it.copy(toastMessage = "Day completed!") }
         }
     }
 

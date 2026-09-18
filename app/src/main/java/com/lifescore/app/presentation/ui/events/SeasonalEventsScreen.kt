@@ -92,7 +92,7 @@ fun SeasonalEventsScreen(
                                 color = MaterialTheme.colorScheme.primaryContainer
                             ) {
                                 Text(
-                                    "🔥 2X XP ACTIVE",
+                                    "🔥 ACTIVE EVENT",
                                     color = MaterialTheme.colorScheme.onPrimaryContainer,
                                     fontSize = 10.sp,
                                     fontWeight = FontWeight.Bold,
@@ -193,7 +193,7 @@ fun SeasonalEventsScreen(
                                     color = Color(quest.dimension.baseColorHex).copy(alpha = 0.15f)
                                 ) {
                                     Text(
-                                        "${quest.dimension.displayName} • +${quest.xpReward} XP • +${quest.gemReward} 💎",
+                                        "${quest.dimension.displayName} • Focus Habit",
                                         fontSize = 11.sp,
                                         fontWeight = FontWeight.Bold,
                                         color = Color(quest.dimension.baseColorHex),
@@ -212,7 +212,7 @@ fun SeasonalEventsScreen(
                             onClick = {
                                 if (!isDone) {
                                     completedQuests.add(quest.id)
-                                    Toast.makeText(context, "Completed! +${quest.xpReward} XP & +${quest.gemReward} Gems! ☀️", Toast.LENGTH_SHORT).show()
+                                    Toast.makeText(context, "Completed habit! ☀️", Toast.LENGTH_SHORT).show()
                                 }
                             },
                             shape = RoundedCornerShape(10.dp),

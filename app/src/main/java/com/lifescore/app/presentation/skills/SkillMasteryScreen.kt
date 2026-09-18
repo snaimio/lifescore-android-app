@@ -272,7 +272,7 @@ fun SkillMasteryScreen(
                         modifier = Modifier.fillMaxWidth(),
                         shape = RoundedCornerShape(12.dp)
                     ) {
-                        Text("Confirm & Award Dimension XP", fontWeight = FontWeight.Bold)
+                        Text("Log Practice Time", fontWeight = FontWeight.Bold)
                     }
                 }
             }

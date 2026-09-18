@@ -94,7 +94,7 @@ fun AnalyticsDashboardScreen(
                                 color = Color.Black.copy(alpha = 0.25f)
                             ) {
                                 Text(
-                                    "Compounding +2.8pts/day",
+                                    "Compounding +2.8% / day",
                                     fontSize = 11.sp,
                                     fontWeight = FontWeight.Bold,
                                     color = Color(0xFF64FFDA),

@@ -69,7 +69,7 @@ class DedicatedTrackerViewModel(
 
                 val formatted = if (value % 1.0f == 0f) "${value.toInt()}" else "$value"
                 _uiState.update {
-                    it.copy(successToast = "Added +$formatted ${trackerType.unit}! (+$xp XP) 🚀")
+                    it.copy(successToast = "Logged +$formatted ${trackerType.unit} successfully!")
                 }
             } catch (e: Exception) {
                 _uiState.update { it.copy(error = e.localizedMessage) }

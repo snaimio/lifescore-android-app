@@ -149,9 +149,9 @@ fun CharacterSystemScreen(
                                     )
                                 }
                                 Column(horizontalAlignment = Alignment.End) {
-                                    Text("Stat Points Available", style = MaterialTheme.typography.labelSmall, color = Color.White.copy(alpha = 0.7f))
+                                    Text("Focus Available", style = MaterialTheme.typography.labelSmall, color = Color.White.copy(alpha = 0.7f))
                                     Text(
-                                        "${uiState.stats.availablePoints} PTS",
+                                        "${uiState.stats.availablePoints} FOCUS",
                                         fontSize = 20.sp,
                                         fontWeight = FontWeight.Black,
                                         color = if (uiState.stats.availablePoints > 0) Color(0xFFFF9800) else Color.White.copy(alpha = 0.5f)
@@ -216,7 +216,7 @@ fun CharacterSystemScreen(
                 StatAllocationRow(
                     name = "Strength (STR)",
                     value = uiState.stats.strength,
-                    description = "Boosts Physical Output, Fitness XP, and Boss Damage",
+                    description = "Boosts Physical Output, Fitness Mastery, and Focus Damage",
                     emoji = "💪",
                     accentColor = Color(0xFFEF4444),
                     canAllocate = uiState.stats.availablePoints > 0,

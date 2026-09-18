@@ -177,7 +177,7 @@ fun ChallengesScreen(
                         Column(modifier = Modifier.padding(12.dp)) {
                             Text("Credential ID: ${cert.certificateId}", fontWeight = FontWeight.Bold, fontSize = 11.sp)
                             Text("Issued: ${cert.completionDate}", fontSize = 11.sp, color = MaterialTheme.colorScheme.outline)
-                            Text("Total XP Earned: +${cert.xpEarnedTotal} XP", fontWeight = FontWeight.Black, fontSize = 12.sp, color = MaterialTheme.colorScheme.primary)
+                            Text("Status: Certified (100% Completed)", fontWeight = FontWeight.Bold, fontSize = 12.sp, color = MaterialTheme.colorScheme.primary)
                         }
                     }
 
@@ -474,8 +474,7 @@ fun MasterclassesView(
                                         horizontalArrangement = Arrangement.SpaceBetween,
                                         verticalAlignment = Alignment.CenterVertically
                                     ) {
-                                        Text("⚡ Daily Actionable Quest", fontWeight = FontWeight.Black, fontSize = 12.sp)
-                                        Text("+${activeDay.dailyTaskPoints} XP", fontWeight = FontWeight.Black, fontSize = 12.sp, color = MaterialTheme.colorScheme.primary)
+                                        Text("⚡ Daily Focus Action", fontWeight = FontWeight.Bold, fontSize = 12.sp)
                                     }
                                     Spacer(Modifier.height(4.dp))
                                     Text(activeDay.dailyTaskTitle, fontSize = 12.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
@@ -499,7 +498,7 @@ fun MasterclassesView(
                                             modifier = Modifier.fillMaxWidth().height(42.dp),
                                             shape = RoundedCornerShape(10.dp)
                                         ) {
-                                            Text(if (activeDay.isCompleted) "Day ${activeDay.dayNumber} Complete ✓" else "Complete Day ${activeDay.dayNumber} Task (+50 XP)", fontWeight = FontWeight.Bold, fontSize = 12.sp)
+                                            Text(if (activeDay.isCompleted) "Day ${activeDay.dayNumber} Complete ✓" else "Complete Day ${activeDay.dayNumber} Task", fontWeight = FontWeight.Bold, fontSize = 12.sp)
                                         }
                                     }
                                 }
@@ -606,7 +605,7 @@ fun DuelsAndSprintsView(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Text(challenge.title, fontWeight = FontWeight.Bold, fontSize = 14.sp)
-                        Text("+${challenge.xpReward} XP", fontWeight = FontWeight.Black, fontSize = 12.sp, color = MaterialTheme.colorScheme.primary)
+                        Text("${challenge.durationDays} Days", fontWeight = FontWeight.Bold, fontSize = 12.sp, color = MaterialTheme.colorScheme.primary)
                     }
                     Spacer(Modifier.height(4.dp))
                     Text(challenge.description, fontSize = 11.sp, color = MaterialTheme.colorScheme.outline)

@@ -60,7 +60,7 @@ class GroupHabitViewModel(
     fun completeToday(habit: GroupHabit) {
         viewModelScope.launch {
             repository.completeToday(habit.id)
-            _uiState.update { it.copy(bannerMessage = "⚡ Daily completion logged for ${habit.title}! +${habit.xpReward} XP") }
+            _uiState.update { it.copy(bannerMessage = "Daily completion logged for ${habit.title}!") }
         }
     }
 

@@ -146,7 +146,7 @@ fun FirstQuestScreen(
                         ) {
                             LifeIcon(LifeIcons.forDimension(dimension), size = 16.dp)
                             Text(
-                                text = "${dimension.displayName} • +50 XP",
+                                text = dimension.displayName,
                                 style = MaterialTheme.typography.labelSmall,
                                 fontWeight = FontWeight.Bold,
                                 color = MaterialTheme.colorScheme.primary
@@ -168,7 +168,7 @@ fun FirstQuestScreen(
                         Spacer(Modifier.height(Space.sm))
 
                         Text(
-                            text = if (isCompleted) "Day 1 streak activated. Ready to architect your life." else "Complete this simple micro-habit right now to bank your first 50 XP.",
+                            text = if (isCompleted) "Day 1 streak activated. Ready to architect your life." else "Complete this foundational habit right now to start your Day 1 streak.",
                             style = MaterialTheme.typography.bodySmall,
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
                             textAlign = TextAlign.Center,
@@ -208,7 +208,7 @@ fun FirstQuestScreen(
                     ) {
                         LifeIcon(LifeIcons.Check, size = 18.dp, tint = MaterialTheme.colorScheme.onPrimary)
                         Spacer(Modifier.width(Space.xs))
-                        Text("Tap to Complete (+50 XP)", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold)
+                        Text("Tap to Complete", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold)
                     }
 
                     TextButton(onClick = onSkip) {

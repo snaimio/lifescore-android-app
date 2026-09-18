@@ -233,7 +233,7 @@ fun HeroScoreCard(
             )
 
             Text(
-                text = "Level $level",
+                text = "Daily Consistency",
                 fontWeight = FontWeight.Bold,
                 style = MaterialTheme.typography.titleMedium
             )
@@ -393,16 +393,12 @@ fun TaskItemCard(
                     color = Color(task.dimension.baseColorHex)
                 )
             }
-            Surface(
-                shape = CircleShape,
-                color = Color(task.dimension.baseColorHex).copy(alpha = 0.15f)
-            ) {
-                Text(
-                    text = "+${task.pointsReward} XP",
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 11.sp,
-                    color = Color(task.dimension.baseColorHex),
-                    modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp)
+            if (task.isCompleted) {
+                Icon(
+                    Icons.Default.Check,
+                    contentDescription = "Done",
+                    tint = Color(task.dimension.baseColorHex),
+                    modifier = Modifier.size(18.dp)
                 )
             }
         }

@@ -15,9 +15,9 @@
 
     <!-- General -->
     <string name="streak_label">سلسلة %1$d يوم</string>
-    <string name="coins_label">%1$d عملة</string>
-    <string name="level_label">المستوى %1$d</string>
-    <string name="points_reward">+%1$d نقطة</string>
+    <string name="coins_label">%1$d عادات</string>
+    <string name="level_label">الاستمرارية</string>
+    <string name="points_reward">مكتمل</string>
 
     <!-- Dimensions -->
     <string name="dim_health">الصحة والحيوية</string>

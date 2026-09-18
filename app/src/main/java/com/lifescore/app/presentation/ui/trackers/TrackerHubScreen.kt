@@ -289,7 +289,7 @@ fun MasterOverviewCard(
                     color = MaterialTheme.colorScheme.secondaryContainer
                 ) {
                     Text(
-                        text = "⚡ Up to +400 XP Daily",
+                        text = "Daily Habit Tracking",
                         fontSize = 11.sp,
                         fontWeight = FontWeight.Bold,
                         color = MaterialTheme.colorScheme.onSecondaryContainer,
@@ -413,7 +413,7 @@ fun TrackerModuleCard(
                         color = if (isCompleted) Color(0xFF10B981).copy(alpha = 0.15f) else MaterialTheme.colorScheme.surfaceVariant
                     ) {
                         Text(
-                            text = if (isCompleted) "✓ DONE" else "+${type.xpReward} XP",
+                            text = if (isCompleted) "✓ DONE" else "Active",
                             fontSize = 10.sp,
                             fontWeight = FontWeight.Bold,
                             color = if (isCompleted) Color(0xFF10B981) else MaterialTheme.colorScheme.primary,
@@ -572,7 +572,7 @@ fun CustomLogDialog(
                         shape = RoundedCornerShape(10.dp),
                         enabled = textValue.isNotBlank()
                     ) {
-                        Text("Log Entry (+${trackerType.xpReward} XP)", fontWeight = FontWeight.Bold)
+                        Text("Log Entry", fontWeight = FontWeight.Bold)
                     }
                 }
             }

@@ -44,7 +44,7 @@ fun HydrationStreakCard(
                         fontWeight = FontWeight.Bold
                     )
                     Text(
-                        text = "Consistency rewards: +10 XP daily & Health dimension boost",
+                        text = "Consistent daily hydration improves mental focus & vitality",
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
@@ -56,7 +56,7 @@ fun HydrationStreakCard(
                 color = Color(0xFFF59E0B).copy(alpha = 0.2f)
             ) {
                 Text(
-                    text = "🏆 Level ${(streak / 3) + 1}",
+                    text = "🔥 Active",
                     fontSize = 11.sp,
                     fontWeight = FontWeight.Bold,
                     color = Color(0xFFF59E0B),

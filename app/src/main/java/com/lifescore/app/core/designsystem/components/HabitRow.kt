@@ -121,11 +121,6 @@ fun HabitRow(
                         color = if (isChecked) MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f) else Color(task.dimension.baseColorHex),
                         fontWeight = FontWeight.Bold
                     )
-                    Text(
-                        text = " • +${task.pointsReward} XP",
-                        style = MaterialTheme.typography.labelSmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f)
-                    )
                     if (task.streakDays > 0) {
                         Text(
                             text = " • ",

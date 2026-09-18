@@ -335,7 +335,7 @@ fun CustomMiniAppLogDialog(
                         shape = RoundedCornerShape(10.dp),
                         enabled = textValue.isNotBlank()
                     ) {
-                        Text("Save Entry (+${type.xpReward} XP)", fontWeight = FontWeight.Bold)
+                        Text("Save Entry", fontWeight = FontWeight.Bold)
                     }
                 }
             }

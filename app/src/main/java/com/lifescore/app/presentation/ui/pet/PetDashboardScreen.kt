@@ -217,15 +217,14 @@ fun PetDashboardScreen(
                         shape = RoundedCornerShape(14.dp),
                         colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFFF9800))
                     ) {
-                        Text("🍎 Feed Snack (+20 XP)")
+                        Text("🍎 Feed Snack")
                     }
                     Button(
                         onClick = { viewModel.petAffection() },
                         modifier = Modifier.weight(1f),
-                        shape = RoundedCornerShape(14.dp),
                         colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFE91E63))
                     ) {
-                        Text("💖 Pet & Hug (+15 XP)")
+                        Text("💖 Pet & Hug")
                     }
                 }
             }

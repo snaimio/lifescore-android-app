@@ -15,9 +15,9 @@
 
     <!-- General -->
     <string name="streak_label">%1$d दिन की निरंतरता</string>
-    <string name="coins_label">%1$d सिक्के</string>
-    <string name="level_label">लेवल %1$d</string>
-    <string name="points_reward">+%1$d अनुभव</string>
+    <string name="coins_label">%1$d आदतें</string>
+    <string name="level_label">निरंतरता</string>
+    <string name="points_reward">पूर्ण</string>
 
     <!-- Dimensions -->
     <string name="dim_health">स्वास्थ्य और ऊर्जा</string>

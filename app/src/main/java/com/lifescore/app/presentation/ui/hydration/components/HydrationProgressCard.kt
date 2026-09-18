@@ -135,7 +135,7 @@ fun HydrationProgressCard(
                         }
                     ) {
                         Text(
-                            text = if (stats?.isGoalMet == true) "🎉 Daily Goal Met! (+20 XP)" else "${stats?.glassesConsumed ?: 0} / ${stats?.glassesGoal ?: 10} glasses (250ml)",
+                            text = if (stats?.isGoalMet == true) "🎉 Daily Goal Met!" else "${stats?.glassesConsumed ?: 0} / ${stats?.glassesGoal ?: 10} glasses (250ml)",
                             modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp),
                             style = MaterialTheme.typography.labelSmall,
                             fontWeight = FontWeight.Bold,

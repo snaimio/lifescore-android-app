@@ -221,7 +221,7 @@ fun ActionPlanScreen(
                                     color = MaterialTheme.colorScheme.errorContainer
                                 ) {
                                     Text(
-                                        text = "${weakness.score}/200 pts",
+                                        text = "${weakness.score}/200 Index",
                                         fontSize = 11.sp,
                                         fontWeight = FontWeight.Bold,
                                         color = MaterialTheme.colorScheme.onErrorContainer,
@@ -289,7 +289,7 @@ fun ActionPlanScreen(
                                     )
                                 }
                                 Text(
-                                    text = "+${habit.xpReward} XP • ~${habit.estimatedMinutes}m",
+                                    text = "~${habit.estimatedMinutes}m daily",
                                     fontSize = 11.sp,
                                     fontWeight = FontWeight.Bold,
                                     color = MaterialTheme.colorScheme.primary
@@ -347,7 +347,7 @@ fun ActionPlanScreen(
                                 color = MaterialTheme.colorScheme.primary.copy(alpha = 0.15f)
                             ) {
                                 Text(
-                                    "+${goal.xpReward} XP",
+                                    "Weekly",
                                     fontSize = 11.sp,
                                     fontWeight = FontWeight.Bold,
                                     color = MaterialTheme.colorScheme.primary,
@@ -379,7 +379,7 @@ fun ActionPlanScreen(
                                 color = MaterialTheme.colorScheme.tertiary
                             ) {
                                 Text(
-                                    "+${milestone.xpReward} XP",
+                                    "Milestone",
                                     fontSize = 11.sp,
                                     fontWeight = FontWeight.Bold,
                                     color = MaterialTheme.colorScheme.onTertiary,

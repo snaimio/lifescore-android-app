@@ -112,7 +112,7 @@ fun PartyDashboardScreen(
                                             fontWeight = FontWeight.Bold
                                         )
                                     }
-                                    Text("Squad XP: +${((party?.teamXpMultiplier ?: 1.3) * 100 - 100).toInt()}%", color = Color.White, fontSize = 12.sp, fontWeight = FontWeight.Bold)
+                                    Text("Squad Focus: +${((party?.teamXpMultiplier ?: 1.3) * 100 - 100).toInt()}%", color = Color.White, fontSize = 12.sp, fontWeight = FontWeight.Bold)
                                 }
 
                                 Spacer(modifier = Modifier.height(16.dp))
@@ -152,7 +152,7 @@ fun PartyDashboardScreen(
                                     shape = RoundedCornerShape(12.dp),
                                     colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFFFD54F), contentColor = Color(0xFF3E2723))
                                 ) {
-                                    Text("⚔️ Deal 35 DMG from Completed Daily Habits (+70 XP)", fontWeight = FontWeight.Bold, fontSize = 12.sp)
+                                    Text("⚔️ Contribute 35 Focus from Daily Habits", fontWeight = FontWeight.Bold, fontSize = 12.sp)
                                 }
                             }
                         }

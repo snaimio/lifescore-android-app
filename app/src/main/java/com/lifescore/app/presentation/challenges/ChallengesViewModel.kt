@@ -173,7 +173,7 @@ class ChallengesViewModel(
             selectedMasterclassDay = updated.days.getOrNull(updated.currentDay - 1),
             activeCertificate = cert,
             showGraduationModal = updated.isCompleted,
-            recentSuccessMessage = if (updated.isCompleted) "🏆 Congratulations! 14-Day Masterclass Graduated!" else "Day $dayNumber Completed! +50 XP"
+            recentSuccessMessage = if (updated.isCompleted) "🏆 Congratulations! 14-Day Masterclass Graduated!" else "Day $dayNumber Completed!"
         )
     }
 
@@ -273,9 +273,9 @@ class ChallengesViewModel(
             repository.updateUserProfile(updatedProfile)
 
             val msg = if (completedBonus > 0) {
-                "🎉 Challenge Completed! +${totalEarned} XP Earned & Champion Badge Unlocked!"
+                "🎉 Challenge Completed! Milestone Badge Unlocked!"
             } else {
-                "✅ Day Check-In Logged! +${bonusXp} XP & Streak Continued 🔥"
+                "✅ Day Check-In Logged! Streak Continued 🔥"
             }
 
             _uiState.value = _uiState.value.copy(

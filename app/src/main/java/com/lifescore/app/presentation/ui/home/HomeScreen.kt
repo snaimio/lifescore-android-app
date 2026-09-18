@@ -102,7 +102,12 @@ fun HomeScreen(
                             modifier = Modifier.size(34.dp)
                         ) {
                             Box(contentAlignment = Alignment.Center) {
-                                Text("⚔️", fontSize = 16.sp)
+                                Icon(
+                                    Icons.Default.Person,
+                                    contentDescription = "Profile",
+                                    tint = MaterialTheme.colorScheme.primary,
+                                    modifier = Modifier.size(18.dp)
+                                )
                             }
                         }
                         Spacer(Modifier.width(Spacing.sm))
@@ -115,7 +120,7 @@ fun HomeScreen(
                             )
                             Row(verticalAlignment = Alignment.CenterVertically) {
                                 Text(
-                                    "${uiState.userTitle} • Lvl ${uiState.level}",
+                                    "${uiState.userTitle} • ${uiState.streak} Day Streak",
                                     style = MaterialTheme.typography.labelSmall,
                                     color = MaterialTheme.colorScheme.onSurfaceVariant
                                 )
@@ -259,7 +264,7 @@ fun HomeScreen(
                                     Text("📋", fontSize = 18.sp)
                                     Spacer(Modifier.width(8.dp))
                                     Text(
-                                        "Today's Quests",
+                                        "Daily Habits",
                                         style = MaterialTheme.typography.titleMedium,
                                         fontWeight = FontWeight.Bold
                                     )
@@ -292,7 +297,7 @@ fun HomeScreen(
                                     ) {
                                         Text("🎉", fontSize = 28.sp)
                                         Spacer(Modifier.height(4.dp))
-                                        Text("All daily quests completed!", fontWeight = FontWeight.Bold)
+                                        Text("All daily habits completed!", fontWeight = FontWeight.Bold)
                                         Text("You've built compounding momentum today.", fontSize = 12.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
                                     }
                                 }
@@ -317,7 +322,7 @@ fun HomeScreen(
                                 modifier = Modifier.fillMaxWidth()
                             ) {
                                 Text(
-                                    if (uiState.todayTasks.size > visibleQuests.size) "View All Quests (${uiState.todayTasks.size}) →" else "Manage Quests →",
+                                    if (uiState.todayTasks.size > visibleQuests.size) "View All Habits (${uiState.todayTasks.size}) →" else "Manage Habits →",
                                     fontWeight = FontWeight.Bold,
                                     fontSize = 13.sp
                                 )
@@ -600,7 +605,7 @@ private fun DailyQuestRow(
                     color = if (task.isCompleted) MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f) else MaterialTheme.colorScheme.onSurface
                 )
                 Text(
-                    text = "${task.dimension.displayName} • +${task.pointsReward} XP",
+                    text = task.dimension.displayName,
                     fontSize = 11.sp,
                     color = Color(task.dimension.baseColorHex)
                 )

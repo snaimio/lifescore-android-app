@@ -25,16 +25,16 @@ object SubscriptionManager {
                 "✅ All 88+ Features & Modules",
                 "✅ All 15 Dedicated Trackers",
                 "✅ 8 Life Dimensions & Radar",
-                "✅ Daily Micro-Quests & XP",
+                "✅ Daily Habits & Routines",
                 "✅ Stanford AI Coach (Basic)",
-                "✅ RPG Boss Raids & Party System",
-                "✅ 10-Tier Leagues & Duels",
-                "✅ Earn Gems from Gameplay"
+                "✅ Squad Collaboration System",
+                "✅ Weekly Consistency Benchmarks",
+                "✅ Earn Rewards from Consistency"
             )
             SupporterTier.SUPPORTER -> listOf(
                 "💎 All FREE Core Benefits",
-                "💎 Convert In-Game Gold to Gems (100:1)",
-                "💎 Exclusive Supporter Avatar & Themes",
+                "💎 Advanced Analytics & Visualizations",
+                "💎 Exclusive Executive Themes",
                 "💎 Supporter Patron Profile Badge",
                 "💎 Early Access to New Feature Modules",
                 "💎 100% Ad-Free Support of Development",

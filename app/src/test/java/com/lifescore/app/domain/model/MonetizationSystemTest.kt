@@ -80,7 +80,7 @@ class MonetizationSystemTest {
         val premiumBenefits = SubscriptionManager.getSubscriptionBenefits(SupporterTier.PREMIUM)
 
         assertTrue(freeBenefits.any { it.contains("100% Free Core Experience") })
-        assertTrue(supporterBenefits.any { it.contains("Convert In-Game Gold to Gems") })
+        assertTrue(supporterBenefits.any { it.contains("Advanced Analytics & Visualizations") })
         assertTrue(premiumBenefits.any { it.contains("Stanford AI") })
     }
 }

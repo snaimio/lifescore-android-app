@@ -105,7 +105,7 @@ class TasksViewModel(
         val list = _uiState.value.tasks.map { if (it.id == task.id) updated else it }
         _uiState.value = _uiState.value.copy(
             tasks = list,
-            recentSuccessMessage = if (updated.isCompleted) "Completed '${task.title}'! +${task.pointsReward} XP" else null
+            recentSuccessMessage = if (updated.isCompleted) "Completed '${task.title}'!" else null
         )
         viewModelScope.launch {
             repository.toggleTaskCompletion(task)
@@ -117,7 +117,7 @@ class TasksViewModel(
         val list = _uiState.value.tasks.map { if (it.id == task.id) updated else it }
         _uiState.value = _uiState.value.copy(
             tasks = list,
-            recentSuccessMessage = if (updated.isCompleted && !task.isCompleted) "🎉 Target Reached! +${task.pointsReward} XP" else null
+            recentSuccessMessage = if (updated.isCompleted && !task.isCompleted) "🎉 Target Reached!" else null
         )
     }
 
@@ -132,7 +132,7 @@ class TasksViewModel(
         val list = _uiState.value.tasks.map { if (it.id == task.id) updated else it }
         _uiState.value = _uiState.value.copy(
             tasks = list,
-            recentSuccessMessage = if (updated.isCompleted && !task.isCompleted) "🏆 Routine Finished! +${task.pointsReward} XP" else null
+            recentSuccessMessage = if (updated.isCompleted && !task.isCompleted) "Routine Finished!" else null
         )
     }
 
@@ -680,7 +680,7 @@ fun CounterHabitCard(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = "${task.dimension.displayName} • +${task.pointsReward} XP • 🔥 ${task.streakDays}d streak",
+                    text = "${task.dimension.displayName} • 🔥 ${task.streakDays}d streak",
                     fontSize = 11.sp,
                     color = MaterialTheme.colorScheme.outline
                 )
@@ -707,7 +707,7 @@ fun CounterHabitCard(
             ) {
                 if (task.isCompleted) {
                     Surface(shape = RoundedCornerShape(6.dp), color = Color(0xFF10B981).copy(alpha = 0.2f)) {
-                        Text("✓ Target Reached! (+${task.pointsReward} XP)", fontSize = 11.sp, fontWeight = FontWeight.Bold, color = Color(0xFF10B981), modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp))
+                        Text("✓ Target Reached!", fontSize = 11.sp, fontWeight = FontWeight.Bold, color = Color(0xFF10B981), modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp))
                     }
                 } else {
                     Text("${String.format("%.0f", task.counterProgress * 100)}% complete", fontSize = 11.sp, color = MaterialTheme.colorScheme.outline)
@@ -759,7 +759,7 @@ fun SubTasksHabitCard(
             ) {
                 Column(modifier = Modifier.weight(1f)) {
                     Text(task.title, fontWeight = FontWeight.Bold, fontSize = 14.sp)
-                    Text("${task.dimension.displayName} • Routine • +${task.pointsReward} XP", fontSize = 11.sp, color = MaterialTheme.colorScheme.outline)
+                    Text("${task.dimension.displayName} • Routine", fontSize = 11.sp, color = MaterialTheme.colorScheme.outline)
                 }
 
                 Row(verticalAlignment = Alignment.CenterVertically) {
@@ -861,7 +861,7 @@ fun BooleanHabitCard(
                     color = if (task.isCompleted) MaterialTheme.colorScheme.outline else MaterialTheme.colorScheme.onSurface
                 )
                 Text(
-                    text = "${task.dimension.displayName} • +${task.pointsReward} XP • 🔥 ${task.streakDays}d streak",
+                    text = "${task.dimension.displayName} • 🔥 ${task.streakDays}d streak",
                     fontSize = 11.sp,
                     color = MaterialTheme.colorScheme.outline
                 )
@@ -952,7 +952,7 @@ fun Challenges30DayView(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Text(ch.title, fontWeight = FontWeight.Bold, fontSize = 15.sp)
-                        Text("+${ch.xpReward} XP", fontWeight = FontWeight.Black, fontSize = 12.sp, color = MaterialTheme.colorScheme.primary)
+                        Text("30-Day Focus", fontWeight = FontWeight.Bold, fontSize = 12.sp, color = MaterialTheme.colorScheme.primary)
                     }
                     Spacer(Modifier.height(4.dp))
                     Text(ch.description, fontSize = 12.sp, color = MaterialTheme.colorScheme.outline)

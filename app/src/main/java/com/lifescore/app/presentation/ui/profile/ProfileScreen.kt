@@ -44,7 +44,7 @@ fun ProfileScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Hero Profile & Stats", fontWeight = FontWeight.Black) },
+                title = { Text("Profile & Analytics", fontWeight = FontWeight.Bold) },
                 navigationIcon = {
                     IconButton(onClick = { navController.popBackStack() }) {
                         Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
@@ -65,7 +65,7 @@ fun ProfileScreen(
                 .padding(horizontal = 16.dp),
             verticalArrangement = Arrangement.spacedBy(14.dp)
         ) {
-            // 1. Hero Identity Banner
+            // 1. Identity Banner
             item {
                 Card(
                     shape = RoundedCornerShape(24.dp),
@@ -82,26 +82,31 @@ fun ProfileScreen(
                             modifier = Modifier.size(72.dp)
                         ) {
                             Box(contentAlignment = Alignment.Center) {
-                                Text("⚔️", fontSize = 36.sp)
+                                Icon(
+                                    Icons.Default.Person,
+                                    contentDescription = "Profile",
+                                    tint = MaterialTheme.colorScheme.onPrimary,
+                                    modifier = Modifier.size(36.dp)
+                                )
                             }
                         }
 
                         Spacer(Modifier.height(10.dp))
-                        Text(uiState.user.name, fontWeight = FontWeight.Black, fontSize = 22.sp, color = MaterialTheme.colorScheme.onPrimaryContainer)
-                        Text(uiState.user.title, fontSize = 13.sp, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.primary)
-                        Spacer(Modifier.height(8.dp))
+                        Text(uiState.user.name, fontWeight = FontWeight.Bold, fontSize = 22.sp, color = MaterialTheme.colorScheme.onPrimaryContainer)
+                        Text(uiState.user.title.ifBlank { "Dedicated Practitioner" }, fontSize = 13.sp, fontWeight = FontWeight.SemiBold, color = MaterialTheme.colorScheme.primary)
+                        Spacer(Modifier.height(12.dp))
 
-                        // Level & XP Progress
+                        // Consistency Progress
                         Row(
                             modifier = Modifier.fillMaxWidth(),
                             horizontalArrangement = Arrangement.SpaceBetween
                         ) {
-                            Text("Level ${uiState.user.currentLevel}", fontSize = 11.sp, fontWeight = FontWeight.Bold)
-                            Text("${uiState.user.currentXp % 500} / 500 XP to Lvl ${uiState.user.currentLevel + 1}", fontSize = 11.sp, color = MaterialTheme.colorScheme.outline)
+                            Text("Weekly Habit Consistency", fontSize = 11.sp, fontWeight = FontWeight.Bold)
+                            Text("${uiState.consistencyPercentage}% on track", fontSize = 11.sp, color = MaterialTheme.colorScheme.outline)
                         }
                         Spacer(Modifier.height(6.dp))
                         LinearProgressIndicator(
-                            progress = { ((uiState.user.currentXp % 500) / 500f).coerceIn(0f, 1f) },
+                            progress = { (uiState.consistencyPercentage / 100f).coerceIn(0f, 1f) },
                             modifier = Modifier.fillMaxWidth().height(8.dp).clip(CircleShape),
                             color = MaterialTheme.colorScheme.primary
                         )
@@ -117,26 +122,26 @@ fun ProfileScreen(
                 ) {
                     Surface(shape = RoundedCornerShape(14.dp), color = MaterialTheme.colorScheme.surfaceVariant, modifier = Modifier.weight(1f)) {
                         Column(modifier = Modifier.padding(12.dp), horizontalAlignment = Alignment.CenterHorizontally) {
-                            Text("🔥 STREAK", fontSize = 9.sp, fontWeight = FontWeight.Black, color = Color(0xFFFF5722))
-                            Text("${uiState.user.currentStreakDays}d", fontWeight = FontWeight.Black, fontSize = 16.sp)
+                            Text("🔥 STREAK", fontSize = 9.sp, fontWeight = FontWeight.Bold, color = Color(0xFFFF5722))
+                            Text("${uiState.user.currentStreakDays}d", fontWeight = FontWeight.Bold, fontSize = 16.sp)
                         }
                     }
                     Surface(shape = RoundedCornerShape(14.dp), color = MaterialTheme.colorScheme.surfaceVariant, modifier = Modifier.weight(1f)) {
                         Column(modifier = Modifier.padding(12.dp), horizontalAlignment = Alignment.CenterHorizontally) {
-                            Text("🪙 COINS", fontSize = 9.sp, fontWeight = FontWeight.Black, color = Color(0xFFFFD700))
-                            Text("1,250", fontWeight = FontWeight.Black, fontSize = 16.sp)
+                            Text("✓ HABITS", fontSize = 9.sp, fontWeight = FontWeight.Bold, color = Color(0xFF10B981))
+                            Text("${uiState.totalTasksCompleted}", fontWeight = FontWeight.Bold, fontSize = 16.sp)
                         }
                     }
                     Surface(shape = RoundedCornerShape(14.dp), color = MaterialTheme.colorScheme.surfaceVariant, modifier = Modifier.weight(1f)) {
                         Column(modifier = Modifier.padding(12.dp), horizontalAlignment = Alignment.CenterHorizontally) {
-                            Text("🛡️ SHIELDS", fontSize = 9.sp, fontWeight = FontWeight.Black, color = Color(0xFF6366F1))
-                            Text("${uiState.streakShieldsAvailable}", fontWeight = FontWeight.Black, fontSize = 16.sp)
+                            Text("⏳ FOCUS", fontSize = 9.sp, fontWeight = FontWeight.Bold, color = Color(0xFF6366F1))
+                            Text("${String.format(java.util.Locale.US, "%.1f", uiState.focusHours)}h", fontWeight = FontWeight.Bold, fontSize = 16.sp)
                         }
                     }
                     Surface(shape = RoundedCornerShape(14.dp), color = MaterialTheme.colorScheme.surfaceVariant, modifier = Modifier.weight(1f)) {
                         Column(modifier = Modifier.padding(12.dp), horizontalAlignment = Alignment.CenterHorizontally) {
-                            Text("🏆 LEAGUE", fontSize = 9.sp, fontWeight = FontWeight.Black, color = Color(0xFF10B981))
-                            Text("Diamond", fontWeight = FontWeight.Black, fontSize = 14.sp)
+                            Text("📈 RATE", fontSize = 9.sp, fontWeight = FontWeight.Bold, color = Color(0xFFF59E0B))
+                            Text("${uiState.consistencyPercentage}%", fontWeight = FontWeight.Bold, fontSize = 14.sp)
                         }
                     }
                 }
@@ -161,30 +166,30 @@ fun ProfileScreen(
                             modifier = Modifier.size(48.dp)
                         ) {
                             Box(contentAlignment = Alignment.Center) {
-                                Text("⚔️", fontSize = 24.sp)
+                                Icon(Icons.Default.Psychology, contentDescription = null, tint = Color(0xFFFF5722), modifier = Modifier.size(24.dp))
                             }
                         }
                         Spacer(Modifier.width(14.dp))
                         Column(modifier = Modifier.weight(1f)) {
-                            Text("Hero Archetype: The Warrior", fontWeight = FontWeight.Black, fontSize = 15.sp)
-                            Text("Unyielding Force • Fitness & Tactical Execution", fontSize = 11.sp, color = MaterialTheme.colorScheme.outline)
+                            Text("Behavioral Archetype Profile", fontWeight = FontWeight.Bold, fontSize = 15.sp)
+                            Text("Habit Tendencies • Focus & Execution Style", fontSize = 11.sp, color = MaterialTheme.colorScheme.outline)
                         }
                         Icon(Icons.Default.ChevronRight, contentDescription = null)
                     }
                 }
             }
 
-            // 4. Lifetime Achievements & Badges
+            // 4. Milestones & Consistency Badges
             item {
-                Text("🎖️ Badges & Milestones", fontWeight = FontWeight.Black, fontSize = 16.sp)
+                Text("🎖️ Milestones & Consistency", fontWeight = FontWeight.Bold, fontSize = 16.sp)
             }
 
             item {
                 val badges = listOf(
                     Triple("🔥 7-Day Flame", "Maintained 7d streak", true),
-                    Triple("⚔️ Deep Work Knight", "50+ focus hours", true),
-                    Triple("🧘 Circadian Zen", "14d sleep routine", true),
-                    Triple("👑 Outlier Legend", "Reached 900 LifeScore", false)
+                    Triple("⏱️ Deep Work", "50+ focus hours", true),
+                    Triple("🧘 Circadian Habit", "14d sleep routine", true),
+                    Triple("📊 Master Index", "Reached 900 LifeScore", false)
                 )
 
                 Row(
@@ -208,16 +213,16 @@ fun ProfileScreen(
                 }
             }
 
-            // 5. Quick Links (Explore, Referral, Enterprise, Skill Mastery)
+            // 5. Quick Links
             item {
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Text("⚡ Quick Hubs & Directory", fontWeight = FontWeight.Black, fontSize = 16.sp)
+                    Text("⚡ Quick Hubs & Directory", fontWeight = FontWeight.Bold, fontSize = 16.sp)
                     TextButton(onClick = { navController.navigate(Screen.Explore.route) }) {
-                        Text("View All 40+ →", fontWeight = FontWeight.Bold, fontSize = 12.sp)
+                        Text("View All →", fontWeight = FontWeight.Bold, fontSize = 12.sp)
                     }
                 }
             }
@@ -230,11 +235,11 @@ fun ProfileScreen(
                         modifier = Modifier.fillMaxWidth().clickable { navController.navigate(Screen.Explore.route) }
                     ) {
                         Row(modifier = Modifier.padding(14.dp), verticalAlignment = Alignment.CenterVertically) {
-                            Text("🧭", fontSize = 20.sp)
+                            Icon(Icons.Default.Explore, contentDescription = null, tint = MaterialTheme.colorScheme.primary)
                             Spacer(Modifier.width(12.dp))
                             Column(modifier = Modifier.weight(1f)) {
-                                Text("Explore LifeScore Directory", fontWeight = FontWeight.Bold, fontSize = 14.sp)
-                                Text("Discover all 40+ modules, 15 trackers & RPG systems", fontSize = 11.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                                Text("Explore Directory", fontWeight = FontWeight.Bold, fontSize = 14.sp)
+                                Text("Discover all habit modules & analytics tools", fontSize = 11.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
                             }
                             Icon(Icons.Default.ChevronRight, contentDescription = null, tint = MaterialTheme.colorScheme.primary)
                         }
@@ -246,22 +251,9 @@ fun ProfileScreen(
                         modifier = Modifier.fillMaxWidth().clickable { navController.navigate(Screen.SkillMastery.route) }
                     ) {
                         Row(modifier = Modifier.padding(14.dp), verticalAlignment = Alignment.CenterVertically) {
-                            Text("⏱️", fontSize = 20.sp)
+                            Icon(Icons.Default.Timer, contentDescription = null)
                             Spacer(Modifier.width(12.dp))
                             Text("10,000-Hour Skill Mastery Tracker", fontWeight = FontWeight.Bold, fontSize = 13.sp, modifier = Modifier.weight(1f))
-                            Icon(Icons.Default.ChevronRight, contentDescription = null)
-                        }
-                    }
-
-                    Surface(
-                        shape = RoundedCornerShape(14.dp),
-                        color = MaterialTheme.colorScheme.surfaceVariant,
-                        modifier = Modifier.fillMaxWidth().clickable { navController.navigate(Screen.RewardStore.route) }
-                    ) {
-                        Row(modifier = Modifier.padding(14.dp), verticalAlignment = Alignment.CenterVertically) {
-                            Text("🎁", fontSize = 20.sp)
-                            Spacer(Modifier.width(12.dp))
-                            Text("LifeScore Reward Store & Coins", fontWeight = FontWeight.Bold, fontSize = 13.sp, modifier = Modifier.weight(1f))
                             Icon(Icons.Default.ChevronRight, contentDescription = null)
                         }
                     }
@@ -272,22 +264,9 @@ fun ProfileScreen(
                         modifier = Modifier.fillMaxWidth().clickable { navController.navigate(Screen.Enterprise.route) }
                     ) {
                         Row(modifier = Modifier.padding(14.dp), verticalAlignment = Alignment.CenterVertically) {
-                            Text("🏢", fontSize = 20.sp)
+                            Icon(Icons.Default.Business, contentDescription = null)
                             Spacer(Modifier.width(12.dp))
                             Text("LifeScore Enterprise & Team Hub", fontWeight = FontWeight.Bold, fontSize = 13.sp, modifier = Modifier.weight(1f))
-                            Icon(Icons.Default.ChevronRight, contentDescription = null)
-                        }
-                    }
-
-                    Surface(
-                        shape = RoundedCornerShape(14.dp),
-                        color = MaterialTheme.colorScheme.surfaceVariant,
-                        modifier = Modifier.fillMaxWidth().clickable { navController.navigate(Screen.MemeStudio.route) }
-                    ) {
-                        Row(modifier = Modifier.padding(14.dp), verticalAlignment = Alignment.CenterVertically) {
-                            Text("🎭", fontSize = 20.sp)
-                            Spacer(Modifier.width(12.dp))
-                            Text("AI Meme Studio & Viral Content", fontWeight = FontWeight.Bold, fontSize = 13.sp, modifier = Modifier.weight(1f))
                             Icon(Icons.Default.ChevronRight, contentDescription = null)
                         }
                     }

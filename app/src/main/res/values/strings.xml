@@ -15,9 +15,9 @@
 
     <!-- General -->
     <string name="streak_label">%1$d Day Streak</string>
-    <string name="coins_label">%1$d Coins</string>
-    <string name="level_label">Level %1$d</string>
-    <string name="points_reward">+%1$d XP</string>
+    <string name="coins_label">%1$d Habits</string>
+    <string name="level_label">Consistency</string>
+    <string name="points_reward">Completed</string>
 
     <!-- Dimensions -->
     <string name="dim_health">Health &amp; Vitality</string>

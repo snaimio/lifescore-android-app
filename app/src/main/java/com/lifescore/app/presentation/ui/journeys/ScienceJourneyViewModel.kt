@@ -61,7 +61,7 @@ class ScienceJourneyViewModel(
                     triggerInput = "",
                     actionInput = "",
                     rewardInput = "",
-                    toastMessage = "Habit Stack Created! +30 XP"
+                    toastMessage = "Habit Stack Created!"
                 )
             }
         }
@@ -71,7 +71,7 @@ class ScienceJourneyViewModel(
         viewModelScope.launch {
             repository.toggleHabitStackCompleted(id, !currentStatus)
             if (!currentStatus) {
-                _uiState.update { it.copy(toastMessage = "Habit stack anchored! +25 XP") }
+                _uiState.update { it.copy(toastMessage = "Habit stack anchored!") }
             }
         }
     }
@@ -79,7 +79,7 @@ class ScienceJourneyViewModel(
     fun advanceJourney(journeyId: String) {
         viewModelScope.launch {
             repository.advanceJourneyDay(journeyId)
-            _uiState.update { it.copy(toastMessage = "Journey Milestone Completed! +40 XP") }
+            _uiState.update { it.copy(toastMessage = "Journey Milestone Completed!") }
         }
     }
 

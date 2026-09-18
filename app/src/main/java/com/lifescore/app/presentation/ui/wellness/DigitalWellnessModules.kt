@@ -109,7 +109,7 @@ fun TaskBreakthroughScreen(
                     ) {
                         Icon(Icons.Default.Star, contentDescription = null)
                         Spacer(Modifier.width(8.dp))
-                        Text("Break Down into 3 High-Impact Steps (+30 XP)")
+                        Text("Break Down into 3 High-Impact Steps")
                     }
                 }
             }
@@ -326,7 +326,7 @@ fun ThoughtBreakScreen(
                         ) {
                             Icon(Icons.Default.Check, contentDescription = null)
                             Spacer(Modifier.width(8.dp))
-                            Text("Save Reframe (+40 XP Mental Health)")
+                            Text("Save Reframe")
                         }
                     }
                 }

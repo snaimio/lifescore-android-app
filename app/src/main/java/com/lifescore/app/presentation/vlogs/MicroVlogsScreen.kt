@@ -145,7 +145,7 @@ fun MicroVlogsScreen(
                                                 shape = RoundedCornerShape(8.dp),
                                                 color = Color(0xFFFFD700).copy(alpha = 0.2f)
                                             ) {
-                                                Text("+150 XP", color = Color(0xFFFFD700), fontSize = 11.sp, fontWeight = FontWeight.Black, modifier = Modifier.padding(horizontal = 8.dp, vertical = 3.dp))
+                                                Text("COMPLETED", color = Color(0xFFFFD700), fontSize = 11.sp, fontWeight = FontWeight.Black, modifier = Modifier.padding(horizontal = 8.dp, vertical = 3.dp))
                                             }
                                         }
 
@@ -514,7 +514,7 @@ fun MicroVlogsScreen(
             onDismiss = { viewModel.closeRecordDialog() },
             onSaveClip = { day, dim, cap ->
                 viewModel.saveRecordedClip(day, dim, cap)
-                Toast.makeText(context, "2s Vlog Snap Saved! 🎬 +25 XP", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, "2s Vlog Snap Saved! 🎬", Toast.LENGTH_SHORT).show()
             }
         )
     }

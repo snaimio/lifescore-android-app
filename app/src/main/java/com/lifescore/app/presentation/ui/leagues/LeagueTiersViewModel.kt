@@ -64,7 +64,7 @@ class LeagueTiersViewModel(
     fun completeWeeklyQuestXpBoost() {
         viewModelScope.launch {
             repository.contributeLeagueXp(120)
-            _uiState.update { it.copy(toastMessage = "Completed League Quest! +120 Weekly XP • Rank Climbing!") }
+            _uiState.update { it.copy(toastMessage = "Progress updated • Rank Climbing!") }
         }
     }
 

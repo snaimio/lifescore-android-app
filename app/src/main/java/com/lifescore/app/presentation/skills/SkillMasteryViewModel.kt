@@ -67,7 +67,7 @@ class SkillMasteryViewModel : ViewModel() {
             skills = updatedList,
             isLogDialogOpen = false,
             selectedSkill = null,
-            recentSuccessMessage = "Logged ${minutes}m for ${updatedSkill.title}! +${session.xpGranted} XP (${updatedSkill.dimension.displayName})"
+            recentSuccessMessage = "Logged ${minutes}m for ${updatedSkill.title}! (${updatedSkill.dimension.displayName})"
         )
     }
 

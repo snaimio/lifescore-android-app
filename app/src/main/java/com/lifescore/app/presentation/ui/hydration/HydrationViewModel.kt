@@ -80,9 +80,9 @@ class HydrationViewModel(
                 val goal = stats?.dailyGoalMl ?: 2500
 
                 val msg = if (newTotal >= goal && (stats?.todayTotalMl ?: 0) < goal) {
-                    "🎉 Goal Met! +25 Bonus XP & Health Dimension Boost!"
+                    "🎉 Daily Hydration Goal Met!"
                 } else {
-                    "+${volumeMl}ml logged! (+$xpEarned XP)"
+                    "+${volumeMl}ml logged!"
                 }
 
                 _uiState.update { it.copy(successMessage = msg) }

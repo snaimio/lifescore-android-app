@@ -256,7 +256,7 @@ fun FlashcardStudyView(
                     colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF66BB6A)),
                     shape = RoundedCornerShape(12.dp)
                 ) {
-                    Text("Easy (+15 XP)")
+                    Text("Easy (4d)")
                 }
             }
         }
@@ -347,7 +347,7 @@ fun LearningPlanView(
                     ) {
                         Icon(Icons.Default.Check, contentDescription = null, modifier = Modifier.size(16.dp))
                         Spacer(modifier = Modifier.width(8.dp))
-                        Text("Complete Day ${plan.currentDay} Reading & Practice (+25 XP)")
+                        Text("Complete Day ${plan.currentDay} Reading & Practice")
                     }
                 }
             }

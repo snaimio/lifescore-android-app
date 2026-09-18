@@ -15,9 +15,9 @@
 
     <!-- General -->
     <string name="streak_label">Racha de %1$d Días</string>
-    <string name="coins_label">%1$d Monedas</string>
-    <string name="level_label">Nivel %1$d</string>
-    <string name="points_reward">+%1$d XP</string>
+    <string name="coins_label">%1$d Hábitos</string>
+    <string name="level_label">Consistencia</string>
+    <string name="points_reward">Completado</string>
 
     <!-- Dimensions -->
     <string name="dim_health">Salud y Vitalidad</string>

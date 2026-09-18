@@ -31,7 +31,7 @@ class VirtualPetViewModel(
     fun feedPet() {
         viewModelScope.launch {
             val boost = repository.feedPet()
-            _uiState.update { it.copy(toastMessage = "Fed ${it.pet?.petName ?: "Pip"}! +$boost Happiness & +20 XP") }
+            _uiState.update { it.copy(toastMessage = "Fed ${it.pet?.petName ?: "Pip"}! +$boost Happiness") }
         }
     }
 
@@ -41,7 +41,7 @@ class VirtualPetViewModel(
             _uiState.update {
                 it.copy(
                     isPettingAnimation = true,
-                    toastMessage = "${it.pet?.petName ?: "Pip"} feels loved! +$boost Happiness & +15 XP"
+                    toastMessage = "${it.pet?.petName ?: "Pip"} feels loved! +$boost Happiness"
                 )
             }
         }

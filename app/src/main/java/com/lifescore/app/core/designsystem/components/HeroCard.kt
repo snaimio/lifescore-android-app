@@ -114,7 +114,7 @@ fun HeroCard(
                                 tint = LifeScoreColors.SecondaryLight
                             )
                             Text(
-                                text = "Level $level",
+                                text = "Daily Consistency",
                                 style = MaterialTheme.typography.bodySmall,
                                 fontWeight = FontWeight.SemiBold,
                                 color = Color.White.copy(alpha = 0.85f)
@@ -209,20 +209,20 @@ fun HeroCard(
 
                 Spacer(Modifier.height(12.dp))
 
-                val progress = if (xpToNextLevel > 0) (currentXp.toFloat() / xpToNextLevel.toFloat()).coerceIn(0f, 1f) else 0f
+                val progress = (score.toFloat() / 1000f).coerceIn(0f, 1f)
                 Column {
                     Row(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.SpaceBetween
                     ) {
                         Text(
-                            text = "XP Progress to Next Level",
+                            text = "Holistic Index Progress",
                             style = MaterialTheme.typography.bodySmall,
                             fontSize = 10.sp,
                             color = Color.White.copy(alpha = 0.8f)
                         )
                         Text(
-                            text = "$currentXp / $xpToNextLevel XP",
+                            text = "$score / 1000",
                             style = MaterialTheme.typography.bodySmall,
                             fontSize = 10.sp,
                             fontWeight = FontWeight.Bold,

@@ -87,7 +87,7 @@ fun LeaderboardScreen(
                         Column {
                             Text("Your Standing", fontWeight = FontWeight.Bold, fontSize = 13.sp)
                             Text(
-                                text = "${uiState.userScore} pts • ${uiState.currentLeague.displayName}",
+                                text = "Score: ${uiState.userScore} • ${uiState.currentLeague.displayName}",
                                 fontSize = 11.sp,
                                 color = MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.8f)
                             )
@@ -360,7 +360,7 @@ private fun PodiumColumn(
         )
 
         Text(
-            text = "${entry.score} pts",
+            text = "${entry.score}",
             fontWeight = FontWeight.Black,
             fontSize = 11.sp,
             color = MaterialTheme.colorScheme.primary

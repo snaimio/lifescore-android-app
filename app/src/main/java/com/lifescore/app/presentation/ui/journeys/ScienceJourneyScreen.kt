@@ -138,7 +138,7 @@ fun ScienceJourneyScreen(
             },
             confirmButton = {
                 Button(onClick = { viewModel.saveHabitStack() }) {
-                    Text("Save & Anchor (+30 XP)")
+                    Text("Save & Anchor")
                 }
             },
             dismissButton = {
@@ -253,7 +253,7 @@ fun ScienceJourneyCard(
             ) {
                 Icon(Icons.Default.Check, contentDescription = null, modifier = Modifier.size(16.dp))
                 Spacer(modifier = Modifier.width(8.dp))
-                Text("Complete Day ${journey.currentDay} Milestone (+40 XP)")
+                Text("Complete Day ${journey.currentDay} Milestone")
             }
         }
     }

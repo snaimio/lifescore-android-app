@@ -330,7 +330,7 @@ fun GroupHabitCard(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    "+${habit.xpReward} XP / Day",
+                    "Daily Squad Habit",
                     fontSize = 12.sp,
                     fontWeight = FontWeight.Bold,
                     color = Color(0xFF4CAF50)

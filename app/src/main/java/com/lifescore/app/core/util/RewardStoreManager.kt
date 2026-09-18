@@ -52,8 +52,8 @@ object RewardStoreManager {
             // BOOSTERS
             StoreProductItem(
                 id = "boost_2x_multiplier",
-                title = "2x XP & Coin Multiplier (24 Hours)",
-                description = "Double all XP and LifeCoins earned from habits and masterclasses for the next 24 hours.",
+                title = "2x Booster Multiplier (24 Hours)",
+                description = "Double all progress and LifeCoins earned from habits and masterclasses for the next 24 hours.",
                 emoji = "🚀",
                 category = StoreCategory.BOOSTER,
                 coinCost = 400,
@@ -147,7 +147,7 @@ object RewardStoreManager {
             ),
             RewardTransaction(
                 id = "tx_3",
-                itemTitle = "Purchased: 2x XP Multiplier (24h)",
+                itemTitle = "Purchased: 2x Booster Multiplier (24h)",
                 category = StoreCategory.BOOSTER,
                 coinsAmount = -400,
                 timestamp = now - 3600000 * 48,

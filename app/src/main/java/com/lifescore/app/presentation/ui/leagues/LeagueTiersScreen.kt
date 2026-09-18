@@ -111,13 +111,13 @@ fun LeagueTiersScreen(
                             Spacer(modifier = Modifier.height(16.dp))
 
                             Text(
-                                "Rank #${tier?.userRankInLeague ?: 4} • ${tier?.currentWeeklyXp ?: 1450} Weekly XP",
+                                "Rank #${tier?.userRankInLeague ?: 4} • ${tier?.currentWeeklyXp ?: 1450} Weekly Consistency Score",
                                 color = Color.White,
                                 fontSize = 22.sp,
                                 fontWeight = FontWeight.ExtraBold
                             )
                             Text(
-                                "You are only 85 XP away from Promotion to Gold I!",
+                                "You are close to reaching Gold I!",
                                 color = Color.White.copy(alpha = 0.9f),
                                 fontSize = 13.sp
                             )
@@ -132,7 +132,7 @@ fun LeagueTiersScreen(
                             ) {
                                 Icon(Icons.Default.Bolt, contentDescription = null)
                                 Spacer(modifier = Modifier.width(8.dp))
-                                Text("Claim +120 XP from Daily Quests", fontWeight = FontWeight.Bold)
+                                Text("Boost Weekly Progress", fontWeight = FontWeight.Bold)
                             }
                         }
                     }
@@ -238,7 +238,7 @@ fun CompetitorRow(comp: LeagueCompetitor) {
             }
 
             Text(
-                "${comp.weeklyXp} XP",
+                "${comp.weeklyXp} Score",
                 fontWeight = FontWeight.Bold,
                 fontSize = 14.sp,
                 color = MaterialTheme.colorScheme.primary

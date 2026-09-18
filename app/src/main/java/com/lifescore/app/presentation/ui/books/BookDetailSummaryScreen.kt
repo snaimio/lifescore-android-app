@@ -372,7 +372,7 @@ fun BookDetailSummaryScreen(
                                             color = Color(0xFF10B981).copy(alpha = 0.2f)
                                         ) {
                                             Text(
-                                                text = "+${book.questXpReward} XP",
+                                                text = "Actionable",
                                                 fontSize = 12.sp,
                                                 fontWeight = FontWeight.Bold,
                                                 color = Color(0xFF10B981),
@@ -403,7 +403,7 @@ fun BookDetailSummaryScreen(
                                         )
                                     ) {
                                         Text(
-                                            text = if (isApplied) "✅ Quest Completed (+75 XP)" else "Complete Quest & Claim +75 XP",
+                                            text = if (isApplied) "✅ Action Completed" else "Mark Action Applied",
                                             fontWeight = FontWeight.Bold
                                         )
                                     }
@@ -449,7 +449,7 @@ fun BookDetailSummaryScreen(
                         )
                     ) {
                         Text(
-                            text = if (isDone) "✅ Book Summary Completed (+75 XP)" else "Mark Summary Read (+75 XP)",
+                            text = if (isDone) "✅ Book Summary Completed" else "Mark Summary as Read",
                             fontWeight = FontWeight.Bold,
                             fontSize = 15.sp
                         )

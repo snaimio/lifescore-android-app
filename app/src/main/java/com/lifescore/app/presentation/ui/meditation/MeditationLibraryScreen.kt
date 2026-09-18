@@ -163,7 +163,7 @@ fun MeditationLibraryScreen(
                                 Icon(if (uiState.isTimerActive) Icons.Default.Stop else Icons.Default.PlayArrow, contentDescription = null)
                                 Spacer(modifier = Modifier.width(8.dp))
                                 Text(
-                                    if (uiState.isTimerActive) "Stop Meditation Audio & Timer" else "Begin Guided Meditation (${uiState.customTimerMinutes * 2} XP)",
+                                    if (uiState.isTimerActive) "Stop Meditation Audio & Timer" else "Begin Guided Meditation (${uiState.customTimerMinutes} min)",
                                     fontWeight = FontWeight.Bold
                                 )
                             }

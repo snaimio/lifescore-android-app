@@ -187,7 +187,7 @@ fun StreakVaultScreen(
                             ) {
                                 Icon(Icons.Default.Check, contentDescription = null, modifier = Modifier.size(16.dp))
                                 Spacer(modifier = Modifier.width(8.dp))
-                                Text("Complete Day $progress Tasks (+30 XP)")
+                                Text("Complete Day $progress Tasks")
                             }
                         } else {
                             Button(

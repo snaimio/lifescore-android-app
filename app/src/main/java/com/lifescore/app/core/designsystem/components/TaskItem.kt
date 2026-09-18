@@ -106,20 +106,7 @@ fun TaskItem(
                 }
             }
 
-            if (!task.isCompleted) {
-                Surface(
-                    shape = RoundedCornerShape(8.dp),
-                    color = accentColor.copy(alpha = 0.12f),
-                    contentColor = accentColor
-                ) {
-                    Text(
-                        text = "+${task.pointsReward} XP",
-                        style = MaterialTheme.typography.labelSmall,
-                        fontWeight = FontWeight.Bold,
-                        modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp)
-                    )
-                }
-            } else {
+            if (task.isCompleted) {
                 Icon(
                     imageVector = Icons.Default.Check,
                     contentDescription = "Completed",

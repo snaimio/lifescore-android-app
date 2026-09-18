@@ -102,7 +102,7 @@ fun DailyFocusCard(
                             color = if (task.isCompleted) MaterialTheme.colorScheme.onSurfaceVariant else MaterialTheme.colorScheme.onSurface
                         )
                         Text(
-                            text = "+${task.pointsReward} XP & Gold • ${if (task.isCompleted) "Completed 🎉" else "Tap to complete"}",
+                            text = if (task.isCompleted) "Completed" else "Tap to complete",
                             fontSize = 12.sp,
                             color = if (task.isCompleted) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant
                         )

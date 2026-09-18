@@ -263,7 +263,7 @@ fun BalanceScreen(
                                     color = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.5f)
                                 ) {
                                     Text(
-                                        text = "Projected +42 pts",
+                                        text = "Projected +18% Growth",
                                         style = MaterialTheme.typography.labelSmall,
                                         fontWeight = FontWeight.Bold,
                                         color = MaterialTheme.colorScheme.primary,
