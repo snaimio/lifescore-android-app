@@ -17,10 +17,14 @@ Experience how LifeScore transforms daily intentionality, multi-dimensional life
 
 <p align="center">
   <a href="https://github.com/snaimio/lifescore-android-app/blob/main/docs/demo/lifescore_walkthrough_demo.mp4">
-    <img src="docs/demo/lifescore_demo_preview.gif" alt="LifeScore Walkthrough Demo Preview" width="850" style="border-radius: 12px; box-shadow: 0 8px 30px rgba(0,0,0,0.5);" />
+    <img src="docs/demo/lifescore_demo_preview.gif" alt="LifeScore Walkthrough Demo" width="850" style="border-radius: 12px; box-shadow: 0 8px 30px rgba(0,0,0,0.5);" />
   </a>
-  <br />
-  <em>Click image or <a href="https://github.com/snaimio/lifescore-android-app/blob/main/docs/demo/lifescore_walkthrough_demo.mp4"><strong>Watch Full 1080p Video Walkthrough directly in GitHub Video Player (No Download Required)</strong></a></em>
+</p>
+
+<p align="center">
+  <a href="https://github.com/snaimio/lifescore-android-app/blob/main/docs/demo/lifescore_walkthrough_demo.mp4">
+    <img src="https://img.shields.io/badge/%E2%96%B6%20Watch%20Walkthrough%20Video%20with%20Sound-GitHub%20Player-D4A24C?style=for-the-badge&logo=github&logoColor=white" alt="Watch Video Demo" height="40" />
+  </a>
 </p>
 
 ---
