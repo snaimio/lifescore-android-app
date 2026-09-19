@@ -2,6 +2,7 @@ package com.lifescore.app.presentation.ui.sleep
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.lifescore.app.core.audio.NatureSoundEngine
 import com.lifescore.app.data.repository.LifeScoreRepository
 import com.lifescore.app.domain.model.selfimprovement.AmbientSoundTrack
 import com.lifescore.app.domain.model.selfimprovement.SleepStory
@@ -32,6 +33,7 @@ data class SleepUiState(
 
 class SleepViewModel(
     private val lifeScoreRepository: LifeScoreRepository,
+    private val natureSoundEngine: NatureSoundEngine = NatureSoundEngine(),
     private val userId: String = "default_user"
 ) : ViewModel() {
 
@@ -46,18 +48,26 @@ class SleepViewModel(
             val volumes = state.activeTrackVolumes.toMutableMap()
             if (volumes.containsKey(trackId)) {
                 volumes.remove(trackId)
+                natureSoundEngine.removeTrack(trackId)
             } else {
                 val track = state.ambientTracks.find { it.id == trackId }
-                volumes[trackId] = track?.defaultVolume ?: 0.7f
+                val vol = track?.defaultVolume ?: 0.7f
+                volumes[trackId] = vol
+                natureSoundEngine.setTrackVolume(trackId, vol)
             }
             state.copy(activeTrackVolumes = volumes)
         }
     }
 
     fun setTrackVolume(trackId: String, volume: Float) {
+        natureSoundEngine.setTrackVolume(trackId, volume)
         _uiState.update { state ->
             val volumes = state.activeTrackVolumes.toMutableMap()
-            volumes[trackId] = volume
+            if (volume <= 0.001f) {
+                volumes.remove(trackId)
+            } else {
+                volumes[trackId] = volume
+            }
             state.copy(activeTrackVolumes = volumes)
         }
     }
@@ -78,8 +88,19 @@ class SleepViewModel(
             storyNarrationJob?.cancel()
             _uiState.update { it.copy(isStoryPlaying = false) }
         } else {
-            _uiState.update { it.copy(isStoryPlaying = true) }
-            startStoryNarration()
+            val story = _uiState.value.selectedStory ?: _uiState.value.sleepStories.firstOrNull()
+            if (story != null) {
+                _uiState.update { it.copy(selectedStory = story, isStoryPlaying = true) }
+                // If no ambient sound is active, start a gentle background nature stream
+                if (_uiState.value.activeTrackVolumes.isEmpty()) {
+                    val defaultTrack = "stream"
+                    natureSoundEngine.setTrackVolume(defaultTrack, 0.45f)
+                    _uiState.update {
+                        it.copy(activeTrackVolumes = mapOf(defaultTrack to 0.45f))
+                    }
+                }
+                startStoryNarration()
+            }
         }
     }
 
@@ -88,13 +109,13 @@ class SleepViewModel(
         storyNarrationJob = viewModelScope.launch {
             val story = _uiState.value.selectedStory ?: return@launch
             while (_uiState.value.isStoryPlaying) {
-                delay(4000L) // advance story paragraph every 4 seconds
+                delay(6000L) // advance story paragraph calmly every 6 seconds
                 val next = _uiState.value.storyProgressParagraph + 1
                 if (next < story.storyScript.size) {
                     _uiState.update { it.copy(storyProgressParagraph = next) }
                 } else {
                     _uiState.update { it.copy(isStoryPlaying = false) }
-                    awardBedtimeXp()
+                    onStoryCompleted()
                     break
                 }
             }
@@ -118,7 +139,8 @@ class SleepViewModel(
                     val next = _uiState.value.timerRemainingSeconds - 1
                     _uiState.update { it.copy(timerRemainingSeconds = next) }
                     if (next <= 0) {
-                        // Turn off all sounds
+                        // Turn off all audio output
+                        natureSoundEngine.stopAll()
                         _uiState.update {
                             it.copy(
                                 isTimerActive = false,
@@ -130,6 +152,9 @@ class SleepViewModel(
                     }
                 }
             }
+        } else {
+            // Turn off timer
+            _uiState.update { it.copy(isTimerActive = false) }
         }
     }
 
@@ -141,16 +166,8 @@ class SleepViewModel(
         }
     }
 
-    private fun awardBedtimeXp() {
-        viewModelScope.launch {
-            try {
-                val user = lifeScoreRepository.getUserProfile().firstOrNull()
-                if (user != null) {
-                    lifeScoreRepository.updateUserProfile(user.copy(currentXp = user.currentXp + 25))
-                }
-            } catch (_: Exception) {}
-            _uiState.update { it.copy(snackbarMessage = "🌙 Sleep Story Complete! Sweet dreams (+25 XP)") }
-        }
+    private fun onStoryCompleted() {
+        _uiState.update { it.copy(snackbarMessage = "Sleep story complete. Rest well.") }
     }
 
     fun clearSnackbar() {
@@ -161,5 +178,6 @@ class SleepViewModel(
         super.onCleared()
         sleepTimerJob?.cancel()
         storyNarrationJob?.cancel()
+        natureSoundEngine.release()
     }
 }

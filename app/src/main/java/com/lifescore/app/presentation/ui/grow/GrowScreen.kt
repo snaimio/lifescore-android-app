@@ -90,11 +90,11 @@ fun GrowScreen(
             GrowthArea(
                 id = "rest",
                 title = "Rest & Recovery",
-                subtitle = "Deep REM sleep, circadian restoration, and soundscapes",
+                subtitle = "Deep REM sleep, circadian restoration, and nature soundscapes",
                 icon = LifeIcons.Sleep,
                 color = Color(0xFF8B5CF6),
                 tools = listOf(
-                    GrowthToolItem("Sleep Stories & Soundscapes", "Ambient soundscapes and bedtime wind-downs", LifeIcons.Sleep, Screen.SleepSoundscapes.route, "Calm"),
+                    GrowthToolItem("Sleep Stories & Nature Sounds", "Pure acoustic nature sounds and bedtime wind-downs", LifeIcons.Sleep, Screen.SleepSoundscapes.route, "Calm"),
                     GrowthToolItem("Sleep Telemetry", "Track duration and sleep quality", LifeIcons.Analytics, "tracker_detail/sleep")
                 )
             ),

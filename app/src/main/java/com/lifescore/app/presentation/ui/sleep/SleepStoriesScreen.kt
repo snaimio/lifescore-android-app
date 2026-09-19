@@ -316,9 +316,9 @@ fun SleepStoriesScreen(
 
     if (showCoachMark) {
         com.lifescore.app.core.designsystem.components.CoachMarkOverlay(
-            emoji = "🌙",
-            title = "Sleep & Soundscapes",
-            description = "Mix ambient sounds (rain, ocean, white noise) with calming sleep stories to fall asleep faster and improve Sleep quality.",
+            emoji = "🌲",
+            title = "Sleep & Nature Soundscapes",
+            description = "Mix pure acoustic nature sounds (canopy rain, ocean waves, mountain streams, forest wind) with relaxing stories for deep restorative sleep.",
             onDismiss = {
                 coachMarkManager.markSeen("sleep")
                 showCoachMark = false
