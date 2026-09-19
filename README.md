@@ -11,23 +11,11 @@ LifeScore is a modern executive life operating system and personal growth Androi
 
 ---
 
-## Demo
+## Video Walkthrough Demo
 
 Experience how LifeScore transforms daily intentionality, multi-dimensional life balance, and deep focus through real reactive data and intelligent coaching.
 
-<p align="center">
-  <video src="https://github.com/snaimio/lifescore-android-app/releases/download/v1.0.0/lifescore_walkthrough_demo.mp4" controls="controls" width="850" style="max-width: 100%; border-radius: 12px; box-shadow: 0 8px 30px rgba(0,0,0,0.5);">
-    <a href="https://github.com/snaimio/lifescore-android-app/releases/download/v1.0.0/lifescore_walkthrough_demo.mp4">
-      <img src="docs/demo/lifescore_demo_preview.gif" alt="Click to Watch Video Demo" width="850" style="border-radius: 12px;" />
-    </a>
-  </video>
-</p>
-
-<p align="center">
-  <a href="https://github.com/snaimio/lifescore-android-app/releases/download/v1.0.0/lifescore_walkthrough_demo.mp4">
-    <strong>▶ Watch & Download Full Video Demo with Audio (MP4)</strong>
-  </a>
-</p>
+https://github.com/user-attachments/assets/ac5ec428-b0b1-455c-ac94-035c6356bcaf
 
 ---
 
