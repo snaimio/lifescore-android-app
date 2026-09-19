@@ -39,14 +39,9 @@ fun SettingsScreen(
 ) {
     val context = LocalContext.current
     val app = context.applicationContext as LifeScoreApp
-    val coroutineScope = rememberCoroutineScope()
 
     var notificationsEnabled by remember { mutableStateOf(true) }
     var soundEffectsEnabled by remember { mutableStateOf(true) }
-
-    var isTesting by remember { mutableStateOf(false) }
-    var showTestDialog by remember { mutableStateOf(false) }
-    var testOutput by remember { mutableStateOf("") }
 
     Scaffold(
         topBar = {
@@ -184,7 +179,7 @@ fun SettingsScreen(
                         Spacer(Modifier.width(14.dp))
                         Column(modifier = Modifier.weight(1f)) {
                             Text("Hero Archetype Profile", fontWeight = FontWeight.Bold, fontSize = 16.sp)
-                            Text("Tendencies, blind spots, work style & share cards", fontSize = 12.sp, color = MaterialTheme.colorScheme.outline)
+                            Text("Tendencies, blind spots, work style & share cards", fontSize = 12.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
                         }
                         Icon(Icons.Default.ChevronRight, contentDescription = null)
                     }
@@ -202,25 +197,12 @@ fun SettingsScreen(
             }
 
             item {
-                Text("Preferences & Localization", fontWeight = FontWeight.Bold, style = MaterialTheme.typography.titleMedium)
+                Text("Preferences", fontWeight = FontWeight.Bold, style = MaterialTheme.typography.titleMedium)
             }
 
             item {
-                var showLanguageDialog by remember { mutableStateOf(false) }
-                var currentLang by remember { mutableStateOf(com.lifescore.app.core.util.LanguageManager.getCurrentLanguage()) }
-
                 Card(shape = RoundedCornerShape(16.dp)) {
                     Column(modifier = Modifier.padding(8.dp)) {
-                        // Language Selector Item
-                        SettingsClickableItem(
-                            icon = Icons.Default.Language,
-                            title = "App Language / Idioma / 语言 / لغة / भाषा",
-                            subtitle = "${currentLang.flagEmoji} ${currentLang.nativeName} (${currentLang.code.uppercase()})",
-                            onClick = { showLanguageDialog = true }
-                        )
-
-                        HorizontalDivider(modifier = Modifier.padding(horizontal = 8.dp))
-
                         SettingsSwitchItem(
                             icon = Icons.Default.Notifications,
                             title = "Daily Streak Reminders",
@@ -235,155 +217,6 @@ fun SettingsScreen(
                             subtitle = "Feel feedback upon habit completion",
                             checked = soundEffectsEnabled,
                             onCheckedChange = { soundEffectsEnabled = it }
-                        )
-                    }
-                }
-
-                if (showLanguageDialog) {
-                    androidx.compose.ui.window.Dialog(onDismissRequest = { showLanguageDialog = false }) {
-                        Card(
-                            shape = RoundedCornerShape(22.dp),
-                            modifier = Modifier.fillMaxWidth().padding(16.dp)
-                        ) {
-                            Column(modifier = Modifier.padding(20.dp)) {
-                                Text("Select Language", fontWeight = FontWeight.Black, fontSize = 18.sp)
-                                Text("Choose your preferred language for LifeScore", fontSize = 12.sp, color = MaterialTheme.colorScheme.outline)
-                                Spacer(Modifier.height(14.dp))
-
-                                com.lifescore.app.core.util.LanguageManager.getSupportedLanguages().forEach { lang ->
-                                    Surface(
-                                        onClick = {
-                                            com.lifescore.app.core.util.LanguageManager.setAppLanguage(lang)
-                                            currentLang = lang
-                                            showLanguageDialog = false
-                                        },
-                                        shape = RoundedCornerShape(12.dp),
-                                        color = if (currentLang == lang) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.surface,
-                                        modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp)
-                                    ) {
-                                        Row(
-                                            modifier = Modifier.padding(14.dp),
-                                            verticalAlignment = Alignment.CenterVertically
-                                        ) {
-                                            Text(lang.flagEmoji, fontSize = 20.sp)
-                                            Spacer(Modifier.width(12.dp))
-                                            Column(modifier = Modifier.weight(1f)) {
-                                                Text(lang.nativeName, fontWeight = FontWeight.Bold, fontSize = 14.sp)
-                                                Text(lang.name.lowercase().replaceFirstChar { it.uppercase() }, fontSize = 11.sp, color = MaterialTheme.colorScheme.outline)
-                                            }
-                                            if (currentLang == lang) {
-                                                Text("✓", fontWeight = FontWeight.Black, color = MaterialTheme.colorScheme.primary, fontSize = 16.sp)
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-
-            item {
-                Text("Developer & Cloud Diagnostics", fontWeight = FontWeight.Bold, style = MaterialTheme.typography.titleMedium)
-            }
-
-            item {
-                Card(shape = RoundedCornerShape(16.dp)) {
-                    Column(modifier = Modifier.padding(8.dp)) {
-                        SettingsClickableItem(
-                            icon = Icons.Default.CloudSync,
-                            title = if (isTesting) "Running Firestore Test..." else "Run Firestore Connection Test",
-                            subtitle = "Verify Anonymous Auth, Document Write & Read",
-                            onClick = {
-                                if (isTesting) return@SettingsClickableItem
-                                isTesting = true
-                                testOutput = "1. Authenticating anonymously...\n"
-                                coroutineScope.launch {
-                                    val authResult = app.authRepository.signInAnonymously()
-                                    authResult.fold(
-                                        onSuccess = { user ->
-                                            val uid = app.authRepository.currentUser?.uid ?: user.id.toString()
-                                            testOutput += "✅ Auth Success: UID = ${uid.take(12)}...\n\n2. Writing user document to /users/$uid...\n"
-                                            
-                                            try {
-                                                app.firebaseRepository.saveUser(user, email = "guest@lifescore.app", uid = uid)
-                                                testOutput += "✅ Document Write: SUCCESS\n\n3. Reading document back from Firestore...\n"
-                                                
-                                                val retrieved = app.firebaseRepository.getUser(uid)
-                                                if (retrieved != null) {
-                                                    testOutput += "✅ Document Read: SUCCESS\n"
-                                                    testOutput += "   • Name: ${retrieved.name}\n"
-                                                    testOutput += "   • Level: ${retrieved.currentLevel}\n"
-                                                    testOutput += "   • Archetype: ${retrieved.title}\n\n"
-                                                    testOutput += "🎉 Firestore connection verified and operational!"
-                                                } else {
-                                                    testOutput += "⚠️ Read back returned null from cache."
-                                                }
-                                            } catch (e: Exception) {
-                                                testOutput += "❌ Operation error: ${e.localizedMessage}"
-                                            }
-                                        },
-                                        onFailure = {
-                                            testOutput += "❌ Auth failed: ${it.localizedMessage}"
-                                        }
-                                    )
-                                    isTesting = false
-                                    showTestDialog = true
-                                }
-                            }
-                        )
-                        HorizontalDivider(modifier = Modifier.padding(horizontal = 8.dp))
-                        SettingsClickableItem(
-                            icon = Icons.Default.SyncLock,
-                            title = "Test Offline Task ➔ Online Sync",
-                            subtitle = "Insert local Room task, reconnect & verify Firestore sync",
-                            onClick = {
-                                if (isTesting) return@SettingsClickableItem
-                                isTesting = true
-                                testOutput = "1. Simulating offline task creation in local Room DB...\n"
-                                coroutineScope.launch {
-                                    try {
-                                        // 1. Insert offline task into local Room database
-                                        val testTask = com.lifescore.app.data.local.entity.TaskEntity(
-                                            title = "Hydrate 2L Water (Offline Test)",
-                                            dimension = com.lifescore.app.domain.model.DimensionType.HEALTH,
-                                            pointsReward = 20,
-                                            isCompleted = true,
-                                            completedAt = System.currentTimeMillis()
-                                        )
-                                        app.database.taskDao().insertTask(testTask)
-                                        testOutput += "✅ Local SQLite Insert: Saved '${testTask.title}'\n\n"
-                                        testOutput += "2. Restoring connection & triggering DataSyncService...\n"
-
-                                        // Ensure anonymous auth session exists
-                                        if (app.authRepository.currentUser == null) {
-                                            app.authRepository.signInAnonymously()
-                                        }
-
-                                        val syncService = com.lifescore.app.services.DataSyncService(
-                                            db = app.database,
-                                            firebaseRepository = app.firebaseRepository,
-                                            authRepository = app.authRepository
-                                        )
-
-                                        val report = syncService.syncAllWithLogs()
-                                        testOutput += "\n=== SYNC EXECUTION TRACE ===\n"
-                                        report.logs.forEach { logLine ->
-                                            testOutput += "$logLine\n"
-                                        }
-
-                                        if (report.isSuccess) {
-                                            testOutput += "\n🎉 Task verified in Cloud Firestore! (Total Synced: ${report.tasksSyncedCount})"
-                                        } else {
-                                            testOutput += "\n❌ Sync failed: ${report.error}"
-                                        }
-                                    } catch (e: Exception) {
-                                        testOutput += "❌ Error: ${e.localizedMessage}"
-                                    }
-                                    isTesting = false
-                                    showTestDialog = true
-                                }
-                            }
                         )
                     }
                 }
@@ -508,38 +341,6 @@ fun SettingsScreen(
             }
         }
     }
-
-    if (showTestDialog) {
-        AlertDialog(
-            onDismissRequest = { showTestDialog = false },
-            title = {
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Icon(Icons.Default.CloudDone, contentDescription = null, tint = MaterialTheme.colorScheme.primary)
-                    Spacer(Modifier.width(8.dp))
-                    Text("Firestore Diagnostics", fontWeight = FontWeight.Bold)
-                }
-            },
-            text = {
-                Surface(
-                    shape = RoundedCornerShape(12.dp),
-                    color = MaterialTheme.colorScheme.surfaceVariant,
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    Text(
-                        text = testOutput,
-                        fontSize = 13.sp,
-                        fontFamily = androidx.compose.ui.text.font.FontFamily.Monospace,
-                        modifier = Modifier.padding(14.dp)
-                    )
-                }
-            },
-            confirmButton = {
-                Button(onClick = { showTestDialog = false }) {
-                    Text("Done")
-                }
-            }
-        )
-    }
 }
 
 @Composable
@@ -560,7 +361,7 @@ fun SettingsSwitchItem(
         Spacer(Modifier.width(14.dp))
         Column(modifier = Modifier.weight(1f)) {
             Text(title, fontWeight = FontWeight.SemiBold, fontSize = 14.sp)
-            Text(subtitle, fontSize = 12.sp, color = MaterialTheme.colorScheme.outline)
+            Text(subtitle, fontSize = 12.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
         }
         Switch(checked = checked, onCheckedChange = onCheckedChange)
     }
@@ -584,9 +385,9 @@ fun SettingsClickableItem(
         Spacer(Modifier.width(14.dp))
         Column(modifier = Modifier.weight(1f)) {
             Text(title, fontWeight = FontWeight.SemiBold, fontSize = 14.sp)
-            Text(subtitle, fontSize = 12.sp, color = MaterialTheme.colorScheme.outline)
+            Text(subtitle, fontSize = 12.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
         }
-        Icon(Icons.Default.ChevronRight, contentDescription = null, tint = MaterialTheme.colorScheme.outline)
+        Icon(Icons.Default.ChevronRight, contentDescription = null, tint = MaterialTheme.colorScheme.onSurfaceVariant)
     }
 }
 
@@ -637,7 +438,7 @@ fun ThemePicker(
                     modifier = Modifier.weight(1f)
                 )
                 ThemeOptionButton(
-                    icon = "🔄",
+                    icon = "📱",
                     label = "System",
                     isSelected = currentMode == com.lifescore.app.core.designsystem.AppThemeMode.SYSTEM,
                     onClick = { onModeChange(com.lifescore.app.core.designsystem.AppThemeMode.SYSTEM) },

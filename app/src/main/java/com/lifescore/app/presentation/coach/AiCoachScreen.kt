@@ -304,7 +304,7 @@ fun AiCoachScreen(
                                     Text(
                                         text = uiState.diagnosticGuidance,
                                         fontSize = 11.sp,
-                                        color = MaterialTheme.colorScheme.outline
+                                        color = MaterialTheme.colorScheme.onSurfaceVariant
                                     )
                                 }
                             }
@@ -673,11 +673,11 @@ fun AiCoachScreen(
                                             }
                                         }
                                         Spacer(Modifier.height(3.dp))
-                                        Text(mem.detail, fontSize = 11.sp, color = MaterialTheme.colorScheme.outline)
+                                        Text(mem.detail, fontSize = 11.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
                                     }
 
                                     IconButton(onClick = { viewModel.deleteMemory(mem.id) }) {
-                                        Icon(Icons.Default.Close, contentDescription = "Forget", tint = MaterialTheme.colorScheme.outline, modifier = Modifier.size(16.dp))
+                                        Icon(Icons.Default.Close, contentDescription = "Forget", tint = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.size(16.dp))
                                     }
                                 }
                             }
@@ -704,7 +704,7 @@ fun AiCoachScreen(
                                         Text(journal.mood, fontSize = 10.sp, fontWeight = FontWeight.Bold)
                                     }
                                     Spacer(Modifier.height(4.dp))
-                                    Text(journal.body, fontSize = 11.sp, color = MaterialTheme.colorScheme.outline)
+                                    Text(journal.body, fontSize = 11.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
 
                                     Spacer(Modifier.height(8.dp))
                                     Surface(

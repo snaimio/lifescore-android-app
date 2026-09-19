@@ -120,7 +120,10 @@ fun PaywallBottomSheet(
                                 horizontalArrangement = Arrangement.SpaceBetween,
                                 verticalAlignment = Alignment.CenterVertically
                             ) {
-                                Row(verticalAlignment = Alignment.CenterVertically) {
+                                Row(
+                                    modifier = Modifier.weight(1f, fill = false),
+                                    verticalAlignment = Alignment.CenterVertically
+                                ) {
                                     RadioButton(
                                         selected = isSelected,
                                         onClick = { selectedTier = tier }
@@ -128,9 +131,9 @@ fun PaywallBottomSheet(
                                     Spacer(Modifier.width(8.dp))
                                     Column {
                                         Row(verticalAlignment = Alignment.CenterVertically) {
-                                            Text(tier.title, fontWeight = FontWeight.Bold, fontSize = 15.sp)
+                                            Text(tier.title, fontWeight = FontWeight.Bold, fontSize = 15.sp, maxLines = 1)
                                             if (tier.isPopular) {
-                                                Spacer(Modifier.width(8.dp))
+                                                Spacer(Modifier.width(6.dp))
                                                 Surface(
                                                     shape = RoundedCornerShape(6.dp),
                                                     color = Color(0xFFFFD700)
@@ -145,15 +148,19 @@ fun PaywallBottomSheet(
                                                 }
                                             }
                                         }
-                                        Text(tier.billingPeriod, fontSize = 11.sp, color = MaterialTheme.colorScheme.outline)
+                                        Text(tier.billingPeriod, fontSize = 11.sp, color = MaterialTheme.colorScheme.outline, maxLines = 1)
                                     }
                                 }
+
+                                Spacer(Modifier.width(8.dp))
 
                                 Text(
                                     text = tier.priceFormatted,
                                     fontWeight = FontWeight.Black,
                                     fontSize = 16.sp,
-                                    color = if (isSelected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface
+                                    color = if (isSelected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface,
+                                    maxLines = 1,
+                                    softWrap = false
                                 )
                             }
                         }

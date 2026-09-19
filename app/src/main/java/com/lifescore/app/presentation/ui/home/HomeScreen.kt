@@ -59,7 +59,11 @@ fun HomeScreen(
     val gettingStartedManager = remember { GettingStartedManager(context) }
     var completedSteps by remember { mutableStateOf(gettingStartedManager.getCompletedStepCount()) }
 
-    val visibleQuests = uiState.todayTasks
+    val visibleQuests = remember(uiState.todayTasks) {
+        val pending = uiState.todayTasks.filter { !it.isCompleted }
+        val completed = uiState.todayTasks.filter { it.isCompleted }
+        (pending + completed).take(4)
+    }
 
     val unlockedCount = remember(uiState.userPhase) {
         FeatureUnlockManager.getUnlockedFeatures(uiState.userPhase).size

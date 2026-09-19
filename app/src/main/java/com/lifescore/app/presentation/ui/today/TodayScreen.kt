@@ -65,7 +65,11 @@ fun TodayScreen(
 
     val isDark = MaterialTheme.colorScheme.background.luminance() < 0.5f
 
-    val visibleTasks = uiState.todayTasks
+    val visibleTasks = remember(uiState.todayTasks) {
+        val pending = uiState.todayTasks.filter { !it.isCompleted }
+        val completed = uiState.todayTasks.filter { it.isCompleted }
+        (pending + completed).take(4)
+    }
     val pendingCount = uiState.todayTasks.count { !it.isCompleted }
 
     Scaffold(

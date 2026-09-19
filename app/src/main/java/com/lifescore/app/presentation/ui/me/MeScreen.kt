@@ -192,100 +192,113 @@ fun MeScreen(
             }
 
             // ==========================================
-            // 2. CONSISTENCY & DISCIPLINE METRICS (4 CARDS)
+            // 2. CONSISTENCY & DISCIPLINE METRICS (2x2 GRID)
             // ==========================================
             item {
                 StaggeredAppear(index = 1) {
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.spacedBy(Space.sm)
+                    Column(
+                        verticalArrangement = Arrangement.spacedBy(Space.sm),
+                        modifier = Modifier.fillMaxWidth()
                     ) {
-                        // STREAK
-                        Surface(
-                            shape = LifeScoreShapes.cardSmall,
-                            color = if (isDark) MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f) else Color(0xFFFFF5ED),
-                            border = if (isDark) BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f)) else BorderStroke(1.dp, Color(0xFFFED7AA)),
-                            modifier = Modifier.weight(1f)
+                        // Row 1: STREAK & COMPLETED
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.spacedBy(Space.sm)
                         ) {
-                            Column(
-                                modifier = Modifier.padding(Space.sm),
-                                horizontalAlignment = Alignment.CenterHorizontally
+                            // STREAK
+                            Surface(
+                                shape = LifeScoreShapes.cardSmall,
+                                color = if (isDark) MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f) else Color(0xFFFFF5ED),
+                                border = if (isDark) BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f)) else BorderStroke(1.dp, Color(0xFFFED7AA)),
+                                modifier = Modifier.weight(1f)
                             ) {
-                                Row(
-                                    verticalAlignment = Alignment.CenterVertically,
-                                    horizontalArrangement = Arrangement.spacedBy(4.dp)
+                                Column(
+                                    modifier = Modifier.padding(horizontal = Space.md, vertical = Space.sm),
+                                    horizontalAlignment = Alignment.CenterHorizontally
                                 ) {
-                                    LifeIcon(LifeIcons.Streak, size = 14.dp)
-                                    Text("STREAK", style = MaterialTheme.typography.labelSmall.copy(fontSize = 9.sp), fontWeight = FontWeight.Bold, color = Color(0xFFFF5722))
+                                    Row(
+                                        verticalAlignment = Alignment.CenterVertically,
+                                        horizontalArrangement = Arrangement.spacedBy(6.dp)
+                                    ) {
+                                        LifeIcon(LifeIcons.Streak, size = 16.dp)
+                                        Text("STREAK", style = MaterialTheme.typography.labelSmall.copy(fontSize = 11.sp), fontWeight = FontWeight.Bold, color = Color(0xFFFF5722))
+                                    }
+                                    Spacer(Modifier.height(Space.xxs))
+                                    Text("${uiState.user.currentStreakDays} Days", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold, color = if (isDark) MaterialTheme.colorScheme.onSurface else Color(0xFF19181F), maxLines = 1)
                                 }
-                                Spacer(Modifier.height(Space.xxs))
-                                Text("${uiState.user.currentStreakDays} Days", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold, color = if (isDark) MaterialTheme.colorScheme.onSurface else Color(0xFF19181F))
+                            }
+                            // COMPLETED
+                            Surface(
+                                shape = LifeScoreShapes.cardSmall,
+                                color = if (isDark) MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f) else Color(0xFFF0FDF4),
+                                border = if (isDark) BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f)) else BorderStroke(1.dp, Color(0xFFBBF7D0)),
+                                modifier = Modifier.weight(1f)
+                            ) {
+                                Column(
+                                    modifier = Modifier.padding(horizontal = Space.md, vertical = Space.sm),
+                                    horizontalAlignment = Alignment.CenterHorizontally
+                                ) {
+                                    Row(
+                                        verticalAlignment = Alignment.CenterVertically,
+                                        horizontalArrangement = Arrangement.spacedBy(6.dp)
+                                    ) {
+                                        LifeIcon(LifeIcons.Check, size = 16.dp)
+                                        Text("COMPLETED", style = MaterialTheme.typography.labelSmall.copy(fontSize = 11.sp), fontWeight = FontWeight.Bold, color = Color(0xFF10B981))
+                                    }
+                                    Spacer(Modifier.height(Space.xxs))
+                                    Text("${uiState.totalTasksCompleted} Habits", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold, color = if (isDark) MaterialTheme.colorScheme.onSurface else Color(0xFF19181F), maxLines = 1)
+                                }
                             }
                         }
-                        // COMPLETED
-                        Surface(
-                            shape = LifeScoreShapes.cardSmall,
-                            color = if (isDark) MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f) else Color(0xFFF0FDF4),
-                            border = if (isDark) BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f)) else BorderStroke(1.dp, Color(0xFFBBF7D0)),
-                            modifier = Modifier.weight(1f)
+
+                        // Row 2: FOCUS & RATE
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.spacedBy(Space.sm)
                         ) {
-                            Column(
-                                modifier = Modifier.padding(Space.sm),
-                                horizontalAlignment = Alignment.CenterHorizontally
+                            // FOCUS
+                            Surface(
+                                shape = LifeScoreShapes.cardSmall,
+                                color = if (isDark) MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f) else Color(0xFFF5F3FF),
+                                border = if (isDark) BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f)) else BorderStroke(1.dp, Color(0xFFDDD6FE)),
+                                modifier = Modifier.weight(1f)
                             ) {
-                                Row(
-                                    verticalAlignment = Alignment.CenterVertically,
-                                    horizontalArrangement = Arrangement.spacedBy(4.dp)
+                                Column(
+                                    modifier = Modifier.padding(horizontal = Space.md, vertical = Space.sm),
+                                    horizontalAlignment = Alignment.CenterHorizontally
                                 ) {
-                                    LifeIcon(LifeIcons.Check, size = 14.dp)
-                                    Text("COMPLETED", style = MaterialTheme.typography.labelSmall.copy(fontSize = 9.sp), fontWeight = FontWeight.Bold, color = Color(0xFF10B981))
+                                    Row(
+                                        verticalAlignment = Alignment.CenterVertically,
+                                        horizontalArrangement = Arrangement.spacedBy(6.dp)
+                                    ) {
+                                        LifeIcon(LifeIcons.Goal, size = 16.dp)
+                                        Text("FOCUS", style = MaterialTheme.typography.labelSmall.copy(fontSize = 11.sp), fontWeight = FontWeight.Bold, color = Color(0xFF6366F1))
+                                    }
+                                    Spacer(Modifier.height(Space.xxs))
+                                    Text("${String.format(java.util.Locale.US, "%.1f", uiState.focusHours)} hrs", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold, color = if (isDark) MaterialTheme.colorScheme.onSurface else Color(0xFF19181F), maxLines = 1)
                                 }
-                                Spacer(Modifier.height(Space.xxs))
-                                Text("${uiState.totalTasksCompleted} Habits", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold, color = if (isDark) MaterialTheme.colorScheme.onSurface else Color(0xFF19181F))
                             }
-                        }
-                        // FOCUS
-                        Surface(
-                            shape = LifeScoreShapes.cardSmall,
-                            color = if (isDark) MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f) else Color(0xFFF5F3FF),
-                            border = if (isDark) BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f)) else BorderStroke(1.dp, Color(0xFFDDD6FE)),
-                            modifier = Modifier.weight(1f)
-                        ) {
-                            Column(
-                                modifier = Modifier.padding(Space.sm),
-                                horizontalAlignment = Alignment.CenterHorizontally
+                            // RATE
+                            Surface(
+                                shape = LifeScoreShapes.cardSmall,
+                                color = if (isDark) MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f) else Color(0xFFFFFBEB),
+                                border = if (isDark) BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f)) else BorderStroke(1.dp, Color(0xFFFDE68A)),
+                                modifier = Modifier.weight(1f)
                             ) {
-                                Row(
-                                    verticalAlignment = Alignment.CenterVertically,
-                                    horizontalArrangement = Arrangement.spacedBy(4.dp)
+                                Column(
+                                    modifier = Modifier.padding(horizontal = Space.md, vertical = Space.sm),
+                                    horizontalAlignment = Alignment.CenterHorizontally
                                 ) {
-                                    LifeIcon(LifeIcons.Goal, size = 14.dp)
-                                    Text("FOCUS", style = MaterialTheme.typography.labelSmall.copy(fontSize = 9.sp), fontWeight = FontWeight.Bold, color = Color(0xFF6366F1))
+                                    Row(
+                                        verticalAlignment = Alignment.CenterVertically,
+                                        horizontalArrangement = Arrangement.spacedBy(6.dp)
+                                    ) {
+                                        LifeIcon(LifeIcons.Analytics, size = 16.dp)
+                                        Text("RATE", style = MaterialTheme.typography.labelSmall.copy(fontSize = 11.sp), fontWeight = FontWeight.Bold, color = Color(0xFFF59E0B))
+                                    }
+                                    Spacer(Modifier.height(Space.xxs))
+                                    Text("${uiState.consistencyPercentage}%", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold, color = if (isDark) MaterialTheme.colorScheme.onSurface else Color(0xFF19181F), maxLines = 1)
                                 }
-                                Spacer(Modifier.height(Space.xxs))
-                                Text("${String.format(java.util.Locale.US, "%.1f", uiState.focusHours)} hrs", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold, color = if (isDark) MaterialTheme.colorScheme.onSurface else Color(0xFF19181F))
-                            }
-                        }
-                        // RATE
-                        Surface(
-                            shape = LifeScoreShapes.cardSmall,
-                            color = if (isDark) MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f) else Color(0xFFFFFBEB),
-                            border = if (isDark) BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f)) else BorderStroke(1.dp, Color(0xFFFDE68A)),
-                            modifier = Modifier.weight(1f)
-                        ) {
-                            Column(
-                                modifier = Modifier.padding(Space.sm),
-                                horizontalAlignment = Alignment.CenterHorizontally
-                            ) {
-                                Row(
-                                    verticalAlignment = Alignment.CenterVertically,
-                                    horizontalArrangement = Arrangement.spacedBy(4.dp)
-                                ) {
-                                    LifeIcon(LifeIcons.Analytics, size = 14.dp)
-                                    Text("RATE", style = MaterialTheme.typography.labelSmall.copy(fontSize = 9.sp), fontWeight = FontWeight.Bold, color = Color(0xFFF59E0B))
-                                }
-                                Spacer(Modifier.height(Space.xxs))
-                                Text("${uiState.consistencyPercentage}%", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold, color = if (isDark) MaterialTheme.colorScheme.onSurface else Color(0xFF19181F))
                             }
                         }
                     }

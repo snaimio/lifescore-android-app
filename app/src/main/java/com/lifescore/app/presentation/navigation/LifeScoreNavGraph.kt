@@ -248,8 +248,14 @@ fun LifeScoreNavGraph(
                 )
             }
             composable(Screen.ArchetypeProfile.route) {
+                val homeUiState by homeViewModel.uiState.collectAsState()
+                val detectedArchetype = remember(homeUiState.dimensionScores) {
+                    com.lifescore.app.core.util.ArchetypeManager.mapScoresToArchetype(homeUiState.dimensionScores)
+                }
                 com.lifescore.app.presentation.ui.archetype.ArchetypeProfileScreen(
-                    initialArchetypeId = "architect",
+                    initialArchetypeId = detectedArchetype.id,
+                    userScore = homeUiState.totalScore,
+                    userLevel = homeUiState.level,
                     onNavigateBack = { navController.popBackStack() }
                 )
             }

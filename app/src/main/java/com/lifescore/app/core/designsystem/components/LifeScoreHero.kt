@@ -209,8 +209,8 @@ fun LifeScoreHero(
                 // Right: Streak Pill & View Stats Action
                 Column(
                     horizontalAlignment = Alignment.End,
-                    verticalArrangement = Arrangement.spacedBy(14.dp),
-                    modifier = Modifier.weight(1f).padding(start = 12.dp)
+                    verticalArrangement = Arrangement.spacedBy(10.dp),
+                    modifier = Modifier.weight(1f).padding(start = 8.dp)
                 ) {
                     // Gold Streak Pill
                     Surface(
@@ -229,21 +229,22 @@ fun LifeScoreHero(
                     ) {
                         Row(
                             verticalAlignment = Alignment.CenterVertically,
-                            modifier = Modifier.padding(horizontal = 14.dp, vertical = 8.dp)
+                            modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp)
                         ) {
                             Icon(
                                 imageVector = Icons.AutoMirrored.Filled.TrendingUp,
                                 contentDescription = null,
                                 tint = Color(0xFF1B1408),
-                                modifier = Modifier.size(16.dp)
+                                modifier = Modifier.size(15.dp)
                             )
-                            Spacer(Modifier.width(6.dp))
+                            Spacer(Modifier.width(5.dp))
                             Text(
-                                text = "$streak-Day\nStreak",
+                                text = "$streak-Day Streak",
                                 fontSize = 11.sp,
-                                fontWeight = FontWeight.Black,
+                                fontWeight = FontWeight.Bold,
                                 color = Color(0xFF1B1408),
-                                lineHeight = 13.sp
+                                maxLines = 1,
+                                softWrap = false
                             )
                         }
                     }
@@ -257,20 +258,22 @@ fun LifeScoreHero(
                     ) {
                         Row(
                             verticalAlignment = Alignment.CenterVertically,
-                            modifier = Modifier.padding(horizontal = 16.dp, vertical = 9.dp)
+                            modifier = Modifier.padding(horizontal = 14.dp, vertical = 7.dp)
                         ) {
                             Text(
                                 text = "View Stats",
                                 fontSize = 12.sp,
                                 fontWeight = FontWeight.Bold,
-                                color = if (isDark) Color(0xFFFBF8F3) else Color(0xFF19181F)
+                                color = if (isDark) Color(0xFFFBF8F3) else Color(0xFF19181F),
+                                maxLines = 1,
+                                softWrap = false
                             )
                             Spacer(Modifier.width(4.dp))
                             Icon(
                                 imageVector = Icons.Default.ChevronRight,
                                 contentDescription = null,
                                 tint = Color(0xFFD4A24C),
-                                modifier = Modifier.size(16.dp)
+                                modifier = Modifier.size(15.dp)
                             )
                         }
                     }
