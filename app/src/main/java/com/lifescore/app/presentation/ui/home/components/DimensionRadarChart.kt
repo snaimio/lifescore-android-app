@@ -50,24 +50,30 @@ fun DimensionRadarChart(
         label = "radarAnimation"
     )
 
+    val isDark = MaterialTheme.colorScheme.background.luminance() < 0.5f
     val radarPurple = Color(0xFFA855F7)
     val radarGlowPurple = Color(0xFFC084FC)
-    val gridLineColor = Color(0xFF475569).copy(alpha = 0.4f)
+    val gridLineColor = if (isDark) Color(0xFF475569).copy(alpha = 0.4f) else Color(0xFFCBD5E1)
+    val labelTextColor = if (isDark) Color(0xFFF1F5F9) else Color(0xFF19181F)
+    val scoreTextColor = if (isDark) Color(0xFFCBD5E1) else Color(0xFF64748B)
 
     Column(
         modifier = modifier.fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Box(
+        BoxWithConstraints(
             modifier = Modifier
                 .fillMaxWidth()
                 .aspectRatio(1.02f)
                 .padding(4.dp),
             contentAlignment = Alignment.Center
         ) {
+            val chartRadius = (maxWidth.coerceAtMost(maxHeight) / 2) * 0.62f
+            val labelRadiusDist = (maxWidth.coerceAtMost(maxHeight) / 2) * 0.84f
+
             Canvas(modifier = Modifier.fillMaxSize()) {
                 val center = Offset(size.width / 2, size.height / 2)
-                val radius = (size.minDimension / 2) * 0.62f
+                val radius = chartRadius.toPx()
                 val numAxes = dimensions.size
                 val angleStep = (2 * Math.PI / numAxes).toFloat()
 
@@ -141,7 +147,7 @@ fun DimensionRadarChart(
                 // Neon Stroke Outline
                 drawPath(
                     path = scorePath,
-                    color = Color(0xFFE9D5FF),
+                    color = if (isDark) Color(0xFFE9D5FF) else Color(0xFF9333EA),
                     style = Stroke(
                         width = 2.2.dp.toPx(),
                         cap = StrokeCap.Round,
@@ -151,15 +157,13 @@ fun DimensionRadarChart(
 
                 // 4. Draw glowing vertex dots
                 points.forEach { point ->
-                    // Outer glow halo
                     drawCircle(
                         color = radarGlowPurple.copy(alpha = 0.4f),
                         radius = 6.5.dp.toPx(),
                         center = point
                     )
-                    // Inner bright core
                     drawCircle(
-                        color = Color.White,
+                        color = if (isDark) Color.White else Color(0xFF7E22CE),
                         radius = 3.5.dp.toPx(),
                         center = point
                     )
@@ -171,8 +175,10 @@ fun DimensionRadarChart(
                 val numAxes = dimensions.size
                 val angleStep = (2 * Math.PI / numAxes).toFloat()
                 val angle = (index * angleStep - Math.PI / 2).toFloat()
-                val labelRadius = 0.88f
                 val score = dimensionScores[dimension] ?: 80
+
+                val offsetX = (cos(angle) * labelRadiusDist.value).dp
+                val offsetY = (sin(angle) * labelRadiusDist.value).dp
 
                 Box(
                     modifier = Modifier
@@ -180,32 +186,26 @@ fun DimensionRadarChart(
                         .padding(2.dp),
                     contentAlignment = Alignment.Center
                 ) {
-                    val offsetX = (cos(angle) * labelRadius)
-                    val offsetY = (sin(angle) * labelRadius)
-
                     Column(
                         modifier = Modifier
-                            .fillMaxSize()
                             .wrapContentSize(align = Alignment.Center)
-                            .offset(
-                                x = (offsetX * 115).dp,
-                                y = (offsetY * 115).dp
-                            ),
+                            .offset(x = offsetX, y = offsetY),
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
                         Text(
                             text = dimension.displayName,
                             fontSize = 10.sp,
                             fontWeight = FontWeight.Bold,
-                            color = Color(0xFFF1F5F9),
+                            color = labelTextColor,
                             textAlign = TextAlign.Center,
-                            maxLines = 1
+                            maxLines = 1,
+                            softWrap = false
                         )
                         Text(
                             text = "${score}%",
                             fontSize = 9.sp,
                             fontWeight = FontWeight.SemiBold,
-                            color = Color(0xFFCBD5E1),
+                            color = scoreTextColor,
                             textAlign = TextAlign.Center
                         )
                     }

@@ -189,10 +189,10 @@ fun BalanceScreen(
                                 dimensionScores = uiState.dimensionScores,
                                 modifier = Modifier
                                     .fillMaxWidth()
-                                    .height(210.dp)
+                                    .height(230.dp)
                             )
 
-                            Spacer(Modifier.height(Space.sm))
+                            Spacer(Modifier.height(Space.md))
 
                             DimensionLegend(dimensionScores = uiState.dimensionScores)
                         }

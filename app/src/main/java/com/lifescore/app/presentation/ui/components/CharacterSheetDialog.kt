@@ -87,7 +87,7 @@ fun CharacterSheetDialog(
 
                 Text(userProfile.name, fontWeight = FontWeight.Bold, fontSize = 18.sp)
                 Text("Level ${userProfile.currentLevel} • ${userProfile.title}", color = Color(archetype.baseColorHex), fontWeight = FontWeight.SemiBold, fontSize = 13.sp)
-                Text("Total XP: ${userProfile.currentXp} • 🔥 ${userProfile.currentStreakDays}d Streak", fontSize = 12.sp, color = MaterialTheme.colorScheme.outline)
+                Text("${userProfile.currentStreakDays}-Day Streak • Level ${userProfile.currentLevel}", fontSize = 12.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
 
                 Spacer(Modifier.height(16.dp))
 

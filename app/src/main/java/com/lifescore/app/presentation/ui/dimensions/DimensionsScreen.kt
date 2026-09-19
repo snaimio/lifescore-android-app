@@ -483,8 +483,14 @@ fun FadedSampleChart() {
 fun DimensionLegend(dimensionScores: Map<DimensionType, Int>) {
     val dimensions = remember { DimensionType.values().toList() }
 
-    Column(modifier = Modifier.fillMaxWidth()) {
-        Row(modifier = Modifier.fillMaxWidth()) {
+    Column(
+        modifier = Modifier.fillMaxWidth(),
+        verticalArrangement = Arrangement.spacedBy(6.dp)
+    ) {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(4.dp)
+        ) {
             dimensions.take(4).forEach { dim ->
                 val score = dimensionScores[dim] ?: 0
                 DimensionLegendItem(
@@ -494,8 +500,10 @@ fun DimensionLegend(dimensionScores: Map<DimensionType, Int>) {
                 )
             }
         }
-        Spacer(Modifier.height(Spacing.xs))
-        Row(modifier = Modifier.fillMaxWidth()) {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(4.dp)
+        ) {
             dimensions.takeLast(4).forEach { dim ->
                 val score = dimensionScores[dim] ?: 0
                 DimensionLegendItem(
@@ -514,22 +522,36 @@ private fun DimensionLegendItem(
     score: Int,
     modifier: Modifier = Modifier
 ) {
+    val cleanName = when (dimension) {
+        DimensionType.HEALTH -> "Health"
+        DimensionType.WEALTH -> "Wealth"
+        DimensionType.RELATIONSHIPS -> "Relations"
+        DimensionType.CAREER -> "Career"
+        DimensionType.LEARNING -> "Learning"
+        DimensionType.FITNESS -> "Fitness"
+        DimensionType.MENTAL_HEALTH -> "Mind"
+        DimensionType.SOCIAL_LIFE -> "Social"
+    }
+
     Row(
-        modifier = modifier.padding(2.dp),
-        verticalAlignment = Alignment.CenterVertically
+        modifier = modifier.padding(vertical = 2.dp),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.Center
     ) {
         Box(
             modifier = Modifier
-                .size(8.dp)
+                .size(7.dp)
                 .clip(CircleShape)
                 .background(Color(dimension.baseColorHex))
         )
         Spacer(Modifier.width(4.dp))
         Text(
-            text = "${dimension.displayName.take(5)}: $score%",
+            text = "$cleanName: $score%",
             fontSize = 10.sp,
+            fontWeight = FontWeight.Medium,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
-            maxLines = 1
+            maxLines = 1,
+            softWrap = false
         )
     }
 }

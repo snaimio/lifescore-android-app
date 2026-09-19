@@ -272,6 +272,7 @@ fun AiCoachScreen(
                     Column(
                         modifier = Modifier
                             .fillMaxSize()
+                            .imePadding()
                             .padding(16.dp)
                     ) {
                         // Diagnostic Banner / Frontier Pill

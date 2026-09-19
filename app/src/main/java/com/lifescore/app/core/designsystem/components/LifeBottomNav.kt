@@ -111,7 +111,10 @@ private fun LifeNavItem(
             fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Medium,
             fontSize = 10.sp,
             color = iconColor,
-            letterSpacing = 0.3.sp
+            letterSpacing = 0.3.sp,
+            maxLines = 1,
+            softWrap = false,
+            overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis
         )
         Spacer(Modifier.height(3.dp))
         // Subtle glowing dot indicator under selected
