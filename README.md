@@ -1,4 +1,8 @@
-# LifeScore
+<div align="center">
+  <img src="docs/images/lifescore_logo.png" alt="LifeScore Logo" width="140" style="border-radius: 28px;" />
+  <h1>LifeScore</h1>
+  <p><strong>Executive Life Operating System & Multi-Dimensional Vitality Index</strong></p>
+</div>
 
 [![Kotlin](https://img.shields.io/badge/Kotlin-2.0.21-purple.svg)](https://kotlinlang.org)
 [![Jetpack Compose](https://img.shields.io/badge/Jetpack%20Compose-BOM%202024.10.01-4285F4.svg)](https://developer.android.com/jetpack/compose)

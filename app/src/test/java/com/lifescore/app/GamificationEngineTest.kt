@@ -33,8 +33,8 @@ class GamificationEngineTest {
         // 4 completed out of 4 tasks = 100%
         assertEquals(100, ScoreEngine.calculateDimensionScore(4, 4))
 
-        // Empty tasks = neutral baseline 50
-        assertEquals(50, ScoreEngine.calculateDimensionScore(0, 0))
+        // Empty tasks = clean baseline 0
+        assertEquals(0, ScoreEngine.calculateDimensionScore(0, 0))
     }
 
     @Test
