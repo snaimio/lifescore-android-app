@@ -50,25 +50,9 @@ class LifeTrackersRepositoryImpl(
     private val dayFormatter = SimpleDateFormat("EEE", Locale.getDefault())
     private val dateKeyFormatter = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
 
-    // In-memory reactive state initialized with default baseline for all 15 trackers
+    // Clean reactive state: starts at 0 with no fake/mock values
     private val _trackerValues = MutableStateFlow<Map<TrackerType, Float>>(
-        mapOf(
-            TrackerType.HYDRATION to 1250f,
-            TrackerType.NUTRITION to 1400f,
-            TrackerType.SLEEP to 7.5f,
-            TrackerType.VITALS to 68f,
-            TrackerType.STEPS to 6420f,
-            TrackerType.WORKOUTS to 30f,
-            TrackerType.WEIGHT to 74.5f,
-            TrackerType.READING to 15f,
-            TrackerType.SKILL_MASTERY to 1.5f,
-            TrackerType.JOURNAL to 1f,
-            TrackerType.OKRS to 45f,
-            TrackerType.ROUTINES to 2f,
-            TrackerType.SOCIAL to 1f,
-            TrackerType.FINANCE to 35f,
-            TrackerType.MINDFULNESS to 10f
-        )
+        TrackerType.values().associateWith { 0f }
     )
 
     private val _trackerGoals = MutableStateFlow<Map<TrackerType, Float>>(
@@ -76,23 +60,7 @@ class LifeTrackersRepositoryImpl(
     )
 
     private val _trackerLogs = MutableStateFlow<Map<TrackerType, List<TrackerLogEntry>>>(
-        TrackerType.values().associateWith { type ->
-            val now = System.currentTimeMillis()
-            listOf(
-                TrackerLogEntry(
-                    trackerType = type,
-                    value = type.defaultGoal * 0.5f,
-                    timestamp = now - (24 * 3600000L),
-                    note = "Previous day logged entry"
-                ),
-                TrackerLogEntry(
-                    trackerType = type,
-                    value = type.defaultGoal * 0.5f,
-                    timestamp = now - 3600000L,
-                    note = "Today focus session"
-                )
-            )
-        }
+        TrackerType.values().associateWith { emptyList() }
     )
 
     private fun calculateStreak(logs: List<TrackerLogEntry>): Int {
@@ -134,8 +102,8 @@ class LifeTrackersRepositoryImpl(
                     type = type,
                     currentValue = curr,
                     targetGoal = goal,
-                    streakDays = streak.coerceAtLeast(if (curr > 0f) 1 else 0),
-                    todayCompleted = curr >= goal,
+                    streakDays = streak,
+                    todayCompleted = curr >= goal && goal > 0f,
                     progressPercentage = if (goal > 0) (curr / goal).coerceIn(0f, 1f) else 0f
                 )
             }
@@ -152,8 +120,8 @@ class LifeTrackersRepositoryImpl(
                 type = type,
                 currentValue = curr,
                 targetGoal = goal,
-                streakDays = streak.coerceAtLeast(if (curr > 0f) 1 else 0),
-                todayCompleted = curr >= goal,
+                streakDays = streak,
+                todayCompleted = curr >= goal && goal > 0f,
                 progressPercentage = if (goal > 0) (curr / goal).coerceIn(0f, 1f) else 0f
             )
         }
