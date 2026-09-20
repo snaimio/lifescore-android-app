@@ -50,12 +50,12 @@ object Neutrals {
 
 // Accent — signature gradient & state accents
 object Accent {
-    val Primary = Color(0xFF3D3A8C)          // Deep indigo
-    val PrimaryLight = Color(0xFF5B57B8)
-    val PrimaryDark = Color(0xFF262466)
+    val Primary = Color(0xFFD4A24C)          // Champagne gold
+    val PrimaryLight = Color(0xFFE5B869)
+    val PrimaryDark = Color(0xFFB38230)
     val Secondary = Color(0xFFD97757)        // Warm terracotta
-    val Tertiary = Color(0xFF6BA89C)         // Calm teal
-    val Success = Color(0xFF6BA86B)
+    val Tertiary = Color(0xFF439386)         // Forest emerald
+    val Success = Color(0xFF2E7D5B)          // Growth emerald
     val Warning = Color(0xFFD4A24C)
     val Error = Color(0xFFC9553D)
 }
@@ -64,17 +64,17 @@ object Accent {
 object LifeGradients {
     val HeroDark = Brush.linearGradient(
         colors = listOf(
-            Color(0xFF2A2750),      // Deep indigo
-            Color(0xFF3D3A8C),      // Primary
-            Color(0xFF6B4B8C)       // Warm violet
+            Color(0xFF0C0B12),      // Obsidian black
+            Color(0xFF14241D),      // Deep forest emerald
+            Color(0xFF1D3B2F)       // Rich emerald
         )
     )
 
     val CardMesh = Brush.linearGradient(
         colors = listOf(
-            Color(0xFF1E1C38),
-            Color(0xFF2D295C),
-            Color(0xFF4A3B69)
+            Color(0xFF12111D),
+            Color(0xFF18231E),
+            Color(0xFF22352B)
         )
     )
 
@@ -241,16 +241,16 @@ val GlassBorderDark = Color.White.copy(alpha = 0.1f)
 
 val md_theme_light_primary = Accent.Primary
 val md_theme_light_onPrimary = Neutrals.White
-val md_theme_light_primaryContainer = Color(0xFFE6E5F5)
-val md_theme_light_onPrimaryContainer = Accent.PrimaryDark
+val md_theme_light_primaryContainer = Color(0xFFFFF3DB)
+val md_theme_light_onPrimaryContainer = Color(0xFF7A510A)
 val md_theme_light_secondary = Accent.Secondary
 val md_theme_light_onSecondary = Neutrals.White
-val md_theme_light_secondaryContainer = Color(0xFFF5E5DC)
-val md_theme_light_onSecondaryContainer = Color(0xFF4A2618)
+val md_theme_light_secondaryContainer = Color(0xFFFEECE4)
+val md_theme_light_onSecondaryContainer = Color(0xFF7C2D12)
 val md_theme_light_tertiary = Accent.Tertiary
 val md_theme_light_onTertiary = Neutrals.White
-val md_theme_light_tertiaryContainer = Color(0xFFDCF0EC)
-val md_theme_light_onTertiaryContainer = Color(0xFF1A3D37)
+val md_theme_light_tertiaryContainer = Color(0xFFE2F7F2)
+val md_theme_light_onTertiaryContainer = Color(0xFF0D5347)
 val md_theme_light_error = Accent.Error
 val md_theme_light_onError = Neutrals.White
 val md_theme_light_errorContainer = Color(0xFFFFDAD6)
@@ -264,10 +264,10 @@ val md_theme_light_onSurfaceVariant = Neutrals.Ink_500
 val md_theme_light_outline = Neutrals.Ink_200
 val md_theme_light_outlineVariant = Neutrals.Ink_100
 
-val md_theme_dark_primary = Color(0xFFB8B5E8)
-val md_theme_dark_onPrimary = Color(0xFF1F1D4A)
-val md_theme_dark_primaryContainer = Color(0xFF353273)
-val md_theme_dark_onPrimaryContainer = Color(0xFFE6E5F5)
+val md_theme_dark_primary = Color(0xFFD4A24C)
+val md_theme_dark_onPrimary = Color(0xFF1B1408)
+val md_theme_dark_primaryContainer = Color(0xFF2E2413)
+val md_theme_dark_onPrimaryContainer = Color(0xFFFDE68A)
 val md_theme_dark_secondary = Color(0xFFF0B49C)
 val md_theme_dark_onSecondary = Color(0xFF4A2618)
 val md_theme_dark_secondaryContainer = Color(0xFF6B3E28)

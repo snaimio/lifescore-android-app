@@ -95,10 +95,10 @@ fun WelcomeScreen(
     }
 
     val isDark = MaterialTheme.colorScheme.background.luminance() < 0.5f
-    val backgroundColor = if (isDark) Color(0xFF0F0E14) else MaterialTheme.colorScheme.background
+    val backgroundColor = if (isDark) Color(0xFF0C0B12) else MaterialTheme.colorScheme.background
     val textPrimary = if (isDark) Color(0xFFFBF8F3) else Color(0xFF19181F)
     val textSecondary = if (isDark) Color(0xFF9E958B) else Color(0xFF6B6357)
-    val cardBackground = if (isDark) Color(0xFF161522) else Color(0xFFFFFFFF)
+    val cardBackground = if (isDark) Color(0xFF14131E) else Color(0xFFFFFFFF)
     val cardBorder = if (isDark) Color(0x1FD4A24C) else Color(0x33D4A24C)
 
     Box(
@@ -264,7 +264,7 @@ fun WelcomeScreen(
                             val optionBg = if (isSelected) {
                                 option.accentColor.copy(alpha = if (isDark) 0.18f else 0.12f)
                             } else {
-                                if (isDark) Color(0xFF1F1E2E) else Color(0xFFF6F4EF)
+                                if (isDark) Color(0xFF1D1B2B) else Color(0xFFF6F4EF)
                             }
                             val optionBorder = if (isSelected) {
                                 option.accentColor
@@ -421,7 +421,7 @@ private fun ShowcaseSlide(
     tags: List<String>
 ) {
     val isDark = MaterialTheme.colorScheme.background.luminance() < 0.5f
-    val slideBg = if (isDark) Color(0xFF161522) else Color(0xFFFFFFFF)
+    val slideBg = if (isDark) Color(0xFF14131E) else Color(0xFFFFFFFF)
     val slideBorder = if (isDark) Color(0x1FD4A24C) else Color(0x33D4A24C)
     val textTitle = if (isDark) Color(0xFFFBF8F3) else Color(0xFF19181F)
     val textDesc = if (isDark) Color(0xFFFBF8F3).copy(alpha = 0.75f) else Color(0xFF4A453E)

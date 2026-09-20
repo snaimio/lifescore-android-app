@@ -69,7 +69,7 @@ fun SplashScreen(
             // Sunrise Arc Brand Mark Halo
             Surface(
                 shape = CircleShape,
-                color = Color(0x15D4A24C),
+                color = Color(0x18D4A24C),
                 modifier = Modifier
                     .size(130.dp)
                     .scale(pulseScale * entryScale)
@@ -77,7 +77,7 @@ fun SplashScreen(
                 Box(contentAlignment = Alignment.Center) {
                     Surface(
                         shape = CircleShape,
-                        color = Color(0x303D3A8C),
+                        color = Color(0x282E7D5B),
                         modifier = Modifier.size(96.dp)
                     ) {
                         Box(contentAlignment = Alignment.Center) {
@@ -116,7 +116,7 @@ fun SplashScreen(
 
             CircularProgressIndicator(
                 modifier = Modifier.size(24.dp),
-                color = Color(0xFFE08556),
+                color = Color(0xFFD4A24C),
                 strokeWidth = 2.dp
             )
         }

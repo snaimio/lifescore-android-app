@@ -408,7 +408,7 @@ fun OnboardingAssessmentScreen(
                                 Card(
                                     modifier = Modifier.fillMaxWidth().padding(top = 8.dp),
                                     shape = RoundedCornerShape(24.dp),
-                                    colors = CardDefaults.cardColors(containerColor = Color(0xFF0F172A))
+                                    colors = CardDefaults.cardColors(containerColor = Color(0xFF14131E))
                                 ) {
                                     Column(
                                         modifier = Modifier.padding(22.dp),

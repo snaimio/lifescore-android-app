@@ -59,10 +59,10 @@ fun LoginScreen(
     val backgroundColor = if (isDark) Color(0xFF0C0B12) else MaterialTheme.colorScheme.background
     val textPrimary = if (isDark) Color(0xFFFBF8F3) else Color(0xFF19181F)
     val textSecondary = if (isDark) Color(0xFF9E958B) else Color(0xFF6B6357)
-    val cardBackground = if (isDark) Color(0xFF181726) else Color(0xFFFFFFFF)
+    val cardBackground = if (isDark) Color(0xFF14131E) else Color(0xFFFFFFFF)
     val cardBorder = if (isDark) Color(0x1FD4A24C) else Color(0x33D4A24C)
-    val switcherBg = if (isDark) Color(0xFF14131E) else Color(0xFFF2EFE9)
-    val inputBg = if (isDark) Color(0xFF12111D) else Color(0xFFFAFAF7)
+    val switcherBg = if (isDark) Color(0xFF1A1926) else Color(0xFFF2EFE9)
+    val inputBg = if (isDark) Color(0xFF0F0E16) else Color(0xFFFAFAF7)
     val inputBorder = if (isDark) Color(0x22FFFFFF) else Color(0x1A000000)
 
     Scaffold(
