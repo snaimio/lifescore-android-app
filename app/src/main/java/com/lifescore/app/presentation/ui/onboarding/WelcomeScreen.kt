@@ -127,25 +127,19 @@ fun WelcomeScreen(
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.spacedBy(Space.xs)
                 ) {
-                    Surface(
-                        shape = CircleShape,
-                        color = Color(0x22D4A24C),
-                        modifier = Modifier.size(36.dp)
-                    ) {
-                        Box(contentAlignment = Alignment.Center) {
-                            Image(
-                                painter = painterResource(R.drawable.lifescore_logo),
-                                contentDescription = "LifeScore Brand Mark",
-                                modifier = Modifier.size(28.dp)
-                            )
-                        }
-                    }
+                    Image(
+                        painter = painterResource(R.drawable.lifescore_logo),
+                        contentDescription = "LifeScore Brand Mark",
+                        modifier = Modifier
+                            .size(36.dp)
+                            .clip(RoundedCornerShape(10.dp))
+                    )
                     Text(
-                        text = "LIFESCORE",
-                        style = MaterialTheme.typography.titleMedium.copy(
+                        text = "LifeScore",
+                        style = MaterialTheme.typography.titleLarge.copy(
                             fontFamily = FontFamily.Serif,
                             fontWeight = FontWeight.Bold,
-                            letterSpacing = 2.sp
+                            letterSpacing = 1.sp
                         ),
                         color = textPrimary
                     )

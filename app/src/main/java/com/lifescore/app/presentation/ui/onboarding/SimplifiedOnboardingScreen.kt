@@ -2,6 +2,7 @@ package com.lifescore.app.presentation.ui.onboarding
 
 import androidx.compose.animation.*
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -173,15 +174,13 @@ private fun WelcomeStepContent(
         verticalArrangement = Arrangement.Center
     ) {
         item {
-            Surface(
-                shape = CircleShape,
-                color = MaterialTheme.colorScheme.primaryContainer,
-                modifier = Modifier.size(90.dp)
-            ) {
-                Box(contentAlignment = Alignment.Center) {
-                    Text("🌟", fontSize = 44.sp)
-                }
-            }
+            Image(
+                painter = androidx.compose.ui.res.painterResource(com.lifescore.app.R.drawable.lifescore_logo),
+                contentDescription = "LifeScore Brand Logo",
+                modifier = Modifier
+                    .size(80.dp)
+                    .clip(RoundedCornerShape(18.dp))
+            )
 
             Spacer(Modifier.height(Spacing.lg))
 
