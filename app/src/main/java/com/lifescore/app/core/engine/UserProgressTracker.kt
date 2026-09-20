@@ -42,7 +42,7 @@ object UserProgressTracker {
                 phase != UserPhase.NEW_USER
             "MASTERCLASSES", "SOCIAL_DUELS", "REWARD_STORE", "SKILL_MASTERY", "MICRO_VLOGS", "GROUP_HABITS", "WEEKLY_AUDITS" ->
                 phase == UserPhase.ADVANCED || phase == UserPhase.EXPERT
-            "ENTERPRISE_HUB", "COMBAT_BOSS", "ANALYTICS_DASHBOARD", "PRIVACY_GUARD", "CAREER_QUESTS" ->
+            "AI_MEMORY_INSPECTOR", "COMBAT_BOSS", "ANALYTICS_DASHBOARD", "PRIVACY_GUARD", "CAREER_QUESTS" ->
                 phase == UserPhase.EXPERT || phase == UserPhase.ADVANCED
             else -> true
         }
@@ -60,7 +60,7 @@ object UserProgressTracker {
                 "8 Daily Quests", "Expert Masterclasses", "Social Duels", "XP Reward Store", "Skill Mastery", "Micro-Vlogs", "Weekly Audits"
             )
             UserPhase.EXPERT -> listOf(
-                "Complete Life OS", "Enterprise Hub", "Dimension Boss Raids", "Predictive Analytics", "Zero-Data Privacy", "Career Quests"
+                "Complete Life OS", "AI Memory Inspector", "Dimension Boss Raids", "Predictive Analytics", "Zero-Data Privacy", "Career Quests"
             )
         }
     }

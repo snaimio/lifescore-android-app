@@ -257,19 +257,6 @@ fun ProfileScreen(
                             Icon(Icons.Default.ChevronRight, contentDescription = null)
                         }
                     }
-
-                    Surface(
-                        shape = RoundedCornerShape(14.dp),
-                        color = MaterialTheme.colorScheme.surfaceVariant,
-                        modifier = Modifier.fillMaxWidth().clickable { navController.navigate(Screen.Enterprise.route) }
-                    ) {
-                        Row(modifier = Modifier.padding(14.dp), verticalAlignment = Alignment.CenterVertically) {
-                            Icon(Icons.Default.Business, contentDescription = null)
-                            Spacer(Modifier.width(12.dp))
-                            Text("LifeScore Enterprise & Team Hub", fontWeight = FontWeight.Bold, fontSize = 13.sp, modifier = Modifier.weight(1f))
-                            Icon(Icons.Default.ChevronRight, contentDescription = null)
-                        }
-                    }
                 }
             }
 

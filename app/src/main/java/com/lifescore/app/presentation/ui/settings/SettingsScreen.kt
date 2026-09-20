@@ -90,42 +90,6 @@ fun SettingsScreen(
                 }
             }
 
-            // Enterprise Hub Card
-            item {
-                Card(
-                    modifier = Modifier.fillMaxWidth(),
-                    shape = RoundedCornerShape(20.dp),
-                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant),
-                    onClick = { navController.navigate(com.lifescore.app.presentation.navigation.Screen.Enterprise.route) }
-                ) {
-                    Row(
-                        modifier = Modifier.padding(18.dp),
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Surface(
-                            shape = CircleShape,
-                            color = Color(0xFF6366F1).copy(alpha = 0.2f),
-                            modifier = Modifier.size(40.dp)
-                        ) {
-                            Box(contentAlignment = Alignment.Center) {
-                                Text("🏢", fontSize = 20.sp)
-                            }
-                        }
-                        Spacer(Modifier.width(14.dp))
-                        Column(modifier = Modifier.weight(1f)) {
-                            Row(verticalAlignment = Alignment.CenterVertically) {
-                                Text("LifeScore Enterprise Hub", fontWeight = FontWeight.Bold, fontSize = 16.sp)
-                                Spacer(Modifier.width(6.dp))
-                                Surface(shape = RoundedCornerShape(4.dp), color = Color(0xFF6366F1)) {
-                                    Text("B2B", fontSize = 8.sp, fontWeight = FontWeight.Black, color = Color.White, modifier = Modifier.padding(horizontal = 4.dp, vertical = 1.dp))
-                                }
-                            }
-                            Text("Acme Technologies • 78 Seats • Team Analytics", fontSize = 12.sp, color = MaterialTheme.colorScheme.outline)
-                        }
-                        Icon(Icons.Default.ChevronRight, contentDescription = null)
-                    }
-                }
-            }
 
             // Pro Membership Promo
             item {

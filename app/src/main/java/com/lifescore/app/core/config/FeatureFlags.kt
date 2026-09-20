@@ -8,7 +8,7 @@ object FeatureFlags {
     const val ENABLE_JOURNALING = true
     const val ENABLE_MICRO_VLOGS = true
     const val ENABLE_PAYWALL = true
-    const val ENABLE_ENTERPRISE = true
+    const val ENABLE_ENTERPRISE = false
     
     // Debug features
     val SHOW_DEBUG_LOGS = AppConfig.DEBUG

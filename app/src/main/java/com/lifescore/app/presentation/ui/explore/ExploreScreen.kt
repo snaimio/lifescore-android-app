@@ -51,7 +51,6 @@ private fun getCategoryIcon(cat: FeatureCategory): LifeIcons = when (cat) {
     FeatureCategory.RECOVERY -> LifeIcons.Health
     FeatureCategory.HABIT_SYSTEMS -> LifeIcons.Rocket
     FeatureCategory.SOCIAL_GROWTH -> LifeIcons.Social
-    FeatureCategory.ENTERPRISE -> LifeIcons.Career
 }
 
 private fun getFeatureIcon(feature: FeatureItem): LifeIcons = when (feature.id) {
@@ -69,7 +68,6 @@ private fun getFeatureIcon(feature: FeatureItem): LifeIcons = when (feature.id) 
     "vitals", "recovery", "recovery_sos" -> LifeIcons.Health
     "skill_mastery", "goals_okrs" -> LifeIcons.Goal
     "relationships", "friends_feed" -> LifeIcons.Social
-    "enterprise" -> LifeIcons.Career
     "ai_coach", "ai_memory" -> LifeIcons.Star
     "science_journeys" -> LifeIcons.Rocket
     else -> getCategoryIcon(feature.category)

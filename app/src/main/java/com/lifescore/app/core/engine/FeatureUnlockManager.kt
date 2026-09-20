@@ -18,8 +18,7 @@ enum class FeatureCategory(val displayName: String) {
     WELLNESS("Digital Wellness & Screen Time"),
     RECOVERY("Addiction Recovery OS"),
     HABIT_SYSTEMS("Habit Systems & Science"),
-    SOCIAL_GROWTH("Community & Growth"),
-    ENTERPRISE("Enterprise & AI")
+    SOCIAL_GROWTH("Community & Growth")
 }
 
 object FeatureUnlockManager {
@@ -70,12 +69,11 @@ object FeatureUnlockManager {
         FeatureItem("science_journeys", "Habit Science Journeys", FeatureCategory.HABIT_SYSTEMS, "Behavioral transformation science journeys", UserPhase.EXPERT, Screen.ScienceJourneys.route),
         FeatureItem("neurodivergent", "Soft Focus ADHD Hub", FeatureCategory.HABIT_SYSTEMS, "Sensory filters, micro-pacing & focus timers", UserPhase.EXPERT, Screen.NeurodivergentHub.route),
 
-        // Social, Growth & Enterprise
+        // Social & Growth
         FeatureItem("viral_referrals", "Referral Program", FeatureCategory.SOCIAL_GROWTH, "Invite friends for free Pro access", UserPhase.EXPERT, Screen.ViralReferrals.route),
         FeatureItem("friends_feed", "Friends Activity Feed", FeatureCategory.SOCIAL_GROWTH, "Accountability nudges and encouragement", UserPhase.EXPERT, Screen.FriendsFeed.route),
         FeatureItem("micro_vlogs", "Micro-Vlogs Proof", FeatureCategory.SOCIAL_GROWTH, "Visual proof of daily habit execution", UserPhase.EXPERT, Screen.MicroVlogs.route),
-        FeatureItem("ai_memory", "AI Memory Inspector", FeatureCategory.ENTERPRISE, "OARS behavioral patterns and habit memory", UserPhase.EXPERT, Screen.AiMemoryInspector.route),
-        FeatureItem("enterprise", "Enterprise Team Wellbeing", FeatureCategory.ENTERPRISE, "Corporate team wellbeing and burnout analytics", UserPhase.EXPERT, Screen.Enterprise.route)
+        FeatureItem("ai_memory", "AI Memory Inspector", FeatureCategory.SELF_IMPROVEMENT, "OARS behavioral patterns and habit memory", UserPhase.EXPERT, Screen.AiMemoryInspector.route)
     )
 
     fun isFeatureUnlocked(featureId: String, currentPhase: UserPhase): Boolean {

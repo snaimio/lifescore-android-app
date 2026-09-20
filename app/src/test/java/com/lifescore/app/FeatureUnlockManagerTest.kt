@@ -26,7 +26,7 @@ class FeatureUnlockManagerTest {
 
         // Advanced features should be locked in NEW phase
         assertFalse(FeatureUnlockManager.isFeatureUnlocked("hydration", UserPhase.NEW_USER))
-        assertFalse(FeatureUnlockManager.isFeatureUnlocked("enterprise", UserPhase.NEW_USER))
+        assertFalse(FeatureUnlockManager.isFeatureUnlocked("ai_memory", UserPhase.NEW_USER))
     }
 
     @Test
