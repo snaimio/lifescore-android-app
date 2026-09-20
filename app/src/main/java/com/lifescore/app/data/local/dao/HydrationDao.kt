@@ -17,6 +17,12 @@ interface HydrationDao {
     @Query("SELECT SUM(volumeMl) FROM hydration_entries WHERE userId = :userId AND date(timestamp / 1000, 'unixepoch', 'localtime') = date('now', 'localtime')")
     fun getTodayTotal(userId: String): Flow<Int?>
 
+    @Query("SELECT * FROM hydration_entries WHERE userId = :userId ORDER BY timestamp DESC")
+    suspend fun getAllEntriesSync(userId: String): List<HydrationEntity>
+
+    @Query("SELECT SUM(volumeMl) FROM hydration_entries WHERE userId = :userId AND date(timestamp / 1000, 'unixepoch', 'localtime') = date('now', 'localtime')")
+    suspend fun getTodayTotalMlSync(userId: String): Int?
+
     @Query("SELECT * FROM hydration_entries WHERE userId = :userId ORDER BY timestamp DESC LIMIT 1")
     suspend fun getLastEntry(userId: String): HydrationEntity?
 

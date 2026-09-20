@@ -87,7 +87,7 @@ fun DailyGrowthScreen(
                         modifier = Modifier.padding(end = Spacing.sm)
                     ) {
                         Text(
-                            text = "Day ${state.selectedDay} of 30",
+                            text = "Day ${state.selectedDay} of ${state.totalCurriculumDays}",
                             fontSize = 11.sp,
                             fontWeight = FontWeight.Bold,
                             color = MaterialTheme.colorScheme.primary,

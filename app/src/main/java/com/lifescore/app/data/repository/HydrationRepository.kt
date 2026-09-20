@@ -122,21 +122,15 @@ class HydrationRepositoryImpl(
 
     override suspend fun calculateStreak(userId: String): Int {
         val goal = dao.getHydrationGoal(userId)?.dailyGoalMl ?: 2500
-        return 3 // Baseline positive streak
+        val allEntries = dao.getAllEntriesSync(userId)
+        val todayTotal = dao.getTodayTotalMlSync(userId) ?: 0
+        return computeStreak(allEntries, goal, todayTotal)
     }
 
     override suspend fun getLast7Days(userId: String): List<DailyHydrationData> {
         val goal = dao.getHydrationGoal(userId)?.dailyGoalMl ?: 2500
-        val cal = Calendar.getInstance()
-        return (6 downTo 0).map { daysAgo ->
-            val d = Calendar.getInstance().apply { add(Calendar.DAY_OF_YEAR, -daysAgo) }
-            DailyHydrationData(
-                date = dateFormatter.format(d.time),
-                dayOfWeek = dayFormatter.format(d.time),
-                totalMl = if (daysAgo == 0) 0 else (1800 + (daysAgo * 120)).coerceAtMost(3000),
-                goalMl = goal
-            )
-        }
+        val allEntries = dao.getAllEntriesSync(userId)
+        return computeLast7Days(allEntries, goal)
     }
 
     private fun computeLast7Days(allEntries: List<HydrationEntity>, goalMl: Int): List<DailyHydrationData> {
@@ -159,7 +153,7 @@ class HydrationRepositoryImpl(
                 DailyHydrationData(
                     date = dateFormatter.format(targetCal.time),
                     dayOfWeek = dayFormatter.format(targetCal.time),
-                    totalMl = if (totalForDay > 0) totalForDay else (if (i == 0) 0 else 2000),
+                    totalMl = totalForDay,
                     goalMl = goalMl
                 )
             )
@@ -168,11 +162,33 @@ class HydrationRepositoryImpl(
     }
 
     private fun computeStreak(allEntries: List<HydrationEntity>, goalMl: Int, todayTotal: Int): Int {
-        var streak = if (todayTotal >= goalMl) 1 else 0
-        // Aggregate mock positive streak from history
-        if (allEntries.isNotEmpty()) {
-            streak += (allEntries.size / 3).coerceIn(1, 14)
+        if (allEntries.isEmpty()) return if (todayTotal >= goalMl) 1 else 0
+        val sdf = SimpleDateFormat("yyyyMMdd", Locale.getDefault())
+        val entriesByDay = allEntries.groupBy { sdf.format(Date(it.timestamp)) }
+        val dailyTotals = entriesByDay.mapValues { (_, entries) -> entries.sumOf { it.volumeMl } }
+
+        val cal = Calendar.getInstance()
+        var streak = 0
+        val todayKey = sdf.format(cal.time)
+
+        if ((dailyTotals[todayKey] ?: 0) < goalMl) {
+            cal.add(Calendar.DAY_OF_YEAR, -1)
+            val yesterdayKey = sdf.format(cal.time)
+            if ((dailyTotals[yesterdayKey] ?: 0) < goalMl) {
+                return 0
+            }
         }
-        return streak.coerceAtLeast(1)
+
+        while (true) {
+            val key = sdf.format(cal.time)
+            val total = dailyTotals[key] ?: 0
+            if (total >= goalMl) {
+                streak++
+                cal.add(Calendar.DAY_OF_YEAR, -1)
+            } else {
+                break
+            }
+        }
+        return streak
     }
 }

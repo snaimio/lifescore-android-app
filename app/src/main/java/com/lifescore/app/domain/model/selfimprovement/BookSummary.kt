@@ -351,6 +351,258 @@ object BookSummariesCatalog {
                 "The sugar rush of clicks and likes is a poor substitute for real-world engagement."
             ),
             actionableLifeScoreQuest = "Do a 60-minute tech-free digital detox block this evening (+75 XP)."
+        ),
+        BookSummary(
+            id = "thinking_fast_and_slow",
+            title = "Thinking, Fast and Slow",
+            author = "Daniel Kahneman",
+            coverEmoji = "🧩",
+            dimension = DimensionType.LEARNING,
+            readingTimeMinutes = 15,
+            rating = 4.93,
+            coreThesis = "Human judgment is governed by two systems: fast, intuitive System 1 and slow, deliberate System 2. Knowing their cognitive biases empowers rational decision-making.",
+            summaryOverview = "Nobel laureate Daniel Kahneman takes us on a groundbreaking tour of the mind, explaining the two systems that drive the way we think and how cognitive heuristics systematically lead us astray in risk, probability, and choice.",
+            keyTakeaways = listOf(
+                KeyTakeaway(
+                    1,
+                    "System 1 vs System 2 Thinking",
+                    "System 1 operates automatically and quickly with little effort. System 2 allocates attention to effortful mental operations.",
+                    "Slow down on major life and investment decisions to engage System 2."
+                ),
+                KeyTakeaway(
+                    2,
+                    "Loss Aversion",
+                    "The psychological pain of losing \$100 is twice as intense as the pleasure of gaining \$100.",
+                    "Evaluate asymmetric opportunities based on expected mathematical value rather than emotional fear."
+                ),
+                KeyTakeaway(
+                    3,
+                    "Availability Heuristic & Anchoring",
+                    "We estimate probability by how easily examples come to mind, and anchor heavily on initial numbers presented.",
+                    "Seek objective base-rate statistics before making predictions."
+                )
+            ),
+            memorableQuotes = listOf(
+                "A reliable way to make people believe in falsehoods is frequent repetition, because familiarity is not easily distinguished from truth.",
+                "Nothing in life is as important as you think it is, while you are thinking about it."
+            ),
+            actionableLifeScoreQuest = "Conduct a pre-mortem analysis on your biggest upcoming project or goal (+75 XP)."
+        ),
+        BookSummary(
+            id = "essentialism",
+            title = "Essentialism",
+            author = "Greg McKeown",
+            coverEmoji = "🎯",
+            dimension = DimensionType.CAREER,
+            readingTimeMinutes = 12,
+            rating = 4.89,
+            coreThesis = "The disciplined pursuit of less: doing only what is truly essential to make our highest possible contribution.",
+            summaryOverview = "Essentialism is not about how to get more things done; it's about how to get the right things done. It is a systematic discipline for discerning what is absolutely vital, then eliminating everything that is not.",
+            keyTakeaways = listOf(
+                KeyTakeaway(
+                    1,
+                    "The 90% Rule",
+                    "As you evaluate an option, think about the single most important criterion. If it scores below 90%, the answer is an absolute zero.",
+                    "If it isn't a clear 'Yes', make it a clean 'No'."
+                ),
+                KeyTakeaway(
+                    2,
+                    "Trade-Offs Are Inevitable",
+                    "Non-essentialists ask, 'How can I do both?' Essentialists ask, 'Which problem do I want to solve, and what trade-off will I embrace?'",
+                    "Choose what you are willing to go small on to go big on what matters."
+                ),
+                KeyTakeaway(
+                    3,
+                    "Protect the Asset (You)",
+                    "Your greatest asset is yourself. If you underinvest in your sleep, health, and energy, you destroy your ability to contribute.",
+                    "Sleep 8 hours as an act of professional leadership."
+                )
+            ),
+            memorableQuotes = listOf(
+                "If you don't prioritize your life, someone else will.",
+                "Essentialism is not about how to get more things done; it's about how to get the right things done."
+            ),
+            actionableLifeScoreQuest = "Decline one non-essential commitment or meeting this week with graceful clarity (+75 XP)."
+        ),
+        BookSummary(
+            id = "obstacle_is_the_way",
+            title = "The Obstacle Is the Way",
+            author = "Ryan Holiday",
+            coverEmoji = "🗿",
+            dimension = DimensionType.MENTAL_HEALTH,
+            readingTimeMinutes = 11,
+            rating = 4.91,
+            coreThesis = "The impediment to action advances action. What stands in the way becomes the way.",
+            summaryOverview = "Rooted in the ancient Stoic philosophy of Marcus Aurelius, Ryan Holiday reveals how history's greatest leaders turned adversity into advantage, converting obstacles into fuel for triumph and resilience.",
+            keyTakeaways = listOf(
+                KeyTakeaway(
+                    1,
+                    "Perception: Control Your Mindset",
+                    "There is no good or bad without judgment. There is only perception. You control how you interpret any challenge.",
+                    "Reframe an active frustration as a deliberate test of your character."
+                ),
+                KeyTakeaway(
+                    2,
+                    "Action: Process Over Perfection",
+                    "Break down daunting hurdles into immediate, single-step kinetic actions. Relentless persistence outlasts genius.",
+                    "Take one micro-action on your toughest problem right now."
+                ),
+                KeyTakeaway(
+                    3,
+                    "Will: Amor Fati (Love Your Fate)",
+                    "Don't just tolerate adversity—love it. Every setback is an opportunity to practice virtue, patience, and fortitude.",
+                    "Say 'Good' when plans derail and look for the hidden growth leverage."
+                )
+            ),
+            memorableQuotes = listOf(
+                "The impediment to action advances action. What stands in the way becomes the way.",
+                "Choose not to be harmed—and you won't feel harmed. Don't feel harmed—and you haven't been."
+            ),
+            actionableLifeScoreQuest = "Identify your biggest current obstacle and write down how it can become your greatest advantage (+75 XP)."
+        ),
+        BookSummary(
+            id = "outlive",
+            title = "Outlive: The Science & Art of Longevity",
+            author = "Dr. Peter Attia",
+            coverEmoji = "🧬",
+            dimension = DimensionType.HEALTH,
+            readingTimeMinutes = 15,
+            rating = 4.96,
+            coreThesis = "Medicine 3.0 focuses on early prevention of chronic disease to extend healthspan (quality of life) alongside lifespan.",
+            summaryOverview = "Dr. Peter Attia provides an operating manual for longevity grounded in rigorous science, addressing the four horsemen of aging (cardiovascular disease, cancer, neurodegeneration, and metabolic dysfunction) through exercise, nutrition, sleep, and emotional health.",
+            keyTakeaways = listOf(
+                KeyTakeaway(
+                    1,
+                    "Exercise is the Ultimate Drug",
+                    "Cardiorespiratory fitness (VO2 Max) and muscle mass are the two strongest predictors of all-cause mortality.",
+                    "Incorporate 3-4 hours of Zone 2 aerobic training per week alongside progressive strength training."
+                ),
+                KeyTakeaway(
+                    2,
+                    "Centenarian Decathlon",
+                    "Define the physical feats you want to be able to do in your 80s and 90s, and back-cast the physical capacity required today.",
+                    "Train for grip strength, stability, and hinge mobility daily."
+                ),
+                KeyTakeaway(
+                    3,
+                    "Metabolic Stability Over Fads",
+                    "Insulin resistance and visceral adiposity accelerate all four horsemen. Protein adequacy preserves lean muscle mass.",
+                    "Target 1.6 to 2.2 grams of protein per kilogram of target body weight daily."
+                )
+            ),
+            memorableQuotes = listOf(
+                "Longevity is not just about living longer. It's about living better for longer.",
+                "Exercise is by far the most potent longevity 'drug' we have in our arsenal."
+            ),
+            actionableLifeScoreQuest = "Complete a 45-minute Zone 2 steady-state cardio session today (+75 XP)."
+        ),
+        BookSummary(
+            id = "zero_to_one",
+            title = "Zero to One",
+            author = "Peter Thiel",
+            coverEmoji = "🚀",
+            dimension = DimensionType.CAREER,
+            readingTimeMinutes = 13,
+            rating = 4.88,
+            coreThesis = "True progress comes from vertical (0 to 1) breakthroughs in technology rather than horizontal (1 to N) globalization.",
+            summaryOverview = "Legendary investor Peter Thiel explains how to build companies that create entirely new things. He offers provocative insights on contrarian thinking, secrets, monopoly economics, and designing an unassailable future.",
+            keyTakeaways = listOf(
+                KeyTakeaway(
+                    1,
+                    "The Contrarian Question",
+                    "'What important truth do very few people agree with you on?' Great businesses are built on valuable secrets.",
+                    "Identify an unconventional insight in your career or industry."
+                ),
+                KeyTakeaway(
+                    2,
+                    "Monopoly Power Over Competition",
+                    "Competition is for losers. Creative monopolies solve unique problems and capture durable economic value.",
+                    "Aim to dominate a small, specific niche before scaling outward."
+                ),
+                KeyTakeaway(
+                    3,
+                    "Definite Optimism",
+                    "A definite optimist believes the future will be better than the present if they actively plan and work to make it so.",
+                    "Design a concrete 5-year strategy rather than relying on randomized diversification."
+                )
+            ),
+            memorableQuotes = listOf(
+                "All happy companies are different: each one earns a monopoly by solving a unique problem. All failed companies are the same: they failed to escape competition.",
+                "Brilliant thinking is rare, but courage is in even shorter supply than genius."
+            ),
+            actionableLifeScoreQuest = "Answer Thiel's contrarian question in your personal journal: 'What important truth do few agree with you on?' (+75 XP)."
+        ),
+        BookSummary(
+            id = "mindset",
+            title = "Mindset: The New Psychology of Success",
+            author = "Dr. Carol S. Dweck",
+            coverEmoji = "🌱",
+            dimension = DimensionType.LEARNING,
+            readingTimeMinutes = 12,
+            rating = 4.89,
+            coreThesis = "Believing that your abilities can be developed through dedication and hard work (Growth Mindset) fosters resilience and great accomplishment.",
+            summaryOverview = "Stanford psychologist Carol Dweck demonstrates how our beliefs about our capabilities profoundly affect our success. She reveals the stark contrast between a Fixed Mindset (abilities are static) and a Growth Mindset (abilities can be grown).",
+            keyTakeaways = listOf(
+                KeyTakeaway(
+                    1,
+                    "The Power of 'Yet'",
+                    "When faced with something you cannot do, add the word 'yet'. It shifts neural framing from permanent failure to progressive learning.",
+                    "Replace 'I can't do this' with 'I haven't mastered this yet.'"
+                ),
+                KeyTakeaway(
+                    2,
+                    "Embracing Effort as the Catalyst",
+                    "In a fixed mindset, effort means you lack talent. In a growth mindset, effort is the exact vehicle that builds talent.",
+                    "Praise your own effort, strategy, and persistence rather than raw outcome."
+                ),
+                KeyTakeaway(
+                    3,
+                    "Constructive Response to Setbacks",
+                    "Growth-minded individuals view mistakes as high-fidelity feedback data rather than an indictment of identity.",
+                    "Analyze a recent mistake to extract three specific technical adjustments."
+                )
+            ),
+            memorableQuotes = listOf(
+                "Becoming is better than being.",
+                "Why waste time proving over and over how great you are, when you could be getting better?"
+            ),
+            actionableLifeScoreQuest = "Reframe a current struggle with the word 'Yet' and practice for 20 focused minutes (+75 XP)."
+        ),
+        BookSummary(
+            id = "almanack_of_naval_ravikant",
+            title = "The Almanack of Naval Ravikant",
+            author = "Eric Jorgenson",
+            coverEmoji = "🧘‍♂️",
+            dimension = DimensionType.WEALTH,
+            readingTimeMinutes = 14,
+            rating = 4.98,
+            coreThesis = "Building wealth and being happy are skills we can learn through specific knowledge, leverage, judgment, and present-moment awareness.",
+            summaryOverview = "A curation of wisdom from philosopher-investor Naval Ravikant on how to create wealth without getting lucky and how to cultivate deep, unconditional internal peace.",
+            keyTakeaways = listOf(
+                KeyTakeaway(
+                    1,
+                    "Permissionless Leverage",
+                    "The four forms of leverage are labor, capital, code, and media. Code and media require no one's permission to work for you while you sleep.",
+                    "Build an asset in code, writing, or media that scales with zero marginal cost."
+                ),
+                KeyTakeaway(
+                    2,
+                    "Specific Knowledge & Authenticity",
+                    "Specific knowledge cannot be trained for. It is found by pursuing your genuine curiosity and obsession.",
+                    "No one can compete with you on being you."
+                ),
+                KeyTakeaway(
+                    3,
+                    "Happiness Is a Choice & Habit",
+                    "Peace is happiness at rest; happiness is peace in motion. A busy mind cannot perceive truth or joy.",
+                    "Meditate in silence for 15 minutes today with zero agenda."
+                )
+            ),
+            memorableQuotes = listOf(
+                "Earn with your mind, not your time.",
+                "A fit body, a calm mind, a house full of love. These things cannot be bought—they must be earned."
+            ),
+            actionableLifeScoreQuest = "Identify your primary source of permissionless leverage and outline your next build step (+75 XP)."
         )
     )
 }
