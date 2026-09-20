@@ -4,24 +4,11 @@
     android:height="108dp"
     android:viewportWidth="108"
     android:viewportHeight="108">
-    <!-- Monochrome version for themed icons -->
+    <!-- Modern Monogram L & Ascending Vitality Arrow -->
     <path
-        android:pathData="M 30,58 A 24,24 0 0 1 78,58"
-        android:strokeColor="#000000"
-        android:strokeWidth="4"
-        android:strokeLineCap="round" />
-    <path
-        android:pathData="M 26,62 L 82,62"
-        android:strokeColor="#000000"
-        android:strokeWidth="2"
-        android:strokeLineCap="round" />
-    <path
-        android:pathData="M 42,52 m -1.5,0 a 1.5,1.5 0 1,0 3,0 a 1.5,1.5 0 1,0 -3,0"
+        android:pathData="M 28,28 L 38,28 L 38,68 L 78,68 L 78,78 L 28,78 Z"
         android:fillColor="#000000" />
     <path
-        android:pathData="M 54,44 m -2,0 a 2,2 0 1,0 4,0 a 2,2 0 1,0 -4,0"
-        android:fillColor="#000000" />
-    <path
-        android:pathData="M 66,34 m -2.5,0 a 2.5,2.5 0 1,0 5,0 a 2.5,2.5 0 1,0 -5,0"
+        android:pathData="M 42,62 L 54,44 L 62,56 L 76,34 L 68,34 L 84,24 L 84,40 L 76,40 L 62,62 L 54,50 Z"
         android:fillColor="#000000" />
 </vector>

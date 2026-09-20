@@ -82,8 +82,8 @@ fun SplashScreen(
                     ) {
                         Box(contentAlignment = Alignment.Center) {
                             Image(
-                                painter = painterResource(R.drawable.ic_launcher_foreground),
-                                contentDescription = "LifeScore Sunrise Arc",
+                                painter = painterResource(R.drawable.lifescore_logo),
+                                contentDescription = "LifeScore Brand Logo",
                                 modifier = Modifier.size(72.dp)
                             )
                         }
