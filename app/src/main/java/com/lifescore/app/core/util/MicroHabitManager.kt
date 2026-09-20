@@ -29,13 +29,8 @@ object MicroHabitManager {
 
         return (1..totalDays).map { day ->
             val isToday = day == todayIndex
-            val isCompleted = when {
-                day < todayIndex && day >= (todayIndex - currentStreak) -> true
-                day < (todayIndex - currentStreak) -> day % 4 != 0 // occasional completed historical
-                day == todayIndex -> false // Pending for today until completed
-                else -> false // Future days
-            }
-            val isMissed = day < (todayIndex - currentStreak) && !isCompleted
+            val isCompleted = day < todayIndex && day >= (todayIndex - currentStreak)
+            val isMissed = day < (todayIndex - currentStreak)
 
             ChainNode(
                 dayNumber = day,
@@ -53,30 +48,30 @@ object MicroHabitManager {
                 title = "30-Day Morning Hydration & 8k Steps",
                 description = "Drink 500ml of water right upon waking and hit 8,000 daily steps.",
                 dimension = DimensionType.FITNESS,
-                currentDay = 12,
+                currentDay = 0,
                 totalDays = 30,
                 xpReward = 500,
-                isJoined = true
+                isJoined = false
             ),
             MicroHabitChallenge(
                 id = "ch_mind_30",
                 title = "30-Day Mindful Breathwork & RAM Dump",
                 description = "Practice 4-7-8 box breathing for 5 minutes before checking morning notifications.",
                 dimension = DimensionType.MENTAL_HEALTH,
-                currentDay = 8,
+                currentDay = 0,
                 totalDays = 30,
                 xpReward = 450,
-                isJoined = true
+                isJoined = false
             ),
             MicroHabitChallenge(
                 id = "ch_learn_30",
                 title = "30-Day 20-Min Deep Reading Immersion",
                 description = "Read 1 chapter of a non-fiction or skill-building book every evening.",
                 dimension = DimensionType.LEARNING,
-                currentDay = 19,
+                currentDay = 0,
                 totalDays = 30,
                 xpReward = 600,
-                isJoined = true
+                isJoined = false
             ),
             MicroHabitChallenge(
                 id = "ch_wealth_30",

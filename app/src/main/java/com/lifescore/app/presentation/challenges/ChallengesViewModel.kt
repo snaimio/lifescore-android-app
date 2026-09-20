@@ -370,18 +370,17 @@ class ChallengesViewModel(
                 description = "Complete 100 push-ups and 20 min cardio every single day for 7 days. Head-to-head duel!",
                 dimension = DimensionType.FITNESS,
                 durationDays = 7,
-                currentDay = 3,
+                currentDay = 0,
                 xpReward = 750,
-                isJoined = true,
+                isJoined = false,
                 isDuel = true,
                 creatorName = "Sarah Chen",
                 inviteCode = "DUEL_FIT_7",
-                participantsCount = 2,
+                participantsCount = 1,
                 participants = listOf(
-                    ChallengeParticipant("self", "You", 5, 3, 7, isCurrentUser = true),
-                    ChallengeParticipant("u2", "Sarah Chen", 6, 3, 14, isCurrentUser = false)
+                    ChallengeParticipant("u2", "Sarah Chen", 6, 0, 14, isCurrentUser = false)
                 ),
-                dailyCheckIns = listOf(true, true, true, false, false, false, false)
+                dailyCheckIns = emptyList()
             ),
             Challenge(
                 id = "c_duel_02",
@@ -389,18 +388,17 @@ class ChallengesViewModel(
                 description = "4 hours of pure zero-distraction deep work. High-intensity productivity duel.",
                 dimension = DimensionType.CAREER,
                 durationDays = 7,
-                currentDay = 1,
+                currentDay = 0,
                 xpReward = 800,
-                isJoined = true,
+                isJoined = false,
                 isDuel = true,
                 creatorName = "Marcus Vance",
                 inviteCode = "DUEL_WORK_4",
-                participantsCount = 2,
+                participantsCount = 1,
                 participants = listOf(
-                    ChallengeParticipant("self", "You", 5, 1, 7, isCurrentUser = true),
-                    ChallengeParticipant("u3", "Marcus Vance", 7, 2, 21, isCurrentUser = false)
+                    ChallengeParticipant("u3", "Marcus Vance", 7, 0, 21, isCurrentUser = false)
                 ),
-                dailyCheckIns = listOf(true, false, false, false, false, false, false)
+                dailyCheckIns = emptyList()
             ),
             Challenge(
                 id = "c_pub_01",
@@ -408,13 +406,13 @@ class ChallengesViewModel(
                 description = "Wake up at 6 AM, drink 500ml water, 10 min journaling, no social media for 1 hour.",
                 dimension = DimensionType.CAREER,
                 durationDays = 30,
-                currentDay = 12,
+                currentDay = 0,
                 xpReward = 1000,
-                isJoined = true,
+                isJoined = false,
                 isDuel = false,
                 creatorName = "LifeScore Global",
                 participantsCount = 428,
-                dailyCheckIns = (1..30).map { it <= 12 }
+                dailyCheckIns = emptyList()
             ),
             Challenge(
                 id = "c_pub_02",

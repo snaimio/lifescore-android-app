@@ -452,17 +452,8 @@ fun LifeMatrixEmptyState(
 
 @Composable
 fun FadedSampleChart() {
-    val sampleScores = remember {
-        mapOf(
-            DimensionType.HEALTH to 80,
-            DimensionType.WEALTH to 65,
-            DimensionType.RELATIONSHIPS to 75,
-            DimensionType.CAREER to 85,
-            DimensionType.LEARNING to 70,
-            DimensionType.FITNESS to 60,
-            DimensionType.MENTAL_HEALTH to 75,
-            DimensionType.SOCIAL_LIFE to 65
-        )
+    val baselineScores = remember {
+        DimensionType.values().associateWith { 0 }
     }
 
     Box(
@@ -473,7 +464,7 @@ fun FadedSampleChart() {
         contentAlignment = Alignment.Center
     ) {
         DimensionRadarChart(
-            dimensionScores = sampleScores,
+            dimensionScores = baselineScores,
             modifier = Modifier.fillMaxSize()
         )
     }

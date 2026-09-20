@@ -677,12 +677,10 @@ fun TodayScreen(
                 Button(
                     onClick = {
                         if (newHabitTitle.isNotBlank()) {
-                            viewModel.onToggleTask(
-                                LifeTask(
-                                    title = newHabitTitle,
-                                    dimension = newHabitDimension,
-                                    pointsReward = 15
-                                )
+                            viewModel.addTask(
+                                title = newHabitTitle,
+                                dimension = newHabitDimension,
+                                pointsReward = 15
                             )
                             newHabitTitle = ""
                             showAddHabitDialog = false

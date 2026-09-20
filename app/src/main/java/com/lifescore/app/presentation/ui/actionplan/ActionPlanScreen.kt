@@ -39,8 +39,8 @@ fun ActionPlanScreen(
     val context = LocalContext.current
     val actionPlan = remember(result) {
         val res = result ?: run {
-            val sampleAnswers = (1..130).associateWith { (3..5).random() }
-            PsychometricAssessmentEngine.evaluateAssessment(sampleAnswers)
+            val baselineAnswers = (1..130).associateWith { 3 }
+            PsychometricAssessmentEngine.evaluateAssessment(baselineAnswers)
         }
         ActionPlanGenerator.generateActionPlan(res)
     }

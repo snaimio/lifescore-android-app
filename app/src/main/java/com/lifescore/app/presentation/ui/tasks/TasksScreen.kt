@@ -55,11 +55,11 @@ enum class HabitTab(val title: String) {
 
 data class TasksUiState(
     val selectedTab: HabitTab = HabitTab.HABITS,
-    val tasks: List<LifeTask> = SmartHabitEngine.getDefaultAdvancedHabits(),
+    val tasks: List<LifeTask> = emptyList(),
     val filterDimension: DimensionType? = null,
-    val chainNodes: List<ChainNode> = MicroHabitManager.generate30DayChain(7),
+    val chainNodes: List<ChainNode> = emptyList(),
     val challenges: List<MicroHabitChallenge> = MicroHabitManager.getDefault30DayChallenges(),
-    val currentStreak: Int = 7,
+    val currentStreak: Int = 0,
     val smartSuggestedHabit: LifeTask = SmartHabitEngine.getSmartSuggestionForDimension(DimensionType.HEALTH),
     val recentSuccessMessage: String? = null
 )
@@ -78,9 +78,7 @@ class TasksViewModel(
     private fun loadTasks() {
         viewModelScope.launch {
             repository.getAllTasks().collect { allTasks ->
-                if (allTasks.isNotEmpty()) {
-                    _uiState.value = _uiState.value.copy(tasks = allTasks)
-                }
+                _uiState.value = _uiState.value.copy(tasks = allTasks)
             }
         }
         viewModelScope.launch {
@@ -143,6 +141,9 @@ class TasksViewModel(
             smartSuggestedHabit = SmartHabitEngine.getSmartSuggestionForDimension(DimensionType.LEARNING),
             recentSuccessMessage = "Added Smart Habit: '${suggested.title}'!"
         )
+        viewModelScope.launch {
+            repository.addTask(suggested.title, suggested.dimension, suggested.pointsReward)
+        }
     }
 
     fun addAdvancedHabit(

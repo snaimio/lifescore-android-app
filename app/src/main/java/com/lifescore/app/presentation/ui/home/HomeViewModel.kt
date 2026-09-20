@@ -159,6 +159,12 @@ class HomeViewModel(
         }
     }
 
+    fun addTask(title: String, dimension: DimensionType, pointsReward: Int = 15) {
+        viewModelScope.launch {
+            repository.addTask(title, dimension, pointsReward)
+        }
+    }
+
     fun saveEveningReflection(text: String) {
         viewModelScope.launch {
             val todayIso = java.text.SimpleDateFormat("yyyy-MM-dd", java.util.Locale.getDefault()).format(java.util.Date())
