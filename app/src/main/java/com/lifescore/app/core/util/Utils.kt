@@ -59,13 +59,13 @@ object LevelCalculator {
 
 object ScoreEngine {
     fun calculateDimensionScore(completedTasks: Int, totalTasks: Int): Int {
-        if (totalTasks == 0) return 0
+        if (totalTasks == 0) return 50 // Neutral baseline for dimensions without tasks
         val percentage = (completedTasks.toFloat() / totalTasks.toFloat())
         return (percentage * 100).toInt().coerceIn(0, 100)
     }
 
     fun calculateOverallLifeScore(dimensionScores: Map<com.lifescore.app.domain.model.DimensionType, Int>): Int {
-        if (dimensionScores.isEmpty()) return 0
+        if (dimensionScores.isEmpty()) return 500
         val sum = dimensionScores.values.sum()
         val average = sum.toFloat() / dimensionScores.size
         return (average * 10).toInt().coerceIn(0, 1000)

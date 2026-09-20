@@ -9,17 +9,17 @@ object SmartHabitEngine {
 
     fun getDefaultAdvancedHabits(): List<LifeTask> {
         return listOf(
-            // 1. Counter Habit: 8 glasses hydration
+            // 1. Counter Habit: 8/8 glasses hydration
             LifeTask(
                 id = 101,
                 title = "Hydrate 8 Glasses of Mineral Water 💧",
                 dimension = DimensionType.HEALTH,
                 pointsReward = 20,
                 habitType = HabitType.COUNTER,
-                currentCount = 0,
+                currentCount = 5,
                 targetCount = 8,
                 countUnit = "glasses",
-                streakDays = 0
+                streakDays = 8
             ),
             // 2. Counter Habit: 10,000 Steps
             LifeTask(
@@ -28,10 +28,10 @@ object SmartHabitEngine {
                 dimension = DimensionType.FITNESS,
                 pointsReward = 25,
                 habitType = HabitType.COUNTER,
-                currentCount = 0,
+                currentCount = 7500,
                 targetCount = 10000,
                 countUnit = "steps",
-                streakDays = 0
+                streakDays = 14
             ),
             // 3. Sub-Tasks Routine: 4-Step Circadian Sleep Routine
             LifeTask(
@@ -40,10 +40,10 @@ object SmartHabitEngine {
                 dimension = DimensionType.HEALTH,
                 pointsReward = 30,
                 habitType = HabitType.SUB_TASKS,
-                streakDays = 0,
+                streakDays = 6,
                 subTasks = listOf(
-                    SubTaskItem(id = "st_1", title = "Take 400mg Magnesium Glycinate & L-Theanine", isCompleted = false),
-                    SubTaskItem(id = "st_2", title = "Put on 100% amber blue-blocking glasses at 9 PM", isCompleted = false),
+                    SubTaskItem(id = "st_1", title = "Take 400mg Magnesium Glycinate & L-Theanine", isCompleted = true),
+                    SubTaskItem(id = "st_2", title = "Put on 100% amber blue-blocking glasses at 9 PM", isCompleted = true),
                     SubTaskItem(id = "st_3", title = "Set bedroom temperature to 67°F (19°C) & pitch dark", isCompleted = false),
                     SubTaskItem(id = "st_4", title = "10-minute NSDR / physiological breathwork in bed", isCompleted = false)
                 )
@@ -55,10 +55,10 @@ object SmartHabitEngine {
                 dimension = DimensionType.CAREER,
                 pointsReward = 35,
                 habitType = HabitType.SUB_TASKS,
-                streakDays = 0,
+                streakDays = 11,
                 subTasks = listOf(
-                    SubTaskItem(id = "st_5", title = "Define #1 single highest-leverage priority before opening email", isCompleted = false),
-                    SubTaskItem(id = "st_6", title = "Complete 90-minute uninterrupted deep work sprint", isCompleted = false),
+                    SubTaskItem(id = "st_5", title = "Define #1 single highest-leverage priority before opening email", isCompleted = true),
+                    SubTaskItem(id = "st_6", title = "Complete 90-minute uninterrupted deep work sprint", isCompleted = true),
                     SubTaskItem(id = "st_7", title = "Log progress & shutdown communication by 6 PM", isCompleted = false)
                 )
             ),
@@ -69,8 +69,8 @@ object SmartHabitEngine {
                 dimension = DimensionType.HEALTH,
                 pointsReward = 15,
                 habitType = HabitType.BOOLEAN,
-                isCompleted = false,
-                streakDays = 0
+                isCompleted = true,
+                streakDays = 7
             ),
             // 6. Boolean Habit: Zero Impulse Spending
             LifeTask(
@@ -80,7 +80,7 @@ object SmartHabitEngine {
                 pointsReward = 20,
                 habitType = HabitType.BOOLEAN,
                 isCompleted = false,
-                streakDays = 0
+                streakDays = 15
             )
         )
     }

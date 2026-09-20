@@ -99,7 +99,19 @@ class LifeScoreRepositoryImpl(
     }
 
     override suspend fun seedInitialDataIfEmpty() {
-        // Starts with clean zero state. User creates their genuine daily habits and tracks real data.
+        val starterTasks = listOf(
+            TaskEntity(title = "Morning 10-minute meditation", dimension = DimensionType.MENTAL_HEALTH, pointsReward = 15),
+            TaskEntity(title = "Drink 2L of water & stretch", dimension = DimensionType.HEALTH, pointsReward = 10),
+            TaskEntity(title = "Review monthly budget & investments", dimension = DimensionType.WEALTH, pointsReward = 20),
+            TaskEntity(title = "Send thoughtful message to a close friend", dimension = DimensionType.RELATIONSHIPS, pointsReward = 15),
+            TaskEntity(title = "Read 15 pages of non-fiction book", dimension = DimensionType.LEARNING, pointsReward = 20),
+            TaskEntity(title = "Complete 30 min cardio or strength session", dimension = DimensionType.FITNESS, pointsReward = 25),
+            TaskEntity(title = "Outline top 3 deep-work priorities for tomorrow", dimension = DimensionType.CAREER, pointsReward = 15),
+            TaskEntity(title = "Plan weekend outing or community meetup", dimension = DimensionType.SOCIAL_LIFE, pointsReward = 10)
+        )
+        starterTasks.forEach { task ->
+            db.taskDao().insertTask(task)
+        }
     }
 
     override suspend fun saveEveningReflection(text: String, dateIso: String) {

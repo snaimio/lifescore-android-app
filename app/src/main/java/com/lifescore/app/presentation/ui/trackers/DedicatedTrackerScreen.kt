@@ -130,7 +130,7 @@ fun DedicatedTrackerScreen(
                 // 2. Streak Card
                 item {
                     MiniAppStreakCard(
-                        streakDays = status?.streakDays ?: 0,
+                        streakDays = status?.streakDays ?: 3,
                         dimensionName = type.dimension.displayName
                     )
                 }

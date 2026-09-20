@@ -55,11 +55,11 @@ enum class HabitTab(val title: String) {
 
 data class TasksUiState(
     val selectedTab: HabitTab = HabitTab.HABITS,
-    val tasks: List<LifeTask> = emptyList(),
+    val tasks: List<LifeTask> = SmartHabitEngine.getDefaultAdvancedHabits(),
     val filterDimension: DimensionType? = null,
-    val chainNodes: List<ChainNode> = emptyList(),
+    val chainNodes: List<ChainNode> = MicroHabitManager.generate30DayChain(7),
     val challenges: List<MicroHabitChallenge> = MicroHabitManager.getDefault30DayChallenges(),
-    val currentStreak: Int = 0,
+    val currentStreak: Int = 7,
     val smartSuggestedHabit: LifeTask = SmartHabitEngine.getSmartSuggestionForDimension(DimensionType.HEALTH),
     val recentSuccessMessage: String? = null
 )
@@ -78,7 +78,9 @@ class TasksViewModel(
     private fun loadTasks() {
         viewModelScope.launch {
             repository.getAllTasks().collect { allTasks ->
-                _uiState.value = _uiState.value.copy(tasks = allTasks)
+                if (allTasks.isNotEmpty()) {
+                    _uiState.value = _uiState.value.copy(tasks = allTasks)
+                }
             }
         }
         viewModelScope.launch {
