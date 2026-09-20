@@ -134,7 +134,7 @@ fun WelcomeScreen(
                     ) {
                         Box(contentAlignment = Alignment.Center) {
                             Image(
-                                painter = painterResource(R.drawable.ic_launcher_foreground),
+                                painter = painterResource(R.drawable.lifescore_logo),
                                 contentDescription = "LifeScore Brand Mark",
                                 modifier = Modifier.size(28.dp)
                             )
