@@ -19,7 +19,10 @@ LifeScore is a modern executive life operating system and personal growth Androi
 
 Experience how LifeScore transforms daily intentionality, multi-dimensional life balance, and deep focus through real reactive data and intelligent coaching.
 
-https://github.com/user-attachments/assets/ac5ec428-b0b1-455c-ac94-035c6356bcaf
+<div align="center">
+  <img src="docs/demo/lifescore_demo_preview.gif" alt="LifeScore Walkthrough Demo Preview" width="100%" style="border-radius: 14px;" />
+  <p><em>Full 1080p High-Definition Walkthrough Demo Video available at <a href="docs/demo/lifescore_walkthrough_demo.mp4"><code>docs/demo/lifescore_walkthrough_demo.mp4</code></a></em></p>
+</div>
 
 ---
 
