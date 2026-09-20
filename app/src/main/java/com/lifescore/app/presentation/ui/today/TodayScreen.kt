@@ -547,8 +547,10 @@ fun TodayScreen(
 
                 // ==========================================
                 // 6. EVENING REFLECTION
+                // 6. EVENING REFLECTION
                 // ==========================================
-                if (isEvening || isReflectionSaved) {
+                val hasSavedReflection = !uiState.todayReflection.isNullOrBlank() || isReflectionSaved
+                if (isEvening || hasSavedReflection) {
                     item {
                         SectionHeader(
                             title = "Evening reflection",
@@ -558,26 +560,35 @@ fun TodayScreen(
 
                     item {
                         LifeCard(variant = CardVariant.Default) {
-                            if (isReflectionSaved) {
-                                Row(
-                                    modifier = Modifier.padding(Space.sm),
-                                    verticalAlignment = Alignment.CenterVertically
-                                ) {
-                                    LifeIcon(
-                                        icon = LifeIcons.Star,
-                                        size = 24.dp
-                                    )
-                                    Spacer(Modifier.width(Space.sm))
-                                    Column {
-                                        Text(
-                                            "Reflection saved for today",
-                                            fontWeight = FontWeight.Bold,
-                                            style = MaterialTheme.typography.titleSmall
+                            if (hasSavedReflection) {
+                                val savedText = uiState.todayReflection ?: eveningReflectionText
+                                Column(modifier = Modifier.padding(Space.sm)) {
+                                    Row(verticalAlignment = Alignment.CenterVertically) {
+                                        LifeIcon(
+                                            icon = LifeIcons.Star,
+                                            size = 24.dp
                                         )
+                                        Spacer(Modifier.width(Space.sm))
+                                        Column {
+                                            Text(
+                                                "Reflection saved for today",
+                                                fontWeight = FontWeight.Bold,
+                                                style = MaterialTheme.typography.titleSmall
+                                            )
+                                            Text(
+                                                "You closed your day with intention and clarity.",
+                                                style = MaterialTheme.typography.bodySmall,
+                                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                                            )
+                                        }
+                                    }
+                                    if (savedText.isNotBlank()) {
+                                        Spacer(Modifier.height(Space.xs))
                                         Text(
-                                            "You closed your day with intention and clarity.",
-                                            style = MaterialTheme.typography.bodySmall,
-                                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                                            text = "\"$savedText\"",
+                                            style = MaterialTheme.typography.bodyMedium,
+                                            fontWeight = FontWeight.Medium,
+                                            color = MaterialTheme.colorScheme.primary
                                         )
                                     }
                                 }
@@ -604,8 +615,9 @@ fun TodayScreen(
                                 Button(
                                     onClick = {
                                         if (eveningReflectionText.isNotBlank()) {
+                                            viewModel.saveEveningReflection(eveningReflectionText)
                                             isReflectionSaved = true
-                                            Toast.makeText(context, "Daily reflection saved", Toast.LENGTH_SHORT).show()
+                                            Toast.makeText(context, "Daily reflection saved to your journal!", Toast.LENGTH_SHORT).show()
                                         }
                                     },
                                     modifier = Modifier.fillMaxWidth(),

@@ -15,6 +15,8 @@ interface LifeScoreRepository {
     fun getUserProfile(): Flow<UserProfile>
     suspend fun updateUserProfile(user: UserProfile)
     suspend fun seedInitialDataIfEmpty()
+    suspend fun saveEveningReflection(text: String, dateIso: String) {}
+    suspend fun getEveningReflection(dateIso: String): String? = null
 }
 
 class LifeScoreRepositoryImpl(
@@ -97,20 +99,37 @@ class LifeScoreRepositoryImpl(
     }
 
     override suspend fun seedInitialDataIfEmpty() {
-        // Initial setup for starter tasks
-        val starterTasks = listOf(
-            TaskEntity(title = "Morning 10-minute meditation", dimension = DimensionType.MENTAL_HEALTH, pointsReward = 15),
-            TaskEntity(title = "Drink 2L of water & stretch", dimension = DimensionType.HEALTH, pointsReward = 10),
-            TaskEntity(title = "Review monthly budget & investments", dimension = DimensionType.WEALTH, pointsReward = 20),
-            TaskEntity(title = "Send thoughtful message to a close friend", dimension = DimensionType.RELATIONSHIPS, pointsReward = 15),
-            TaskEntity(title = "Read 15 pages of non-fiction book", dimension = DimensionType.LEARNING, pointsReward = 20),
-            TaskEntity(title = "Complete 30 min cardio or strength session", dimension = DimensionType.FITNESS, pointsReward = 25),
-            TaskEntity(title = "Outline top 3 deep-work priorities for tomorrow", dimension = DimensionType.CAREER, pointsReward = 15),
-            TaskEntity(title = "Plan weekend outing or community meetup", dimension = DimensionType.SOCIAL_LIFE, pointsReward = 10)
-        )
-        starterTasks.forEach { task ->
-            db.taskDao().insertTask(task)
+        if (db.taskDao().getTaskCount() == 0) {
+            val starterTasks = listOf(
+                TaskEntity(title = "Morning 10-minute meditation", dimension = DimensionType.MENTAL_HEALTH, pointsReward = 15),
+                TaskEntity(title = "Drink 2L of water & stretch", dimension = DimensionType.HEALTH, pointsReward = 10),
+                TaskEntity(title = "Review monthly budget & investments", dimension = DimensionType.WEALTH, pointsReward = 20),
+                TaskEntity(title = "Send thoughtful message to a close friend", dimension = DimensionType.RELATIONSHIPS, pointsReward = 15),
+                TaskEntity(title = "Read 15 pages of non-fiction book", dimension = DimensionType.LEARNING, pointsReward = 20),
+                TaskEntity(title = "Complete 30 min cardio or strength session", dimension = DimensionType.FITNESS, pointsReward = 25),
+                TaskEntity(title = "Outline top 3 deep-work priorities for tomorrow", dimension = DimensionType.CAREER, pointsReward = 15),
+                TaskEntity(title = "Plan weekend outing or community meetup", dimension = DimensionType.SOCIAL_LIFE, pointsReward = 10)
+            )
+            starterTasks.forEach { task ->
+                db.taskDao().insertTask(task)
+            }
         }
+    }
+
+    override suspend fun saveEveningReflection(text: String, dateIso: String) {
+        val entry = com.lifescore.app.data.local.entity.JournalEntity(
+            id = java.util.UUID.randomUUID().toString(),
+            dateIso = dateIso,
+            mood = JournalMood.HAPPY,
+            textContent = text,
+            dimensionTag = DimensionType.MENTAL_HEALTH,
+            createdAt = System.currentTimeMillis()
+        )
+        db.journalDao().insertJournalEntry(entry)
+    }
+
+    override suspend fun getEveningReflection(dateIso: String): String? {
+        return db.journalDao().getEntryByDate(dateIso)?.textContent
     }
 
     private fun TaskEntity.toDomain() = LifeTask(

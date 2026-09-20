@@ -22,6 +22,9 @@ interface TaskDao {
     @Delete
     suspend fun deleteTask(task: TaskEntity)
 
+    @Query("SELECT COUNT(*) FROM tasks")
+    suspend fun getTaskCount(): Int
+
     @Query("UPDATE tasks SET isCompleted = :isCompleted, completedAt = :completedAt WHERE id = :taskId")
     suspend fun updateTaskStatus(taskId: Long, isCompleted: Boolean, completedAt: Long?)
 }

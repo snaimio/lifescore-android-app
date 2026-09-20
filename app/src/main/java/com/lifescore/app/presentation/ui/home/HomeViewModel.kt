@@ -33,7 +33,8 @@ data class HomeUiState(
     val userPhase: com.lifescore.app.core.engine.UserPhase = com.lifescore.app.core.engine.UserPhase.NEW_USER,
     val unlockedFeatures: List<String> = emptyList(),
     val milestoneMessage: String? = null,
-    val cloudSyncStatus: String = "Ready"
+    val cloudSyncStatus: String = "Ready",
+    val todayReflection: String? = null
 )
 
 class HomeViewModel(
@@ -65,6 +66,9 @@ class HomeViewModel(
                     // Fallback to local cache
                 }
             }
+
+            val todayIso = java.text.SimpleDateFormat("yyyy-MM-dd", java.util.Locale.getDefault()).format(java.util.Date())
+            val savedReflection = repository.getEveningReflection(todayIso)
 
             // 2. Combine Room Flow for reactive 0ms updates
             combine(
@@ -111,7 +115,8 @@ class HomeViewModel(
                     userPhase = phase,
                     unlockedFeatures = com.lifescore.app.core.engine.UserProgressTracker.getUnlockedFeatures(phase),
                     milestoneMessage = com.lifescore.app.core.engine.FeatureUnlockNotification.getUnlockMessage(phase),
-                    cloudSyncStatus = "Live Cloud Sync Active"
+                    cloudSyncStatus = "Live Cloud Sync Active",
+                    todayReflection = savedReflection
                 )
             }.collect { newState ->
                 _uiState.value = newState
@@ -151,6 +156,14 @@ class HomeViewModel(
             } else {
                 _uiState.value = _uiState.value.copy(isSyncing = false, cloudSyncStatus = "Saved locally")
             }
+        }
+    }
+
+    fun saveEveningReflection(text: String) {
+        viewModelScope.launch {
+            val todayIso = java.text.SimpleDateFormat("yyyy-MM-dd", java.util.Locale.getDefault()).format(java.util.Date())
+            repository.saveEveningReflection(text, todayIso)
+            _uiState.update { it.copy(todayReflection = text) }
         }
     }
 
