@@ -99,18 +99,20 @@ class LifeScoreRepositoryImpl(
     }
 
     override suspend fun seedInitialDataIfEmpty() {
-        val starterTasks = listOf(
-            TaskEntity(title = "Morning 10-minute meditation", dimension = DimensionType.MENTAL_HEALTH, pointsReward = 15),
-            TaskEntity(title = "Drink 2L of water & stretch", dimension = DimensionType.HEALTH, pointsReward = 10),
-            TaskEntity(title = "Review monthly budget & investments", dimension = DimensionType.WEALTH, pointsReward = 20),
-            TaskEntity(title = "Send thoughtful message to a close friend", dimension = DimensionType.RELATIONSHIPS, pointsReward = 15),
-            TaskEntity(title = "Read 15 pages of non-fiction book", dimension = DimensionType.LEARNING, pointsReward = 20),
-            TaskEntity(title = "Complete 30 min cardio or strength session", dimension = DimensionType.FITNESS, pointsReward = 25),
-            TaskEntity(title = "Outline top 3 deep-work priorities for tomorrow", dimension = DimensionType.CAREER, pointsReward = 15),
-            TaskEntity(title = "Plan weekend outing or community meetup", dimension = DimensionType.SOCIAL_LIFE, pointsReward = 10)
-        )
-        starterTasks.forEach { task ->
-            db.taskDao().insertTask(task)
+        if (db.taskDao().getTaskCount() == 0) {
+            val starterTasks = listOf(
+                TaskEntity(id = 1L, title = "Morning 10-minute meditation", dimension = DimensionType.MENTAL_HEALTH, pointsReward = 15),
+                TaskEntity(id = 2L, title = "Drink 2L of water & stretch", dimension = DimensionType.HEALTH, pointsReward = 10),
+                TaskEntity(id = 3L, title = "Review monthly budget & investments", dimension = DimensionType.WEALTH, pointsReward = 20),
+                TaskEntity(id = 4L, title = "Send thoughtful message to a close friend", dimension = DimensionType.RELATIONSHIPS, pointsReward = 15),
+                TaskEntity(id = 5L, title = "Read 15 pages of non-fiction book", dimension = DimensionType.LEARNING, pointsReward = 20),
+                TaskEntity(id = 6L, title = "Complete 30 min cardio or strength session", dimension = DimensionType.FITNESS, pointsReward = 25),
+                TaskEntity(id = 7L, title = "Outline top 3 deep-work priorities for tomorrow", dimension = DimensionType.CAREER, pointsReward = 15),
+                TaskEntity(id = 8L, title = "Plan weekend outing or community meetup", dimension = DimensionType.SOCIAL_LIFE, pointsReward = 10)
+            )
+            starterTasks.forEach { task ->
+                db.taskDao().insertTask(task)
+            }
         }
     }
 

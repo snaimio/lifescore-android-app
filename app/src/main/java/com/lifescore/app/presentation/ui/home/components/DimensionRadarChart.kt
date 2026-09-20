@@ -64,12 +64,12 @@ fun DimensionRadarChart(
         BoxWithConstraints(
             modifier = Modifier
                 .fillMaxWidth()
-                .aspectRatio(1.02f)
-                .padding(4.dp),
+                .height(250.dp)
+                .padding(horizontal = 8.dp, vertical = 2.dp),
             contentAlignment = Alignment.Center
         ) {
-            val chartRadius = (maxWidth.coerceAtMost(maxHeight) / 2) * 0.62f
-            val labelRadiusDist = (maxWidth.coerceAtMost(maxHeight) / 2) * 0.84f
+            val chartRadius = (maxWidth.coerceAtMost(maxHeight) / 2) * 0.44f
+            val labelRadiusDist = (maxWidth.coerceAtMost(maxHeight) / 2) * 0.70f
 
             Canvas(modifier = Modifier.fillMaxSize()) {
                 val center = Offset(size.width / 2, size.height / 2)
@@ -118,7 +118,7 @@ fun DimensionRadarChart(
                 val points = mutableListOf<Offset>()
                 for (i in 0 until numAxes) {
                     val dim = dimensions[i]
-                    val score = (dimensionScores[dim] ?: 80).coerceIn(10, 100) / 100f
+                    val score = (dimensionScores[dim] ?: 50).coerceIn(10, 100) / 100f
                     val animatedScore = score * animatedProgress
                     val angle = (i * angleStep - Math.PI / 2).toFloat()
                     val pointRadius = radius * animatedScore
@@ -159,12 +159,12 @@ fun DimensionRadarChart(
                 points.forEach { point ->
                     drawCircle(
                         color = radarGlowPurple.copy(alpha = 0.4f),
-                        radius = 6.5.dp.toPx(),
+                        radius = 6.dp.toPx(),
                         center = point
                     )
                     drawCircle(
                         color = if (isDark) Color.White else Color(0xFF7E22CE),
-                        radius = 3.5.dp.toPx(),
+                        radius = 3.dp.toPx(),
                         center = point
                     )
                 }
@@ -175,7 +175,7 @@ fun DimensionRadarChart(
                 val numAxes = dimensions.size
                 val angleStep = (2 * Math.PI / numAxes).toFloat()
                 val angle = (index * angleStep - Math.PI / 2).toFloat()
-                val score = dimensionScores[dimension] ?: 80
+                val score = dimensionScores[dimension] ?: 50
 
                 val offsetX = (cos(angle) * labelRadiusDist.value).dp
                 val offsetY = (sin(angle) * labelRadiusDist.value).dp

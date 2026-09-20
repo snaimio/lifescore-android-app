@@ -51,7 +51,7 @@ data class DimensionsUiState(
     val isOverviewMode: Boolean = true
 ) {
     val allDimensionsZero: Boolean
-        get() = dimensionScores.isEmpty() || dimensionScores.values.all { it == 0 } || allTasks.isEmpty()
+        get() = dimensionScores.isEmpty()
 }
 
 class DimensionsViewModel(
@@ -67,11 +67,12 @@ class DimensionsViewModel(
 
     private fun loadAllData() {
         viewModelScope.launch {
+            repository.seedInitialDataIfEmpty()
             repository.getAllTasks().collect { tasks ->
                 val scores = DimensionType.values().associateWith { dim ->
                     val dimTasks = tasks.filter { it.dimension == dim }
                     val completed = dimTasks.count { it.isCompleted }
-                    if (dimTasks.isEmpty()) 0 else ScoreEngine.calculateDimensionScore(completed, dimTasks.size)
+                    ScoreEngine.calculateDimensionScore(completed, dimTasks.size)
                 }
 
                 _uiState.value = _uiState.value.copy(
@@ -483,7 +484,7 @@ fun DimensionLegend(dimensionScores: Map<DimensionType, Int>) {
             horizontalArrangement = Arrangement.spacedBy(4.dp)
         ) {
             dimensions.take(4).forEach { dim ->
-                val score = dimensionScores[dim] ?: 0
+                val score = dimensionScores[dim] ?: 50
                 DimensionLegendItem(
                     dimension = dim,
                     score = score,
@@ -496,7 +497,7 @@ fun DimensionLegend(dimensionScores: Map<DimensionType, Int>) {
             horizontalArrangement = Arrangement.spacedBy(4.dp)
         ) {
             dimensions.takeLast(4).forEach { dim ->
-                val score = dimensionScores[dim] ?: 0
+                val score = dimensionScores[dim] ?: 50
                 DimensionLegendItem(
                     dimension = dim,
                     score = score,

@@ -54,13 +54,13 @@ fun BalanceScreen(
     val uiState by viewModel.uiState.collectAsState()
     var showAddTaskDialog by remember { mutableStateOf(false) }
     var newTaskTitle by remember { mutableStateOf("") }
-    var expandedDimension by remember { mutableStateOf<DimensionType?>(null) }
+    var expandedDimension by remember { mutableStateOf<DimensionType?>(DimensionType.HEALTH) }
 
     val avgBalance = remember(uiState.dimensionScores) {
-        if (uiState.dimensionScores.isNotEmpty() && uiState.dimensionScores.values.any { it > 0 }) {
+        if (uiState.dimensionScores.isNotEmpty()) {
             uiState.dimensionScores.values.average().toInt()
         } else {
-            0
+            50
         }
     }
 
@@ -110,30 +110,14 @@ fun BalanceScreen(
             }
         }
     ) { padding ->
-        if (uiState.allDimensionsZero) {
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(padding)
-            ) {
-                LifeMatrixEmptyState(
-                    onStartAssessment = {
-                        navController.navigate(Screen.QuickAssessment.route)
-                    },
-                    onAddFirstHabit = {
-                        showAddTaskDialog = true
-                    }
-                )
-            }
-        } else {
-            LazyColumn(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(padding)
-                    .padding(horizontal = Space.screenH),
-                verticalArrangement = Arrangement.spacedBy(Space.cardGap),
-                contentPadding = PaddingValues(top = Space.xs, bottom = Space.xxxl)
-            ) {
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(padding)
+                .padding(horizontal = Space.screenH),
+            verticalArrangement = Arrangement.spacedBy(Space.cardGap),
+            contentPadding = PaddingValues(top = Space.xs, bottom = Space.xxxl)
+        ) {
                 // ==========================================
                 // 1. 360° LIFE MATRIX HERO CARD
                 // ==========================================
@@ -189,10 +173,10 @@ fun BalanceScreen(
                                 dimensionScores = uiState.dimensionScores,
                                 modifier = Modifier
                                     .fillMaxWidth()
-                                    .height(230.dp)
+                                    .padding(vertical = Space.xs)
                             )
 
-                            Spacer(Modifier.height(Space.md))
+                            Spacer(Modifier.height(Space.sm))
 
                             DimensionLegend(dimensionScores = uiState.dimensionScores)
                         }
@@ -413,9 +397,125 @@ fun BalanceScreen(
                         }
                     }
                 }
+
+                // ==========================================
+                // 5. SELECTED DIMENSION DETAIL & HABITS
+                // ==========================================
+                if (expandedDimension != null) {
+                    val activeDim = expandedDimension!!
+                    val score = uiState.dimensionScores[activeDim] ?: 50
+                    val dimTasks = uiState.allTasks.filter { it.dimension == activeDim }
+                    val dimColor = DimensionColors.forDimension(activeDim)
+
+                    item {
+                        SectionHeader(
+                            title = "${activeDim.displayName} Habits & Focus",
+                            subtitle = activeDim.description
+                        )
+                    }
+
+                    item {
+                        LifeCard(
+                            modifier = Modifier.fillMaxWidth(),
+                            variant = CardVariant.Default
+                        ) {
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalArrangement = Arrangement.SpaceBetween,
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                Row(verticalAlignment = Alignment.CenterVertically) {
+                                    Surface(
+                                        shape = CircleShape,
+                                        color = dimColor.copy(alpha = 0.18f),
+                                        modifier = Modifier.size(32.dp)
+                                    ) {
+                                        Box(contentAlignment = Alignment.Center) {
+                                            LifeIcon(
+                                                icon = LifeIcons.forDimension(activeDim),
+                                                size = 18.dp,
+                                                tint = dimColor
+                                            )
+                                        }
+                                    }
+                                    Spacer(Modifier.width(Space.sm))
+                                    Column {
+                                        Text(
+                                            activeDim.displayName,
+                                            style = MaterialTheme.typography.titleMedium,
+                                            fontWeight = FontWeight.Bold
+                                        )
+                                        Text(
+                                            "${dimTasks.count { it.isCompleted }} of ${dimTasks.size} completed",
+                                            style = MaterialTheme.typography.bodySmall,
+                                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                                        )
+                                    }
+                                }
+
+                                Surface(
+                                    shape = LifeScoreShapes.tag,
+                                    color = dimColor.copy(alpha = 0.15f)
+                                ) {
+                                    Text(
+                                        text = "$score%",
+                                        style = MaterialTheme.typography.labelLarge,
+                                        fontWeight = FontWeight.Black,
+                                        color = dimColor,
+                                        modifier = Modifier.padding(horizontal = Space.sm, vertical = Space.xxs)
+                                    )
+                                }
+                            }
+
+                            Spacer(Modifier.height(Space.sm))
+
+                            LinearProgressIndicator(
+                                progress = { (score.toFloat() / 100f).coerceIn(0f, 1f) },
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .height(6.dp)
+                                    .clip(RoundedCornerShape(3.dp)),
+                                color = dimColor,
+                                trackColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.4f)
+                            )
+
+                            Spacer(Modifier.height(Space.md))
+
+                            if (dimTasks.isEmpty()) {
+                                Text(
+                                    "No habits active in ${activeDim.displayName} yet.",
+                                    style = MaterialTheme.typography.bodySmall,
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                                )
+                            } else {
+                                dimTasks.forEach { task ->
+                                    TaskItem(
+                                        task = task,
+                                        onComplete = { viewModel.toggleTask(task) }
+                                    )
+                                    Spacer(Modifier.height(Space.xs))
+                                }
+                            }
+
+                            Spacer(Modifier.height(Space.xs))
+
+                            OutlinedButton(
+                                onClick = {
+                                    viewModel.selectDimension(activeDim)
+                                    showAddTaskDialog = true
+                                },
+                                modifier = Modifier.fillMaxWidth(),
+                                shape = LifeScoreShapes.button
+                            ) {
+                                Icon(Icons.Default.Add, contentDescription = null, modifier = Modifier.size(16.dp))
+                                Spacer(Modifier.width(Space.xs))
+                                Text("Add ${activeDim.displayName} Habit", style = MaterialTheme.typography.labelMedium)
+                            }
+                        }
+                    }
+                }
             }
         }
-    }
 
     if (showAddTaskDialog) {
         AlertDialog(
